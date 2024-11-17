@@ -1,0 +1,50 @@
+.loading {
+    height: 100dvh;
+    width: auto;
+    background: $colorp;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    position: relative;
+
+
+    .logo_loading {
+        position: absolute;
+
+        .logoanimador{
+            width: 3vw;
+        }
+
+        
+        .logoestatico{
+            top: 0;
+            position: absolute;
+            width: 3vw;
+            opacity: 0%;
+        }
+
+    }
+
+    /* Contenedor de la barra de carga */
+    #progress {
+        position: fixed;
+        left: 46.4dvw;
+        top: 55%;
+        width: 100px;
+        height: 3px;
+        background-color: #5686FF;
+        overflow: hidden;
+        /* Barra de progreso */
+        #progressBar {
+            height: 100%;
+            width: 0%;
+            /* Inicia en 0% */
+            background-color: #ffffff;
+            transition: width 0.1s ease-in-out;
+            /* Suaviza el cambio de anchura */
+        }
+    }
+}
