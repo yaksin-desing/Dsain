@@ -3,13 +3,70 @@
   margin: 0;
   padding: 0;
   border: 0;
-  box-sizing: border-box; /* Importante para manejar tamaños correctamente */
+  box-sizing: border-box;
+  /* Importante para manejar tamaños correctamente */
 }
 
 body {
   background: white;
 }
 
+@font-face {
+  font-family: "Extralight";
+  src: url("../src/fonts/Panchang-Extralight.woff2") format("woff2"), url("../src/fonts/Panchang-Extralight.woff") format("woff"), url("../src/fonts/Panchang-Extralight.ttf") format("truetype");
+  font-weight: 200;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Light";
+  src: url("../src/fonts/Panchang-Light.woff2") format("woff2"), url("../src/fonts/Panchang-Light.woff") format("woff"), url("../src/fonts/Panchang-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Regular";
+  src: url("../src/fonts/Panchang-Regular.woff2") format("woff2"), url("../src/fonts/Panchang-Regular.woff") format("woff"), url("../src/fonts/Panchang-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Medium";
+  src: url("../src/fonts/Panchang-Medium.woff2") format("woff2"), url("../src/fonts/Panchang-Medium.woff") format("woff"), url("../src/fonts/Panchang-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Semibold";
+  src: url("../src/fonts/Panchang-Semibold.woff2") format("woff2"), url("../src/fonts/Panchang-Semibold.woff") format("woff"), url("../src/fonts/Panchang-Semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Bold";
+  src: url("../src/fonts/Panchang-Bold.woff2") format("woff2"), url("../src/fonts/Panchang-Bold.woff") format("woff"), url("../src/fonts/Panchang-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Extrabold";
+  src: url("../src/fonts/Panchang-Extrabold.woff2") format("woff2"), url("../src/fonts/Panchang-Extrabold.woff") format("woff"), url("../src/fonts/Panchang-Extrabold.ttf") format("truetype");
+  font-weight: 800;
+  font-display: swap;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Variable";
+  src: url("../src/fonts/Panchang-Variable.woff2") format("woff2"), url("../src/fonts/Panchang-Variable.woff") format("woff"), url("../src/fonts/Panchang-Variable.ttf") format("truetype");
+  font-weight: 200 800;
+  font-display: swap;
+  font-style: normal;
+}
 .loading {
   height: 100dvh;
   width: auto;
@@ -19,21 +76,38 @@ body {
   justify-content: center;
   flex-direction: column;
   gap: 10px;
-  padding: 10px;
   position: relative;
+  overflow: hidden;
   /* Contenedor de la barra de carga */
 }
 .loading .logo_loading {
   position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
 }
 .loading .logo_loading .logoanimador {
-  width: 3vw;
+  width: 2vw;
 }
 .loading .logo_loading .logoestatico {
   top: 0;
   position: absolute;
-  width: 3vw;
+  width: 2vw;
   opacity: 0%;
+}
+.loading .logo_loading .nombrelogo {
+  font-family: "Extrabold";
+  font-size: 21px;
+  color: #ffffff;
+  display: inline-block;
+  overflow: hidden;
+}
+.loading .logo_loading .nombrelogo .letter {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 .loading #progress {
   position: fixed;
@@ -52,4 +126,68 @@ body {
   background-color: #ffffff;
   transition: width 0.1s ease-in-out;
   /* Suaviza el cambio de anchura */
+}
+.loading .animatedTitle {
+  margin-top: 5vh;
+  font-family: "Extrabold";
+  color: #ffffff;
+  font-size: 21.5vw;
+  white-space: nowrap;
+  display: flex;
+  overflow: hidden;
+  line-height: 80%;
+}
+.loading #animatedTitle span {
+  display: inline-block;
+  transform: translateY(100%);
+  /* Inicialmente fuera de vista (eje Y 100%) */
+}
+.loading .contparrafo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.loading .contparrafo .imgparrafoinicio {
+  width: 2vw;
+}
+.loading .contparrafo .parrafodeinicio {
+  font-family: "Light";
+  color: #ffffff;
+  font-size: 12px;
+  padding: 0% 30% 0% 30%;
+  text-align: center;
+}
+.loading .bottoninicio {
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+  text-decoration: none;
+}
+.loading .bottoninicio p {
+  font-family: "Regular";
+  font-size: 12px;
+  color: #ffffff;
+}
+.loading .bottoniniciocontact {
+  position: absolute;
+  top: 3vh;
+  right: 3vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  background: #ffffff;
+  padding: 10px 20px;
+  border-radius: 40px;
+}
+.loading .bottoniniciocontact p {
+  font-family: "Regular";
+  font-size: 12px;
+  color: #0048FF;
 }
