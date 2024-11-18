@@ -1,53 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <link rel="stylesheet" href="./style/styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+    <link rel="stylesheet" href="./style/styles.css" />
     <title>Dsain</title>
 </head>
-<body>
 
+<body>
     <div class="loading" id="cont_loading">
         <div class="logo_loading" id="logo_animado">
-            <img class="logoanimador" id="ilogoanimador" src="./src/img/loadinglogo.gif" alt="logo_loading">
-            <img class="logoestatico" id="ilogoestatico" src="./src/img/logo.svg" alt="logo_loading">
+            <img class="logoanimador" id="ilogoanimador" src="./src/img/loadinglogo.gif" alt="logo_loading" />
+            <img class="logoestatico" id="ilogoestatico" src="./src/img/logo.svg" alt="logo_loading" />
             <p class="nombrelogo" id="animateText">DSAIN</p>
         </div>
 
-    
-        
         <div class="progress-container" id="progress">
             <div class="progress-bar" id="progressBar"></div>
         </div>
 
-
-        <h1 class="animatedTitle"  id="animatedTitle">DSAIN</h1>
-        <div class="contparrafo" >
-            <img class="imgparrafoinicio" src="./src/img/iconparrafoinicio.svg" alt="">
-            <p class="parrafodeinicio" >Hello, I am the ux ui designer you are looking for, I am very happy to have you here, I welcome you to my portfolio.</p>
+        <h1>
+            <h5 data-global-delay="1.5" data-letter-delay="150" style="margin-top: 5vh;font-family: Extrabold;color: #ffffff;font-size: 21.5vw;white-space: nowrap;display: flex;overflow: hidden;line-height: 80%">DSAIN</h5>
+        </h1>
+        <div class="contparrafo">
+            <img class="imgparrafoinicio" src="./src/img/iconparrafoinicio.svg" alt="" />
+            <h5 data-global-delay="1.5" data-letter-delay="10" class="parrafodeinicio">
+                Hello, I am the ux ui designer you are looking for, I am very happy to
+                have you here, I welcome you to my portfolio.
+            </h5>
         </div>
 
         <a class="bottoninicio" href="">
             <p>Scroll to Explore</p>
-            <img src="./src/img/flecha.svg" alt="">
+            <img src="./src/img/flecha.svg" alt="" />
         </a>
 
-        <a class="bottoniniciocontact" href="">
-            <p>Let’s Talk</p>
-            <img id="flechabotoncontact" src="./src/img/flechabotoncontact.svg" alt="">
-        </a>
+        <div class="contactnav" >
 
+            <a class="bottoniniciocontact" href="">
+                <div class="cont_txt_botoncontact">
+                    <h5 data-global-delay="1" data-letter-delay="50" class="animatedTitle" id="animatedTitle" style="width: auto;font-family: Regular;font-size: 12px;white-space: nowrap;" >Let’s Talk</h5>
+                </div>
+                <img class="flechabotoncontact" src="./src/img/flechabotoncontact.svg" alt="" />
+            </a>
+    
+    
+            <div class="audio-container">
+                <button id="audio-button">
+                    <svg id="wave-svg" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
+                        <path id="wave-path" d="M0 15 L 120 15"></path>
+                    </svg>
+                </button>
+                <audio loop id="audio-player" src="./src/sound/soundbase.mp3"></audio>
+            </div>
 
+        </div>
 
 
 
     </div>
 
-
-    <header>
-    </header>
+    <header></header>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="./js/script.js"></script>
 </body>
+
 </html>

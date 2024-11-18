@@ -45,17 +45,19 @@ function updateProgressBar() {
     if (progress < 100) {
         progress += 1;
         progressBar.style.width = `${progress}%`;
-        console.log(`Progress: ${progress}%`);
     } else {
         // Cuando el progreso llega al 100%
         clearInterval(progressInterval);
         progressBar.style.width = `${progress}%`;
         pageLoaded = true; // Cambia la variable
         setTimeout(() => {
+            audioPlayer.play();
+            animateWave();
             conteprogress.style.display = "none"; // Elimina el contenedor de la vista
             animaloading.play(); // Ejemplo: Se puede incluir otra animación aquí
             anitexto.play();
-            animateWords(); // Llama a la función para animar palabras
+
+
         }, 500);
     }
 }
@@ -70,76 +72,110 @@ window.addEventListener('load', () => {
 });
 
 
-// Seleccionar el texto
-const textElement = document.querySelector('#animateText');
+
+
+
+// Selecciona todos los elementos h5
+const titles = document.querySelectorAll("h5");
 
 // Función para animar las palabras letra por letra
 function animateWords() {
-    // Divide el texto en letras
-    textElement.innerHTML = textElement.textContent
-        .split("")
-        .map(char => `<span class="letter">${char}</span>`)
-        .join("");
+    titles.forEach((title) => {
+        // Obtén los valores personalizados del retraso desde los atributos 'data-*'
+        const globalDelay = parseFloat(title.getAttribute('data-global-delay'));  // Retraso global en segundos
+        const letterDelay = parseInt(title.getAttribute('data-letter-delay'));    // Retraso entre letras en milisegundos
 
-    // Selecciona todas las letras
-    const letters = document.querySelectorAll(".letter");
+        // Divide el texto de cada h5 en letras y espacios, envuelve cada uno en un <span>
+        title.innerHTML = title.textContent
+            .split("")
+            .map(char => char === " " ? `<span class="space"> </span>` : `<span class="letter">${char}</span>`)
+            .join("");
 
-    // Aplica la animación a cada letra
-    letters.forEach((letter, index) => {
-        setTimeout(() => {
-            letter.style.transform = "translateY(0)";
-            letter.style.opacity = "1";
-        }, index * 100); // Retraso entre letras
+        // Selecciona todas las letras y espacios dentro del título actual
+        const lettersAndSpaces = title.querySelectorAll(".letter, .space");
+
+        // Aplica la animación a cada letra y espacio
+        lettersAndSpaces.forEach((element, index) => {
+            setTimeout(() => {
+                // Añade el retraso global antes de iniciar la animación
+                setTimeout(() => {
+                    element.style.transform = "translateY(0)";
+                    element.style.opacity = "1";
+                }, globalDelay * 1000); // Retraso global (en segundos)
+
+            }, index * letterDelay); // Retraso entre letras y espacios (en milisegundos)
+        });
     });
 }
 
-// Estilo inicial para las letras
-document.addEventListener("DOMContentLoaded", () => {
-    const style = document.createElement("style");
-    style.textContent = `
-      #animateText {
-        display: inline-block;
-        overflow: hidden;
-        font-size: 21px;
-      }
-      .letter {
-        display: inline-block;
-        transform: translateY(100%);
-        opacity: 0;
-        transition: transform 0.5s ease, opacity 0.5s ease;
-      }
-    `;
-    document.head.appendChild(style);
-});
+// Inicia la animación cuando el DOM esté listo
+document.addEventListener("DOMContentLoaded", animateWords);
 
 
-// Selecciona el título y divide cada letra en un span
-const title = document.getElementById("animatedTitle");
-title.innerHTML = title.textContent
-    .split("")
-    .map(letter => `<span>${letter}</span>`)
-    .join("");
 
-// Selecciona todas las letras
-const letters = document.querySelectorAll("#animatedTitle span");
+const audioButton = document.getElementById('audio-button');
+const audioPlayer = document.getElementById('audio-player');
+const wavePath = document.getElementById('wave-path');
 
-// Crea el timeline de GSAP
-const anitexto = gsap.timeline({
-    paused: true,
-    defaults: {
-        ease: "power2.out",
-        duration: 0.5,
-        delay: 1,
+let isPlaying = false;
+let animationFrame;
+
+// Estados de la onda
+const waveStates = [
+    "M0 15 L 120 15",
+    "M0 15 Q 10 5, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 15", // Estado inicial
+    "M0 15 Q 10 25, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 15" // Estado animado
+];
+
+// Función para animar las ondas
+function animateWave() {
+    let progress = 0;
+
+    function step() {
+        progress += 0.1;
+        const t = (Math.sin(progress) + 4) / 3; // Oscilación entre 0 y 1
+        const interpolatedPath = interpolatePaths(waveStates[1], waveStates[2], t);
+        wavePath.setAttribute('d', interpolatedPath);
+        animationFrame = requestAnimationFrame(step);
     }
+    step();
+}
+
+// Interpolación entre dos caminos SVG
+function interpolatePaths(path1, path2, t) {
+    const regex = /-?\d+(\.\d+)?/g;
+    const nums1 = path1.match(regex).map(Number);
+    const nums2 = path2.match(regex).map(Number);
+    const interpolated = nums1.map((num, i) => num + t * (nums2[i] - num));
+    return path1.replace(regex, () => interpolated.shift());
+}
+
+
+// Evento del botón de audio
+audioButton.addEventListener('click', () => {
+    if (isPlaying) {
+        fadeVolume(audioPlayer, 1); // Aumenta volumen suavemente
+        animateWave(); // Inicia la animación
+    } else {
+        fadeVolume(audioPlayer, 0); // Reduce volumen suavemente
+        cancelAnimationFrame(animationFrame); // Detiene la animación
+        wavePath.setAttribute('d', waveStates[0]); // Vuelve al estado inicial
+    }
+    isPlaying = !isPlaying;
 });
 
-// Anima cada letra desde el eje Y 100% al 0%
-letters.forEach((letter, index) => {
-    anitexto.to(
-        letter, {
-            y: "0%",
-            opacity: 1
-        },
-        index * 0.2 // Retraso progresivo entre letras
-    );
-});
+// Función para hacer un fade del volumen
+function fadeVolume(audioElement, targetVolume) {
+    const step = 0.01; // Paso de volumen
+    const intervalTime = 10; // Intervalo entre ajustes en ms
+    const fadeInterval = setInterval(() => {
+        if (Math.abs(audioElement.volume - targetVolume) <= step) {
+            audioElement.volume = targetVolume; // Ajusta al volumen objetivo
+            clearInterval(fadeInterval); // Detiene el intervalo
+        } else if (audioElement.volume < targetVolume) {
+            audioElement.volume += step; // Aumenta volumen
+        } else {
+            audioElement.volume -= step; // Disminuye volumen
+        }
+    }, intervalTime);
+}

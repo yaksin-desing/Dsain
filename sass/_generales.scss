@@ -13,6 +13,16 @@ body {
     background: white;
 }
 
+h5 {
+    display: inline-block;
+}
+.letter {
+    display: inline-block;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
 @font-face {
     font-family: 'Extralight';
     src: url('../src/fonts/Panchang-Extralight.woff2') format('woff2'),
