@@ -8,6 +8,8 @@ const logoanimado = document.getElementById('logo_animado');
 const conteprogress = document.getElementById('progress');
 const ilogoestatico = document.getElementById('ilogoestatico');
 const ilogoanimador = document.getElementById('ilogoanimador');
+const textologo = document.getElementById('nombrelogo');
+const imgparrafoinicio = document.getElementById('imgparrafoinicio');
 
 //timeline loading
 const animaloading = gsap.timeline({
@@ -27,12 +29,22 @@ animaloading.to(logoanimado, {
     left: "3vh",
     width: "max-content",
 });
+animaloading.to(ilogoestatico, {
+    duration: 0,
+    opacity: "100%",
+});
 animaloading.to(ilogoanimador, {
     duration: 0,
     opacity: "0%",
 });
-animaloading.to(ilogoestatico, {
-    duration: 0,
+
+animaloading.to(textologo, {
+    duration: 1,
+    width: "max-content",
+    display: "flex"
+});
+animaloading.to(imgparrafoinicio, {
+    duration: 1,
     opacity: "100%",
 });
 
@@ -55,9 +67,6 @@ function updateProgressBar() {
             animateWave();
             conteprogress.style.display = "none"; // Elimina el contenedor de la vista
             animaloading.play(); // Ejemplo: Se puede incluir otra animación aquí
-            anitexto.play();
-
-
         }, 500);
     }
 }
@@ -82,8 +91,8 @@ const titles = document.querySelectorAll("h5");
 function animateWords() {
     titles.forEach((title) => {
         // Obtén los valores personalizados del retraso desde los atributos 'data-*'
-        const globalDelay = parseFloat(title.getAttribute('data-global-delay'));  // Retraso global en segundos
-        const letterDelay = parseInt(title.getAttribute('data-letter-delay'));    // Retraso entre letras en milisegundos
+        const globalDelay = parseFloat(title.getAttribute('data-global-delay')); // Retraso global en segundos
+        const letterDelay = parseInt(title.getAttribute('data-letter-delay')); // Retraso entre letras en milisegundos
 
         // Divide el texto de cada h5 en letras y espacios, envuelve cada uno en un <span>
         title.innerHTML = title.textContent
@@ -179,3 +188,20 @@ function fadeVolume(audioElement, targetVolume) {
         }
     }, intervalTime);
 }
+
+
+
+
+
+//lottie menu
+
+LottieInteractivity.create({
+    player: '#firstLottie',
+    mode: 'cursor',
+    speed:200,
+    actions: [
+        {
+        type: "toggle",
+        
+    }]
+});

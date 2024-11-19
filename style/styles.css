@@ -97,28 +97,25 @@ h5 {
   flex-direction: row;
   align-items: center;
   gap: 5px;
+  height: 2vw;
 }
 .loading .logo_loading .logoanimador {
   width: 2vw;
+  height: 2vw;
 }
 .loading .logo_loading .logoestatico {
-  top: 0;
   position: absolute;
   width: 2vw;
   opacity: 0%;
+  height: 2vw;
 }
-.loading .logo_loading .nombrelogo {
+.loading .logo_loading #nombrelogo {
   font-family: "Extrabold";
   font-size: 21px;
   color: #ffffff;
-  display: inline-block;
   overflow: hidden;
-}
-.loading .logo_loading .nombrelogo .letter {
-  display: inline-block;
-  transform: translateY(100%);
-  opacity: 0;
-  transition: transform 0.5s ease, opacity 0.5s ease;
+  width: 0%;
+  display: none;
 }
 .loading #progress {
   position: fixed;
@@ -145,7 +142,8 @@ h5 {
   align-items: center;
   width: 100%;
 }
-.loading .contparrafo .imgparrafoinicio {
+.loading .contparrafo #imgparrafoinicio {
+  opacity: 0%;
   width: 2vw;
 }
 .loading .contparrafo .parrafodeinicio {
@@ -177,6 +175,7 @@ h5 {
   right: 3vh;
   gap: 10px;
   width: auto;
+  height: 3vw;
 }
 .loading .contactnav .bottoniniciocontact {
   display: flex;
@@ -207,8 +206,8 @@ h5 {
   text-align: center;
 }
 .loading .contactnav #audio-button {
-  width: 37px;
-  height: 37px;
+  width: 40px;
+  height: 40px;
   background-color: #ffffff;
   border: 4px solid white;
   border-radius: 25px;
@@ -225,7 +224,7 @@ h5 {
 .loading .contactnav #audio-button #wave-path {
   fill: none;
   stroke: #0048FF;
-  stroke-width: 3;
+  stroke-width: 4;
 }
 .loading .contactnav #audio-button:hover {
   box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.3);
@@ -233,4 +232,24 @@ h5 {
 .loading .contactnav #audio-button:hover #wave-path {
   fill: #0048FF;
   stroke-width: 7;
+}
+.loading .contactnav .cont_menu {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: -moz-max-content;
+  width: max-content;
+}
+.loading .contactnav .cont_menu .cont_boton_menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background: #ffffff;
+}
+.loading .contactnav .cont_menu .cont_boton_menu lottie-player {
+  width: 26px;
+  height: 26px;
 }
