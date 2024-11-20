@@ -253,7 +253,7 @@ const lottiePlayer = lottie.loadAnimation({
     renderer: 'svg',
     loop: false,
     autoplay: false,
-    path: '../src/img/iconmenu.json', // Cambia esto por la ruta de tu archivo JSON
+    path: './src/img/iconmenu.json', // Cambia esto por la ruta de tu archivo JSON
     speed: 2,
 });
 lottiePlayer.setSpeed(2);
