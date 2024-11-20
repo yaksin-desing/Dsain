@@ -19,7 +19,6 @@ const videofondo = document.getElementById('videofondo');
 const animaloading = gsap.timeline({
     paused: true
 });
-
 animaloading.to(contenedor_loading, {
     duration: 1,
     ease: 'power2.out',
@@ -27,11 +26,9 @@ animaloading.to(contenedor_loading, {
     height: "96dvh",
     borderRadius: "2vh",
 });
-
 animaloading.to(tituloh1, {
     opacity: "100%",
 });
-
 animaloading.to(logoanimado, {
     duration: 1,
     ease: 'power2.out',
