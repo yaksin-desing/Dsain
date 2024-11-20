@@ -5,13 +5,33 @@ $colorp:#0048FF;
     padding: 0;
     border: 0;
     box-sizing: border-box;
-    /* Importante para manejar tamaños correctamente */
-
+    cursor: url("../src/img/cursor.svg") 10 10, auto;
 }
 
 body {
     background: white;
 }
+
+.cursor {
+    position: fixed;
+    width: 70px;
+    height: 70px;
+    margin-left: -37px;
+    margin-top: -37px;
+    border-radius: 50%;
+    border: 1px solid rgb(255, 255, 255);
+    transition: transform 0.1s ease;
+    transform-origin: center center;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  
+  .grow,
+  .grow-small {
+    transform: scale(1.5);
+    background: rgba(168, 235, 255, 0.116);
+    border: 1.5px solid rgb(255, 255, 255);
+  }
 
 h5 {
     display: inline-block;

@@ -10,11 +10,16 @@ const ilogoestatico = document.getElementById('ilogoestatico');
 const ilogoanimador = document.getElementById('ilogoanimador');
 const textologo = document.getElementById('nombrelogo');
 const imgparrafoinicio = document.getElementById('imgparrafoinicio');
+const tituloh1 = document.getElementById('tituloh1');
+const contactnav = document.getElementById('contactnav');
+const audio_container = document.getElementById('audio-container');
+const videofondo = document.getElementById('videofondo');
 
 //timeline loading
 const animaloading = gsap.timeline({
     paused: true
 });
+
 animaloading.to(contenedor_loading, {
     duration: 1,
     ease: 'power2.out',
@@ -22,12 +27,26 @@ animaloading.to(contenedor_loading, {
     height: "96dvh",
     borderRadius: "2vh",
 });
+
+animaloading.to(tituloh1, {
+    opacity: "100%",
+});
+
 animaloading.to(logoanimado, {
     duration: 1,
     ease: 'power2.out',
     top: "3vh",
     left: "3vh",
     width: "max-content",
+});
+animaloading.to(contactnav, {
+    opacity: "100%",
+});
+animaloading.to(videofondo, {
+    opacity: "100%",
+});
+animaloading.to(audio_container, {
+    opacity: "100%",
 });
 animaloading.to(ilogoestatico, {
     duration: 0,
@@ -122,18 +141,21 @@ document.addEventListener("DOMContentLoaded", animateWords);
 
 
 
+
+
 const audioButton = document.getElementById('audio-button');
 const audioPlayer = document.getElementById('audio-player');
 const wavePath = document.getElementById('wave-path');
 
 let isPlaying = false;
 let animationFrame;
+let transitionFrame;
 
 // Estados de la onda
 const waveStates = [
-    "M0 15 L 120 15",
-    "M0 15 Q 10 5, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 15", // Estado inicial
-    "M0 15 Q 10 25, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 15" // Estado animado
+    "M0 15 Q 10 15, 20 15 T 40 15 T 60 15 T 80 15 T 85 15 T 120 15", // Estado inicial plano
+    "M0 15 Q 10 25, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 15", // Estado inicial ondulado
+    "M0 15 Q 10 30, 20 15 T 40 15 T 60 15 T 80 15 T 100 15 T 120 15" // Estado animado
 ];
 
 // Función para animar las ondas
@@ -142,7 +164,7 @@ function animateWave() {
 
     function step() {
         progress += 0.1;
-        const t = (Math.sin(progress) + 4) / 3; // Oscilación entre 0 y 1
+        const t = (Math.sin(progress) + 1) / 5; // Oscilación entre 0 y 1
         const interpolatedPath = interpolatePaths(waveStates[1], waveStates[2], t);
         wavePath.setAttribute('d', interpolatedPath);
         animationFrame = requestAnimationFrame(step);
@@ -159,16 +181,47 @@ function interpolatePaths(path1, path2, t) {
     return path1.replace(regex, () => interpolated.shift());
 }
 
+// Transición suave entre dos estados
+function smoothTransition(startPath, endPath, duration = 600, callback) {
+    cancelAnimationFrame(animationFrame); // Detiene la animación actual
+    const startTime = performance.now();
+    const regex = /-?\d+(\.\d+)?/g;
+    const numsStart = startPath.match(regex).map(Number);
+    const numsEnd = endPath.match(regex).map(Number);
+
+    function step(currentTime) {
+        const elapsedTime = currentTime - startTime;
+        const t = Math.min(elapsedTime / duration, 1); // Normaliza entre 0 y 1
+        const interpolated = numsStart.map((num, i) => num + t * (numsEnd[i] - num));
+        const newPath = startPath.replace(regex, () => interpolated.shift());
+        wavePath.setAttribute('d', newPath);
+
+        if (t < 1) {
+            transitionFrame = requestAnimationFrame(step);
+        } else if (callback) {
+            callback();
+        }
+    }
+    requestAnimationFrame(step);
+}
 
 // Evento del botón de audio
 audioButton.addEventListener('click', () => {
     if (isPlaying) {
         fadeVolume(audioPlayer, 1); // Aumenta volumen suavemente
-        animateWave(); // Inicia la animación
+        smoothTransition(
+            wavePath.getAttribute('d'), // Estado actual
+            waveStates[1], // Transición a ondulado inicial
+            500, // Duración
+            animateWave // Inicia la animación después de la transición
+        );
     } else {
         fadeVolume(audioPlayer, 0); // Reduce volumen suavemente
-        cancelAnimationFrame(animationFrame); // Detiene la animación
-        wavePath.setAttribute('d', waveStates[0]); // Vuelve al estado inicial
+        smoothTransition(
+            wavePath.getAttribute('d'), // Estado actual
+            waveStates[0], // Transición a estado plano
+            500 // Duración de la transición más suave
+        );
     }
     isPlaying = !isPlaying;
 });
@@ -193,15 +246,105 @@ function fadeVolume(audioElement, targetVolume) {
 
 
 
+
+
 //lottie menu
 
-LottieInteractivity.create({
-    player: '#firstLottie',
-    mode: 'cursor',
-    speed:200,
-    actions: [
-        {
-        type: "toggle",
-        
-    }]
+// Inicializar la animación de Lottie
+const lottiePlayer = lottie.loadAnimation({
+    container: document.getElementById('menu-button'), // Contenedor del botón
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    path: '../src/img/iconmenu.json', // Cambia esto por la ruta de tu archivo JSON
+    speed: 2,
 });
+lottiePlayer.setSpeed(2);
+
+const menuButton = document.getElementById("menu-button");
+const navMenu = document.getElementById("nav-menu");
+
+let isMenuOpen = false;
+
+menuButton.addEventListener("click", (event) => {
+    isMenuOpen = !isMenuOpen;
+
+    if (isMenuOpen) {
+        // Mostrar el menú
+        navMenu.classList.add("show");
+        navMenu.classList.remove("hidden");
+
+        // Animar del frame 0 al 30
+        lottiePlayer.playSegments([0, 30], true);
+    } else {
+        // Ocultar el menú
+        navMenu.classList.remove("show");
+        setTimeout(() => {
+            navMenu.classList.add("hidden");
+        }, 500); // Coincide con la duración de la animación
+
+        // Animar del frame 30 al 0
+        lottiePlayer.playSegments([30, 0], true);
+    }
+
+    // Evitar que el clic en el botón del menú cierre el menú (propagación)
+    event.stopPropagation();
+});
+
+// Cerrar el menú al hacer clic fuera de él
+document.addEventListener("click", (event) => {
+    if (!navMenu.contains(event.target) && !menuButton.contains(event.target) && isMenuOpen) {
+        isMenuOpen = false;
+        navMenu.classList.remove("show");
+
+        // Animar del frame 30 al 0
+        lottiePlayer.playSegments([30, 0], true);
+
+        setTimeout(() => {
+            navMenu.classList.add("hidden");
+        }, 500); // Coincide con la duración de la animación
+    }
+});
+
+//Animacion del cursor
+
+var cursor = document.querySelector('.cursor'),
+    cursorScale = document.querySelectorAll('.cursor-scale'),
+    mouseX = 0,
+    mouseY = 0
+
+
+gsap.to({}, 0.050, {
+    repeat: -1,
+    onRepeat: function () {
+        gsap.set(cursor, {
+            css: {
+                left: mouseX,
+                top: mouseY
+            }
+        })
+    }
+});
+
+
+window.addEventListener("mousemove", function (e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY
+});
+
+
+cursorScale.forEach(link => {
+    link.addEventListener('mouseleave', () => {
+        cursor.classList.remove('grow');
+        cursor.classList.remove('grow-small');
+    });
+    link.addEventListener('mousemove', () => {
+        cursor.classList.add('grow');
+        if (link.classList.contains('small')) {
+            cursor.classList.remove('grow');
+            cursor.classList.add('grow-small');
+        }
+    });
+});
+
+

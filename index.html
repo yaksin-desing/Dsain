@@ -10,6 +10,7 @@
 </head>
 
 <body>
+    <div class="cursor"></div>
     <div class="loading" id="cont_loading">
         <div class="logo_loading" id="logo_animado">
             <img class="logoanimador" id="ilogoanimador" src="./src/img/loadinglogo.gif" alt="logo_loading" />
@@ -22,8 +23,11 @@
         </div>
 
         <h1>
-        <h5 data-global-delay="1.8" data-letter-delay="150" style="margin-top: 5vh;font-family: Extrabold;color: #ffffff;font-size: 21.5vw;white-space: nowrap;display: flex;overflow: hidden;line-height: 80%;">DSAIN</h5>
+            <h5 id="tituloh1" data-global-delay="1.8" data-letter-delay="150"
+                style="margin-top: 5vh;font-family: Extrabold;color: #ffffff;font-size: 21.5vw;white-space: nowrap;display: flex;overflow: hidden;line-height: 80%; opacity: 0%;z-index: 1;">
+                DSAIN</h5>
         </h1>
+
         <div class="contparrafo">
             <img id="imgparrafoinicio" src="./src/img/iconparrafoinicio.svg" alt="" />
             <h5 data-global-delay="1.5" data-letter-delay="10" class="parrafodeinicio">
@@ -32,48 +36,63 @@
             </h5>
         </div>
 
-        <a class="bottoninicio" href="">
+        <a class="bottoninicio cursor-scale" href="">
             <p>Scroll to Explore</p>
             <img src="./src/img/flecha.svg" alt="" />
         </a>
 
-        <div class="contactnav" >
-
-            <div class="audio-container">
-                <button id="audio-button">
-                    <svg id="wave-svg" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
-                        <path id="wave-path" d="M0 15 L 120 15"></path>
-                    </svg>
-                </button>
-                <audio loop id="audio-player" src="./src/sound/soundbase.mp3"></audio>
-            </div>
+        <div class="contactnav" id="contactnav"  >
 
 
-            <a class="bottoniniciocontact" href="">
+
+
+            <a class="bottoniniciocontact cursor-scale" href="">
                 <div class="cont_txt_botoncontact">
-                    <h5 data-global-delay="1" data-letter-delay="50" class="animatedTitle" id="animatedTitle" style="width: auto;font-family: Regular;font-size: 12px;white-space: nowrap;" >Let’s Talk</h5>
+                    <h5 data-global-delay="4" data-letter-delay="10" class="animatedTitle" id="animatedTitle"
+                        style="width: auto;font-family: Regular;font-size: 12px;white-space: nowrap;">Let’s Talk</h5>
                 </div>
                 <img class="flechabotoncontact" src="./src/img/flechabotoncontact.svg" alt="" />
             </a>
-    
-    
 
-            <div class="cont_menu">
-                <div class="cont_boton_menu">
-                    <lottie-player autoplay speed="3" id="firstLottie" src="./src/img/iconmenu.json"></lottie-player>                    
+
+
+            <div class="cont_menu cursor-scale">
+                <div  class="cont_boton_menu">
+                    <div id="menu-button" ></div>
                 </div>
             </div>
 
-            
+            <nav id="nav-menu" class="hidden">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
 
-            
+
+
+
 
         </div>
+
+        <div class="audio-container cursor-scale" id="audio-container">
+            <button id="audio-button">
+                <svg id="wave-svg" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
+                    <path id="wave-path" d="M0 15 L 120 15"></path>
+                </svg>
+            </button>
+            <audio loop id="audio-player" src="./src/sound/soundbase.mp3"></audio>
+        </div>
+
+        <video class="videofondo" id="videofondo" autoplay muted loop  >
+            <source src="./src/img/logofondo.webm" type="video/webm">
 
     </div>
 
     <header></header>
-    <script src="https://unpkg.com/@lottiefiles/lottie-interactivity@latest/dist/lottie-interactivity.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="./js/script.js"></script>
