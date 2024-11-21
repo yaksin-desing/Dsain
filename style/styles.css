@@ -28,7 +28,7 @@ body {
 .grow,
 .grow-small {
   transform: scale(1.5);
-  background: rgba(168, 235, 255, 0.116);
+  background: rgba(168, 235, 255, 0.308);
   border: 1.5px solid rgb(255, 255, 255);
 }
 
@@ -256,33 +256,75 @@ h5 {
   width: 3vw;
   height: 3vw;
   background-color: rgba(255, 255, 255, 0);
-  color: rgb(0, 0, 0);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
   border-radius: 100%;
   overflow: hidden;
 }
-.loading .contactnav #nav-menu ul {
+.loading .contactnav #nav-menu .contlistmenu {
+  position: absolute;
   list-style: none;
   padding: 0;
   margin: 0;
+  top: 20%;
+  left: 15%;
 }
-.loading .contactnav #nav-menu li {
-  margin: 15px 0;
-}
-.loading .contactnav #nav-menu a {
-  color: rgb(0, 0, 0);
+.loading .contactnav #nav-menu .contlistmenu p {
   text-decoration: none;
   font-size: 18px;
-  transition: color 0.3s;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
   opacity: 0%;
 }
-.loading .contactnav #nav-menu a:hover {
-  color: #00aaff;
+.loading .contactnav #nav-menu .contlistmenu li {
+  margin: 15px 0;
+}
+.loading .contactnav #nav-menu .contlistmenu li a {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 0%;
+}
+.loading .contactnav #nav-menu .contsocial {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 0%;
+}
+.loading .contactnav #nav-menu .contsocial p {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.loading .contactnav #nav-menu .contsocial .list_social {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.loading .contactnav #nav-menu .contsocial .list_social li {
+  margin: 15px 0;
+}
+.loading .contactnav #nav-menu .contsocial .list_social li a {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #000000;
+  font-size: 0.9vw;
+  width: 100%;
 }
 .loading .contactnav #nav-menu.show {
   top: 0vh;
@@ -295,20 +337,73 @@ h5 {
   background-color: #ffffff;
   /* Desliza el menú hacia dentro */
 }
-.loading .contactnav #nav-menu.show ul {
+.loading .contactnav #nav-menu.show .contlistmenu {
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
-.loading .contactnav #nav-menu.show ul li {
-  margin: 15px 0;
-}
-.loading .contactnav #nav-menu.show ul li a {
-  color: rgb(0, 0, 0);
+.loading .contactnav #nav-menu.show .contlistmenu p {
   text-decoration: none;
   font-size: 18px;
-  transition: color 5s;
   opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.loading .contactnav #nav-menu.show .contlistmenu li {
+  margin: 15px 0;
+}
+.loading .contactnav #nav-menu.show .contlistmenu li a {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #999999;
+  font-size: 2.2vw;
+  width: 100%;
+}
+.loading .contactnav #nav-menu.show .contlistmenu li:hover a {
+  color: #0066ff;
+}
+.loading .contactnav #nav-menu.show .contsocial {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 100%;
+}
+.loading .contactnav #nav-menu.show .contsocial p {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.loading .contactnav #nav-menu.show .contsocial .list_social {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.loading .contactnav #nav-menu.show .contsocial .list_social li {
+  margin: 15px 0;
+}
+.loading .contactnav #nav-menu.show .contsocial .list_social li a {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #000000;
+  font-size: 0.9vw;
+  width: 100%;
 }
 .loading .contactnav .hidden {
   display: none;
