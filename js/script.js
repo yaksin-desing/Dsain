@@ -14,10 +14,15 @@ const tituloh1 = document.getElementById('tituloh1');
 const contactnav = document.getElementById('contactnav');
 const audio_container = document.getElementById('audio-container');
 const videofondo = document.getElementById('videofondo');
+const parrafodeinicio = document.getElementById('parrafodeinicio');
 
 //timeline loading
 const animaloading = gsap.timeline({
     paused: true
+});
+animaloading.to(parrafodeinicio, {
+    duration: 1,
+    opacity: "100%",
 });
 animaloading.to(contenedor_loading, {
     duration: 1,
@@ -63,6 +68,7 @@ animaloading.to(imgparrafoinicio, {
     duration: 1,
     opacity: "100%",
 });
+
 
 
 // Progreso inicial
@@ -345,3 +351,47 @@ cursorScale.forEach(link => {
 });
 
 
+
+
+
+
+
+
+
+
+
+//Animacion de inicio de escena
+
+
+//timeline loading
+const openescena = gsap.timeline({
+    paused: true,
+    duration: 1,
+    delay: -1,
+});
+
+openescena.to(botoninicio, {
+    bottom: "-5vh",
+});
+
+openescena.to(tituloh1, {
+
+    opacity: "0",
+});
+
+openescena.to(imgparrafoinicio, {
+
+    opacity: "0",
+});
+openescena.to(parrafodeinicio, {
+
+    opacity: "0",
+});
+
+
+
+// Escuchar el evento click en el botón
+document.getElementById("botoninicio").addEventListener("click", () => {
+    openescena.play(); // Iniciar el timeline
+    audioPlayer.play();
+  });
