@@ -388,6 +388,14 @@ openescena.to(parrafodeinicio, {
     opacity: "0",
 });
 
+openescena.to(contenedor_loading, {
+    duration: 1,
+    ease: 'power2.out',
+    margin: "0vh",
+    height: "100dvh",
+    borderRadius: "0vh",
+});
+
 
 
 // Escuchar el evento click en el botón

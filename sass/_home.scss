@@ -10,6 +10,8 @@
     position: relative;
     overflow: hidden;
 
+    
+
     .logo_loading {
         position: absolute;
         display: flex;
@@ -446,3 +448,10 @@
     }
 
 }
+#scene-container {
+    width: 100vw;
+    height: 100dvh;
+    border: 2px solid #3a3a3a;
+    position:absolute;
+    z-index: 0;
+  }
