@@ -1,13 +1,7 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import {
-  GLTFLoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
-import {
-  RGBELoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
-import {
-  TextureLoader
-} from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+import { RGBELoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
+import { TextureLoader } from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 function main() {
@@ -15,13 +9,13 @@ function main() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
-// Agregar niebla lineal
-//scene.fog = new THREE.Fog(0xffbb33, 1, 40); // Color, inicio de la niebla, fin de la niebla
-
-// Agregar niebla exponencial
-//scene.fog = new THREE.FogExp2(0x0000ff, 0.01); // Color, densidad (ajusta para más o menos intensidad)
-
-
+  // Cargar HDRI global para toda la escena
+  const globalHdrLoader = new RGBELoader();
+  globalHdrLoader.load("./src/objt/logo/hdrs.hdr", (texture) => {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.environment = texture;  // HDRI global
+    //scene.background = texture;   // Fondo global
+  });
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -36,11 +30,7 @@ function main() {
   const minCameraX = -1;
   const maxCameraX = 5;
 
-  function focusCameraOnObject(camera, object, offset = {
-    x: 0,
-    y: -1,
-    z: 1,
-  }) {
+  function focusCameraOnObject(camera, object, offset = { x: 0, y: -1, z: 0.2 }) {
     const boundingBox = new THREE.Box3().setFromObject(object);
     const center = boundingBox.getCenter(new THREE.Vector3());
     camera.position.set(
@@ -51,9 +41,7 @@ function main() {
     camera.lookAt(center);
   }
 
-  const renderer = new THREE.WebGLRenderer({
-    antialias: true
-  });
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
   renderer.shadowMap.enabled = true;
@@ -72,7 +60,6 @@ function main() {
   const aaoMap = textureLoader.load("./src/objt/agua/occ.jpg");
   const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
   const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
-  const atexture = textureLoader.load("./src/objt/agua/hdr.png");
 
   const planeGeometry = new THREE.PlaneGeometry(100, 100, 100, 100);
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
@@ -85,7 +72,6 @@ function main() {
     thickness: 1.5,
     clearcoat: 1,
     clearcoatRoughness: 0.05,
-    envMap: atexture,
     envMapIntensity: 2,
     normalMap: anormalMap,
     displacementMap: adisplacementMap,
@@ -98,9 +84,6 @@ function main() {
   plane.receiveShadow = true;
   scene.add(plane);
 
-
-
-
   const pisoGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
   const pisoMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xffbb33,
@@ -112,14 +95,12 @@ function main() {
   piso.position.set(0, -5, 0);
   scene.add(piso);
 
-
-
   let mixer;
   const animateFunctions = [];
 
   let model = null; // Variable global para el modelo
 
-  // Cargar el HDR solo para el modelo
+  // Cargar el modelo y aplicar un HDRI local solo al modelo
   const loader = new GLTFLoader();
   loader.load(
     "./src/objt/logo/scene.gltf",
@@ -129,23 +110,24 @@ function main() {
       model.position.set(0, 12, 0);
       model.rotation.set(-2, 0, 0);
 
+      // Cargar HDRI específico para el modelo
       const rgbeLoader = new RGBELoader();
-      rgbeLoader.load("./src/objt/logo/hdrs.hdr", (texture) => {
+      rgbeLoader.load("./src/objt/logo/logo.hdr", (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping;
 
         model.traverse((child) => {
           if (child.isMesh && child.material) {
-            // Aplica el HDR solo al modelo
+            // Aplica el HDRI solo al modelo
             child.material.envMap = texture;
             child.material.envMapIntensity = 3;
-            child.material.metalness = 0.5;
+            child.material.metalness = 0.8;
             child.material.roughness = 0;
             child.material.clearcoat = 1;
             child.material.clearcoatRoughness = 0;
             child.material.emissive = new THREE.Color(0x9966cc);
             child.material.emissiveIntensity = 0.5;
             child.material.ior = 1;
-            child.material.transmission =1;
+            child.material.transmission = 1;
             child.material.thickness = 1;
             child.material.needsUpdate = true;
             child.castShadow = true;
@@ -219,16 +201,16 @@ function main() {
     const inicioescena = gsap.timeline();
 
     inicioescena.to(camera.position, {
-      duration: 5,
+      duration: 2,
       x: 0,
       y: 10,
-      z: 1,
+      z: 2,
       ease: "none",
 
     });
 
     inicioescena.to(camera.position, {
-      duration: 5,
+      duration: 2,
       x: 0,
       y: 2,
       z: 2,
@@ -238,7 +220,7 @@ function main() {
       }
     });
     inicioescena.to(model.position, {
-      delay: -3,
+      delay: -1,
       x: 0,
       y: 1,
       z: 0,
@@ -247,7 +229,7 @@ function main() {
     });
 
     inicioescena.to(model.rotation, {
-      delay: -3,
+      delay: -2,
       x: 0,
       y: 0,
       z: 0,
@@ -255,6 +237,7 @@ function main() {
     });
 
     inicioescena.to(camera.position, {
+      delay: -2,
       duration: 3,
       x: 0,
       y: 1,
