@@ -372,20 +372,25 @@ const openescena = gsap.timeline({
 
 openescena.to(botoninicio, {
     bottom: "-5vh",
+    
 });
 
-openescena.to(tituloh1, {
 
-    opacity: "0",
-});
 
 openescena.to(imgparrafoinicio, {
 
     opacity: "0",
+    display:"none"
 });
 openescena.to(parrafodeinicio, {
 
     opacity: "0",
+    display:"none"
+});
+openescena.to(tituloh1, {
+
+    opacity: "0",
+    display:"none"
 });
 
 openescena.to(contenedor_loading, {

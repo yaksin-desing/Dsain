@@ -102,7 +102,7 @@ h5 {
 .loading {
   height: 100dvh;
   width: auto;
-  background: #0048ee;
+  background: #0004ee;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,7 +226,7 @@ h5 {
 .loading .contactnav .bottoniniciocontact .cont_txt_botoncontact {
   overflow: hidden;
   width: 100%;
-  color: #0048ee;
+  color: #0004ee;
 }
 .loading .contactnav .bottoniniciocontact .flechabotoncontact {
   width: 1vw;
