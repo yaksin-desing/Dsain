@@ -2,6 +2,7 @@ import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
 import { TextureLoader } from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+import { SVGLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/SVGLoader.js";
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 function main() {
@@ -65,7 +66,7 @@ function main() {
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
   const planeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x000fff,
+    color: 0x000eee,
     roughness: 0,
     metalness: 0.1,
     transmission: 0.5,
@@ -147,6 +148,39 @@ function main() {
     (error) => console.error("Error al cargar el modelo:", error)
   );
 
+  // Agregar el SVG
+  const svgLoader = new SVGLoader();
+  svgLoader.load(
+    './src/objt/cielo/nubeuno.svg',
+    (data) => {
+      const paths = data.paths;
+      const group = new THREE.Group();
+
+      paths.forEach((path) => {
+        const material = new THREE.MeshBasicMaterial({
+          color: path.color,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+        });
+
+        const shapes = path.toShapes(true);
+        shapes.forEach((shape) => {
+          const geometry = new THREE.ShapeGeometry(shape);
+          const mesh = new THREE.Mesh(geometry, material);
+          group.add(mesh);
+        });
+      });
+
+      group.scale.set(0.1, 0.15, 0.1); // Cambia estos valores según el tamaño deseado
+      group.position.set(-100, 27, -65);
+      group.rotation.set(3.1, 0, -0.1);
+
+      scene.add(group);
+    },
+    undefined,
+    (error) => console.error("Error al cargar el SVG:", error)
+  );
+
   let animateWaves = false;
   const clock = new THREE.Clock();
 
@@ -159,7 +193,7 @@ function main() {
       for (let i = 0; i < positionAttribute.count; i++) {
         const x = positionAttribute.getX(i);
         const y = positionAttribute.getY(i);
-        const z = Math.sin(x * 0.3 + time) * 0.1 + Math.cos(y * 0.3 + time) * 0.1;
+        const z = Math.sin(x * 0.5 + time) * 0.01 + Math.cos(y * 0.5 + time) * 0.01;
         positionAttribute.setZ(i, z);
       }
       positionAttribute.needsUpdate = true;
