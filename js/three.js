@@ -8,9 +8,7 @@ import {
 import {
   TextureLoader
 } from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import {
-  SVGLoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/SVGLoader.js";
+
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 function main() {
@@ -70,50 +68,118 @@ function main() {
     camera.lookAt(center);
   }
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-  directionalLight.position.set(0, 10, -45);
+  // Crear un gradiente utilizando un Canvas
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; // Ajustamos el tamaño del canvas para que cubra toda la pantalla
+  canvas.height = window.innerHeight;
+
+  // Crear un gradiente lineal de arriba hacia abajo (puedes personalizarlo)
+  const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
+  gradient.addColorStop(0, '#FFEBA8E5'); // abajo
+  gradient.addColorStop(1, '#0000ff'); // arriba
+
+  // Rellenar el canvas con el gradiente
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Crear una textura con el canvas
+  const texture = new THREE.CanvasTexture(canvas);
+
+  // Crear un rectángulo (plane geometry) con un material que tenga el gradiente
+  const geometry = new THREE.PlaneGeometry(800, 100, 1); // Rectángulo de 2x2 unidades para que ocupe toda la pantalla
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true, // Hacerlo transparente
+    opacity: 1, // Totalmente opaco
+  });
+
+  const backgroundRect = new THREE.Mesh(geometry, material);
+  backgroundRect.position.set(0, 20, -150); // Colocarlo detrás de la cámara
+  backgroundRect.rotation.set(0, 0, 0);
+  scene.add(backgroundRect);
+
+
+
+  const directionalLight = new THREE.DirectionalLight(0xFfffff, 3);
+  directionalLight.position.set(-40, 25, -100);
   directionalLight.castShadow = true;
+  directionalLight.shadow.mapSize.width = 1024; // Tamaño del mapa de sombras
+  directionalLight.shadow.mapSize.height = 1024;
+  directionalLight.shadow.bias = 1; // Previene artefactos de sombra
+
+  // Puedes ajustar la cámara de sombra para la luz direccional
+  directionalLight.shadow.camera.left = -50;
+  directionalLight.shadow.camera.right = 100;
+  directionalLight.shadow.camera.top = 50;
+  directionalLight.shadow.camera.bottom = 50;
+  directionalLight.shadow.camera.near = 0.1;
+  directionalLight.shadow.camera.far = 200;
+
+  // Se puede personalizar la suavidad de la sombra (para luces direccionales)
+  directionalLight.shadow.radius = 100;
   scene.add(directionalLight);
 
   const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
   //scene.add(directionalLightHelper);
 
-  const segundaLight = new THREE.DirectionalLight(0xFFF0C6, 2);
-  segundaLight.position.set(4, 5, -15);
+  const segundaLight = new THREE.DirectionalLight(0xFF3419, 1);
+  segundaLight.position.set(3, 19, -150);
+  segundaLight.target.position.set(0, 0, 0); // Dirige la luz hacia el origen
+
+  // Habilitar sombras
   segundaLight.castShadow = true;
-  //scene.add(segundaLight);
+  segundaLight.shadow.mapSize.width = 1024; // Tamaño del mapa de sombras
+  segundaLight.shadow.mapSize.height = 1024;
+  segundaLight.shadow.bias = 1; // Previene artefactos de sombra
+
+  // Puedes ajustar la cámara de sombra para la luz direccional
+  segundaLight.shadow.camera.left = -50;
+  segundaLight.shadow.camera.right = 50;
+  segundaLight.shadow.camera.top = 50;
+  segundaLight.shadow.camera.bottom = 50;
+  segundaLight.shadow.camera.near = 0.1;
+  segundaLight.shadow.camera.far = 200;
+
+  // Se puede personalizar la suavidad de la sombra (para luces direccionales)
+  segundaLight.shadow.radius = 100;
+
+  // Agregar la luz a la escena
+  scene.add(segundaLight);
 
   const segundaLightHelper = new THREE.DirectionalLightHelper(segundaLight, 5);
   //scene.add(segundaLightHelper);
 
-  const textureLoader = new TextureLoader();
-  const aroughnessMap = textureLoader.load("./src/objt/agua/roug.jpg");
-  const aaoMap = textureLoader.load("./src/objt/agua/occ.jpg");
-  const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
-  const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
+  const textureLoader = new THREE.TextureLoader();
+const aroughnessMap = textureLoader.load("./src/objt/agua/roug.jpg");
+const aaoMap = textureLoader.load("./src/objt/agua/occ.jpg");
+const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
+const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
 
-  const planeGeometry = new THREE.PlaneGeometry(150, 50, 100, 100);
-  planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
+const planeGeometry = new THREE.PlaneGeometry(50, 50, 500, 100);
+planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
-  const planeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x000fff,
-    roughness: 0.5,
-    metalness: 1,
-    transmission: 2,
-    thickness: 1,
-    clearcoat: 1,
-    clearcoatRoughness: 0.05,
-    envMapIntensity: 1,
-    normalMap: anormalMap,
-    displacementMap: adisplacementMap,
-    displacementScale: 0.3,
-  });
+const planeMaterial = new THREE.MeshPhysicalMaterial({
+  color: 0x0026FF,
+  roughness: 0.1,
+  metalness: 0.5,
+  transmission: 0.5,   // Esto hace que el material sea más transparente (efecto vidrio)
+  thickness: 1,
+  clearcoat: 1,
+  clearcoatRoughness: 0.05,
+  envMapIntensity: 1,
+  normalMap: anormalMap,
+  displacementMap: adisplacementMap,
+  displacementScale: 0.3,
+  transparent: true,    // Habilitar la transparencia
+  opacity: 0.7          // Controla el nivel de transparencia (0 es completamente transparente)
+});
 
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane.rotation.x = -Math.PI / 2;
-  plane.position.set(0, 0, 0);
-  plane.receiveShadow = true;
-  scene.add(plane);
+const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+plane.rotation.x = -Math.PI / 2;
+plane.position.set(0, 0, 0);
+plane.receiveShadow = true;
+scene.add(plane);
 
 
   let mixer;
@@ -121,7 +187,7 @@ function main() {
 
   let model = null; // Variable global para el modelo
 
-  // Cargar el modelo y aplicar un HDRI local solo al modelo
+  // ((( LOGO ))) Cargar el modelo y aplicar un HDRI local solo al modelo
   const loader = new GLTFLoader();
   loader.load(
     "./src/objt/logo/scene.gltf",
@@ -130,6 +196,9 @@ function main() {
       model.scale.set(1, 1, 1);
       model.position.set(0, 12, 0);
       model.rotation.set(-2, 0, 0);
+      // Habilitar sombras en el modelo
+      model.castShadow = true; // El cubo emitirá sombras
+      model.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
 
       // Cargar HDRI específico para el modelo
       const rgbeLoader = new RGBELoader();
@@ -168,72 +237,150 @@ function main() {
     (error) => console.error("Error al cargar el modelo:", error)
   );
 
-  // Agregar el SVG
-  const svgLoader = new SVGLoader();
-  svgLoader.load(
-    './src/objt/cielo/nubeunos.svg',
-    (data) => {
-      const paths = data.paths;
-      const group = new THREE.Group();
+  const baselogo = new GLTFLoader();
+  baselogo.load(
+    "./src/objt/escena/baselogo.glb",
+    (gltf) => {
+      const modelbaselogo = gltf.scene;
+      modelbaselogo.position.set(0, -1.1, 0);
+      modelbaselogo.scale.set(0.3, 0.36, 0.3);
+      modelbaselogo.rotation.set(0, 0, 0);
 
-      paths.forEach((path) => {
-        const material = new THREE.MeshBasicMaterial({
-          color: path.color,
-          side: THREE.DoubleSide,
-          depthWrite: false,
-        });
+      // Habilitar sombras en el modelo
+      modelbaselogo.castShadow = true; // El cubo emitirá sombras
+      modelbaselogo.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
 
-        const shapes = path.toShapes(true);
-        shapes.forEach((shape) => {
-          const geometry = new THREE.ShapeGeometry(shape);
-          const mesh = new THREE.Mesh(geometry, material);
-          group.add(mesh);
-        });
+      const modelbaselogoMaterial = new THREE.MeshStandardMaterial({
+        color: 0xFFF6E8, // Color base del material          
+        aoMap: null, // Mapa de oclusión ambiental
+        emissive: 0xFF9F73, // Color de emisión (luz propia)
+        emissiveIntensity: 0.5, // Intensidad de la emisión
+        emissiveMap: null, // Textura de emisión
+        metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
+        metalnessMap: null, // Mapa de metalicidad
+        roughness: 1, // Rugosidad de la superficie (0 = completamente suave, 1 = completamente rugoso)
+        roughnessMap: null, // Mapa de rugosidad
+        bumpMap: null, // Mapa de relieve (bump)
+        normalMap: null, // Mapa normal (para efectos de iluminación)
+        displacementMap: null, // Mapa de desplazamiento
+        displacementScale: 0.2, // Escala del desplazamiento
+        displacementBias: 0, // Desplazamiento de la altura
+        alphaMap: null, // Mapa de transparencia
+        transparent: false, // Si es transparente (se usa con alphaMap o opacity)
+        opacity: 1, // Opacidad del material (0 = completamente transparente)
+        side: THREE.FrontSide, // Qué caras del material se deben renderizar (FrontSide, BackSide, DoubleSide)
+        flatShading: false, // Si se aplica sombreado plano en las caras
+        wireframe: false, // Si se muestra como líneas (wireframe)
+        wireframeLinewidth: 1, // Grosor de las líneas en el modo wireframe
+        wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
+        wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
+        shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
+        reflectivity: 0.5, // Reflexión del material
+        envMap: null, // Mapa del entorno para reflejos
+        envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
+        alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
+        combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
+
       });
 
-      group.scale.set(0.1, 0.05, 0.1); // Cambia estos valores según el tamaño deseado
-      group.position.set(-155, 50, -73);
-      group.rotation.set(3.1, 0, 0);
+      modelbaselogo.traverse((child) => {
+        if (child.isMesh) {
+          child.material = modelbaselogoMaterial;
+        }
+      });
 
-      scene.add(group);
+      scene.add(modelbaselogo);
     },
     undefined,
-    (error) => console.error("Error al cargar el SVG:", error)
+    (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
 
+
+
+  // Cargar el modelo de las dunas
+  const textureLoaderDunas = new THREE.TextureLoader();
+  const ambientOcclusion = textureLoaderDunas.load("./src/objt/tierra/arenaambientOcclusion.jpg");
+  const roughnessMap = textureLoaderDunas.load("./src/objt/tierra/arenaRoughness.jpg");
+  const displacementMap = textureLoaderDunas.load("./src/objt/tierra/arenaHeight.png");
+
+  const dunasLoader = new GLTFLoader();
+  dunasLoader.load(
+    "./src/objt/escena/base.glb",
+    (gltf) => {
+      const modelDunas = gltf.scene;
+      modelDunas.position.set(0, -1, 0);
+      modelDunas.scale.set(0.5, 0.5, 0.5);
+      modelDunas.rotation.set(0, 0, 0);
+
+      const sandMaterial = new THREE.MeshStandardMaterial({
+        color: 0xF6B756, // Color base del material          
+        aoMap: ambientOcclusion, // Mapa de oclusión ambiental
+        emissive: 0xCC5219, // Color de emisión (luz propia)
+        emissiveIntensity: 1, // Intensidad de la emisión
+        emissiveMap: null, // Textura de emisión
+        metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
+        metalnessMap: null, // Mapa de metalicidad
+        roughness: 1, // Rugosidad de la superficie (0 = completamente suave, 1 = completamente rugoso)
+        roughnessMap: roughnessMap, // Mapa de rugosidad
+        bumpMap: null, // Mapa de relieve (bump)
+        normalMap: null, // Mapa normal (para efectos de iluminación)
+        displacementMap: displacementMap, // Mapa de desplazamiento
+        displacementScale: 0.2, // Escala del desplazamiento
+        displacementBias: 0, // Desplazamiento de la altura
+        alphaMap: null, // Mapa de transparencia
+        transparent: false, // Si es transparente (se usa con alphaMap o opacity)
+        opacity: 1, // Opacidad del material (0 = completamente transparente)
+        side: THREE.FrontSide, // Qué caras del material se deben renderizar (FrontSide, BackSide, DoubleSide)
+        flatShading: false, // Si se aplica sombreado plano en las caras
+        wireframe: false, // Si se muestra como líneas (wireframe)
+        wireframeLinewidth: 1, // Grosor de las líneas en el modo wireframe
+        wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
+        wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
+        shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
+        reflectivity: 0.5, // Reflexión del material
+        envMap: null, // Mapa del entorno para reflejos
+        envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
+        alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
+        combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
+
+      });
+
+      modelDunas.traverse((child) => {
+        if (child.isMesh) {
+          child.material = sandMaterial;
+        }
+      });
+
+      scene.add(modelDunas);
+    },
+    undefined,
+    (error) => console.error("Error al cargar el modelo de dunas:", error)
+  );
+
+
   // Sol 1
-const sun1Geometry = new THREE.SphereGeometry(5, 32, 32);
-const sun1Material = new THREE.MeshStandardMaterial({
-    emissive: 0xFFECEC, // Color brillante del primer sol
+  const sun1Geometry = new THREE.SphereGeometry(3, 32, 32);
+  const sun1Material = new THREE.MeshStandardMaterial({
+    emissive: 0xffffff, // Color brillante del primer sol
     emissiveIntensity: 1.8,
-    color: 0xFFECEC,
+    color: 0xffffff,
     roughness: 0.2,
     metalness: 0.7
-});
-const sun1 = new THREE.Mesh(sun1Geometry, sun1Material);
-sun1.position.set(-3, 16, -77);
-scene.add(sun1);
+  });
+  const sun1 = new THREE.Mesh(sun1Geometry, sun1Material);
+  sun1.position.set(-40, 25, -100);
+  scene.add(sun1);
 
-const sun1Light = new THREE.PointLight(0xFFECEC, 5, 100);
-sun1Light.position.set(-3, 16, -77);
-scene.add(sun1Light);
-
-// Sol 2
-const sun2Geometry = new THREE.SphereGeometry(20, 35, 35);
-const sun2Material = new THREE.MeshStandardMaterial({
+  // Sol 2
+  const sun2Geometry = new THREE.SphereGeometry(20, 35, 35);
+  const sun2Material = new THREE.MeshStandardMaterial({
     emissive: 0xff0000, // Color brillante del segundo sol
     emissiveIntensity: 1.8,
     color: 0xff0000,
-    roughness: 0.2,
-    metalness: 0.1
-});
-const sun2 = new THREE.Mesh(sun2Geometry, sun2Material);
-sun2.position.set(15, 15, -100);
-scene.add(sun2);
-
-const sun2Light = new THREE.PointLight(0xff0000, 20, 50);
-sun2Light.position.set(15, 15, -50);
-scene.add(sun2Light);
+  });
+  const sun2 = new THREE.Mesh(sun2Geometry, sun2Material);
+  sun2.position.set(3, 19, -150);
+  scene.add(sun2);
 
 
   let animateWaves = false;
@@ -248,7 +395,7 @@ scene.add(sun2Light);
       for (let i = 0; i < positionAttribute.count; i++) {
         const x = positionAttribute.getX(i);
         const y = positionAttribute.getY(i);
-        const z = Math.sin(x * 0.5 + time) * 0.09 + Math.cos(y * 1 + time) * 0.09;
+        const z = Math.sin(x * 0.3 + time) * 0.05 + Math.cos(y * 0.3 + time) * 0.03;
         positionAttribute.setZ(i, z);
       }
       positionAttribute.needsUpdate = true;
@@ -277,6 +424,8 @@ scene.add(sun2Light);
   }
 
   window.addEventListener("mousemove", onMouseMove);
+
+
 
   const botonInicio = document.getElementById("botoninicio");
   botonInicio.addEventListener("click", () => {
