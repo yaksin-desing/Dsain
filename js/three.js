@@ -1,8 +1,16 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
-import { RGBELoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
-import { TextureLoader } from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import { SVGLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/SVGLoader.js";
+import {
+  GLTFLoader
+} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+import {
+  RGBELoader
+} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
+import {
+  TextureLoader
+} from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+import {
+  SVGLoader
+} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/SVGLoader.js";
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 function main() {
@@ -10,12 +18,28 @@ function main() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
-  // Cargar HDRI global para toda la escena
+  // Inicializa el renderer antes de utilizarlo
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true
+  });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  // Crear PMREMGenerator después de inicializar el renderer
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+
+  // Cargar HDRI global
   const globalHdrLoader = new RGBELoader();
-  globalHdrLoader.load("./src/objt/logo/hdrs.hdr", (texture) => {
+  globalHdrLoader.load("./src/objt/escena/cielo.hdr", (texture) => {
     texture.mapping = THREE.EquirectangularReflectionMapping;
-    scene.environment = texture;  // HDRI global
-    //scene.background = texture;   // Fondo global
+
+    // Convertir para compatibilidad con PMREM (mejor iluminación)
+    const hdrEquirect = pmremGenerator.fromEquirectangular(texture).texture;
+    scene.environment = hdrEquirect; // HDRI global
+    //scene.background = hdrEquirect;  // Fondo global (opcional)
+
   });
 
   const camera = new THREE.PerspectiveCamera(
@@ -31,7 +55,11 @@ function main() {
   const minCameraX = -1;
   const maxCameraX = 5;
 
-  function focusCameraOnObject(camera, object, offset = { x: 0, y: -1, z: 0.2 }) {
+  function focusCameraOnObject(camera, object, offset = {
+    x: 0,
+    y: -1,
+    z: 0.2
+  }) {
     const boundingBox = new THREE.Box3().setFromObject(object);
     const center = boundingBox.getCenter(new THREE.Vector3());
     camera.position.set(
@@ -42,19 +70,21 @@ function main() {
     camera.lookAt(center);
   }
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  container.appendChild(renderer.domElement);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-  const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 5);
-  directionalLight.position.set(0, 10, 50);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(0, 10, -45);
   directionalLight.castShadow = true;
   scene.add(directionalLight);
 
   const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
-  scene.add(directionalLightHelper);
+  //scene.add(directionalLightHelper);
+
+  const segundaLight = new THREE.DirectionalLight(0xFFF0C6, 2);
+  segundaLight.position.set(4, 5, -15);
+  segundaLight.castShadow = true;
+  //scene.add(segundaLight);
+
+  const segundaLightHelper = new THREE.DirectionalLightHelper(segundaLight, 5);
+  //scene.add(segundaLightHelper);
 
   const textureLoader = new TextureLoader();
   const aroughnessMap = textureLoader.load("./src/objt/agua/roug.jpg");
@@ -62,18 +92,18 @@ function main() {
   const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
   const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
 
-  const planeGeometry = new THREE.PlaneGeometry(100, 100, 100, 100);
+  const planeGeometry = new THREE.PlaneGeometry(150, 50, 100, 100);
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
   const planeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x000eee,
-    roughness: 0,
-    metalness: 0.1,
-    transmission: 0.5,
-    thickness: 1.5,
+    color: 0x000fff,
+    roughness: 0.5,
+    metalness: 1,
+    transmission: 2,
+    thickness: 1,
     clearcoat: 1,
     clearcoatRoughness: 0.05,
-    envMapIntensity: 2,
+    envMapIntensity: 1,
     normalMap: anormalMap,
     displacementMap: adisplacementMap,
     displacementScale: 0.3,
@@ -85,16 +115,6 @@ function main() {
   plane.receiveShadow = true;
   scene.add(plane);
 
-  const pisoGeometry = new THREE.PlaneGeometry(100, 100, 1, 1);
-  const pisoMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xffbb33,
-    metalness: 0,
-    transmission: 0,
-  });
-  const piso = new THREE.Mesh(pisoGeometry, pisoMaterial);
-  piso.rotation.x = -Math.PI / 2;
-  piso.position.set(0, -5, 0);
-  scene.add(piso);
 
   let mixer;
   const animateFunctions = [];
@@ -151,7 +171,7 @@ function main() {
   // Agregar el SVG
   const svgLoader = new SVGLoader();
   svgLoader.load(
-    './src/objt/cielo/nubeuno.svg',
+    './src/objt/cielo/nubeunos.svg',
     (data) => {
       const paths = data.paths;
       const group = new THREE.Group();
@@ -171,15 +191,50 @@ function main() {
         });
       });
 
-      group.scale.set(0.1, 0.15, 0.1); // Cambia estos valores según el tamaño deseado
-      group.position.set(-100, 27, -65);
-      group.rotation.set(3.1, 0, -0.1);
+      group.scale.set(0.1, 0.05, 0.1); // Cambia estos valores según el tamaño deseado
+      group.position.set(-155, 50, -73);
+      group.rotation.set(3.1, 0, 0);
 
       scene.add(group);
     },
     undefined,
     (error) => console.error("Error al cargar el SVG:", error)
   );
+
+  // Sol 1
+const sun1Geometry = new THREE.SphereGeometry(5, 32, 32);
+const sun1Material = new THREE.MeshStandardMaterial({
+    emissive: 0xFFECEC, // Color brillante del primer sol
+    emissiveIntensity: 1.8,
+    color: 0xFFECEC,
+    roughness: 0.2,
+    metalness: 0.7
+});
+const sun1 = new THREE.Mesh(sun1Geometry, sun1Material);
+sun1.position.set(-3, 16, -77);
+scene.add(sun1);
+
+const sun1Light = new THREE.PointLight(0xFFECEC, 5, 100);
+sun1Light.position.set(-3, 16, -77);
+scene.add(sun1Light);
+
+// Sol 2
+const sun2Geometry = new THREE.SphereGeometry(20, 35, 35);
+const sun2Material = new THREE.MeshStandardMaterial({
+    emissive: 0xff0000, // Color brillante del segundo sol
+    emissiveIntensity: 1.8,
+    color: 0xff0000,
+    roughness: 0.2,
+    metalness: 0.1
+});
+const sun2 = new THREE.Mesh(sun2Geometry, sun2Material);
+sun2.position.set(15, 15, -100);
+scene.add(sun2);
+
+const sun2Light = new THREE.PointLight(0xff0000, 20, 50);
+sun2Light.position.set(15, 15, -50);
+scene.add(sun2Light);
+
 
   let animateWaves = false;
   const clock = new THREE.Clock();
@@ -193,7 +248,7 @@ function main() {
       for (let i = 0; i < positionAttribute.count; i++) {
         const x = positionAttribute.getX(i);
         const y = positionAttribute.getY(i);
-        const z = Math.sin(x * 0.5 + time) * 0.01 + Math.cos(y * 0.5 + time) * 0.01;
+        const z = Math.sin(x * 0.5 + time) * 0.09 + Math.cos(y * 1 + time) * 0.09;
         positionAttribute.setZ(i, z);
       }
       positionAttribute.needsUpdate = true;
