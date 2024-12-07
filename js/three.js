@@ -102,7 +102,7 @@ function main() {
 
 
   const directionalLight = new THREE.DirectionalLight(0xFfffff, 3);
-  directionalLight.position.set(-40, 25, -100);
+  directionalLight.position.set(-15, 25, -100);
   directionalLight.castShadow = true;
   directionalLight.shadow.mapSize.width = 1024; // Tamaño del mapa de sombras
   directionalLight.shadow.mapSize.height = 1024;
@@ -151,35 +151,35 @@ function main() {
   //scene.add(segundaLightHelper);
 
   const textureLoader = new THREE.TextureLoader();
-const aroughnessMap = textureLoader.load("./src/objt/agua/roug.jpg");
-const aaoMap = textureLoader.load("./src/objt/agua/occ.jpg");
-const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
-const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
+  const aroughnessMap = textureLoader.load("./src/objt/agua/roug.jpg");
+  const aaoMap = textureLoader.load("./src/objt/agua/occ.jpg");
+  const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
+  const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
 
-const planeGeometry = new THREE.PlaneGeometry(50, 50, 500, 100);
-planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
+  const planeGeometry = new THREE.PlaneGeometry(50, 50, 500, 100);
+  planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
-const planeMaterial = new THREE.MeshPhysicalMaterial({
-  color: 0x0026FF,
-  roughness: 0.1,
-  metalness: 0.5,
-  transmission: 0.5,   // Esto hace que el material sea más transparente (efecto vidrio)
-  thickness: 1,
-  clearcoat: 1,
-  clearcoatRoughness: 0.05,
-  envMapIntensity: 1,
-  normalMap: anormalMap,
-  displacementMap: adisplacementMap,
-  displacementScale: 0.3,
-  transparent: true,    // Habilitar la transparencia
-  opacity: 0.7          // Controla el nivel de transparencia (0 es completamente transparente)
-});
+  const planeMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x0026FF,
+    roughness: 0.1,
+    metalness: 0.5,
+    transmission: 0.5, // Esto hace que el material sea más transparente (efecto vidrio)
+    thickness: 1,
+    clearcoat: 1,
+    clearcoatRoughness: 0.05,
+    envMapIntensity: 1,
+    normalMap: anormalMap,
+    displacementMap: adisplacementMap,
+    displacementScale: 0.3,
+    transparent: true, // Habilitar la transparencia
+    opacity: 0.7 // Controla el nivel de transparencia (0 es completamente transparente)
+  });
 
-const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-plane.rotation.x = -Math.PI / 2;
-plane.position.set(0, 0, 0);
-plane.receiveShadow = true;
-scene.add(plane);
+  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  plane.rotation.x = -Math.PI / 2;
+  plane.position.set(0, 0, 0);
+  plane.receiveShadow = true;
+  scene.add(plane);
 
 
   let mixer;
@@ -237,6 +237,7 @@ scene.add(plane);
     (error) => console.error("Error al cargar el modelo:", error)
   );
 
+  // cargar modelo base logo
   const baselogo = new GLTFLoader();
   baselogo.load(
     "./src/objt/escena/baselogo.glb",
@@ -290,6 +291,65 @@ scene.add(plane);
       });
 
       scene.add(modelbaselogo);
+    },
+    undefined,
+    (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
+  );
+
+  // cargar modelo pasillo
+  const pasillo = new GLTFLoader();
+  pasillo.load(
+    "./src/objt/escena/pasillo.glb",
+    (gltf) => {
+      const modelpasillo = gltf.scene;
+      modelpasillo.position.set(0, 1.4, 10);
+      modelpasillo.scale.set(0.2, 0.2, 0.2);
+      modelpasillo.rotation.set(0, 0, 0);
+
+      // Habilitar sombras en el modelo
+      modelpasillo.castShadow = true; // El cubo emitirá sombras
+      modelpasillo.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
+
+      const modelpasilloMaterial = new THREE.MeshStandardMaterial({
+        color: 0xFFF6E8, // Color base del material          
+        aoMap: null, // Mapa de oclusión ambiental
+        emissive: 0xFF9F73, // Color de emisión (luz propia)
+        emissiveIntensity: 0.5, // Intensidad de la emisión
+        emissiveMap: null, // Textura de emisión
+        metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
+        metalnessMap: null, // Mapa de metalicidad
+        roughness: 1, // Rugosidad de la superficie (0 = completamente suave, 1 = completamente rugoso)
+        roughnessMap: null, // Mapa de rugosidad
+        bumpMap: null, // Mapa de relieve (bump)
+        normalMap: null, // Mapa normal (para efectos de iluminación)
+        displacementMap: null, // Mapa de desplazamiento
+        displacementScale: 0.2, // Escala del desplazamiento
+        displacementBias: 0, // Desplazamiento de la altura
+        alphaMap: null, // Mapa de transparencia
+        transparent: false, // Si es transparente (se usa con alphaMap o opacity)
+        opacity: 1, // Opacidad del material (0 = completamente transparente)
+        side: THREE.FrontSide, // Qué caras del material se deben renderizar (FrontSide, BackSide, DoubleSide)
+        flatShading: false, // Si se aplica sombreado plano en las caras
+        wireframe: false, // Si se muestra como líneas (wireframe)
+        wireframeLinewidth: 1, // Grosor de las líneas en el modo wireframe
+        wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
+        wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
+        shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
+        reflectivity: 0.5, // Reflexión del material
+        envMap: null, // Mapa del entorno para reflejos
+        envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
+        alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
+        combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
+
+      });
+
+      modelpasillo.traverse((child) => {
+        if (child.isMesh) {
+          child.material = modelpasilloMaterial;
+        }
+      });
+
+      scene.add(modelpasillo);
     },
     undefined,
     (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
@@ -368,7 +428,7 @@ scene.add(plane);
     metalness: 0.7
   });
   const sun1 = new THREE.Mesh(sun1Geometry, sun1Material);
-  sun1.position.set(-40, 25, -100);
+  sun1.position.set(-15, 25, -100);
   scene.add(sun1);
 
   // Sol 2
@@ -395,7 +455,7 @@ scene.add(plane);
       for (let i = 0; i < positionAttribute.count; i++) {
         const x = positionAttribute.getX(i);
         const y = positionAttribute.getY(i);
-        const z = Math.sin(x * 0.3 + time) * 0.05 + Math.cos(y * 0.3 + time) * 0.03;
+        const z = Math.sin(x * 0.3 + time) * 0.01 + Math.cos(y * 0.3 + time) * 0.01;
         positionAttribute.setZ(i, z);
       }
       positionAttribute.needsUpdate = true;
@@ -479,7 +539,19 @@ scene.add(plane);
       duration: 3,
       x: 0,
       y: 1,
-      z: 5,
+      z: 3,
+      ease: "power3.easeInOut",
+      onUpdate: () => {
+        camera.lookAt(0, 1, 0);
+      }
+    });
+
+    inicioescena.to(camera.position, {
+      delay: -2,
+      duration: 3,
+      x: 0,
+      y: 1,
+      z: 10,
       ease: "power3.easeInOut",
       onUpdate: () => {
         camera.lookAt(0, 1, 0);
