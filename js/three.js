@@ -400,7 +400,7 @@ function main() {
         wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
         wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
         shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
-        reflectivity: 0.5, // Reflexión del material
+        reflectivity: 0, // Reflexión del material
         envMap: null, // Mapa del entorno para reflejos
         envMapIntensity: 0, // Intensidad de los reflejos del mapa del entorno
         alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
