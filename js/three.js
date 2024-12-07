@@ -20,13 +20,16 @@ function main() {
   const renderer = new THREE.WebGLRenderer({
     antialias: true
   });
+
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+
   // Crear PMREMGenerator después de inicializar el renderer
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
+
 
   // Cargar HDRI global
   const globalHdrLoader = new RGBELoader();
@@ -484,6 +487,10 @@ function main() {
   }
 
   window.addEventListener("mousemove", onMouseMove);
+
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  texture.encoding = THREE.sRGBEncoding; // Para texturas
+  material.map.encoding = THREE.sRGBEncoding; // Si usas texturas en materiales
 
 
 
