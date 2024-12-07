@@ -402,7 +402,7 @@ function main() {
         shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
         reflectivity: 0.5, // Reflexión del material
         envMap: null, // Mapa del entorno para reflejos
-        envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
+        envMapIntensity: 0, // Intensidad de los reflejos del mapa del entorno
         alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
         combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
 
