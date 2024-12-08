@@ -159,7 +159,7 @@ function main() {
   const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
   const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
 
-  const planeGeometry = new THREE.PlaneGeometry(50, 50, 500, 100);
+  const planeGeometry = new THREE.PlaneGeometry(50, 50, 500, 500);
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
   const planeMaterial = new THREE.MeshPhysicalMaterial({
@@ -180,7 +180,7 @@ function main() {
 
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = -Math.PI / 2;
-  plane.position.set(0, 0, 0);
+  plane.position.set(0, 0, 9);
   plane.receiveShadow = true;
   scene.add(plane);
 
@@ -197,7 +197,7 @@ function main() {
     (gltf) => {
       model = gltf.scene; // Asignar el modelo a la variable global
       model.scale.set(1, 1, 1);
-      model.position.set(0, 12, 0);
+      model.position.set(0, 12, -5);
       model.rotation.set(-2, 0, 0);
       // Habilitar sombras en el modelo
       model.castShadow = true; // El cubo emitirá sombras
@@ -246,7 +246,7 @@ function main() {
     "./src/objt/escena/baselogo.glb",
     (gltf) => {
       const modelbaselogo = gltf.scene;
-      modelbaselogo.position.set(0, -1.1, 0);
+      modelbaselogo.position.set(0, -1.1, -5);
       modelbaselogo.scale.set(0.3, 0.36, 0.3);
       modelbaselogo.rotation.set(0, 0, 0);
 
@@ -305,8 +305,8 @@ function main() {
     "./src/objt/escena/pasillo.glb",
     (gltf) => {
       const modelpasillo = gltf.scene;
-      modelpasillo.position.set(0, 1.4, 10);
-      modelpasillo.scale.set(0.2, 0.2, 0.2);
+      modelpasillo.position.set(0, -1.8, 4);
+      modelpasillo.scale.set(0.3, 0.2, 0.2);
       modelpasillo.rotation.set(0, 0, 0);
 
       // Habilitar sombras en el modelo
@@ -352,7 +352,7 @@ function main() {
         }
       });
 
-      scene.add(modelpasillo);
+      //scene.add(modelpasillo);
     },
     undefined,
     (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
@@ -374,6 +374,7 @@ function main() {
       modelDunas.position.set(0, -1, 0);
       modelDunas.scale.set(0.5, 0.5, 0.5);
       modelDunas.rotation.set(0, 0, 0);
+      modelDunas.receiveShadow = true;
 
       const sandMaterial = new THREE.MeshStandardMaterial({
         color: 0xF6B756, // Color base del material          
@@ -445,6 +446,23 @@ function main() {
   sun2.position.set(3, 19, -150);
   scene.add(sun2);
 
+  // Geometría del toro
+const torusgeometry = new THREE.TorusGeometry(5, 0.6, 32, 64, Math.PI); // Arco en semicírculo
+const torusMaterial = new THREE.MeshPhysicalMaterial({
+  color: 0xFFFFFF,
+  metalness: 1.2,
+  roughness: 0,
+  reflectivity: 2,            // Alta reflectividad
+  castShadow : true,
+  
+});
+
+const torus = new THREE.Mesh(torusgeometry, torusMaterial);
+torus.position.set(13, 0, 7);
+torus.rotation.set(0,-11,0);
+torus.castShadow = true; // Permitir que el toro proyecte sombras
+scene.add(torus);
+
 
   let animateWaves = false;
   const clock = new THREE.Clock();
@@ -458,7 +476,7 @@ function main() {
       for (let i = 0; i < positionAttribute.count; i++) {
         const x = positionAttribute.getX(i);
         const y = positionAttribute.getY(i);
-        const z = Math.sin(x * 0.3 + time) * 0.01 + Math.cos(y * 0.3 + time) * 0.01;
+        const z = Math.sin(x * 0.5 + time) * 0.04 + Math.cos(y * 0.5 + time) * 0.01;
         positionAttribute.setZ(i, z);
       }
       positionAttribute.needsUpdate = true;
@@ -521,14 +539,14 @@ function main() {
       z: 2,
       ease: "none",
       onUpdate: () => {
-        camera.lookAt(0, 1, 0);
+        camera.lookAt(0, 1, -5);
       }
     });
     inicioescena.to(model.position, {
       delay: -1,
       x: 0,
       y: 1,
-      z: 0,
+      z: -5,
       duration: 2,
       ease: "power3.easeInOut",
     });
@@ -546,10 +564,10 @@ function main() {
       duration: 3,
       x: 0,
       y: 1,
-      z: 3,
+      z: -2,
       ease: "power3.easeInOut",
       onUpdate: () => {
-        camera.lookAt(0, 1, 0);
+        camera.lookAt(0, 1, -5);
       }
     });
 
@@ -558,10 +576,10 @@ function main() {
       duration: 3,
       x: 0,
       y: 1,
-      z: 10,
+      z: 20,
       ease: "power3.easeInOut",
       onUpdate: () => {
-        camera.lookAt(0, 1, 0);
+        camera.lookAt(0, 1, -5);
       }
     });
   });
