@@ -5,9 +5,6 @@ import {
 import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
-import {
-  TextureLoader
-} from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
@@ -21,10 +18,14 @@ function main() {
     antialias: true
   });
 
+  renderer.shadowMap.enabled = true;
+  //Puedes probar con otros tipos como THREE.PCFSoftShadowMap - THREE.PCFShadowMap o THREE.VSMShadowMap
+
+  renderer.shadowMap.type = THREE.PCFShadowMap;
+
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 
 
   // Crear PMREMGenerator después de inicializar el renderer
@@ -79,8 +80,8 @@ function main() {
 
   // Crear un gradiente lineal de arriba hacia abajo (puedes personalizarlo)
   const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-  gradient.addColorStop(0, '#FFEBA8E5'); // abajo
-  gradient.addColorStop(1, '#0000ff'); // arriba
+  gradient.addColorStop(0, '#FFEBA8FF'); // abajo
+  gradient.addColorStop(1, '#0400FFFF'); // arriba
 
   // Rellenar el canvas con el gradiente
   ctx.fillStyle = gradient;
@@ -90,7 +91,7 @@ function main() {
   const texture = new THREE.CanvasTexture(canvas);
 
   // Crear un rectángulo (plane geometry) con un material que tenga el gradiente
-  const geometry = new THREE.PlaneGeometry(800, 100, 1); // Rectángulo de 2x2 unidades para que ocupe toda la pantalla
+  const geometry = new THREE.PlaneGeometry(800, 150, 1); // Rectángulo de 2x2 unidades para que ocupe toda la pantalla
   const material = new THREE.MeshBasicMaterial({
     map: texture,
     transparent: true, // Hacerlo transparente
@@ -98,8 +99,8 @@ function main() {
   });
 
   const backgroundRect = new THREE.Mesh(geometry, material);
-  backgroundRect.position.set(0, 20, -150); // Colocarlo detrás de la cámara
-  backgroundRect.rotation.set(0, 0, 0);
+  backgroundRect.position.set(0, 30, -170); // Colocarlo detrás de la cámara
+  backgroundRect.rotation.set(0.5, 0, 0);
   scene.add(backgroundRect);
 
 
@@ -109,7 +110,7 @@ function main() {
   directionalLight.castShadow = true;
   directionalLight.shadow.mapSize.width = 1024; // Tamaño del mapa de sombras
   directionalLight.shadow.mapSize.height = 1024;
-  directionalLight.shadow.bias = 1; // Previene artefactos de sombra
+  directionalLight.shadow.bias = -0.001; // Previene artefactos de sombra
 
   // Puedes ajustar la cámara de sombra para la luz direccional
   directionalLight.shadow.camera.left = -50;
@@ -134,7 +135,7 @@ function main() {
   segundaLight.castShadow = true;
   segundaLight.shadow.mapSize.width = 1024; // Tamaño del mapa de sombras
   segundaLight.shadow.mapSize.height = 1024;
-  segundaLight.shadow.bias = 1; // Previene artefactos de sombra
+  segundaLight.shadow.bias = -0.001; // Previene artefactos de sombra
 
   // Puedes ajustar la cámara de sombra para la luz direccional
   segundaLight.shadow.camera.left = -50;
@@ -224,6 +225,7 @@ function main() {
             child.material.thickness = 1;
             child.material.needsUpdate = true;
             child.castShadow = true;
+            child.receiveShadow = true;
           }
         });
 
@@ -305,8 +307,8 @@ function main() {
     "./src/objt/escena/pasillo.glb",
     (gltf) => {
       const modelpasillo = gltf.scene;
-      modelpasillo.position.set(0, -1.8, 4);
-      modelpasillo.scale.set(0.3, 0.2, 0.2);
+      modelpasillo.position.set(0, -1.5, 20);
+      modelpasillo.scale.set(0.3, 0.3, 0.1);
       modelpasillo.rotation.set(0, 0, 0);
 
       // Habilitar sombras en el modelo
@@ -314,6 +316,7 @@ function main() {
       modelpasillo.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
 
       const modelpasilloMaterial = new THREE.MeshStandardMaterial({
+        side: THREE.DoubleSide, // Renderiza ambos lados de las caras
         color: 0xFFF6E8, // Color base del material          
         aoMap: null, // Mapa de oclusión ambiental
         emissive: 0xFF9F73, // Color de emisión (luz propia)
@@ -352,12 +355,11 @@ function main() {
         }
       });
 
-      //scene.add(modelpasillo);
+      scene.add(modelpasillo);
     },
     undefined,
     (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
-
 
 
   // Cargar el modelo de las dunas
@@ -389,7 +391,7 @@ function main() {
         bumpMap: null, // Mapa de relieve (bump)
         normalMap: null, // Mapa normal (para efectos de iluminación)
         displacementMap: displacementMap, // Mapa de desplazamiento
-        displacementScale: 0.2, // Escala del desplazamiento
+        displacementScale: 0, // Escala del desplazamiento
         displacementBias: 0, // Desplazamiento de la altura
         alphaMap: null, // Mapa de transparencia
         transparent: false, // Si es transparente (se usa con alphaMap o opacity)
@@ -447,21 +449,21 @@ function main() {
   scene.add(sun2);
 
   // Geometría del toro
-const torusgeometry = new THREE.TorusGeometry(5, 0.6, 32, 64, Math.PI); // Arco en semicírculo
-const torusMaterial = new THREE.MeshPhysicalMaterial({
-  color: 0xFFFFFF,
-  metalness: 1.2,
-  roughness: 0,
-  reflectivity: 2,            // Alta reflectividad
-  castShadow : true,
-  
-});
+  const torusgeometry = new THREE.TorusGeometry(5, 0.6, 32, 64, Math.PI); // Arco en semicírculo
+  const torusMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xFFFFFF,
+    metalness: 1.2,
+    roughness: 0,
+    reflectivity: 2, // Alta reflectividad
+    castShadow: true,
 
-const torus = new THREE.Mesh(torusgeometry, torusMaterial);
-torus.position.set(13, 0, 7);
-torus.rotation.set(0,-11,0);
-torus.castShadow = true; // Permitir que el toro proyecte sombras
-scene.add(torus);
+  });
+
+  const torus = new THREE.Mesh(torusgeometry, torusMaterial);
+  torus.position.set(13, 0, 7);
+  torus.rotation.set(0, -11, 0);
+  torus.castShadow = true; // Permitir que el toro proyecte sombras
+  scene.add(torus);
 
 
   let animateWaves = false;
@@ -494,11 +496,15 @@ scene.add(torus);
 
   animate();
 
+  
+
   window.addEventListener("resize", () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
   });
+
+  
 
   function onMouseMove(event) {
     mouse.x = (event.clientX / window.innerWidth) * 0.25 - 0.125;
@@ -575,11 +581,11 @@ scene.add(torus);
       delay: -2,
       duration: 3,
       x: 0,
-      y: 1,
-      z: 20,
+      y: 2,
+      z: 28,
       ease: "power3.easeInOut",
       onUpdate: () => {
-        camera.lookAt(0, 1, -5);
+        camera.lookAt(0, 1, -10);
       }
     });
   });
