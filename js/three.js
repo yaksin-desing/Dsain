@@ -11,6 +11,7 @@ import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 function main() {
   const container = document.getElementById("scene-container");
   const scene = new THREE.Scene();
+
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
   // Inicializa el renderer antes de utilizarlo
@@ -19,9 +20,10 @@ function main() {
   });
 
   renderer.shadowMap.enabled = true;
+
   //Puedes probar con otros tipos como THREE.PCFSoftShadowMap - THREE.PCFShadowMap o THREE.VSMShadowMap
 
-  renderer.shadowMap.type = THREE.PCFShadowMap;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
@@ -50,6 +52,9 @@ function main() {
     0.1,
     1000
   );
+  camera.rotation.set(1, 0, 0);
+  camera.position.set(0, 11, -5); // Ajusta los valores según tu escena
+  //camera.lookAt(0, 0, 0); // Asegúrate de que apunte al origen o a donde necesites
 
   const mouse = new THREE.Vector2();
   const targetX = 0;
@@ -72,6 +77,7 @@ function main() {
     camera.lookAt(center);
   }
 
+
   // Crear un gradiente utilizando un Canvas
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -91,7 +97,7 @@ function main() {
   const texture = new THREE.CanvasTexture(canvas);
 
   // Crear un rectángulo (plane geometry) con un material que tenga el gradiente
-  const geometry = new THREE.PlaneGeometry(800, 150, 1); // Rectángulo de 2x2 unidades para que ocupe toda la pantalla
+  const geometry = new THREE.PlaneGeometry(1500, 150, 1); // Rectángulo de 2x2 unidades para que ocupe toda la pantalla
   const material = new THREE.MeshBasicMaterial({
     map: texture,
     transparent: true, // Hacerlo transparente
@@ -99,37 +105,24 @@ function main() {
   });
 
   const backgroundRect = new THREE.Mesh(geometry, material);
-  backgroundRect.position.set(0, 30, -170); // Colocarlo detrás de la cámara
-  backgroundRect.rotation.set(0.5, 0, 0);
+  backgroundRect.position.set(0, -30, -190); // Colocarlo detrás de la cámara
+  backgroundRect.rotation.set(0, 0, 0);
   scene.add(backgroundRect);
 
 
 
-  const directionalLight = new THREE.DirectionalLight(0xFfffff, 3);
-  directionalLight.position.set(-15, 25, -100);
-  directionalLight.castShadow = true;
-  directionalLight.shadow.mapSize.width = 1024; // Tamaño del mapa de sombras
-  directionalLight.shadow.mapSize.height = 1024;
-  directionalLight.shadow.bias = -0.001; // Previene artefactos de sombra
-
-  // Puedes ajustar la cámara de sombra para la luz direccional
-  directionalLight.shadow.camera.left = -50;
-  directionalLight.shadow.camera.right = 100;
-  directionalLight.shadow.camera.top = 50;
-  directionalLight.shadow.camera.bottom = 50;
-  directionalLight.shadow.camera.near = 0.1;
-  directionalLight.shadow.camera.far = 200;
-
-  // Se puede personalizar la suavidad de la sombra (para luces direccionales)
-  directionalLight.shadow.radius = 100;
+  const directionalLight = new THREE.DirectionalLight(0xFfffff, 2);
+  directionalLight.position.set(-15, 15, -50);
+  directionalLight.castShadow = true
   scene.add(directionalLight);
+  console.log(directionalLight.shadow)
 
   const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
   //scene.add(directionalLightHelper);
 
   const segundaLight = new THREE.DirectionalLight(0xFF3419, 1);
   segundaLight.position.set(3, 19, -150);
-  segundaLight.target.position.set(0, 0, 0); // Dirige la luz hacia el origen
+  segundaLight.target.position.set(0, 1, 20); // Dirige la luz hacia el origen
 
   // Habilitar sombras
   segundaLight.castShadow = true;
@@ -138,18 +131,18 @@ function main() {
   segundaLight.shadow.bias = -0.001; // Previene artefactos de sombra
 
   // Puedes ajustar la cámara de sombra para la luz direccional
-  segundaLight.shadow.camera.left = -50;
-  segundaLight.shadow.camera.right = 50;
-  segundaLight.shadow.camera.top = 50;
-  segundaLight.shadow.camera.bottom = 50;
-  segundaLight.shadow.camera.near = 0.1;
-  segundaLight.shadow.camera.far = 200;
-
-  // Se puede personalizar la suavidad de la sombra (para luces direccionales)
-  segundaLight.shadow.radius = 100;
+  segundaLight.shadow.camera.left = -100;
+  segundaLight.shadow.camera.right = 100;
+  segundaLight.shadow.camera.top = 100;
+  segundaLight.shadow.camera.bottom = 100;
+  segundaLight.shadow.camera.near = 10;
+  segundaLight.shadow.camera.far = 500;
 
   // Agregar la luz a la escena
   scene.add(segundaLight);
+
+  const segundasombraHelper = new THREE.CameraHelper(segundaLight.shadow.camera);
+  //scene.add(segundasombraHelper);
 
   const segundaLightHelper = new THREE.DirectionalLightHelper(segundaLight, 5);
   //scene.add(segundaLightHelper);
@@ -230,7 +223,7 @@ function main() {
         });
 
         scene.add(model);
-        focusCameraOnObject(camera, model);
+        //focusCameraOnObject(camera, model);
 
         function rotateModel() {
           model.rotation.y += 0.01;
@@ -301,64 +294,73 @@ function main() {
     (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
 
-  // cargar modelo pasillo
+  // Crear luz direccional
+  const luzpasillo = new THREE.DirectionalLight(0xFFC0A2, 1);
+  luzpasillo.position.set(30, 20, -5); // Posición de la luz
+  luzpasillo.castShadow = true; // Activar sombras
+
+  // Ajustar la cámara de sombras (proyección ortográfica)
+  luzpasillo.shadow.camera.top = 50; // Límite superior
+  luzpasillo.shadow.camera.bottom = -50; // Límite inferior
+  luzpasillo.shadow.camera.left = -50; // Límite izquierdo
+  luzpasillo.shadow.camera.right = 50; // Límite derecho
+  luzpasillo.shadow.camera.near = 0.5; // Distancia mínima
+  luzpasillo.shadow.camera.far = 60; // Distancia máxima
+  luzpasillo.shadow.mapSize.width = 2048; // Ancho del mapa de sombras
+  luzpasillo.shadow.mapSize.height = 2048; // Alto del mapa de sombras
+
+  // Cambiar el objetivo de la luz
+  const target = new THREE.Object3D();
+  target.position.set(5, 0, 15); // Nuevo punto al que apunta la luz
+  scene.add(target); // Agregar el objetivo a la escena
+  luzpasillo.target = target; // Asignar el objetivo a la luz
+
+  // Opcional: Ayuda visual para la cámara de sombras
+  const shadowHelper = new THREE.CameraHelper(luzpasillo.shadow.camera);
+  //scene.add(shadowHelper);
+
+  // Agregar luz a la escena
+  scene.add(luzpasillo);
+
+  const luzpasillohelper = new THREE.DirectionalLightHelper(luzpasillo, 5);
+  //scene.add(luzpasillohelper);
+
+
+
+  // Cargar modelo pasillo
   const pasillo = new GLTFLoader();
   pasillo.load(
     "./src/objt/escena/pasillo.glb",
     (gltf) => {
       const modelpasillo = gltf.scene;
-      modelpasillo.position.set(0, -1.5, 20);
-      modelpasillo.scale.set(0.3, 0.3, 0.1);
+      modelpasillo.position.set(0, -0.8, 21);
+      modelpasillo.scale.set(0.3, 0.24, 0.1);
       modelpasillo.rotation.set(0, 0, 0);
 
-      // Habilitar sombras en el modelo
-      modelpasillo.castShadow = true; // El cubo emitirá sombras
-      modelpasillo.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
-
+      // Material para el pasillo
       const modelpasilloMaterial = new THREE.MeshStandardMaterial({
-        side: THREE.DoubleSide, // Renderiza ambos lados de las caras
-        color: 0xFFF6E8, // Color base del material          
-        aoMap: null, // Mapa de oclusión ambiental
-        emissive: 0xFF9F73, // Color de emisión (luz propia)
-        emissiveIntensity: 0.5, // Intensidad de la emisión
-        emissiveMap: null, // Textura de emisión
-        metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
-        metalnessMap: null, // Mapa de metalicidad
-        roughness: 1, // Rugosidad de la superficie (0 = completamente suave, 1 = completamente rugoso)
-        roughnessMap: null, // Mapa de rugosidad
-        bumpMap: null, // Mapa de relieve (bump)
-        normalMap: null, // Mapa normal (para efectos de iluminación)
-        displacementMap: null, // Mapa de desplazamiento
-        displacementScale: 0.2, // Escala del desplazamiento
-        displacementBias: 0, // Desplazamiento de la altura
-        alphaMap: null, // Mapa de transparencia
-        transparent: false, // Si es transparente (se usa con alphaMap o opacity)
-        opacity: 1, // Opacidad del material (0 = completamente transparente)
-        side: THREE.FrontSide, // Qué caras del material se deben renderizar (FrontSide, BackSide, DoubleSide)
-        flatShading: false, // Si se aplica sombreado plano en las caras
-        wireframe: false, // Si se muestra como líneas (wireframe)
-        wireframeLinewidth: 1, // Grosor de las líneas en el modo wireframe
-        wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
-        wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
-        shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
-        reflectivity: 0.5, // Reflexión del material
-        envMap: null, // Mapa del entorno para reflejos
-        envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
-        alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
-        combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
-
+        side: THREE.DoubleSide,
+        color: 0xffbe92,
+        emissive: 0xffbe92,
+        emissiveIntensity: 0.4,
+        metalness: 0,
+        roughness: 1,
       });
 
+      // Aplicar material y configurar sombras
       modelpasillo.traverse((child) => {
         if (child.isMesh) {
           child.material = modelpasilloMaterial;
+          child.castShadow = true; // Proyectar sombras
+          child.receiveShadow = true; // Recibir sombras
         }
       });
 
+      // Agregar modelo a la escena
       scene.add(modelpasillo);
     },
     undefined,
-    (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
+    (error) => console.error("Error al cargar el modelo de pasillo: ", error)
   );
 
 
@@ -434,11 +436,11 @@ function main() {
     metalness: 0.7
   });
   const sun1 = new THREE.Mesh(sun1Geometry, sun1Material);
-  sun1.position.set(-15, 25, -100);
+  sun1.position.set(-25, 25, -100);
   scene.add(sun1);
 
   // Sol 2
-  const sun2Geometry = new THREE.SphereGeometry(20, 35, 35);
+  const sun2Geometry = new THREE.SphereGeometry(25, 35, 35);
   const sun2Material = new THREE.MeshStandardMaterial({
     emissive: 0xff0000, // Color brillante del segundo sol
     emissiveIntensity: 1.8,
@@ -496,7 +498,7 @@ function main() {
 
   animate();
 
-  
+
 
   window.addEventListener("resize", () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -504,7 +506,7 @@ function main() {
     camera.updateProjectionMatrix();
   });
 
-  
+
 
   function onMouseMove(event) {
     mouse.x = (event.clientX / window.innerWidth) * 0.25 - 0.125;
@@ -529,25 +531,25 @@ function main() {
 
     const inicioescena = gsap.timeline();
 
-    inicioescena.to(camera.position, {
+    inicioescena.to(camera.rotation, {
       duration: 2,
       x: 0,
-      y: 10,
-      z: 2,
+      y: 0,
+      z: 0,
       ease: "none",
 
     });
 
     inicioescena.to(camera.position, {
+      delay: -2,
       duration: 2,
       x: 0,
-      y: 2,
-      z: 2,
+      y: 1,
+      z: -1,
       ease: "none",
-      onUpdate: () => {
-        camera.lookAt(0, 1, -5);
-      }
     });
+
+
     inicioescena.to(model.position, {
       delay: -1,
       x: 0,
@@ -565,29 +567,33 @@ function main() {
       ease: "power3.easeInOut",
     });
 
-    inicioescena.to(camera.position, {
-      delay: -2,
-      duration: 3,
+    inicioescena.to(backgroundRect.position, {
+      delay: 0,
       x: 0,
-      y: 1,
-      z: -2,
-      ease: "power3.easeInOut",
-      onUpdate: () => {
-        camera.lookAt(0, 1, -5);
-      }
+      y: 30,
+      z: -190,
+      ease: "none",
     });
 
     inicioescena.to(camera.position, {
       delay: -2,
-      duration: 3,
+      duration: 2,
       x: 0,
       y: 2,
-      z: 28,
-      ease: "power3.easeInOut",
-      onUpdate: () => {
-        camera.lookAt(0, 1, -10);
-      }
+      z: 26,
+      ease: "none",
     });
+
+    inicioescena.to(camera.rotation, {
+      delay: 4,
+      duration: 1,
+      x: 0,
+      y: -1.5,
+      z: 0,
+      ease: "power3.easeInOut",
+
+    });
+
   });
 }
 
