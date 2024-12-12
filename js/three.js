@@ -23,7 +23,7 @@ function main() {
 
   //Puedes probar con otros tipos como THREE.PCFSoftShadowMap - THREE.PCFShadowMap o THREE.VSMShadowMap
 
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.VSMShadowMap;
 
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
@@ -57,25 +57,9 @@ function main() {
   //camera.lookAt(0, 0, 0); // Asegúrate de que apunte al origen o a donde necesites
 
   const mouse = new THREE.Vector2();
-  const targetX = 0;
-  let cameraX = camera.position.x;
   const minCameraX = -1;
-  const maxCameraX = 5;
+  const maxCameraX = 500;
 
-  function focusCameraOnObject(camera, object, offset = {
-    x: 0,
-    y: -1,
-    z: 0.2
-  }) {
-    const boundingBox = new THREE.Box3().setFromObject(object);
-    const center = boundingBox.getCenter(new THREE.Vector3());
-    camera.position.set(
-      center.x + offset.x,
-      center.y + offset.y,
-      center.z + offset.z
-    );
-    camera.lookAt(center);
-  }
 
 
   // Crear un gradiente utilizando un Canvas
@@ -294,9 +278,10 @@ function main() {
     (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
 
-  // Crear luz direccional
+  /////// Crear luz direccional /////////////
+
   const luzpasillo = new THREE.DirectionalLight(0xFFC0A2, 1);
-  luzpasillo.position.set(30, 20, -5); // Posición de la luz
+  luzpasillo.position.set(15, 20, -10); // Posición de la luz
   luzpasillo.castShadow = true; // Activar sombras
 
   // Ajustar la cámara de sombras (proyección ortográfica)
@@ -308,6 +293,7 @@ function main() {
   luzpasillo.shadow.camera.far = 60; // Distancia máxima
   luzpasillo.shadow.mapSize.width = 2048; // Ancho del mapa de sombras
   luzpasillo.shadow.mapSize.height = 2048; // Alto del mapa de sombras
+  luzpasillo.shadow.bias = -0.001; // Previene artefactos de sombra
 
   // Cambiar el objetivo de la luz
   const target = new THREE.Object3D();
@@ -326,6 +312,39 @@ function main() {
   //scene.add(luzpasillohelper);
 
 
+  ///////// Crear luz direccional  ////////////////
+  const luzdospasillo = new THREE.DirectionalLight(0xFA7D66, 0.3);
+  luzdospasillo.position.set(15, 20, 15); // Posición de la luz
+  luzdospasillo.castShadow = true; // Activar sombras
+
+  // Ajustar la cámara de sombras (proyección ortográfica)
+  luzdospasillo.shadow.camera.top = 50; // Límite superior
+  luzdospasillo.shadow.camera.bottom = -50; // Límite inferior
+  luzdospasillo.shadow.camera.left = -50; // Límite izquierdo
+  luzdospasillo.shadow.camera.right = 50; // Límite derecho
+  luzdospasillo.shadow.camera.near = 0.5; // Distancia mínima
+  luzdospasillo.shadow.camera.far = 60; // Distancia máxima
+  luzdospasillo.shadow.mapSize.width = 2048; // Ancho del mapa de sombras
+  luzdospasillo.shadow.mapSize.height = 2048; // Alto del mapa de sombras
+  luzdospasillo.shadow.bias = -0.0001; // Previene artefactos de sombra
+
+  // Cambiar el objetivo de la luz
+  const targetdos = new THREE.Object3D();
+  targetdos.position.set(5, 0, 20); // Nuevo punto al que apunta la luz
+  scene.add(targetdos); // Agregar el objetivo a la escena
+  luzdospasillo.targetdos = targetdos; // Asignar el objetivo a la luz
+
+  // Opcional: Ayuda visual para la cámara de sombras
+  const shadowHelperdos = new THREE.CameraHelper(luzdospasillo.shadow.camera);
+  //scene.add(shadowHelper);
+
+  // Agregar luz a la escena
+  scene.add(luzdospasillo);
+
+  const luzpasillohelperdos = new THREE.DirectionalLightHelper(luzdospasillo, 5);
+  //scene.add(luzpasillohelperdos);
+
+
 
   // Cargar modelo pasillo
   const pasillo = new GLTFLoader();
@@ -334,15 +353,15 @@ function main() {
     (gltf) => {
       const modelpasillo = gltf.scene;
       modelpasillo.position.set(0, -0.8, 21);
-      modelpasillo.scale.set(0.3, 0.24, 0.1);
+      modelpasillo.scale.set(0.3, 0.25, 0.2);
       modelpasillo.rotation.set(0, 0, 0);
 
       // Material para el pasillo
       const modelpasilloMaterial = new THREE.MeshStandardMaterial({
         side: THREE.DoubleSide,
-        color: 0xffbe92,
-        emissive: 0xffbe92,
-        emissiveIntensity: 0.4,
+        color: 0xFDDF7E,
+        emissive: 0xFF8331,
+        emissiveIntensity: 0.3,
         metalness: 0,
         roughness: 1,
       });
@@ -468,6 +487,20 @@ function main() {
   scene.add(torus);
 
 
+  const geometrybasedos = new THREE.PlaneGeometry(500, 100);
+  const materialbasedos = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    side: THREE.DoubleSide
+  });
+
+
+  const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
+  scene.add(planedos);
+
+  planedos.position.set(0, 0, 100);
+  planedos.rotation.x = -Math.PI / 2;
+
+
   let animateWaves = false;
   const clock = new THREE.Clock();
 
@@ -580,18 +613,54 @@ function main() {
       duration: 2,
       x: 0,
       y: 2,
-      z: 26,
+      z: 31,
+      ease: "none",
+    });
+
+    inicioescena.to(camera.position, {
+      delay: 4,
+      duration: 2,
+      x: 0,
+      y: 4,
+      z: 31,
       ease: "none",
     });
 
     inicioescena.to(camera.rotation, {
-      delay: 4,
+      delay: 0,
       duration: 1,
       x: 0,
       y: -1.5,
       z: 0,
       ease: "power3.easeInOut",
 
+    });
+
+    inicioescena.to(camera.position, {
+      delay: 0,
+      duration: 2,
+      x: 0,
+      y: 5,
+      z: 31,
+      ease: "none",
+    });
+
+    inicioescena.to(camera.rotation, {
+      delay: 0,
+      duration: 1,
+      x: 0,
+      y: -3.1,
+      z: 0,
+      ease: "power3.easeInOut",
+
+    });
+    inicioescena.to(camera.position, {
+      delay: 0,
+      duration: 2,
+      x: 0,
+      y: 5,
+      z: 55,
+      ease: "none",
     });
 
   });

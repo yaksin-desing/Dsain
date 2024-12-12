@@ -15,6 +15,8 @@ const contactnav = document.getElementById('contactnav');
 const audio_container = document.getElementById('audio-container');
 const videofondo = document.getElementById('videofondo');
 const parrafodeinicio = document.getElementById('parrafodeinicio');
+const escena = document.getElementById('scene-container');
+
 
 //timeline loading
 const animaloading = gsap.timeline({
@@ -44,9 +46,6 @@ animaloading.to(logoanimado, {
 animaloading.to(contactnav, {
     opacity: "100%",
 });
-animaloading.to(videofondo, {
-    opacity: "100%",
-});
 animaloading.to(audio_container, {
     opacity: "100%",
 });
@@ -67,6 +66,14 @@ animaloading.to(textologo, {
 animaloading.to(imgparrafoinicio, {
     duration: 1,
     opacity: "100%",
+});
+animaloading.to(escena, {
+    delay:-1,
+    opacity: "100%",
+});
+animaloading.to(botoninicio, {
+    bottom: "1vh",
+    
 });
 
 
