@@ -281,7 +281,7 @@ function main() {
   /////// Crear luz direccional /////////////
 
   const luzpasillo = new THREE.DirectionalLight(0xFFC0A2, 1);
-  luzpasillo.position.set(15, 20, -10); // Posición de la luz
+  luzpasillo.position.set(0, 20, 100); // Posición de la luz
   luzpasillo.castShadow = true; // Activar sombras
 
   // Ajustar la cámara de sombras (proyección ortográfica)
@@ -297,7 +297,7 @@ function main() {
 
   // Cambiar el objetivo de la luz
   const target = new THREE.Object3D();
-  target.position.set(5, 0, 15); // Nuevo punto al que apunta la luz
+  target.position.set(0, 0, 15); // Nuevo punto al que apunta la luz
   scene.add(target); // Agregar el objetivo a la escena
   luzpasillo.target = target; // Asignar el objetivo a la luz
 
@@ -339,55 +339,19 @@ function main() {
   //scene.add(shadowHelper);
 
   // Agregar luz a la escena
-  scene.add(luzdospasillo);
+  //scene.add(luzdospasillo);
 
   const luzpasillohelperdos = new THREE.DirectionalLightHelper(luzdospasillo, 5);
   //scene.add(luzpasillohelperdos);
 
 
 
-  // Cargar modelo pasillo
-  const pasillo = new GLTFLoader();
-  pasillo.load(
-    "./src/objt/escena/pasillo.glb",
-    (gltf) => {
-      const modelpasillo = gltf.scene;
-      modelpasillo.position.set(0, -0.8, 21);
-      modelpasillo.scale.set(0.3, 0.25, 0.2);
-      modelpasillo.rotation.set(0, 0, 0);
-
-      // Material para el pasillo
-      const modelpasilloMaterial = new THREE.MeshStandardMaterial({
-        side: THREE.DoubleSide,
-        color: 0xFDDF7E,
-        emissive: 0xFF8331,
-        emissiveIntensity: 0.3,
-        metalness: 0,
-        roughness: 1,
-      });
-
-      // Aplicar material y configurar sombras
-      modelpasillo.traverse((child) => {
-        if (child.isMesh) {
-          child.material = modelpasilloMaterial;
-          child.castShadow = true; // Proyectar sombras
-          child.receiveShadow = true; // Recibir sombras
-        }
-      });
-
-      // Agregar modelo a la escena
-      scene.add(modelpasillo);
-    },
-    undefined,
-    (error) => console.error("Error al cargar el modelo de pasillo: ", error)
-  );
-
 
   // Cargar el modelo de las dunas
   const textureLoaderDunas = new THREE.TextureLoader();
-  const ambientOcclusion = textureLoaderDunas.load("./src/objt/tierra/arenaambientOcclusion.jpg");
-  const roughnessMap = textureLoaderDunas.load("./src/objt/tierra/arenaRoughness.jpg");
-  const displacementMap = textureLoaderDunas.load("./src/objt/tierra/arenaHeight.png");
+  const ambientOcclusion = textureLoaderDunas.load("./src/objt/tierra/arenaambientcclusion.jpg");
+  const roughnessMap = textureLoaderDunas.load("./src/objt/tierra/arenaroughness.jpg");
+  const displacementMap = textureLoaderDunas.load("./src/objt/tierra/arenaheight.png");
 
   const dunasLoader = new GLTFLoader();
   dunasLoader.load(
@@ -487,18 +451,87 @@ function main() {
   scene.add(torus);
 
 
-  const geometrybasedos = new THREE.PlaneGeometry(500, 100);
-  const materialbasedos = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
+
+  //////// <<<<< base dos >>>>>> /////////////
+
+  // Cargar las texturas usando TextureLoader
+  const textureLoaderazulejo = new THREE.TextureLoader();
+
+  const colorTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/acolor.jpg');
+  const normalTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/anorm.jpg');
+  const roughnessTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/arough.jpg');
+  const aoTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/aocc.jpg');
+  const displacementTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/adisp.png');
+  // Configurar las texturas para que se repitan
+  [colorTexture, normalTexture, roughnessTexture, aoTexture, displacementTexture].forEach((texture) => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(100, 20); // Ajustar el número de repeticiones (10 en X, 2 en Y)
+  });
+
+  // Crear el material con las texturas cargadas
+  const materialbasedos = new THREE.MeshStandardMaterial({
+    map: colorTexture, // Textura de color
+    normalMap: normalTexture, // Textura de normales
+    roughnessMap: roughnessTexture, // Textura de rugosidad
+    aoMap: aoTexture, // Textura de oclusión ambiental
+    displacementMap: displacementTexture, // Textura de desplazamiento
+    displacementScale: 0.2, // Ajustar la escala del desplazamiento
     side: THREE.DoubleSide
   });
 
+  // Crear la geometría del plano
+  const geometrybasedos = new THREE.PlaneGeometry(500, 100);
 
+  // Crear el mesh y añadirlo a la escena
   const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
   scene.add(planedos);
 
-  planedos.position.set(0, 0, 100);
+  // Posicionar y rotar el plano
+  planedos.position.set(0, 0, 1000);
   planedos.rotation.x = -Math.PI / 2;
+
+  // Configurar oclusión ambiental (opcional)
+  geometrybasedos.attributes.uv2 = geometrybasedos.attributes.uv; // Necesario para oclusión ambiental
+
+
+  
+  // Cargar modelo david
+  const david = new GLTFLoader();
+  david.load(
+    "./src/objt/escena/escenados/david.glb",
+    (gltf) => {
+      const modeldavid = gltf.scene;
+      modeldavid.position.set(0, -10, 980);
+      modeldavid.scale.set(1, 1, 1);
+      modeldavid.rotation.set(0, 0, 0);
+
+      // Material para el pasillo
+      const modeldavidMaterial = new THREE.MeshStandardMaterial({
+        side: THREE.DoubleSide,
+        color: 0xffffff,
+        emissive: 0xFF8331,
+        emissiveIntensity: 0,
+        metalness: 0,
+        roughness: 1,
+      });
+
+      // Aplicar material y configurar sombras
+      modeldavid.traverse((child) => {
+        if (child.isMesh) {
+          child.material = modeldavidMaterial;
+          child.castShadow = true; // Proyectar sombras
+          child.receiveShadow = true; // Recibir sombras
+        }
+      });
+
+      // Agregar modelo a la escena
+      scene.add(modeldavid);
+    },
+    undefined,
+    (error) => console.error("Error al cargar el modelo de pasillo: ", error)
+  );
+
 
 
   let animateWaves = false;
@@ -618,48 +651,11 @@ function main() {
     });
 
     inicioescena.to(camera.position, {
-      delay: 4,
-      duration: 2,
-      x: 0,
-      y: 4,
-      z: 31,
-      ease: "none",
-    });
-
-    inicioescena.to(camera.rotation, {
       delay: 0,
-      duration: 1,
+      duration: 0,
       x: 0,
-      y: -1.5,
-      z: 0,
-      ease: "power3.easeInOut",
-
-    });
-
-    inicioescena.to(camera.position, {
-      delay: 0,
-      duration: 2,
-      x: 0,
-      y: 5,
-      z: 31,
-      ease: "none",
-    });
-
-    inicioescena.to(camera.rotation, {
-      delay: 0,
-      duration: 1,
-      x: 0,
-      y: -3.1,
-      z: 0,
-      ease: "power3.easeInOut",
-
-    });
-    inicioescena.to(camera.position, {
-      delay: 0,
-      duration: 2,
-      x: 0,
-      y: 5,
-      z: 55,
+      y: 10,
+      z: 1050,
       ease: "none",
     });
 
