@@ -6,6 +6,9 @@ import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
 
+import { SVGLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/SVGLoader.js";
+
+
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 function main() {
@@ -95,7 +98,7 @@ function main() {
 
 
 
-  const directionalLight = new THREE.DirectionalLight(0xFfffff, 2);
+  const directionalLight = new THREE.DirectionalLight(0xFfffff, 1);
   directionalLight.position.set(-15, 15, -50);
   directionalLight.castShadow = true
   scene.add(directionalLight);
@@ -313,8 +316,8 @@ function main() {
 
 
   ///////// Crear luz direccional  ////////////////
-  const luzdospasillo = new THREE.DirectionalLight(0xFA7D66, 0.3);
-  luzdospasillo.position.set(15, 20, 15); // Posición de la luz
+  const luzdospasillo = new THREE.DirectionalLight(0xFFFFFF, 0);
+  luzdospasillo.position.set(-30, 40, 1000); // Posición de la luz
   luzdospasillo.castShadow = true; // Activar sombras
 
   // Ajustar la cámara de sombras (proyección ortográfica)
@@ -323,23 +326,23 @@ function main() {
   luzdospasillo.shadow.camera.left = -50; // Límite izquierdo
   luzdospasillo.shadow.camera.right = 50; // Límite derecho
   luzdospasillo.shadow.camera.near = 0.5; // Distancia mínima
-  luzdospasillo.shadow.camera.far = 60; // Distancia máxima
+  luzdospasillo.shadow.camera.far = 100; // Distancia máxima
   luzdospasillo.shadow.mapSize.width = 2048; // Ancho del mapa de sombras
   luzdospasillo.shadow.mapSize.height = 2048; // Alto del mapa de sombras
   luzdospasillo.shadow.bias = -0.0001; // Previene artefactos de sombra
 
   // Cambiar el objetivo de la luz
   const targetdos = new THREE.Object3D();
-  targetdos.position.set(5, 0, 20); // Nuevo punto al que apunta la luz
+  targetdos.position.set(0, 0, 1000); // Nuevo punto al que apunta la luz
   scene.add(targetdos); // Agregar el objetivo a la escena
-  luzdospasillo.targetdos = targetdos; // Asignar el objetivo a la luz
+  luzdospasillo.target = targetdos; // Asignar el objetivo a la luz
 
   // Opcional: Ayuda visual para la cámara de sombras
   const shadowHelperdos = new THREE.CameraHelper(luzdospasillo.shadow.camera);
-  //scene.add(shadowHelper);
+  //scene.add(shadowHelperdos);
 
   // Agregar luz a la escena
-  //scene.add(luzdospasillo);
+  scene.add(luzdospasillo);
 
   const luzpasillohelperdos = new THREE.DirectionalLightHelper(luzdospasillo, 5);
   //scene.add(luzpasillohelperdos);
@@ -466,22 +469,23 @@ function main() {
   [colorTexture, normalTexture, roughnessTexture, aoTexture, displacementTexture].forEach((texture) => {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(100, 20); // Ajustar el número de repeticiones (10 en X, 2 en Y)
+    texture.repeat.set(100, 40); // Ajustar el número de repeticiones (10 en X, 2 en Y)
   });
 
   // Crear el material con las texturas cargadas
   const materialbasedos = new THREE.MeshStandardMaterial({
-    map: colorTexture, // Textura de color
-    normalMap: normalTexture, // Textura de normales
-    roughnessMap: roughnessTexture, // Textura de rugosidad
-    aoMap: aoTexture, // Textura de oclusión ambiental
-    displacementMap: displacementTexture, // Textura de desplazamiento
-    displacementScale: 0.2, // Ajustar la escala del desplazamiento
-    side: THREE.DoubleSide
+    map: colorTexture,
+    normalMap: normalTexture,
+    roughnessMap: roughnessTexture,
+    aoMap: aoTexture,
+    displacementMap: displacementTexture,
+    displacementScale: 0.1,
+    emissive: 0x2FA1FF,
+    emissiveIntensity: 0.5,
   });
 
   // Crear la geometría del plano
-  const geometrybasedos = new THREE.PlaneGeometry(500, 100);
+  const geometrybasedos = new THREE.PlaneGeometry(500, 200);
 
   // Crear el mesh y añadirlo a la escena
   const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
@@ -491,29 +495,33 @@ function main() {
   planedos.position.set(0, 0, 1000);
   planedos.rotation.x = -Math.PI / 2;
 
+  // Habilitar sombras en el modelo
+  planedos.castShadow = true; // El cubo emitirá sombras
+  planedos.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
+
   // Configurar oclusión ambiental (opcional)
   geometrybasedos.attributes.uv2 = geometrybasedos.attributes.uv; // Necesario para oclusión ambiental
 
 
-  
+
   // Cargar modelo david
   const david = new GLTFLoader();
   david.load(
     "./src/objt/escena/escenados/david.glb",
     (gltf) => {
       const modeldavid = gltf.scene;
-      modeldavid.position.set(0, -10, 980);
+      modeldavid.position.set(-5, -10, 980);
       modeldavid.scale.set(1, 1, 1);
       modeldavid.rotation.set(0, 0, 0);
 
       // Material para el pasillo
       const modeldavidMaterial = new THREE.MeshStandardMaterial({
         side: THREE.DoubleSide,
-        color: 0xffffff,
-        emissive: 0xFF8331,
-        emissiveIntensity: 0,
+        color: 0xC4E5F5,
+        emissive: 0xC4E5F5,
+        emissiveIntensity: 0.1,
         metalness: 0,
-        roughness: 1,
+        roughness: 0,
       });
 
       // Aplicar material y configurar sombras
@@ -531,6 +539,38 @@ function main() {
     undefined,
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
   );
+
+  // Carga del SVG
+  const svgLoader = new SVGLoader();
+  svgLoader.load('./src/objt/escena/escenados/nubesdos.svg', (data) => {
+    const paths = data.paths;
+
+    // Creación de un grupo para contener las formas SVG
+    const group = new THREE.Group();
+
+    paths.forEach((path) => {
+      const material = new THREE.MeshBasicMaterial({
+        color: path.color,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+      });
+
+      const shapes = SVGLoader.createShapes(path);
+      shapes.forEach((shape) => {
+        const geometry = new THREE.ShapeGeometry(shape);
+        const mesh = new THREE.Mesh(geometry, material);
+        group.add(mesh);
+      });
+    });
+
+    // Configuración del grupo como fondo
+    group.scale.set(0.5, 0.4, 1); // Ajusta la escala según tus necesidades
+    group.position.set(240, 210, 910); // Posición del fondo
+    group.rotation.set(0, 0, 3.2); // Rotación para estar vertical
+
+    // Agregar el grupo a la escena
+    scene.add(group);
+  });
 
 
 
@@ -575,7 +615,7 @@ function main() {
 
 
   function onMouseMove(event) {
-    mouse.x = (event.clientX / window.innerWidth) * 0.25 - 0.125;
+    mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25;
   }
 
   window.addEventListener("mousemove", onMouseMove);
@@ -615,7 +655,6 @@ function main() {
       ease: "none",
     });
 
-
     inicioescena.to(model.position, {
       delay: -1,
       x: 0,
@@ -650,12 +689,39 @@ function main() {
       ease: "none",
     });
 
+    inicioescena.to(directionalLight, {
+      delay: 0,
+      intensity: 0, // Reducir la intensidad a 0
+      duration: 0, // Duración de la animación en segundos
+    });
+
+    inicioescena.to(segundaLight, {
+      delay: 0,
+      intensity: 0, // Reducir la intensidad a 0
+      duration: 0, // Duración de la animación en segundos
+    });
+
+    inicioescena.to(luzdospasillo, {
+      delay: 0,
+      intensity: 0.5, // Reducir la intensidad a 0
+      duration: 0, // Duración de la animación en segundos
+    });
+
     inicioescena.to(camera.position, {
       delay: 0,
       duration: 0,
       x: 0,
       y: 10,
       z: 1050,
+      ease: "none",
+    });
+
+    inicioescena.to(camera.position, {
+      delay: 0,
+      duration: 3,
+      x: 0,
+      y: 5,
+      z: 1100,
       ease: "none",
     });
 
