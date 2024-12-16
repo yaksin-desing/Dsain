@@ -415,3 +415,30 @@ document.getElementById("botoninicio").addEventListener("click", () => {
     openescena.play(); // Iniciar el timeline
     audioPlayer.play();
   });
+
+
+
+  const canvas = document.createElement('canvas');
+const ctx = canvas.getContext('2d');
+const noiseLayer = document.getElementById('noise-layer');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+noiseLayer.appendChild(canvas);
+
+function generateNoise() {
+  const imageData = ctx.createImageData(canvas.width, canvas.height);
+  const pixels = imageData.data;
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    const value = Math.random() * 255;
+    pixels[i] = pixels[i + 1] = pixels[i + 2] = value; // Blanco y negro
+    pixels[i + 3] = 30; // Transparencia
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+}
+
+// Actualiza la capa de ruido cada cierto tiempo para animarla
+setInterval(generateNoise, 150); 
+generateNoise();

@@ -1,12 +1,12 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+
 import {
   GLTFLoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+
 import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
-
-import { SVGLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/SVGLoader.js";
 
 
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
@@ -95,6 +95,35 @@ function main() {
   backgroundRect.position.set(0, -30, -190); // Colocarlo detrás de la cámara
   backgroundRect.rotation.set(0, 0, 0);
   scene.add(backgroundRect);
+
+  // Shader Material para dispersión RGB
+const shaderMaterialespejo = new THREE.ShaderMaterial({
+  vertexShader: `
+    varying vec3 vNormal;
+    void main() {
+      vNormal = normalize(normalMatrix * normal);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    varying vec3 vNormal;
+    void main() {
+      vec3 color = vec3(abs(vNormal.x), abs(vNormal.y), abs(vNormal.z));
+      gl_FragColor = vec4(color, 0.5); // Transparencia
+    }
+  `,
+  transparent: true,
+});
+
+// Geometría y creación del box llamado "espejo"
+const geometryespejo = new THREE.BoxGeometry(2, 4, 0.1);
+const espejo = new THREE.Mesh(geometryespejo, shaderMaterialespejo);
+espejo.position.set(0,1,-2);
+espejo.castShadow = true
+scene.add(espejo);
+
+
+
 
 
 
@@ -437,21 +466,21 @@ function main() {
   scene.add(sun2);
 
   // Geometría del toro
-  const torusgeometry = new THREE.TorusGeometry(5, 0.6, 32, 64, Math.PI); // Arco en semicírculo
+  const torusgeometry = new THREE.TorusGeometry(10, 0.6, 32, 64, Math.PI); // Arco en semicírculo
   const torusMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xFFFFFF,
     metalness: 1.2,
     roughness: 0,
-    reflectivity: 2, // Alta reflectividad
+    reflectivity: 1, // Alta reflectividad
     castShadow: true,
 
   });
 
   const torus = new THREE.Mesh(torusgeometry, torusMaterial);
   torus.position.set(13, 0, 7);
-  torus.rotation.set(0, -11, 0);
+  torus.rotation.set(0, 0, 0);
   torus.castShadow = true; // Permitir que el toro proyecte sombras
-  scene.add(torus);
+  //scene.add(torus);
 
 
 
@@ -469,7 +498,7 @@ function main() {
   [colorTexture, normalTexture, roughnessTexture, aoTexture, displacementTexture].forEach((texture) => {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(100, 40); // Ajustar el número de repeticiones (10 en X, 2 en Y)
+    texture.repeat.set(110, 40); // Ajustar el número de repeticiones (10 en X, 2 en Y)
   });
 
   // Crear el material con las texturas cargadas
@@ -485,7 +514,7 @@ function main() {
   });
 
   // Crear la geometría del plano
-  const geometrybasedos = new THREE.PlaneGeometry(500, 200);
+  const geometrybasedos = new THREE.PlaneGeometry(600, 200);
 
   // Crear el mesh y añadirlo a la escena
   const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
@@ -540,37 +569,29 @@ function main() {
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
   );
 
-  // Carga del SVG
-  const svgLoader = new SVGLoader();
-  svgLoader.load('./src/objt/escena/escenados/nubesdos.svg', (data) => {
-    const paths = data.paths;
+  // Carga de la textura
+  const textureLoaderfondodos = new THREE.TextureLoader();
+  const nubeTexture = textureLoaderfondodos.load('./src/objt/escena/escenados/nubesdos.png'); // Asegúrate de que la ruta sea correcta
 
-    // Creación de un grupo para contener las formas SVG
-    const group = new THREE.Group();
-
-    paths.forEach((path) => {
-      const material = new THREE.MeshBasicMaterial({
-        color: path.color,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-      });
-
-      const shapes = SVGLoader.createShapes(path);
-      shapes.forEach((shape) => {
-        const geometry = new THREE.ShapeGeometry(shape);
-        const mesh = new THREE.Mesh(geometry, material);
-        group.add(mesh);
-      });
-    });
-
-    // Configuración del grupo como fondo
-    group.scale.set(0.5, 0.4, 1); // Ajusta la escala según tus necesidades
-    group.position.set(240, 210, 910); // Posición del fondo
-    group.rotation.set(0, 0, 3.2); // Rotación para estar vertical
-
-    // Agregar el grupo a la escena
-    scene.add(group);
+  // Creación del material con transparencia
+  const nubeMaterial = new THREE.MeshBasicMaterial({
+    map: nubeTexture,
+    transparent: true,
+    side: THREE.DoubleSide, // Opcional, para que sea visible por ambos lados
   });
+
+  // Creación del plano
+  const planeGeometrybasedos = new THREE.PlaneGeometry(700, 220); // Ajusta las dimensiones del plano según tus necesidades
+  const fondoBaseDos = new THREE.Mesh(planeGeometrybasedos, nubeMaterial);
+
+  // Posición del plano
+  fondoBaseDos.position.set(0, 95, 900);
+
+  // Rotación del plano para que sea vertical
+  fondoBaseDos.rotation.set(0, Math.PI, 0); // Ajusta según tu orientación deseada
+
+  // Agregar el plano a la escena
+  scene.add(fondoBaseDos);
 
 
 
@@ -635,6 +656,8 @@ function main() {
 
     animateWaves = true;
 
+    console.log('no loaded')
+
     const inicioescena = gsap.timeline();
 
     inicioescena.to(camera.rotation, {
@@ -684,46 +707,46 @@ function main() {
       delay: -2,
       duration: 2,
       x: 0,
-      y: 2,
-      z: 31,
+      y: 1,
+      z: 5,
       ease: "none",
     });
 
-    inicioescena.to(directionalLight, {
-      delay: 0,
-      intensity: 0, // Reducir la intensidad a 0
-      duration: 0, // Duración de la animación en segundos
-    });
+    // inicioescena.to(directionalLight, {
+    //   delay: 0,
+    //   intensity: 0, // Reducir la intensidad a 0
+    //   duration: 0, // Duración de la animación en segundos
+    // });
 
-    inicioescena.to(segundaLight, {
-      delay: 0,
-      intensity: 0, // Reducir la intensidad a 0
-      duration: 0, // Duración de la animación en segundos
-    });
+    // inicioescena.to(segundaLight, {
+    //   delay: 0,
+    //   intensity: 0, // Reducir la intensidad a 0
+    //   duration: 0, // Duración de la animación en segundos
+    // });
 
-    inicioescena.to(luzdospasillo, {
-      delay: 0,
-      intensity: 0.5, // Reducir la intensidad a 0
-      duration: 0, // Duración de la animación en segundos
-    });
+    // inicioescena.to(luzdospasillo, {
+    //   delay: 0,
+    //   intensity: 0.5, // Reducir la intensidad a 0
+    //   duration: 0, // Duración de la animación en segundos
+    // });
 
-    inicioescena.to(camera.position, {
-      delay: 0,
-      duration: 0,
-      x: 0,
-      y: 10,
-      z: 1050,
-      ease: "none",
-    });
+    // inicioescena.to(camera.position, {
+    //   delay: 0,
+    //   duration: 0,
+    //   x: 0,
+    //   y: 10,
+    //   z: 1050,
+    //   ease: "none",
+    // });
 
-    inicioescena.to(camera.position, {
-      delay: 0,
-      duration: 3,
-      x: 0,
-      y: 5,
-      z: 1100,
-      ease: "none",
-    });
+    // inicioescena.to(camera.position, {
+    //   delay: 0,
+    //   duration: 3,
+    //   x: 0,
+    //   y: 5,
+    //   z: 1100,
+    //   ease: "none",
+    // });
 
   });
 }
