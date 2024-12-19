@@ -11,6 +11,9 @@ import {
 
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
+
+gsap.registerPlugin(ScrollTrigger);
+
 function main() {
   const container = document.getElementById("scene-container");
   const scene = new THREE.Scene();
@@ -96,33 +99,107 @@ function main() {
   backgroundRect.rotation.set(0, 0, 0);
   scene.add(backgroundRect);
 
-  // Shader Material para dispersión RGB
-const shaderMaterialespejo = new THREE.ShaderMaterial({
-  vertexShader: `
-    varying vec3 vNormal;
-    void main() {
-      vNormal = normalize(normalMatrix * normal);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `,
-  fragmentShader: `
-    varying vec3 vNormal;
-    void main() {
-      vec3 color = vec3(abs(vNormal.x), abs(vNormal.y), abs(vNormal.z));
-      gl_FragColor = vec4(color, 0.5); // Transparencia
-    }
-  `,
-  transparent: true,
-});
+  // Cargar texturas
+  const textureLoadertrabajos = new THREE.TextureLoader();
 
-// Geometría y creación del box llamado "espejo"
-const geometryespejo = new THREE.BoxGeometry(2, 4, 0.1);
-const espejo = new THREE.Mesh(geometryespejo, shaderMaterialespejo);
-espejo.position.set(0,1,-2);
-espejo.castShadow = true
-scene.add(espejo);
+  // Shader material para la animación tipo ondas
+  const createWaveMaterial = (texture) => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTexture: {
+          value: texture
+        },
+        uTime: {
+          value: 0
+        }
+      },
+      vertexShader: `
+            uniform float uTime;
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                vec3 pos = position;
+                pos.y += sin(pos.x * 2.0 + uTime) * 0.1;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            }
+        `,
+      fragmentShader: `
+            uniform sampler2D uTexture;
+            varying vec2 vUv;
+            void main() {
+                gl_FragColor = texture2D(uTexture, vUv);
+            }
+        `
+    });
+  };
+
+  // Crear un plano reutilizable
+  const createPlane = (texturePath, position) => {
+    const texture = textureLoadertrabajos.load(texturePath, (texture) => {
+      // Ajustar el tamaño del plano al tamaño de la textura
+      const aspect = texture.image.width / texture.image.height;
+      plane.scale.set(aspect, 1, 1);
+    });
+    const material = createWaveMaterial(texture);
+    const geometry = new THREE.PlaneGeometry(1, 1, 64, 64); // El tamaño base será 1x1 para escalar dinámicamente
+    const plane = new THREE.Mesh(geometry, material);
+    plane.position.set(position.x, position.y, position.z);
+    plane.rotation.y = 0; // Orientación vertical
+    plane.castShadow = true;
+    scene.add(plane);
+
+    return plane;
+  };
+
+  // Crear dos planos con imágenes específicas
+  const planeSpacing = window.innerWidth / 255; // Espaciado basado en el ancho de pantalla
+  const planes = [
+
+    //grupo uno
+    createPlane('./src/img/proyectounod.png', {
+      x: -planeSpacing / 3,
+      y: -5,
+      z: 2
+    }),
+    createPlane('./src/img/proyectouno.jpg', {
+      x: planeSpacing / 3,
+      y: -5,
+      z: 2
+    }),
+
+    //----------------------------------//
+
+    //grupo dos
+    createPlane('./src/img/proyectounod.png', {
+      x: -planeSpacing / 3,
+      y: -5,
+      z: 9
+    }),
+    createPlane('./src/img/proyectouno.jpg', {
+      x: planeSpacing / 3,
+      y: -5,
+      z: 9
+    }),
+
+    //----------------------------------//
 
 
+    //grupo tres
+    createPlane('./src/img/proyectounod.png', {
+      x: -planeSpacing / 3,
+      y: -5,
+      z: 19
+    }),
+    createPlane('./src/img/proyectouno.jpg', {
+      x: planeSpacing / 3,
+      y: -5,
+      z: 19
+    })
+
+    //----------------------------------//
+
+
+  ];
 
 
 
@@ -176,7 +253,7 @@ scene.add(espejo);
     color: 0x0026FF,
     roughness: 0.1,
     metalness: 0.5,
-    transmission: 0.5, // Esto hace que el material sea más transparente (efecto vidrio)
+    transmission: 0, // Esto hace que el material sea más transparente (efecto vidrio)
     thickness: 1,
     clearcoat: 1,
     clearcoatRoughness: 0.05,
@@ -518,7 +595,7 @@ scene.add(espejo);
 
   // Crear el mesh y añadirlo a la escena
   const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
-  scene.add(planedos);
+  //scene.add(planedos);
 
   // Posicionar y rotar el plano
   planedos.position.set(0, 0, 1000);
@@ -563,7 +640,7 @@ scene.add(espejo);
       });
 
       // Agregar modelo a la escena
-      scene.add(modeldavid);
+      //scene.add(modeldavid);
     },
     undefined,
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
@@ -591,7 +668,83 @@ scene.add(espejo);
   fondoBaseDos.rotation.set(0, Math.PI, 0); // Ajusta según tu orientación deseada
 
   // Agregar el plano a la escena
-  scene.add(fondoBaseDos);
+  //scene.add(fondoBaseDos);
+
+
+
+  // Lista de datos para los textos (contenido y posiciones)
+  const datosTextos = [{
+      contenido: 'Texto 2: Hola,\n      Three.js',
+      posX: 0,
+      posY: -5,
+      posZ: 2
+    },
+    {
+      contenido: 'Texto 3: Aprendiendo Three.js',
+      posX: 0,
+      posY: -5,
+      posZ: 10
+    },
+    {
+      contenido: 'Texto 4: ¡Esto es increíble!',
+      posX: 0,
+      posY: -5,
+      posZ: 20
+    },
+  ];
+
+  // Lista para almacenar los objetos de texto generados
+  const textos = [];
+
+  // Función para crear y agregar el texto
+  function crearTexto(contenido, posX, posY, posZ) {
+    const loadertexto = new THREE.FontLoader();
+
+    // Cambiar la URL de la fuente a tu fuente local
+    loadertexto.load('./src/objt/escena/escenados/fuenteescena/bold.json', (font) => {
+      // Calcular el tamaño del texto en función del ancho de la pantalla
+      const baseSize = 0.1; // Tamaño base del texto
+      const responsiveSize = (window.innerWidth / 2000) * baseSize; // Escalar tamaño dinámicamente
+
+      // Crear la geometría del texto
+      const textGeometry = new THREE.TextGeometry(contenido, {
+        font: font,
+        size: responsiveSize, // Tamaño del texto dinámico
+        height: 0, // Grosor del texto
+      });
+
+      // Calcular las dimensiones de la geometría del texto
+      textGeometry.computeBoundingBox();
+      const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+
+      // Crear el material para el texto
+      const textMaterial = new THREE.MeshBasicMaterial({
+        color: 0x000000, // Color negro
+      });
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+      // Centrar el texto en el eje X
+      textMesh.position.x = -textWidth / 2 + posX; // Centrar en el eje X y agregar desplazamiento
+      textMesh.position.y = posY; // Posición en el eje Y
+      textMesh.position.z = posZ; // Posición en el eje Z
+
+      // Agregar el texto a la escena
+      scene.add(textMesh);
+
+      // Guardar el texto en la lista para animaciones futuras
+      textos.push(textMesh);
+    });
+  }
+
+  // Crear los textos desde la lista de datos
+  datosTextos.forEach(({
+    contenido,
+    posX,
+    posY,
+    posZ
+  }) => {
+    crearTexto(contenido, posX, posY, posZ);
+  });
 
 
 
@@ -620,6 +773,11 @@ scene.add(espejo);
     camera.position.x = Math.max(minCameraX, Math.min(camera.position.x, maxCameraX));
 
     animateFunctions.forEach((fn) => fn());
+
+    const elapsedTime = clock.getElapsedTime();
+    planes.forEach(plane => {
+      plane.material.uniforms.uTime.value = elapsedTime;
+    });
     renderer.render(scene, camera);
   }
 
@@ -631,6 +789,7 @@ scene.add(espejo);
     renderer.setSize(container.clientWidth, container.clientHeight);
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
+
   });
 
 
@@ -648,6 +807,7 @@ scene.add(espejo);
 
 
   const botonInicio = document.getElementById("botoninicio");
+
   botonInicio.addEventListener("click", () => {
     if (!model) {
       console.error("El modelo aún no se ha cargado.");
@@ -656,8 +816,7 @@ scene.add(espejo);
 
     animateWaves = true;
 
-    console.log('no loaded')
-
+    // Animación inicial
     const inicioescena = gsap.timeline();
 
     inicioescena.to(camera.rotation, {
@@ -666,7 +825,6 @@ scene.add(espejo);
       y: 0,
       z: 0,
       ease: "none",
-
     });
 
     inicioescena.to(camera.position, {
@@ -708,47 +866,209 @@ scene.add(espejo);
       duration: 2,
       x: 0,
       y: 1,
-      z: 5,
+      z: 0,
       ease: "none",
     });
 
-    // inicioescena.to(directionalLight, {
-    //   delay: 0,
-    //   intensity: 0, // Reducir la intensidad a 0
-    //   duration: 0, // Duración de la animación en segundos
-    // });
+    // Ejecutar lógica después de la animación inicial
+    inicioescena.then(() => {
+      console.log("Animación inicial completada.");
 
-    // inicioescena.to(segundaLight, {
-    //   delay: 0,
-    //   intensity: 0, // Reducir la intensidad a 0
-    //   duration: 0, // Duración de la animación en segundos
-    // });
+      const contenedor = document.getElementById("contenedor");
+      const titulorango = document.getElementById("tituloescena"); // Suponiendo que tienes un título con el ID 'titulo'
 
-    // inicioescena.to(luzdospasillo, {
-    //   delay: 0,
-    //   intensity: 0.5, // Reducir la intensidad a 0
-    //   duration: 0, // Duración de la animación en segundos
-    // });
+      // Función para actualizar el título según la posición de la cámara
+      function actualizarTitulo() {
+        if (camera.position.z >= 0 && camera.position.z < 2) {
+          titulorango.textContent = "Scrollea para ver mas";
+        } else if (camera.position.z >= 2 && camera.position.z < 9) {
+          titulorango.textContent = camera.position.z;
+          const scrolluno = gsap.timeline();
+          scrolluno.to(textos[0].position, {
+            delay: 0,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+          scrolluno.to(textos[1].position, {
+            delay: 0,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
+          scrolluno.to(planes[0].position, {
+            delay: 0,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+          scrolluno.to(planes[1].position, {
+            delay: -1,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+          scrolluno.to(planes[2].position, {
+            delay: 0,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
+          scrolluno.to(planes[3].position, {
+            delay: -1,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
+        } else if (camera.position.z >= 10 && camera.position.z < 19) {
+          titulorango.textContent = camera.position.z;
+          const scrolldos = gsap.timeline();
+          scrolldos.to(textos[0].position, {
+            delay: 0,
+            duration: 0,
+            y: -5,
+            ease: "none",
+          });
+          scrolldos.to(textos[1].position, {
+            delay: -1,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+          scrolldos.to(textos[2].position, {
+            delay: 0,
+            duration: 0,
+            y: -5,
+            ease: "none",
+          });
+          scrolldos.to(planes[2].position, {
+            delay: 0,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+          scrolldos.to(planes[3].position, {
+            delay: -1,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
 
-    // inicioescena.to(camera.position, {
-    //   delay: 0,
-    //   duration: 0,
-    //   x: 0,
-    //   y: 10,
-    //   z: 1050,
-    //   ease: "none",
-    // });
+          scrolldos.to(planes[0].position, {
+            delay: 0,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
+          scrolldos.to(planes[1].position, {
+            delay: -1,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
 
-    // inicioescena.to(camera.position, {
-    //   delay: 0,
-    //   duration: 3,
-    //   x: 0,
-    //   y: 5,
-    //   z: 1100,
-    //   ease: "none",
-    // });
+          scrolldos.to(planes[4].position, {
+            delay: 0,
+            duration: 0,
+            y: -5,
+            ease: "none",
+          });
+          scrolldos.to(planes[5].position, {
+            delay: 0,
+            duration: 0,
+            y: -5,
+            ease: "none",
+          });
+
+        } else if (camera.position.z >= 20 && camera.position.z < 25) {
+          titulorango.textContent = camera.position.z;
+          const scrolltres = gsap.timeline();
+
+          scrolltres.to(textos[1].position, {
+            delay: 0,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
+          scrolltres.to(textos[2].position, {
+            delay: -1,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+          scrolltres.to(planes[2].position, {
+            delay: 0,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
+          scrolltres.to(planes[3].position, {
+            delay: -1,
+            duration: 1,
+            y: -5,
+            ease: "none",
+          });
+          scrolltres.to(planes[4].position, {
+            delay: 0,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+          scrolltres.to(planes[5].position, {
+            delay: -1,
+            duration: 1,
+            y: 1,
+            ease: "none",
+          });
+        }
+      }
+
+      // Configurar ScrollTrigger después de la animación inicial
+      gsap.timeline({
+          scrollTrigger: {
+            trigger: contenedor, // Elemento que activa la animación
+            start: "top top", // Punto inicial del scroll
+            end: "+=10000", // Punto final (3000px adicionales para el scroll)
+            scrub: true, // Sincroniza con el scroll
+            pin: true, // Fija el contenedor durante la animación
+            // Opcional: agrega marcadores si estás depurando
+            // markers: { startColor: "red", endColor: "green", fontSize: "10px", fontWeight: "bold" }
+            onUpdate: function () {
+              // Cada vez que el scroll se actualiza, revisamos la posición de la cámara
+              actualizarTitulo();
+            }
+          }
+        })
+        .to(camera.position, {
+          duration: 10,
+          x: 0,
+          y: 1,
+          z: 5,
+          ease: "none",
+        })
+        .to(camera.position, {
+          duration: 10,
+          x: 0,
+          y: 1,
+          z: 10,
+          ease: "power1.inOut",
+        })
+        .to(camera.position, {
+          duration: 10,
+          x: 0,
+          y: 1,
+          z: 22,
+          ease: "power1.inOut",
+        });
+    });
+
 
   });
+
+
+
+
+
 }
 
 main();

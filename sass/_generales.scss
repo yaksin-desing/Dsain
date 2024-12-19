@@ -13,6 +13,12 @@ body {
     background: white;
 }
 
+html::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    /* Chrome, Safari y Opera */
+}
+
 
 .cursor {
     position: fixed;
@@ -26,18 +32,19 @@ body {
     transform-origin: center center;
     pointer-events: none;
     z-index: 9999;
-  }
-  
-  .grow,
-  .grow-small {
+}
+
+.grow,
+.grow-small {
     transform: scale(1.5);
     background: rgba(168, 235, 255, 0.308);
     border: 1.5px solid rgb(255, 255, 255);
-  }
+}
 
 h5 {
     display: inline-block;
 }
+
 .letter {
     display: inline-block;
     transform: translateY(100%);
