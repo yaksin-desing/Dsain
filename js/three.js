@@ -52,6 +52,17 @@ function main() {
 
   });
 
+  // Carga la animación Lottie
+  const animationprogres = lottie.loadAnimation({
+    container: document.getElementById('lottie-container'), // Contenedor para la animación
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    path: './src/img/progreso.json' // Ruta de tu archivo Lottie
+  });
+
+
+
   const camera = new THREE.PerspectiveCamera(
     75,
     container.clientWidth / container.clientHeight,
@@ -748,6 +759,8 @@ function main() {
 
 
 
+
+
   let animateWaves = false;
   const clock = new THREE.Clock();
 
@@ -804,11 +817,18 @@ function main() {
   texture.encoding = THREE.sRGBEncoding; // Para texturas
   material.map.encoding = THREE.sRGBEncoding; // Si usas texturas en materiales
 
-
+  // Declarar `animationStarted` en el ámbito global
+  let animationStarted = false;
 
   const botonInicio = document.getElementById("botoninicio");
 
   botonInicio.addEventListener("click", () => {
+
+    const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
+    if (currentFrame < 60) {
+      animationprogres.playSegments([currentFrame, 61], true);
+    }
+
     if (!model) {
       console.error("El modelo aún no se ha cargado.");
       return;
@@ -833,7 +853,7 @@ function main() {
       x: 0,
       y: 1,
       z: -1,
-      ease: "none",
+      ease: "expo.out",
     });
 
     inicioescena.to(model.position, {
@@ -867,162 +887,32 @@ function main() {
       x: 0,
       y: 1,
       z: 0,
-      ease: "none",
+      ease: "expo.out",
     });
 
     // Ejecutar lógica después de la animación inicial
     inicioescena.then(() => {
       console.log("Animación inicial completada.");
 
+      animationStarted = true; // Permitir que ScrollTrigger controle Lottie
+
       const contenedor = document.getElementById("contenedor");
       const titulorango = document.getElementById("tituloescena"); // Suponiendo que tienes un título con el ID 'titulo'
 
-      // Función para actualizar el título según la posición de la cámara
-      function actualizarTitulo() {
-        if (camera.position.z >= 0 && camera.position.z < 2) {
-          titulorango.textContent = "Scrollea para ver mas";
-        } else if (camera.position.z >= 2 && camera.position.z < 9) {
-          titulorango.textContent = camera.position.z;
-          const scrolluno = gsap.timeline();
-          scrolluno.to(textos[0].position, {
-            delay: 0,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-          scrolluno.to(textos[1].position, {
-            delay: 0,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-          scrolluno.to(planes[0].position, {
-            delay: 0,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-          scrolluno.to(planes[1].position, {
-            delay: -1,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-          scrolluno.to(planes[2].position, {
-            delay: 0,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-          scrolluno.to(planes[3].position, {
-            delay: -1,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-        } else if (camera.position.z >= 10 && camera.position.z < 19) {
-          titulorango.textContent = camera.position.z;
-          const scrolldos = gsap.timeline();
-          scrolldos.to(textos[0].position, {
-            delay: 0,
-            duration: 0,
-            y: -5,
-            ease: "none",
-          });
-          scrolldos.to(textos[1].position, {
-            delay: -1,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-          scrolldos.to(textos[2].position, {
-            delay: 0,
-            duration: 0,
-            y: -5,
-            ease: "none",
-          });
-          scrolldos.to(planes[2].position, {
-            delay: 0,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-          scrolldos.to(planes[3].position, {
-            delay: -1,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-
-          scrolldos.to(planes[0].position, {
-            delay: 0,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-          scrolldos.to(planes[1].position, {
-            delay: -1,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-
-          scrolldos.to(planes[4].position, {
-            delay: 0,
-            duration: 0,
-            y: -5,
-            ease: "none",
-          });
-          scrolldos.to(planes[5].position, {
-            delay: 0,
-            duration: 0,
-            y: -5,
-            ease: "none",
-          });
-
-        } else if (camera.position.z >= 20 && camera.position.z < 25) {
-          titulorango.textContent = camera.position.z;
-          const scrolltres = gsap.timeline();
-
-          scrolltres.to(textos[1].position, {
-            delay: 0,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-          scrolltres.to(textos[2].position, {
-            delay: -1,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-          scrolltres.to(planes[2].position, {
-            delay: 0,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-          scrolltres.to(planes[3].position, {
-            delay: -1,
-            duration: 1,
-            y: -5,
-            ease: "none",
-          });
-          scrolltres.to(planes[4].position, {
-            delay: 0,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
-          scrolltres.to(planes[5].position, {
-            delay: -1,
-            duration: 1,
-            y: 1,
-            ease: "none",
-          });
+      const endFrame = 300; // Suponiendo que la animación tiene 500 frames totales
+      // Configurar ScrollTrigger para la animación de Lottie
+      ScrollTrigger.create({
+        trigger: contenedor,
+        start: "top top",
+        end: "+=10000",
+        scrub: true,
+        onUpdate: function (self) {
+          const progress = self.progress; // Progreso del scroll (0 a 1)
+          const frame = Math.round(61 + progress * (endFrame - 61));
+          console.log(`Scroll progress: ${progress}, Calculated frame: ${frame}`);
+          animationprogres.goToAndStop(frame, true);
         }
-      }
-
+      });
       // Configurar ScrollTrigger después de la animación inicial
       gsap.timeline({
           scrollTrigger: {
@@ -1060,14 +950,105 @@ function main() {
           z: 22,
           ease: "power1.inOut",
         });
+
+      let timelineUno = gsap.timeline({
+        paused: true
+      });
+      timelineUno.to(textos[0].position, {
+        delay: 0,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      })
+      timelineUno.to(planes[0].position, {
+        delay: -2,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      })
+      timelineUno.to(planes[1].position, {
+        delay: -2,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      });
+
+
+      let timelineDos = gsap.timeline({
+        paused: true
+      });
+      timelineDos.to(textos[1].position, {
+        delay: 0,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      })
+      timelineDos.to(planes[2].position, {
+        delay: -2,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      })
+      timelineDos.to(planes[3].position, {
+        delay: -2,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      });
+
+      let timelineTres = gsap.timeline({
+        paused: true
+      });
+      timelineTres.to(textos[2].position, {
+        delay: 0,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      })
+      timelineTres.to(planes[4].position, {
+        delay: -2,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      })
+      timelineTres.to(planes[5].position, {
+        delay: -2,
+        duration: 2,
+        y: 1,
+        ease: "expo.out"
+      });
+
+
+      // Función para actualizar el título según la posición de la cámara
+      let estadoActual = null;
+
+      function actualizarTitulo() {
+        const z = camera.position.z;
+        if (z >= 0 && z < 2) {
+          cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
+        } else if (z >= 2 && z < 10) {
+          cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
+        } else if (z >= 10 && z < 20) {
+          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
+        } else if (z >= 20 && z <= 25) {
+          cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
+        }
+      }
+
+      function cambiarEstado(texto, timeline, estado, revertTimelines) {
+        titulorango.textContent = texto;
+        if (estadoActual !== estado) {
+          timeline.play();
+          revertTimelines.forEach(t => t.reverse());
+          estadoActual = estado;
+        }
+      }
+
+
+
+
     });
-
-
   });
-
-
-
-
 
 }
 
