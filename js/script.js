@@ -426,19 +426,19 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 noiseLayer.appendChild(canvas);
 
-function generateNoise() {
-  const imageData = ctx.createImageData(canvas.width, canvas.height);
-  const pixels = imageData.data;
+// function generateNoise() {
+//   const imageData = ctx.createImageData(canvas.width, canvas.height);
+//   const pixels = imageData.data;
 
-  for (let i = 0; i < pixels.length; i += 4) {
-    const value = Math.random() * 255;
-    pixels[i] = pixels[i + 1] = pixels[i + 2] = value; // Blanco y negro
-    pixels[i + 3] = 30; // Transparencia
-  }
+//   for (let i = 0; i < pixels.length; i += 4) {
+//     const value = Math.random() * 255;
+//     pixels[i] = pixels[i + 1] = pixels[i + 2] = value; // Blanco y negro
+//     pixels[i + 3] = 30; // Transparencia
+//   }
 
-  ctx.putImageData(imageData, 0, 0);
-}
+//   ctx.putImageData(imageData, 0, 0);
+// }
 
-// Actualiza la capa de ruido cada cierto tiempo para animarla
-setInterval(generateNoise, 150); 
-generateNoise();
+// // Actualiza la capa de ruido cada cierto tiempo para animarla
+// setInterval(generateNoise, 150); 
+// generateNoise();

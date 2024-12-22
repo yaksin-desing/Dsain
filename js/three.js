@@ -257,7 +257,7 @@ function main() {
   const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
   const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
 
-  const planeGeometry = new THREE.PlaneGeometry(50, 50, 500, 500);
+  const planeGeometry = new THREE.PlaneGeometry(50, 50, 100, 100);
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
   const planeMaterial = new THREE.MeshPhysicalMaterial({
@@ -279,7 +279,6 @@ function main() {
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = -Math.PI / 2;
   plane.position.set(0, 0, 9);
-  plane.receiveShadow = true;
   scene.add(plane);
 
 
@@ -297,10 +296,6 @@ function main() {
       model.scale.set(1, 1, 1);
       model.position.set(0, 12, -5);
       model.rotation.set(-2, 0, 0);
-      // Habilitar sombras en el modelo
-      model.castShadow = true; // El cubo emitirá sombras
-      model.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
-
       // Cargar HDRI específico para el modelo
       const rgbeLoader = new RGBELoader();
       rgbeLoader.load("./src/objt/logo/logo.hdr", (texture) => {
@@ -553,22 +548,6 @@ function main() {
   sun2.position.set(3, 19, -150);
   scene.add(sun2);
 
-  // Geometría del toro
-  const torusgeometry = new THREE.TorusGeometry(10, 0.6, 32, 64, Math.PI); // Arco en semicírculo
-  const torusMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xFFFFFF,
-    metalness: 1.2,
-    roughness: 0,
-    reflectivity: 1, // Alta reflectividad
-    castShadow: true,
-
-  });
-
-  const torus = new THREE.Mesh(torusgeometry, torusMaterial);
-  torus.position.set(13, 0, 7);
-  torus.rotation.set(0, 0, 0);
-  torus.castShadow = true; // Permitir que el toro proyecte sombras
-  //scene.add(torus);
 
 
 
@@ -606,7 +585,7 @@ function main() {
 
   // Crear el mesh y añadirlo a la escena
   const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
-  //scene.add(planedos);
+  scene.add(planedos);
 
   // Posicionar y rotar el plano
   planedos.position.set(0, 0, 1000);
@@ -651,7 +630,7 @@ function main() {
       });
 
       // Agregar modelo a la escena
-      //scene.add(modeldavid);
+      scene.add(modeldavid);
     },
     undefined,
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
@@ -679,7 +658,7 @@ function main() {
   fondoBaseDos.rotation.set(0, Math.PI, 0); // Ajusta según tu orientación deseada
 
   // Agregar el plano a la escena
-  //scene.add(fondoBaseDos);
+  scene.add(fondoBaseDos);
 
 
 
@@ -949,7 +928,16 @@ function main() {
           y: 1,
           z: 22,
           ease: "power1.inOut",
-        });
+        })
+        .to(camera.position, {
+          duration: 0,
+          x: 0,
+          y: 2,
+          z: 1100,
+          ease: "power1.inOut",
+        })
+        ;
+
 
       let timelineUno = gsap.timeline({
         paused: true
