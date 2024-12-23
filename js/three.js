@@ -218,8 +218,7 @@ function main() {
   const directionalLight = new THREE.DirectionalLight(0xFfffff, 1);
   directionalLight.position.set(-15, 15, -50);
   directionalLight.castShadow = true
-  scene.add(directionalLight);
-
+  //>>>>>>>>>>>>scene.add(directionalLight);<<<<<<<<<<<<<<<<<<
   const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
   //scene.add(directionalLightHelper);
 
@@ -242,7 +241,7 @@ function main() {
   segundaLight.shadow.camera.far = 500;
 
   // Agregar la luz a la escena
-  scene.add(segundaLight);
+  //>>>>>>>>>>>>>>>scene.add(segundaLight);<<<<<<<<<<<<<<<<<<<
 
   const segundasombraHelper = new THREE.CameraHelper(segundaLight.shadow.camera);
   //scene.add(segundasombraHelper);
@@ -276,7 +275,9 @@ function main() {
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = -Math.PI / 2;
   plane.position.set(0, 0, 9);
-  scene.add(plane);
+
+
+  //>>>>>>>>>>>>>>>>>scene.add(plane);<<<<<<<<<<<<<<<<<<<<<<<<
 
 
   let mixer;
@@ -423,6 +424,7 @@ function main() {
   const luzpasillohelperdos = new THREE.DirectionalLightHelper(luzdospasillo, 5);
   //scene.add(luzpasillohelperdos);
 
+  //>>>>>>>>>>>scene.add(luzdospasillo);<<<<<<<<<<<<<<<<<<
 
 
 
@@ -559,8 +561,7 @@ function main() {
   planedos.castShadow = true; // El cubo emitirá sombras
   planedos.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
 
-  // Configurar oclusión ambiental (opcional)
-  geometrybasedos.attributes.uv2 = geometrybasedos.attributes.uv; // Necesario para oclusión ambiental
+  scene.add(planedos);
 
   // Cargar modelo david
   const david = new GLTFLoader();
@@ -621,6 +622,7 @@ function main() {
   // Rotación del plano para que sea vertical
   fondoBaseDos.rotation.set(0, Math.PI, 0); // Ajusta según tu orientación deseada
 
+  //>>>>>>>>>>>>>scene.add(fondoBaseDos);<<<<<<<<<<<<<<<<<<<<<<
 
   // Lista de datos para los textos (contenido y posiciones)
   const datosTextos = [{
@@ -703,6 +705,29 @@ function main() {
   let animateWaves = false;
   const clock = new THREE.Clock();
 
+  // Define la lista de objetos que deseas optimizar
+  const objects = [planedos,plane,segundaLight,directionalLight,luzdospasillo,fondoBaseDos, sun1, sun2];
+
+  // Distancia máxima a la que un objeto es visible
+  const maxDistance = 200;
+
+  function updateVisibility(camera) {
+    objects.forEach((object) => {
+      const distance = camera.position.distanceTo(object.position);
+      if (distance <= maxDistance) {
+        if (!scene.children.includes(object)) {
+          scene.add(object); // Añade el objeto si no está en la escena
+        }
+      } else {
+        if (scene.children.includes(object)) {
+          scene.remove(object); // Elimina el objeto si está en la escena
+        }
+      }
+    });
+  }
+
+
+
   function animate() {
     requestAnimationFrame(animate);
 
@@ -730,8 +755,13 @@ function main() {
     planes.forEach(plane => {
       plane.material.uniforms.uTime.value = elapsedTime;
     });
+
+    // Actualiza la visibilidad de los objetos
+    updateVisibility(camera);
     renderer.render(scene, camera);
+
   }
+
 
   animate();
 
@@ -829,45 +859,6 @@ function main() {
 
 
 
-
-
-    // Definir la función para remover o add los objetos de la escena
-    function planodos() {
-      // Agregar el plano a la escena
-      scene.add(fondoBaseDos);
-      scene.add(planedos);
-      scene.add(luzdospasillo);
-
-      // Eliminar el plano a la escena
-      scene.remove(plane);
-      scene.remove(backgroundRect);
-      scene.remove(model);
-      scene.remove(sun1);
-      scene.remove(sun2);
-      scene.remove(segundaLight);
-      scene.remove(directionalLight);
-    }
-
-
-    /////////////////////////////////////////////////////////
-
-
-
-    function planouno() {
-      // Agregar el plano a la escena
-      scene.add(plane);
-      scene.add(backgroundRect);
-      scene.add(model);
-      scene.add(sun1);
-      scene.add(sun2);
-      scene.add(segundaLight);
-      scene.add(directionalLight);
-
-      // Eliminar el plano a la escena
-      scene.remove(fondoBaseDos);
-      scene.remove(planedos);
-      scene.remove(luzdospasillo);
-    }
 
 
 
@@ -1018,38 +1009,30 @@ function main() {
 
 
 
-// Función para actualizar el título según la posición de la cámara
-let estadoActual = null;
+      // Función para actualizar el título según la posición de la cámara
+      let estadoActual = null;
 
-function actualizarTitulo() {
-  const z = camera.position.z;
-  console.log(`Posición de la cámara z: ${z}`); // Registro de depuración
-  if (z >= 0 && z < 2) {
-    cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
-  } else if (z >= 2 && z < 10) {
-    cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
-  } else if (z >= 10 && z < 20) {
-    cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
-  } else if (z >= 20 && z <= 25) {
-    cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
-  } else if (z > 25 && z < 29) {
-    console.log('Ejecutando planouno()'); // Registro de depuración
-    planouno();
-  } else if (z >= 29) {
-    console.log('Ejecutando planodos()'); // Registro de depuración
-    planodos();
-  }
-}
+      function actualizarTitulo() {
+        const z = camera.position.z;
+        if (z >= 0 && z < 2) {
+          cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
+        } else if (z >= 2 && z < 10) {
+          cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
+        } else if (z >= 10 && z < 20) {
+          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
+        } else if (z >= 20 && z <= 25) {
+          cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
+        }
+      }
 
-function cambiarEstado(texto, timeline, estado, revertTimelines) {
-  titulorango.textContent = texto;
-  if (estadoActual !== estado) {
-    console.log(`Cambiando estado a: ${estado}`); // Registro de depuración
-    estadoActual = estado;
-    timeline.play();
-    revertTimelines.forEach(tl => tl.reverse());
-  }
-}
+      function cambiarEstado(texto, timeline, estado, revertTimelines) {
+        titulorango.textContent = texto;
+        if (estadoActual !== estado) {
+          timeline.play();
+          revertTimelines.forEach(t => t.reverse());
+          estadoActual = estado;
+        }
+      }
 
 
 
