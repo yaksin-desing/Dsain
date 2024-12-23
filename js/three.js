@@ -149,17 +149,17 @@ function main() {
     const texture = textureLoadertrabajos.load(texturePath, (texture) => {
       // Ajustar el tamaño del plano al tamaño de la textura
       const aspect = texture.image.width / texture.image.height;
-      plane.scale.set(aspect, 1, 1);
+      planes.scale.set(aspect, 1, 1);
     });
     const material = createWaveMaterial(texture);
     const geometry = new THREE.PlaneGeometry(1, 1, 64, 64); // El tamaño base será 1x1 para escalar dinámicamente
-    const plane = new THREE.Mesh(geometry, material);
-    plane.position.set(position.x, position.y, position.z);
-    plane.rotation.y = 0; // Orientación vertical
-    plane.castShadow = true;
-    scene.add(plane);
+    const planes = new THREE.Mesh(geometry, material);
+    planes.position.set(position.x, position.y, position.z);
+    planes.rotation.y = 0; // Orientación vertical
+    planes.castShadow = true;
+    scene.add(planes);
 
-    return plane;
+    return planes;
   };
 
   // Crear dos planos con imágenes específicas
@@ -219,12 +219,11 @@ function main() {
   directionalLight.position.set(-15, 15, -50);
   directionalLight.castShadow = true
   scene.add(directionalLight);
-  console.log(directionalLight.shadow)
 
   const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
   //scene.add(directionalLightHelper);
 
-  const segundaLight = new THREE.DirectionalLight(0xFF3419, 1);
+  const segundaLight = new THREE.DirectionalLight(0xFF9419, 1);
   segundaLight.position.set(3, 19, -150);
   segundaLight.target.position.set(0, 1, 20); // Dirige la luz hacia el origen
 
@@ -252,12 +251,10 @@ function main() {
   //scene.add(segundaLightHelper);
 
   const textureLoader = new THREE.TextureLoader();
-  const aroughnessMap = textureLoader.load("./src/objt/agua/roug.jpg");
-  const aaoMap = textureLoader.load("./src/objt/agua/occ.jpg");
   const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
   const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
 
-  const planeGeometry = new THREE.PlaneGeometry(50, 50, 100, 100);
+  const planeGeometry = new THREE.PlaneGeometry(50, 50, 100);
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
   const planeMaterial = new THREE.MeshPhysicalMaterial({
@@ -393,42 +390,12 @@ function main() {
     (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
 
-  /////// Crear luz direccional /////////////
 
-  const luzpasillo = new THREE.DirectionalLight(0xFFC0A2, 1);
-  luzpasillo.position.set(0, 20, 100); // Posición de la luz
-  luzpasillo.castShadow = true; // Activar sombras
 
-  // Ajustar la cámara de sombras (proyección ortográfica)
-  luzpasillo.shadow.camera.top = 50; // Límite superior
-  luzpasillo.shadow.camera.bottom = -50; // Límite inferior
-  luzpasillo.shadow.camera.left = -50; // Límite izquierdo
-  luzpasillo.shadow.camera.right = 50; // Límite derecho
-  luzpasillo.shadow.camera.near = 0.5; // Distancia mínima
-  luzpasillo.shadow.camera.far = 60; // Distancia máxima
-  luzpasillo.shadow.mapSize.width = 2048; // Ancho del mapa de sombras
-  luzpasillo.shadow.mapSize.height = 2048; // Alto del mapa de sombras
-  luzpasillo.shadow.bias = -0.001; // Previene artefactos de sombra
-
-  // Cambiar el objetivo de la luz
-  const target = new THREE.Object3D();
-  target.position.set(0, 0, 15); // Nuevo punto al que apunta la luz
-  scene.add(target); // Agregar el objetivo a la escena
-  luzpasillo.target = target; // Asignar el objetivo a la luz
-
-  // Opcional: Ayuda visual para la cámara de sombras
-  const shadowHelper = new THREE.CameraHelper(luzpasillo.shadow.camera);
-  //scene.add(shadowHelper);
-
-  // Agregar luz a la escena
-  scene.add(luzpasillo);
-
-  const luzpasillohelper = new THREE.DirectionalLightHelper(luzpasillo, 5);
-  //scene.add(luzpasillohelper);
 
 
   ///////// Crear luz direccional  ////////////////
-  const luzdospasillo = new THREE.DirectionalLight(0xFFFFFF, 0);
+  const luzdospasillo = new THREE.DirectionalLight(0xFFFFFF, 0.8);
   luzdospasillo.position.set(-30, 40, 1000); // Posición de la luz
   luzdospasillo.castShadow = true; // Activar sombras
 
@@ -452,9 +419,6 @@ function main() {
   // Opcional: Ayuda visual para la cámara de sombras
   const shadowHelperdos = new THREE.CameraHelper(luzdospasillo.shadow.camera);
   //scene.add(shadowHelperdos);
-
-  // Agregar luz a la escena
-  scene.add(luzdospasillo);
 
   const luzpasillohelperdos = new THREE.DirectionalLightHelper(luzdospasillo, 5);
   //scene.add(luzpasillohelperdos);
@@ -585,7 +549,7 @@ function main() {
 
   // Crear el mesh y añadirlo a la escena
   const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
-  scene.add(planedos);
+
 
   // Posicionar y rotar el plano
   planedos.position.set(0, 0, 1000);
@@ -597,8 +561,6 @@ function main() {
 
   // Configurar oclusión ambiental (opcional)
   geometrybasedos.attributes.uv2 = geometrybasedos.attributes.uv; // Necesario para oclusión ambiental
-
-
 
   // Cargar modelo david
   const david = new GLTFLoader();
@@ -631,10 +593,12 @@ function main() {
 
       // Agregar modelo a la escena
       scene.add(modeldavid);
+
     },
     undefined,
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
   );
+
 
   // Carga de la textura
   const textureLoaderfondodos = new THREE.TextureLoader();
@@ -656,10 +620,6 @@ function main() {
 
   // Rotación del plano para que sea vertical
   fondoBaseDos.rotation.set(0, Math.PI, 0); // Ajusta según tu orientación deseada
-
-  // Agregar el plano a la escena
-  scene.add(fondoBaseDos);
-
 
 
   // Lista de datos para los textos (contenido y posiciones)
@@ -785,6 +745,7 @@ function main() {
   });
 
 
+  let animationStarted = false; // Definir la variable
 
   function onMouseMove(event) {
     mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25;
@@ -795,9 +756,6 @@ function main() {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   texture.encoding = THREE.sRGBEncoding; // Para texturas
   material.map.encoding = THREE.sRGBEncoding; // Si usas texturas en materiales
-
-  // Declarar `animationStarted` en el ámbito global
-  let animationStarted = false;
 
   const botonInicio = document.getElementById("botoninicio");
 
@@ -869,6 +827,52 @@ function main() {
       ease: "expo.out",
     });
 
+
+
+
+
+    // Definir la función para remover o add los objetos de la escena
+    function planodos() {
+      // Agregar el plano a la escena
+      scene.add(fondoBaseDos);
+      scene.add(planedos);
+      scene.add(luzdospasillo);
+
+      // Eliminar el plano a la escena
+      scene.remove(plane);
+      scene.remove(backgroundRect);
+      scene.remove(model);
+      scene.remove(sun1);
+      scene.remove(sun2);
+      scene.remove(segundaLight);
+      scene.remove(directionalLight);
+    }
+
+
+    /////////////////////////////////////////////////////////
+
+
+
+    function planouno() {
+      // Agregar el plano a la escena
+      scene.add(plane);
+      scene.add(backgroundRect);
+      scene.add(model);
+      scene.add(sun1);
+      scene.add(sun2);
+      scene.add(segundaLight);
+      scene.add(directionalLight);
+
+      // Eliminar el plano a la escena
+      scene.remove(fondoBaseDos);
+      scene.remove(planedos);
+      scene.remove(luzdospasillo);
+    }
+
+
+
+
+
     // Ejecutar lógica después de la animación inicial
     inicioescena.then(() => {
       console.log("Animación inicial completada.");
@@ -930,13 +934,18 @@ function main() {
           ease: "power1.inOut",
         })
         .to(camera.position, {
-          duration: 0,
+          duration: 10,
+          x: 0,
+          y: 2,
+          z: 1050,
+          ease: "power1.inOut",
+        })
+        .to(camera.position, {
           x: 0,
           y: 2,
           z: 1100,
           ease: "power1.inOut",
-        })
-        ;
+        });
 
 
       let timelineUno = gsap.timeline({
@@ -1007,30 +1016,40 @@ function main() {
       });
 
 
-      // Función para actualizar el título según la posición de la cámara
-      let estadoActual = null;
 
-      function actualizarTitulo() {
-        const z = camera.position.z;
-        if (z >= 0 && z < 2) {
-          cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
-        } else if (z >= 2 && z < 10) {
-          cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
-        } else if (z >= 10 && z < 20) {
-          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
-        } else if (z >= 20 && z <= 25) {
-          cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
-        }
-      }
 
-      function cambiarEstado(texto, timeline, estado, revertTimelines) {
-        titulorango.textContent = texto;
-        if (estadoActual !== estado) {
-          timeline.play();
-          revertTimelines.forEach(t => t.reverse());
-          estadoActual = estado;
-        }
-      }
+// Función para actualizar el título según la posición de la cámara
+let estadoActual = null;
+
+function actualizarTitulo() {
+  const z = camera.position.z;
+  console.log(`Posición de la cámara z: ${z}`); // Registro de depuración
+  if (z >= 0 && z < 2) {
+    cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
+  } else if (z >= 2 && z < 10) {
+    cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
+  } else if (z >= 10 && z < 20) {
+    cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
+  } else if (z >= 20 && z <= 25) {
+    cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
+  } else if (z > 25 && z < 29) {
+    console.log('Ejecutando planouno()'); // Registro de depuración
+    planouno();
+  } else if (z >= 29) {
+    console.log('Ejecutando planodos()'); // Registro de depuración
+    planodos();
+  }
+}
+
+function cambiarEstado(texto, timeline, estado, revertTimelines) {
+  titulorango.textContent = texto;
+  if (estadoActual !== estado) {
+    console.log(`Cambiando estado a: ${estado}`); // Registro de depuración
+    estadoActual = estado;
+    timeline.play();
+    revertTimelines.forEach(tl => tl.reverse());
+  }
+}
 
 
 

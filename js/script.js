@@ -16,6 +16,7 @@ const audio_container = document.getElementById('audio-container');
 const videofondo = document.getElementById('videofondo');
 const parrafodeinicio = document.getElementById('parrafodeinicio');
 const escena = document.getElementById('scene-container');
+const cursor = document.querySelector('.cursor');
 
 
 //timeline loading
@@ -68,12 +69,17 @@ animaloading.to(imgparrafoinicio, {
     opacity: "100%",
 });
 animaloading.to(escena, {
-    delay:-1,
+    delay: -1,
     opacity: "100%",
 });
 animaloading.to(botoninicio, {
     bottom: "1vh",
-    
+
+});
+animaloading.to(cursor, {
+    delay: -1,
+    opacity: "100%",
+
 });
 
 
@@ -318,8 +324,7 @@ document.addEventListener("click", (event) => {
 
 //Animacion del cursor
 
-var cursor = document.querySelector('.cursor'),
-    cursorScale = document.querySelectorAll('.cursor-scale'),
+var cursorScale = document.querySelectorAll('.cursor-scale'),
     mouseX = 0,
     mouseY = 0
 
@@ -379,7 +384,7 @@ const openescena = gsap.timeline({
 
 openescena.to(botoninicio, {
     bottom: "-5vh",
-    
+
 });
 
 
@@ -387,17 +392,17 @@ openescena.to(botoninicio, {
 openescena.to(imgparrafoinicio, {
 
     opacity: "0",
-    display:"none"
+    display: "none"
 });
 openescena.to(parrafodeinicio, {
 
     opacity: "0",
-    display:"none"
+    display: "none"
 });
 openescena.to(tituloh1, {
 
     opacity: "0",
-    display:"none"
+    display: "none"
 });
 
 openescena.to(contenedor_loading, {
@@ -414,17 +419,17 @@ openescena.to(contenedor_loading, {
 document.getElementById("botoninicio").addEventListener("click", () => {
     openescena.play(); // Iniciar el timeline
     audioPlayer.play();
-  });
+});
 
 
 
-  const canvas = document.createElement('canvas');
-const ctx = canvas.getContext('2d');
-const noiseLayer = document.getElementById('noise-layer');
+// const canvas = document.createElement('canvas');
+// const ctx = canvas.getContext('2d');
+// const noiseLayer = document.getElementById('noise-layer');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-noiseLayer.appendChild(canvas);
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
+// noiseLayer.appendChild(canvas);
 
 // function generateNoise() {
 //   const imageData = ctx.createImageData(canvas.width, canvas.height);

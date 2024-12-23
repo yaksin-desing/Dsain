@@ -1,6 +1,7 @@
 #contenedor {
     position: relative;
     height: 100%;
+    
 
     .loading {
         height: 100dvh;
@@ -470,6 +471,7 @@
         display: flex;
         justify-content: left;
         align-items: end;
+        
 
         #noise-layer {
             position: fixed;

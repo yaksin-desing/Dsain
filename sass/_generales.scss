@@ -11,7 +11,14 @@ $colorp:#0004ee;
 body {
     position: relative;
     background: white;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
 }
+body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    /* Chrome, Safari y Opera */
+  }
 
 html::-webkit-scrollbar {
     display: none;
@@ -21,6 +28,7 @@ html::-webkit-scrollbar {
 
 
 .cursor {
+    opacity:0;
     position: fixed;
     width: 70px;
     height: 70px;
