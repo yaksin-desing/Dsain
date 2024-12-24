@@ -578,9 +578,7 @@ function main() {
         side: THREE.DoubleSide,
         color: 0xC4E5F5,
         emissive: 0xC4E5F5,
-        emissiveIntensity: 0.1,
-        metalness: 0,
-        roughness: 0,
+        emissiveIntensity: 0.3,
       });
 
       // Aplicar material y configurar sombras
@@ -588,7 +586,6 @@ function main() {
         if (child.isMesh) {
           child.material = modeldavidMaterial;
           child.castShadow = true; // Proyectar sombras
-          child.receiveShadow = true; // Recibir sombras
         }
       });
 
@@ -709,7 +706,7 @@ function main() {
   const objects = [planedos,plane,segundaLight,directionalLight,luzdospasillo,fondoBaseDos, sun1, sun2];
 
   // Distancia máxima a la que un objeto es visible
-  const maxDistance = 200;
+  const maxDistance = 250;
 
   function updateVisibility(camera) {
     objects.forEach((object) => {
