@@ -8,9 +8,7 @@ import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
 
-
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
-
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,7 +20,7 @@ function main() {
 
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
-    antialias: true
+    antialias: true,
   });
 
   renderer.shadowMap.enabled = true;
@@ -34,11 +32,8 @@ function main() {
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
-
-
   // Crear PMREMGenerator después de inicializar el renderer
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
-
 
   // Cargar HDRI global
   const globalHdrLoader = new RGBELoader();
@@ -49,19 +44,16 @@ function main() {
     const hdrEquirect = pmremGenerator.fromEquirectangular(texture).texture;
     scene.environment = hdrEquirect; // HDRI global
     //scene.background = hdrEquirect;  // Fondo global (opcional)
-
   });
 
   // Carga la animación Lottie
   const animationprogres = lottie.loadAnimation({
-    container: document.getElementById('lottie-container'), // Contenedor para la animación
-    renderer: 'svg',
+    container: document.getElementById("lottie-container"), // Contenedor para la animación
+    renderer: "svg",
     loop: false,
     autoplay: false,
-    path: './src/img/progreso.json' // Ruta de tu archivo Lottie
+    path: "./src/img/progreso.json", // Ruta de tu archivo Lottie
   });
-
-
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -77,18 +69,16 @@ function main() {
   const minCameraX = -1;
   const maxCameraX = 500;
 
-
-
   // Crear un gradiente utilizando un Canvas
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth; // Ajustamos el tamaño del canvas para que cubra toda la pantalla
   canvas.height = window.innerHeight;
 
   // Crear un gradiente lineal de arriba hacia abajo (puedes personalizarlo)
   const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-  gradient.addColorStop(0, '#FFEBA8FF'); // abajo
-  gradient.addColorStop(1, '#0400FFFF'); // arriba
+  gradient.addColorStop(0, "#FFEBA8FF"); // abajo
+  gradient.addColorStop(1, "#0400FFFF"); // arriba
 
   // Rellenar el canvas con el gradiente
   ctx.fillStyle = gradient;
@@ -118,11 +108,11 @@ function main() {
     return new THREE.ShaderMaterial({
       uniforms: {
         uTexture: {
-          value: texture
+          value: texture,
         },
         uTime: {
-          value: 0
-        }
+          value: 0,
+        },
       },
       vertexShader: `
             uniform float uTime;
@@ -140,7 +130,7 @@ function main() {
             void main() {
                 gl_FragColor = texture2D(uTexture, vUv);
             }
-        `
+        `,
     });
   };
 
@@ -165,64 +155,60 @@ function main() {
   // Crear dos planos con imágenes específicas
   const planeSpacing = window.innerWidth / 255; // Espaciado basado en el ancho de pantalla
   const planes = [
-
     //grupo uno
-    createPlane('./src/img/proyectounod.png', {
+    createPlane("./src/img/proyectounod.png", {
       x: -planeSpacing / 3,
       y: -5,
-      z: 2
+      z: 1,
     }),
-    createPlane('./src/img/proyectouno.jpg', {
+    createPlane("./src/img/proyectouno.jpg", {
       x: planeSpacing / 3,
       y: -5,
-      z: 2
+      z: 1,
     }),
 
     //----------------------------------//
 
     //grupo dos
-    createPlane('./src/img/proyectounod.png', {
+    createPlane("./src/img/proyectounod.png", {
       x: -planeSpacing / 3,
       y: -5,
-      z: 9
+      z: 3.2,
     }),
-    createPlane('./src/img/proyectouno.jpg', {
+    createPlane("./src/img/proyectouno.jpg", {
       x: planeSpacing / 3,
       y: -5,
-      z: 9
+      z: 3.2,
     }),
 
     //----------------------------------//
-
 
     //grupo tres
-    createPlane('./src/img/proyectounod.png', {
+    createPlane("./src/img/proyectounod.png", {
       x: -planeSpacing / 3,
       y: -5,
-      z: 19
+      z: 9,
     }),
-    createPlane('./src/img/proyectouno.jpg', {
+    createPlane("./src/img/proyectouno.jpg", {
       x: planeSpacing / 3,
       y: -5,
-      z: 19
-    })
+      z: 9,
+    }),
 
     //----------------------------------//
-
-
   ];
 
-
-
-
-  const directionalLight = new THREE.DirectionalLight(0xFfffff, 1);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(-15, 15, -50);
-  directionalLight.castShadow = true
+  directionalLight.castShadow = true;
   //>>>>>>>>>>>>scene.add(directionalLight);<<<<<<<<<<<<<<<<<<
-  const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
+  const directionalLightHelper = new THREE.DirectionalLightHelper(
+    directionalLight,
+    5
+  );
   //scene.add(directionalLightHelper);
 
-  const segundaLight = new THREE.DirectionalLight(0xFF9419, 1);
+  const segundaLight = new THREE.DirectionalLight(0xff9419, 1);
   segundaLight.position.set(3, 19, -150);
   segundaLight.target.position.set(0, 1, 20); // Dirige la luz hacia el origen
 
@@ -243,7 +229,9 @@ function main() {
   // Agregar la luz a la escena
   //>>>>>>>>>>>>>>>scene.add(segundaLight);<<<<<<<<<<<<<<<<<<<
 
-  const segundasombraHelper = new THREE.CameraHelper(segundaLight.shadow.camera);
+  const segundasombraHelper = new THREE.CameraHelper(
+    segundaLight.shadow.camera
+  );
   //scene.add(segundasombraHelper);
 
   const segundaLightHelper = new THREE.DirectionalLightHelper(segundaLight, 5);
@@ -257,7 +245,7 @@ function main() {
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
   const planeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x0026FF,
+    color: 0x0026ff,
     roughness: 0.1,
     metalness: 0.5,
     transmission: 0, // Esto hace que el material sea más transparente (efecto vidrio)
@@ -269,16 +257,14 @@ function main() {
     displacementMap: adisplacementMap,
     displacementScale: 0.3,
     transparent: true, // Habilitar la transparencia
-    opacity: 0.7 // Controla el nivel de transparencia (0 es completamente transparente)
+    opacity: 0.7, // Controla el nivel de transparencia (0 es completamente transparente)
   });
 
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = -Math.PI / 2;
   plane.position.set(0, 0, 9);
 
-
   //>>>>>>>>>>>>>>>>>scene.add(plane);<<<<<<<<<<<<<<<<<<<<<<<<
-
 
   let mixer;
   const animateFunctions = [];
@@ -347,9 +333,9 @@ function main() {
       modelbaselogo.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
 
       const modelbaselogoMaterial = new THREE.MeshStandardMaterial({
-        color: 0xFFF6E8, // Color base del material          
+        color: 0xfff6e8, // Color base del material
         aoMap: null, // Mapa de oclusión ambiental
-        emissive: 0xFF9F73, // Color de emisión (luz propia)
+        emissive: 0xff9f73, // Color de emisión (luz propia)
         emissiveIntensity: 0.5, // Intensidad de la emisión
         emissiveMap: null, // Textura de emisión
         metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
@@ -376,7 +362,6 @@ function main() {
         envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
         alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
         combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
-
       });
 
       modelbaselogo.traverse((child) => {
@@ -388,15 +373,12 @@ function main() {
       scene.add(modelbaselogo);
     },
     undefined,
-    (error) => console.error("Error al cargar el modelo de modelbaselogo ", error)
+    (error) =>
+    console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
 
-
-
-
-
   ///////// Crear luz direccional  ////////////////
-  const luzdospasillo = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+  const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
   luzdospasillo.position.set(-30, 40, 1000); // Posición de la luz
   luzdospasillo.castShadow = true; // Activar sombras
 
@@ -421,18 +403,25 @@ function main() {
   const shadowHelperdos = new THREE.CameraHelper(luzdospasillo.shadow.camera);
   //scene.add(shadowHelperdos);
 
-  const luzpasillohelperdos = new THREE.DirectionalLightHelper(luzdospasillo, 5);
+  const luzpasillohelperdos = new THREE.DirectionalLightHelper(
+    luzdospasillo,
+    5
+  );
   //scene.add(luzpasillohelperdos);
 
   //>>>>>>>>>>>scene.add(luzdospasillo);<<<<<<<<<<<<<<<<<<
 
-
-
   // Cargar el modelo de las dunas
   const textureLoaderDunas = new THREE.TextureLoader();
-  const ambientOcclusion = textureLoaderDunas.load("./src/objt/tierra/arenaambientcclusion.jpg");
-  const roughnessMap = textureLoaderDunas.load("./src/objt/tierra/arenaroughness.jpg");
-  const displacementMap = textureLoaderDunas.load("./src/objt/tierra/arenaheight.png");
+  const ambientOcclusion = textureLoaderDunas.load(
+    "./src/objt/tierra/arenaambientcclusion.jpg"
+  );
+  const roughnessMap = textureLoaderDunas.load(
+    "./src/objt/tierra/arenaroughness.jpg"
+  );
+  const displacementMap = textureLoaderDunas.load(
+    "./src/objt/tierra/arenaheight.png"
+  );
 
   const dunasLoader = new GLTFLoader();
   dunasLoader.load(
@@ -445,9 +434,9 @@ function main() {
       modelDunas.receiveShadow = true;
 
       const sandMaterial = new THREE.MeshStandardMaterial({
-        color: 0xF6B756, // Color base del material          
+        color: 0xf6b756, // Color base del material
         aoMap: ambientOcclusion, // Mapa de oclusión ambiental
-        emissive: 0xCC5219, // Color de emisión (luz propia)
+        emissive: 0xcc5219, // Color de emisión (luz propia)
         emissiveIntensity: 1, // Intensidad de la emisión
         emissiveMap: null, // Textura de emisión
         metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
@@ -474,7 +463,6 @@ function main() {
         envMapIntensity: 0, // Intensidad de los reflejos del mapa del entorno
         alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
         combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
-
       });
 
       modelDunas.traverse((child) => {
@@ -489,7 +477,6 @@ function main() {
     (error) => console.error("Error al cargar el modelo de dunas:", error)
   );
 
-
   // Sol 1
   const sun1Geometry = new THREE.SphereGeometry(3, 32, 32);
   const sun1Material = new THREE.MeshStandardMaterial({
@@ -497,7 +484,7 @@ function main() {
     emissiveIntensity: 1.8,
     color: 0xffffff,
     roughness: 0.2,
-    metalness: 0.7
+    metalness: 0.7,
   });
   const sun1 = new THREE.Mesh(sun1Geometry, sun1Material);
   sun1.position.set(-25, 25, -100);
@@ -514,21 +501,34 @@ function main() {
   sun2.position.set(3, 19, -150);
   scene.add(sun2);
 
-
-
-
   //////// <<<<< base dos >>>>>> /////////////
 
   // Cargar las texturas usando TextureLoader
   const textureLoaderazulejo = new THREE.TextureLoader();
 
-  const colorTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/acolor.jpg');
-  const normalTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/anorm.jpg');
-  const roughnessTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/arough.jpg');
-  const aoTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/aocc.jpg');
-  const displacementTexture = textureLoaderazulejo.load('./src/objt/escena/escenados/azulejo/adisp.png');
+  const colorTexture = textureLoaderazulejo.load(
+    "./src/objt/escena/escenados/azulejo/acolor.jpg"
+  );
+  const normalTexture = textureLoaderazulejo.load(
+    "./src/objt/escena/escenados/azulejo/anorm.jpg"
+  );
+  const roughnessTexture = textureLoaderazulejo.load(
+    "./src/objt/escena/escenados/azulejo/arough.jpg"
+  );
+  const aoTexture = textureLoaderazulejo.load(
+    "./src/objt/escena/escenados/azulejo/aocc.jpg"
+  );
+  const displacementTexture = textureLoaderazulejo.load(
+    "./src/objt/escena/escenados/azulejo/adisp.png"
+  );
   // Configurar las texturas para que se repitan
-  [colorTexture, normalTexture, roughnessTexture, aoTexture, displacementTexture].forEach((texture) => {
+  [
+    colorTexture,
+    normalTexture,
+    roughnessTexture,
+    aoTexture,
+    displacementTexture,
+  ].forEach((texture) => {
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(110, 40); // Ajustar el número de repeticiones (10 en X, 2 en Y)
@@ -542,7 +542,7 @@ function main() {
     aoMap: aoTexture,
     displacementMap: displacementTexture,
     displacementScale: 0.1,
-    emissive: 0x2FA1FF,
+    emissive: 0x2fa1ff,
     emissiveIntensity: 0.5,
   });
 
@@ -551,7 +551,6 @@ function main() {
 
   // Crear el mesh y añadirlo a la escena
   const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
-
 
   // Posicionar y rotar el plano
   planedos.position.set(0, 0, 1000);
@@ -576,8 +575,8 @@ function main() {
       // Material para el pasillo
       const modeldavidMaterial = new THREE.MeshStandardMaterial({
         side: THREE.DoubleSide,
-        color: 0xC4E5F5,
-        emissive: 0xC4E5F5,
+        color: 0xc4e5f5,
+        emissive: 0xc4e5f5,
         emissiveIntensity: 0.3,
       });
 
@@ -591,16 +590,16 @@ function main() {
 
       // Agregar modelo a la escena
       scene.add(modeldavid);
-
     },
     undefined,
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
   );
 
-
   // Carga de la textura
   const textureLoaderfondodos = new THREE.TextureLoader();
-  const nubeTexture = textureLoaderfondodos.load('./src/objt/escena/escenados/nubesdos.png'); // Asegúrate de que la ruta sea correcta
+  const nubeTexture = textureLoaderfondodos.load(
+    "./src/objt/escena/escenados/nubesdos.png"
+  ); // Asegúrate de que la ruta sea correcta
 
   // Creación del material con transparencia
   const nubeMaterial = new THREE.MeshBasicMaterial({
@@ -623,22 +622,22 @@ function main() {
 
   // Lista de datos para los textos (contenido y posiciones)
   const datosTextos = [{
-      contenido: 'Texto 2: Hola,\n      Three.js',
+      contenido: "Texto 1: Hola,\n      Three.js",
       posX: 0,
       posY: -5,
-      posZ: 2
+      posZ: 1.5,
     },
     {
-      contenido: 'Texto 3: Aprendiendo Three.js',
+      contenido: "Texto 3: Aprendiendo Three.js",
       posX: 0,
       posY: -5,
-      posZ: 10
+      posZ: 4,
     },
     {
-      contenido: 'Texto 4: ¡Esto es increíble!',
+      contenido: "Texto 4: ¡Esto es increíble!",
       posX: 0,
       posY: -5,
-      posZ: 20
+      posZ: 9.5,
     },
   ];
 
@@ -650,39 +649,43 @@ function main() {
     const loadertexto = new THREE.FontLoader();
 
     // Cambiar la URL de la fuente a tu fuente local
-    loadertexto.load('./src/objt/escena/escenados/fuenteescena/bold.json', (font) => {
-      // Calcular el tamaño del texto en función del ancho de la pantalla
-      const baseSize = 0.1; // Tamaño base del texto
-      const responsiveSize = (window.innerWidth / 2000) * baseSize; // Escalar tamaño dinámicamente
+    loadertexto.load(
+      "./src/objt/escena/escenados/fuenteescena/bold.json",
+      (font) => {
+        // Calcular el tamaño del texto en función del ancho de la pantalla
+        const baseSize = 0.1; // Tamaño base del texto
+        const responsiveSize = (window.innerWidth / 2000) * baseSize; // Escalar tamaño dinámicamente
 
-      // Crear la geometría del texto
-      const textGeometry = new THREE.TextGeometry(contenido, {
-        font: font,
-        size: responsiveSize, // Tamaño del texto dinámico
-        height: 0, // Grosor del texto
-      });
+        // Crear la geometría del texto
+        const textGeometry = new THREE.TextGeometry(contenido, {
+          font: font,
+          size: responsiveSize, // Tamaño del texto dinámico
+          height: 0, // Grosor del texto
+        });
 
-      // Calcular las dimensiones de la geometría del texto
-      textGeometry.computeBoundingBox();
-      const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+        // Calcular las dimensiones de la geometría del texto
+        textGeometry.computeBoundingBox();
+        const textWidth =
+          textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
 
-      // Crear el material para el texto
-      const textMaterial = new THREE.MeshBasicMaterial({
-        color: 0x000000, // Color negro
-      });
-      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        // Crear el material para el texto
+        const textMaterial = new THREE.MeshBasicMaterial({
+          color: 0x000000, // Color negro
+        });
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
-      // Centrar el texto en el eje X
-      textMesh.position.x = -textWidth / 2 + posX; // Centrar en el eje X y agregar desplazamiento
-      textMesh.position.y = posY; // Posición en el eje Y
-      textMesh.position.z = posZ; // Posición en el eje Z
+        // Centrar el texto en el eje X
+        textMesh.position.x = -textWidth / 2 + posX; // Centrar en el eje X y agregar desplazamiento
+        textMesh.position.y = posY; // Posición en el eje Y
+        textMesh.position.z = posZ; // Posición en el eje Z
 
-      // Agregar el texto a la escena
-      scene.add(textMesh);
+        // Agregar el texto a la escena
+        scene.add(textMesh);
 
-      // Guardar el texto en la lista para animaciones futuras
-      textos.push(textMesh);
-    });
+        // Guardar el texto en la lista para animaciones futuras
+        textos.push(textMesh);
+      }
+    );
   }
 
   // Crear los textos desde la lista de datos
@@ -695,15 +698,20 @@ function main() {
     crearTexto(contenido, posX, posY, posZ);
   });
 
-
-
-
-
   let animateWaves = false;
   const clock = new THREE.Clock();
 
   // Define la lista de objetos que deseas optimizar
-  const objects = [planedos,plane,segundaLight,directionalLight,luzdospasillo,fondoBaseDos, sun1, sun2];
+  const objects = [
+    planedos,
+    plane,
+    segundaLight,
+    directionalLight,
+    luzdospasillo,
+    fondoBaseDos,
+    sun1,
+    sun2,
+  ];
 
   // Distancia máxima a la que un objeto es visible
   const maxDistance = 250;
@@ -723,8 +731,6 @@ function main() {
     });
   }
 
-
-
   function animate() {
     requestAnimationFrame(animate);
 
@@ -734,7 +740,8 @@ function main() {
       for (let i = 0; i < positionAttribute.count; i++) {
         const x = positionAttribute.getX(i);
         const y = positionAttribute.getY(i);
-        const z = Math.sin(x * 0.5 + time) * 0.04 + Math.cos(y * 0.5 + time) * 0.01;
+        const z =
+          Math.sin(x * 0.5 + time) * 0.04 + Math.cos(y * 0.5 + time) * 0.01;
         positionAttribute.setZ(i, z);
       }
       positionAttribute.needsUpdate = true;
@@ -744,33 +751,30 @@ function main() {
     if (mixer) mixer.update(delta);
 
     camera.position.x += (mouse.x - camera.position.x) * 0.05;
-    camera.position.x = Math.max(minCameraX, Math.min(camera.position.x, maxCameraX));
+    camera.position.x = Math.max(
+      minCameraX,
+      Math.min(camera.position.x, maxCameraX)
+    );
 
     animateFunctions.forEach((fn) => fn());
 
     const elapsedTime = clock.getElapsedTime();
-    planes.forEach(plane => {
+    planes.forEach((plane) => {
       plane.material.uniforms.uTime.value = elapsedTime;
     });
 
     // Actualiza la visibilidad de los objetos
     updateVisibility(camera);
     renderer.render(scene, camera);
-
   }
 
-
   animate();
-
-
 
   window.addEventListener("resize", () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-
   });
-
 
   let animationStarted = false; // Definir la variable
 
@@ -787,7 +791,6 @@ function main() {
   const botonInicio = document.getElementById("botoninicio");
 
   botonInicio.addEventListener("click", () => {
-
     const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
     if (currentFrame < 60) {
       animationprogres.playSegments([currentFrame, 61], true);
@@ -854,13 +857,6 @@ function main() {
       ease: "expo.out",
     });
 
-
-
-
-
-
-
-
     // Ejecutar lógica después de la animación inicial
     inicioescena.then(() => {
       console.log("Animación inicial completada.");
@@ -880,12 +876,15 @@ function main() {
         onUpdate: function (self) {
           const progress = self.progress; // Progreso del scroll (0 a 1)
           const frame = Math.round(61 + progress * (endFrame - 61));
-          console.log(`Scroll progress: ${progress}, Calculated frame: ${frame}`);
+          console.log(
+            `Scroll progress: ${progress}, Calculated frame: ${frame}`
+          );
           animationprogres.goToAndStop(frame, true);
-        }
+        },
       });
       // Configurar ScrollTrigger después de la animación inicial
-      gsap.timeline({
+      gsap
+        .timeline({
           scrollTrigger: {
             trigger: contenedor, // Elemento que activa la animación
             start: "top top", // Punto inicial del scroll
@@ -897,127 +896,123 @@ function main() {
             onUpdate: function () {
               // Cada vez que el scroll se actualiza, revisamos la posición de la cámara
               actualizarTitulo();
-            }
-          }
+            },
+          },
         })
         .to(camera.position, {
-          duration: 10,
+          duration: 5,
           x: 0,
           y: 1,
           z: 5,
           ease: "none",
         })
+
         .to(camera.position, {
-          duration: 10,
+          duration: 5,
           x: 0,
           y: 1,
-          z: 10,
+          z: 17,
           ease: "power1.inOut",
         })
+
         .to(camera.position, {
-          duration: 10,
-          x: 0,
-          y: 1,
-          z: 22,
-          ease: "power1.inOut",
-        })
-        .to(camera.position, {
-          duration: 10,
+          duration: 0,
           x: 0,
           y: 2,
-          z: 1050,
+          z: 995,
           ease: "power1.inOut",
         })
+
         .to(camera.position, {
+          duration: 9.5,
           x: 0,
-          y: 2,
+          y: 3,
           z: 1100,
           ease: "power1.inOut",
         });
 
-
       let timelineUno = gsap.timeline({
-        paused: true
+        paused: true,
       });
       timelineUno.to(textos[0].position, {
         delay: 0,
         duration: 2,
         y: 1,
-        ease: "expo.out"
-      })
+        ease: "expo.out",
+      });
       timelineUno.to(planes[0].position, {
         delay: -2,
         duration: 2,
         y: 1,
-        ease: "expo.out"
-      })
+        ease: "expo.out",
+      });
       timelineUno.to(planes[1].position, {
         delay: -2,
         duration: 2,
         y: 1,
-        ease: "expo.out"
+        ease: "expo.out",
       });
-
 
       let timelineDos = gsap.timeline({
-        paused: true
+        paused: true,
       });
+
       timelineDos.to(textos[1].position, {
         delay: 0,
         duration: 2,
         y: 1,
-        ease: "expo.out"
-      })
+        ease: "expo.out",
+      });
       timelineDos.to(planes[2].position, {
         delay: -2,
         duration: 2,
         y: 1,
-        ease: "expo.out"
-      })
+        ease: "expo.out",
+      });
       timelineDos.to(planes[3].position, {
         delay: -2,
         duration: 2,
         y: 1,
-        ease: "expo.out"
+        ease: "expo.out",
       });
 
       let timelineTres = gsap.timeline({
-        paused: true
+        paused: true,
       });
       timelineTres.to(textos[2].position, {
         delay: 0,
         duration: 2,
         y: 1,
-        ease: "expo.out"
-      })
+        ease: "expo.out",
+      });
       timelineTres.to(planes[4].position, {
         delay: -2,
         duration: 2,
         y: 1,
-        ease: "expo.out"
-      })
+        ease: "expo.out",
+      });
       timelineTres.to(planes[5].position, {
         delay: -2,
         duration: 2,
         y: 1,
-        ease: "expo.out"
+        ease: "expo.out",
       });
-
-
-
 
       // Función para actualizar el título según la posición de la cámara
       let estadoActual = null;
 
       function actualizarTitulo() {
         const z = camera.position.z;
-        if (z >= 0 && z < 2) {
+        if (z >= 0 && z < 1) {
           cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
-        } else if (z >= 2 && z < 10) {
+        } else if (z >= 1 && z < 4) {
           cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
-        } else if (z >= 10 && z < 20) {
-          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
-        } else if (z >= 20 && z <= 25) {
+        } else if (z >= 4 && z < 9) {
+          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [
+            timelineUno,
+            timelineTres,
+          ]);
+        } else if (z >= 9 && z <= 1200) {
           cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
         }
       }
@@ -1026,17 +1021,12 @@ function main() {
         titulorango.textContent = texto;
         if (estadoActual !== estado) {
           timeline.play();
-          revertTimelines.forEach(t => t.reverse());
+          revertTimelines.forEach((t) => t.reverse());
           estadoActual = estado;
         }
       }
-
-
-
-
     });
   });
-
 }
 
 main();
