@@ -1,7 +1,7 @@
 #contenedor {
     position: relative;
     height: 100%;
-    
+
 
     .loading {
         height: 100dvh;
@@ -454,8 +454,6 @@
             }
         }
 
-
-
     }
 
 
@@ -471,18 +469,7 @@
         display: flex;
         justify-content: left;
         align-items: end;
-        
 
-        #noise-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            /* No interfiere con clics */
-            opacity: 100%;
-        }
 
         #tituloescena {
             position: absolute;
@@ -499,12 +486,16 @@
             margin-bottom: 1vh;
         }
 
+
+
+
         #lottie-container {
-            position:absolute;
-            bottom: -2vw;
-            left:42.5%;
+            position: absolute;
+            bottom: -0.5vw;
+            left: 42.5%;
             width: 15%;
-            pointer-events: none; /* Evitar que interfiera con los clics */
+            pointer-events: none;
+            /* Evitar que interfiera con los clics */
             z-index: 0;
 
         }

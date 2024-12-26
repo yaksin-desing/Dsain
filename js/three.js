@@ -10,6 +10,7 @@ import {
 
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
+
 gsap.registerPlugin(ScrollTrigger);
 
 function main() {
@@ -159,12 +160,12 @@ function main() {
     createPlane("./src/img/proyectounod.png", {
       x: -planeSpacing / 3,
       y: -5,
-      z: 1,
+      z: 0.1,
     }),
     createPlane("./src/img/proyectouno.jpg", {
       x: planeSpacing / 3,
       y: -5,
-      z: 1,
+      z: 0.1,
     }),
 
     //----------------------------------//
@@ -187,16 +188,97 @@ function main() {
     createPlane("./src/img/proyectounod.png", {
       x: -planeSpacing / 3,
       y: -5,
-      z: 9,
+      z: 11.5,
     }),
     createPlane("./src/img/proyectouno.jpg", {
       x: planeSpacing / 3,
       y: -5,
-      z: 9,
+      z: 11.5,
     }),
 
     //----------------------------------//
   ];
+
+  // Lista de datos para los textos (contenido y posiciones)
+  const datosTextos = [{
+      contenido: "Texto 1: Hola,\n      Three.js",
+      posX: 0,
+      posY: -5,
+      posZ: 0.5,
+    },
+    {
+      contenido: "Texto 3: Aprendiendo Three.js",
+      posX: 0,
+      posY: -5,
+      posZ: 4,
+    },
+    {
+      contenido: "Texto 4: ¡Esto es increíble!",
+      posX: 0,
+      posY: -5,
+      posZ: 12,
+    },
+  ];
+
+  // Lista para almacenar los objetos de texto generados
+  const textos = [];
+
+  // Función para crear y agregar el texto
+  function crearTexto(contenido, posX, posY, posZ) {
+    const loadertexto = new THREE.FontLoader();
+
+    // Cambiar la URL de la fuente a tu fuente local
+    loadertexto.load(
+      "./src/objt/escena/escenados/fuenteescena/bold.json",
+      (font) => {
+        // Calcular el tamaño del texto en función del ancho de la pantalla
+        const baseSize = 0.3; // Tamaño base del texto
+        const responsiveSize = (window.innerWidth / 2000) * baseSize; // Escalar tamaño dinámicamente
+
+        // Crear la geometría del texto
+        const textGeometry = new THREE.TextGeometry(contenido, {
+          font: font,
+          size: responsiveSize, // Tamaño del texto dinámico
+          height: 0, // Grosor del texto
+        });
+
+        // Calcular las dimensiones de la geometría del texto
+        textGeometry.computeBoundingBox();
+        const textWidth =
+          textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+
+        // Crear el material para el texto
+        const textMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff, // Color negro
+        });
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+        // Centrar el texto en el eje X
+        textMesh.position.x = -textWidth / 2 + posX; // Centrar en el eje X y agregar desplazamiento
+        textMesh.position.y = posY; // Posición en el eje Y
+        textMesh.position.z = posZ; // Posición en el eje Z
+
+        // Agregar el texto a la escena
+        scene.add(textMesh);
+
+        // Guardar el texto en la lista para animaciones futuras
+        textos.push(textMesh);
+      }
+    );
+  }
+
+  // Crear los textos desde la lista de datos
+  datosTextos.forEach(({
+    contenido,
+    posX,
+    posY,
+    posZ
+  }) => {
+    crearTexto(contenido, posX, posY, posZ);
+  });
+
+
+  
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(-15, 15, -50);
@@ -620,84 +702,6 @@ function main() {
 
   //>>>>>>>>>>>>>scene.add(fondoBaseDos);<<<<<<<<<<<<<<<<<<<<<<
 
-  // Lista de datos para los textos (contenido y posiciones)
-  const datosTextos = [{
-      contenido: "Texto 1: Hola,\n      Three.js",
-      posX: 0,
-      posY: -5,
-      posZ: 1.5,
-    },
-    {
-      contenido: "Texto 3: Aprendiendo Three.js",
-      posX: 0,
-      posY: -5,
-      posZ: 4,
-    },
-    {
-      contenido: "Texto 4: ¡Esto es increíble!",
-      posX: 0,
-      posY: -5,
-      posZ: 9.5,
-    },
-  ];
-
-  // Lista para almacenar los objetos de texto generados
-  const textos = [];
-
-  // Función para crear y agregar el texto
-  function crearTexto(contenido, posX, posY, posZ) {
-    const loadertexto = new THREE.FontLoader();
-
-    // Cambiar la URL de la fuente a tu fuente local
-    loadertexto.load(
-      "./src/objt/escena/escenados/fuenteescena/bold.json",
-      (font) => {
-        // Calcular el tamaño del texto en función del ancho de la pantalla
-        const baseSize = 0.1; // Tamaño base del texto
-        const responsiveSize = (window.innerWidth / 2000) * baseSize; // Escalar tamaño dinámicamente
-
-        // Crear la geometría del texto
-        const textGeometry = new THREE.TextGeometry(contenido, {
-          font: font,
-          size: responsiveSize, // Tamaño del texto dinámico
-          height: 0, // Grosor del texto
-        });
-
-        // Calcular las dimensiones de la geometría del texto
-        textGeometry.computeBoundingBox();
-        const textWidth =
-          textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
-
-        // Crear el material para el texto
-        const textMaterial = new THREE.MeshBasicMaterial({
-          color: 0x000000, // Color negro
-        });
-        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-
-        // Centrar el texto en el eje X
-        textMesh.position.x = -textWidth / 2 + posX; // Centrar en el eje X y agregar desplazamiento
-        textMesh.position.y = posY; // Posición en el eje Y
-        textMesh.position.z = posZ; // Posición en el eje Z
-
-        // Agregar el texto a la escena
-        scene.add(textMesh);
-
-        // Guardar el texto en la lista para animaciones futuras
-        textos.push(textMesh);
-      }
-    );
-  }
-
-  // Crear los textos desde la lista de datos
-  datosTextos.forEach(({
-    contenido,
-    posX,
-    posY,
-    posZ
-  }) => {
-    crearTexto(contenido, posX, posY, posZ);
-  });
-
   let animateWaves = false;
   const clock = new THREE.Clock();
 
@@ -791,15 +795,17 @@ function main() {
   const botonInicio = document.getElementById("botoninicio");
 
   botonInicio.addEventListener("click", () => {
-    const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
-    if (currentFrame < 60) {
-      animationprogres.playSegments([currentFrame, 61], true);
-    }
+    setTimeout(() => { // Agregar el delay de 1 segundo
+      const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
+      if (currentFrame < 60) {
+        animationprogres.playSegments([currentFrame, 61], true);
+      }
 
-    if (!model) {
-      console.error("El modelo aún no se ha cargado.");
-      return;
-    }
+      if (!model) {
+        console.error("El modelo aún no se ha cargado.");
+        return;
+      }
+    }, 1000);
 
     animateWaves = true;
 
@@ -864,14 +870,15 @@ function main() {
       animationStarted = true; // Permitir que ScrollTrigger controle Lottie
 
       const contenedor = document.getElementById("contenedor");
-      const titulorango = document.getElementById("tituloescena"); // Suponiendo que tienes un título con el ID 'titulo'
+      const titulorango = document.getElementById("tituloescena"); // Suponiendo que tienes un título con el ID 'titulo
+
 
       const endFrame = 300; // Suponiendo que la animación tiene 500 frames totales
       // Configurar ScrollTrigger para la animación de Lottie
       ScrollTrigger.create({
         trigger: contenedor,
         start: "top top",
-        end: "+=10000",
+        end: "+=20000",
         scrub: true,
         onUpdate: function (self) {
           const progress = self.progress; // Progreso del scroll (0 a 1)
@@ -883,12 +890,11 @@ function main() {
         },
       });
       // Configurar ScrollTrigger después de la animación inicial
-      gsap
-        .timeline({
+      gsap.timeline({
           scrollTrigger: {
             trigger: contenedor, // Elemento que activa la animación
             start: "top top", // Punto inicial del scroll
-            end: "+=10000", // Punto final (3000px adicionales para el scroll)
+            end: "+=20000", // Punto final (3000px adicionales para el scroll)
             scrub: true, // Sincroniza con el scroll
             pin: true, // Fija el contenedor durante la animación
             // Opcional: agrega marcadores si estás depurando
@@ -911,7 +917,7 @@ function main() {
           duration: 5,
           x: 0,
           y: 1,
-          z: 17,
+          z: 20,
           ease: "power1.inOut",
         })
 
@@ -924,7 +930,7 @@ function main() {
         })
 
         .to(camera.position, {
-          duration: 9.5,
+          duration: 10,
           x: 0,
           y: 3,
           z: 1100,
@@ -1003,16 +1009,16 @@ function main() {
 
       function actualizarTitulo() {
         const z = camera.position.z;
-        if (z >= 0 && z < 1) {
+        if (z >= 0 && z < 1.7) {
           cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
-        } else if (z >= 1 && z < 4) {
+        } else if (z >= 1.7 && z < 4) {
           cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
-        } else if (z >= 4 && z < 9) {
+        } else if (z >= 4 && z < 13) {
           cambiarEstado(z.toFixed(2), timelineDos, "rango3", [
             timelineUno,
             timelineTres,
           ]);
-        } else if (z >= 9 && z <= 1200) {
+        } else if (z >= 13 && z <= 1200) {
           cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
         }
       }

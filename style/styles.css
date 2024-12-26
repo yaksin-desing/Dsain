@@ -498,16 +498,6 @@ h5 {
   justify-content: left;
   align-items: end;
 }
-#contenedor #scene-container #noise-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  /* No interfiere con clics */
-  opacity: 100%;
-}
 #contenedor #scene-container #tituloescena {
   position: absolute;
   z-index: 2;
@@ -524,9 +514,10 @@ h5 {
 }
 #contenedor #scene-container #lottie-container {
   position: absolute;
-  bottom: -2vw;
+  bottom: -0.5vw;
   left: 42.5%;
   width: 15%;
-  pointer-events: none; /* Evitar que interfiera con los clics */
+  pointer-events: none;
+  /* Evitar que interfiera con los clics */
   z-index: 0;
 }
