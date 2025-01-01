@@ -63,7 +63,7 @@ function main() {
     1000
   );
   camera.rotation.set(1, 0, 0);
-  camera.position.set(0, 11, -5); // Ajusta los valores según tu escena
+  camera.position.set(0, 10.8, -4.9); // Ajusta los valores según tu escena
   //camera.lookAt(0, 0, 0); // Asegúrate de que apunte al origen o a donde necesites
 
   const mouse = new THREE.Vector2();
@@ -97,7 +97,7 @@ function main() {
   });
 
   const backgroundRect = new THREE.Mesh(geometry, material);
-  backgroundRect.position.set(0, -30, -190); // Colocarlo detrás de la cámara
+  backgroundRect.position.set(0, -30, -189); // Colocarlo detrás de la cámara
   backgroundRect.rotation.set(0, 0, 0);
   scene.add(backgroundRect);
 
@@ -174,12 +174,12 @@ function main() {
     createPlane("./src/img/proyectounod.png", {
       x: -planeSpacing / 3,
       y: -5,
-      z: 3.2,
+      z: 2.5,
     }),
     createPlane("./src/img/proyectouno.jpg", {
       x: planeSpacing / 3,
       y: -5,
-      z: 3.2,
+      z: 2.5,
     }),
 
     //----------------------------------//
@@ -201,22 +201,22 @@ function main() {
 
   // Lista de datos para los textos (contenido y posiciones)
   const datosTextos = [{
-      contenido: "Texto 1: Hola,\n      Three.js",
+      contenido: "BEASTDEALLER",
       posX: 0,
-      posY: -5,
-      posZ: 0.5,
+      posY: -50,
+      posZ: -180, //0.5   
     },
     {
-      contenido: "Texto 3: Aprendiendo Three.js",
+      contenido: "DSAIN",
       posX: 0,
-      posY: -5,
-      posZ: 4,
+      posY: -50,
+      posZ: -180,//3
     },
     {
-      contenido: "Texto 4: ¡Esto es increíble!",
+      contenido: "FINTRA",
       posX: 0,
-      posY: -5,
-      posZ: 12,
+      posY: -50,
+      posZ: -180,//12
     },
   ];
 
@@ -232,7 +232,7 @@ function main() {
       "./src/objt/escena/escenados/fuenteescena/bold.json",
       (font) => {
         // Calcular el tamaño del texto en función del ancho de la pantalla
-        const baseSize = 0.3; // Tamaño base del texto
+        const baseSize = 50; // Tamaño base del texto
         const responsiveSize = (window.innerWidth / 2000) * baseSize; // Escalar tamaño dinámicamente
 
         // Crear la geometría del texto
@@ -247,10 +247,10 @@ function main() {
         const textWidth =
           textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
 
-        // Crear el material para el texto
         const textMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff, // Color negro
+          color: 0xffffff, // Color base del material
         });
+
         const textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
         // Centrar el texto en el eje X
@@ -263,7 +263,7 @@ function main() {
 
         // Guardar el texto en la lista para animaciones futuras
         textos.push(textMesh);
-      }
+      },
     );
   }
 
@@ -278,9 +278,9 @@ function main() {
   });
 
 
-  
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
   directionalLight.position.set(-15, 15, -50);
   directionalLight.castShadow = true;
   //>>>>>>>>>>>>scene.add(directionalLight);<<<<<<<<<<<<<<<<<<
@@ -318,6 +318,39 @@ function main() {
 
   const segundaLightHelper = new THREE.DirectionalLightHelper(segundaLight, 5);
   //scene.add(segundaLightHelper);
+
+
+ // Cargar modelo cintauno
+const cintauno = new GLTFLoader();
+cintauno.load(
+  "./src/objt/escena/cintauno.glb",
+  (gltf) => {
+    const modelcintauno = gltf.scene;
+    modelcintauno.position.set(0, 10, -80);
+    modelcintauno.scale.set(2, 2, 2);
+    modelcintauno.rotation.set(0, 0, 0.5);
+
+        // Configurar animaciones
+        const mixer = new THREE.AnimationMixer(modelcintauno);
+        gltf.animations.forEach((clip) => {
+          mixer.clipAction(clip).play(); // Reproduce todas las animaciones del modelo
+        });
+    
+        // Guardar mixer para usarlo en la función de renderizado
+        mixers.push(mixer);
+
+
+
+    // Agregar modelo a la escena
+    scene.add(modelcintauno);
+  },
+);
+
+// Arreglo para mixers de animación
+const mixers = [];
+
+
+
 
   const textureLoader = new THREE.TextureLoader();
   const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
@@ -371,15 +404,15 @@ function main() {
           if (child.isMesh && child.material) {
             // Aplica el HDRI solo al modelo
             child.material.envMap = texture;
-            child.material.envMapIntensity = 3;
-            child.material.metalness = 0.8;
+            child.material.envMapIntensity = 2;
+            child.material.metalness = 1;
             child.material.roughness = 0;
-            child.material.clearcoat = 1;
+            child.material.clearcoat = 0;
             child.material.clearcoatRoughness = 0;
             child.material.emissive = new THREE.Color(0x9966cc);
-            child.material.emissiveIntensity = 0.5;
+            child.material.emissiveIntensity = 0.6;
             child.material.ior = 1;
-            child.material.transmission = 1;
+            child.material.transmission = 0.5;
             child.material.thickness = 1;
             child.material.needsUpdate = true;
             child.castShadow = true;
@@ -677,6 +710,8 @@ function main() {
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
   );
 
+
+
   // Carga de la textura
   const textureLoaderfondodos = new THREE.TextureLoader();
   const nubeTexture = textureLoaderfondodos.load(
@@ -738,6 +773,9 @@ function main() {
   function animate() {
     requestAnimationFrame(animate);
 
+    const delta = clock.getDelta(); // Tiempo entre frames
+    mixers.forEach((mixer) => mixer.update(delta)); // Actualiza los mixers
+
     if (animateWaves) {
       const time = clock.getElapsedTime();
       const positionAttribute = plane.geometry.attributes.position;
@@ -751,7 +789,6 @@ function main() {
       positionAttribute.needsUpdate = true;
     }
 
-    const delta = clock.getDelta();
     if (mixer) mixer.update(delta);
 
     camera.position.x += (mouse.x - camera.position.x) * 0.05;
@@ -849,7 +886,7 @@ function main() {
     inicioescena.to(backgroundRect.position, {
       delay: 0,
       x: 0,
-      y: 30,
+      y: 45,
       z: -190,
       ease: "none",
     });
@@ -943,7 +980,7 @@ function main() {
       timelineUno.to(textos[0].position, {
         delay: 0,
         duration: 2,
-        y: 1,
+        y: 40,
         ease: "expo.out",
       });
       timelineUno.to(planes[0].position, {
@@ -966,7 +1003,7 @@ function main() {
       timelineDos.to(textos[1].position, {
         delay: 0,
         duration: 2,
-        y: 1,
+        y: 40,
         ease: "expo.out",
       });
       timelineDos.to(planes[2].position, {
@@ -988,7 +1025,7 @@ function main() {
       timelineTres.to(textos[2].position, {
         delay: 0,
         duration: 2,
-        y: 1,
+        y: 40,
         ease: "expo.out",
       });
       timelineTres.to(planes[4].position, {
@@ -1009,9 +1046,9 @@ function main() {
 
       function actualizarTitulo() {
         const z = camera.position.z;
-        if (z >= 0 && z < 1.7) {
+        if (z >= 0 && z < 2) {
           cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
-        } else if (z >= 1.7 && z < 4) {
+        } else if (z >= 2 && z < 4) {
           cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
         } else if (z >= 4 && z < 13) {
           cambiarEstado(z.toFixed(2), timelineDos, "rango3", [
