@@ -320,34 +320,6 @@ function main() {
   //scene.add(segundaLightHelper);
 
 
- // Cargar modelo cintauno
-const cintauno = new GLTFLoader();
-cintauno.load(
-  "./src/objt/escena/cintauno.glb",
-  (gltf) => {
-    const modelcintauno = gltf.scene;
-    modelcintauno.position.set(0, 10, -80);
-    modelcintauno.scale.set(2, 2, 2);
-    modelcintauno.rotation.set(0, 0, 0.5);
-
-        // Configurar animaciones
-        const mixer = new THREE.AnimationMixer(modelcintauno);
-        gltf.animations.forEach((clip) => {
-          mixer.clipAction(clip).play(); // Reproduce todas las animaciones del modelo
-        });
-    
-        // Guardar mixer para usarlo en la función de renderizado
-        mixers.push(mixer);
-
-
-
-    // Agregar modelo a la escena
-    scene.add(modelcintauno);
-  },
-);
-
-// Arreglo para mixers de animación
-const mixers = [];
 
 
 
@@ -494,7 +466,7 @@ const mixers = [];
 
   ///////// Crear luz direccional  ////////////////
   const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
-  luzdospasillo.position.set(-30, 40, 1000); // Posición de la luz
+  luzdospasillo.position.set(0, 80, 970); // Posición de la luz
   luzdospasillo.castShadow = true; // Activar sombras
 
   // Ajustar la cámara de sombras (proyección ortográfica)
@@ -525,6 +497,11 @@ const mixers = [];
   //scene.add(luzpasillohelperdos);
 
   //>>>>>>>>>>>scene.add(luzdospasillo);<<<<<<<<<<<<<<<<<<
+
+  const ambientLightdos = new THREE.DirectionalLight(0xffffff, 0.2); // Luz ambiental
+  ambientLightdos.position.set(0, -1, 800); // Posición de la luz
+  
+  scene.add(ambientLightdos);
 
   // Cargar el modelo de las dunas
   const textureLoaderDunas = new THREE.TextureLoader();
@@ -690,9 +667,10 @@ const mixers = [];
       // Material para el pasillo
       const modeldavidMaterial = new THREE.MeshStandardMaterial({
         side: THREE.DoubleSide,
-        color: 0xc4e5f5,
+        color: 0xffffff,
         emissive: 0xc4e5f5,
-        emissiveIntensity: 0.3,
+        emissiveIntensity: 0.4,
+        envMap: null,   // Deshabilitar HDRI solo para este material
       });
 
       // Aplicar material y configurar sombras
@@ -712,30 +690,39 @@ const mixers = [];
 
 
 
-  // Carga de la textura
-  const textureLoaderfondodos = new THREE.TextureLoader();
-  const nubeTexture = textureLoaderfondodos.load(
-    "./src/objt/escena/escenados/nubesdos.png"
-  ); // Asegúrate de que la ruta sea correcta
+  // Cargar el modelo .glb
+  const nube = new GLTFLoader();
+  nube.load(
+      './src/objt/escena/escenados/nubes.glb', // Ruta al archivo .glb
+      (gltf) => {
+          const modelnube = gltf.scene;
+          
+          // Recorrer todos los objetos del modelo y asignar un material de nube
+          modelnube.traverse((child) => {
+              if (child.isMesh) {
+                  // Crear un material para las nubes
+                  child.material = new THREE.MeshStandardMaterial({
+                      color: 0xFFFFFF, // Blanco
+                      emissive: 0xc4e5f5,
+                      emissiveIntensity: 0.7,
+                      envMap: null,   // Deshabilitar HDRI solo para este material
+                  });
+              }
+          });
+  
+          // Ajustar posición y escala
+          modelnube.position.set(0, 15, 950);
+          modelnube.scale.set(2, 1, 1);
+          modelnube.rotation.set(-0.2, 0, 0);
+  
+          // Agregar el modelo a la escena
+          scene.add(modelnube);
+      },
+);
 
-  // Creación del material con transparencia
-  const nubeMaterial = new THREE.MeshBasicMaterial({
-    map: nubeTexture,
-    transparent: true,
-    side: THREE.DoubleSide, // Opcional, para que sea visible por ambos lados
-  });
 
-  // Creación del plano
-  const planeGeometrybasedos = new THREE.PlaneGeometry(700, 220); // Ajusta las dimensiones del plano según tus necesidades
-  const fondoBaseDos = new THREE.Mesh(planeGeometrybasedos, nubeMaterial);
 
-  // Posición del plano
-  fondoBaseDos.position.set(0, 95, 900);
 
-  // Rotación del plano para que sea vertical
-  fondoBaseDos.rotation.set(0, Math.PI, 0); // Ajusta según tu orientación deseada
-
-  //>>>>>>>>>>>>>scene.add(fondoBaseDos);<<<<<<<<<<<<<<<<<<<<<<
 
   let animateWaves = false;
   const clock = new THREE.Clock();
@@ -747,7 +734,6 @@ const mixers = [];
     segundaLight,
     directionalLight,
     luzdospasillo,
-    fondoBaseDos,
     sun1,
     sun2,
   ];
@@ -774,7 +760,6 @@ const mixers = [];
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta(); // Tiempo entre frames
-    mixers.forEach((mixer) => mixer.update(delta)); // Actualiza los mixers
 
     if (animateWaves) {
       const time = clock.getElapsedTime();
