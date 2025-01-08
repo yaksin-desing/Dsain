@@ -10,6 +10,10 @@ import {
 
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
+const {
+  AnimationMixer
+} = THREE; // Importar AnimationMixer
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -210,13 +214,13 @@ function main() {
       contenido: "DSAIN",
       posX: 0,
       posY: -50,
-      posZ: -180,//3
+      posZ: -180, //3
     },
     {
       contenido: "FINTRA",
       posX: 0,
       posY: -50,
-      posZ: -180,//12
+      posZ: -180, //12
     },
   ];
 
@@ -500,7 +504,7 @@ function main() {
 
   const ambientLightdos = new THREE.DirectionalLight(0xffffff, 0.2); // Luz ambiental
   ambientLightdos.position.set(0, -1, 800); // Posición de la luz
-  
+
   scene.add(ambientLightdos);
 
   // Cargar el modelo de las dunas
@@ -670,7 +674,7 @@ function main() {
         color: 0xffffff,
         emissive: 0xc4e5f5,
         emissiveIntensity: 0.4,
-        envMap: null,   // Deshabilitar HDRI solo para este material
+        envMap: null, // Deshabilitar HDRI solo para este material
       });
 
       // Aplicar material y configurar sombras
@@ -688,39 +692,39 @@ function main() {
     (error) => console.error("Error al cargar el modelo de pasillo: ", error)
   );
 
+  // Lista para almacenar los mixers
+  const mixers = [];
 
 
-  // Cargar el modelo .glb
+  // Cargar el modelo nube.glb
   const nube = new GLTFLoader();
   nube.load(
-      './src/objt/escena/escenados/nubes.glb', // Ruta al archivo .glb
-      (gltf) => {
-          const modelnube = gltf.scene;
-          
-          // Recorrer todos los objetos del modelo y asignar un material de nube
-          modelnube.traverse((child) => {
-              if (child.isMesh) {
-                  // Crear un material para las nubes
-                  child.material = new THREE.MeshStandardMaterial({
-                      color: 0xFFFFFF, // Blanco
-                      emissive: 0xc4e5f5,
-                      emissiveIntensity: 0.7,
-                      envMap: null,   // Deshabilitar HDRI solo para este material
-                  });
-              }
+    './src/objt/escena/escenados/nubes.glb', // Ruta al archivo .glb
+    (gltf) => {
+      const modelnube = gltf.scene;
+
+      // Recorrer todos los objetos del modelo y asignar un material de nube
+      modelnube.traverse((child) => {
+        if (child.isMesh) {
+          // Crear un material para las nubes
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0xFFFFFF, // Blanco
+            emissive: 0xc4e5f5,
+            emissiveIntensity: 0.7,
+            envMap: null, // Deshabilitar HDRI solo para este material
           });
-  
-          // Ajustar posición y escala
-          modelnube.position.set(0, 15, 950);
-          modelnube.scale.set(2, 1, 1);
-          modelnube.rotation.set(-0.2, 0, 0);
-  
-          // Agregar el modelo a la escena
-          scene.add(modelnube);
-      },
-);
+        }
+      });
 
+      // Ajustar posición y escala
+      modelnube.position.set(0, 15, 950);
+      modelnube.scale.set(2, 1, 1);
+      modelnube.rotation.set(-0.2, 0, 0);
 
+      // Agregar el modelo a la escena
+      scene.add(modelnube);
+    },
+  );
 
 
 
@@ -731,9 +735,9 @@ function main() {
   const objects = [
     planedos,
     plane,
+    luzdospasillo,
     segundaLight,
     directionalLight,
-    luzdospasillo,
     sun1,
     sun2,
   ];
@@ -756,45 +760,141 @@ function main() {
     });
   }
 
-  function animate() {
-    requestAnimationFrame(animate);
+  // Declarar las variables fuera de la función de carga para que sean accesibles en todo el código
+let puertaAction, perillaAction, seguroAction;
 
-    const delta = clock.getDelta(); // Tiempo entre frames
 
-    if (animateWaves) {
-      const time = clock.getElapsedTime();
-      const positionAttribute = plane.geometry.attributes.position;
-      for (let i = 0; i < positionAttribute.count; i++) {
-        const x = positionAttribute.getX(i);
-        const y = positionAttribute.getY(i);
-        const z =
-          Math.sin(x * 0.5 + time) * 0.04 + Math.cos(y * 0.5 + time) * 0.01;
-        positionAttribute.setZ(i, z);
-      }
-      positionAttribute.needsUpdate = true;
-    }
+  // Cargar el modelo puerta.glb
+  const puerta = new GLTFLoader();
+  puerta.load(
+    './src/objt/escena/escenados/door.glb', // Ruta al archivo .glb
+    (gltf) => {
+      const modelpuerta = gltf.scene;
 
-    if (mixer) mixer.update(delta);
+      // Habilitar sombras para el modelo y sus hijos
+      modelpuerta.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true; // Proyectar sombras
+          child.receiveShadow = true; // Recibir sombras
+        }
+      });
 
-    camera.position.x += (mouse.x - camera.position.x) * 0.05;
-    camera.position.x = Math.max(
-      minCameraX,
-      Math.min(camera.position.x, maxCameraX)
-    );
+      // Ajustar posición y escala
+      modelpuerta.position.set(0, 0, 994);
+      modelpuerta.scale.set(1, 1, 1);
+      modelpuerta.rotation.set(0, 0, 0);
 
-    animateFunctions.forEach((fn) => fn());
+      // Crear el mixer para el modelo cargado
+      mixer = new THREE.AnimationMixer(modelpuerta);
 
-    const elapsedTime = clock.getElapsedTime();
-    planes.forEach((plane) => {
-      plane.material.uniforms.uTime.value = elapsedTime;
+      // Inicializar las acciones de animación
+      puertaAction = mixer.clipAction(gltf.animations[0]); // Ajusta el índice según tus animaciones
+      perillaAction = mixer.clipAction(gltf.animations[1]);
+      seguroAction = mixer.clipAction(gltf.animations[2]);
+
+      // Configurar las acciones
+      puertaAction.clampWhenFinished = true;
+      perillaAction.clampWhenFinished = true;
+      seguroAction.clampWhenFinished = true;
+
+      // Agregar el modelo a la escena
+      scene.add(modelpuerta);
+    },
+    undefined,
+    (error) => console.error("Error al cargar el modelo: ", error)
+  );
+
+
+
+  // Función para activar el estado 'on'
+  function activarEstadoOn() {
+
+    puertaAction.time = 0;
+    perillaAction.time = 0;
+    seguroAction.time = 0;
+
+    puertaAction.play();
+    perillaAction.play();
+    seguroAction.play();
+
+    puertaAction.setLoop(THREE.LoopOnce);
+    perillaAction.setLoop(THREE.LoopOnce);
+    seguroAction.setLoop(THREE.LoopOnce);
+
+    gsap.to(puertaAction, {
+      time: 50 / 30,
+      duration: 1.5,
+      onComplete: () => puertaAction.stop(),
+    });
+    gsap.to(perillaAction, {
+      time: 50 / 30,
+      duration: 1.5,
+      onComplete: () => perillaAction.stop(),
+    });
+    gsap.to(seguroAction, {
+      time: 50 / 30,
+      duration: 1.5,
+      onComplete: () => seguroAction.stop(),
     });
 
-    // Actualiza la visibilidad de los objetos
-    updateVisibility(camera);
-    renderer.render(scene, camera);
+    console.log("Estado 'on' activado");
   }
 
-  animate();
+  // Función para activar el estado 'off'
+  function activarEstadoOff() {
+
+    puertaAction.time = 50 / 30;
+    perillaAction.time = 50 / 30;
+    seguroAction.time = 50 / 30;
+
+    puertaAction.play();
+    perillaAction.play();
+    seguroAction.play();
+
+    puertaAction.setLoop(THREE.LoopOnce);
+    perillaAction.setLoop(THREE.LoopOnce);
+    seguroAction.setLoop(THREE.LoopOnce);
+
+    gsap.to(puertaAction, {
+      time: 0,
+      duration: 1.5,
+      onComplete: () => puertaAction.stop(),
+    });
+    gsap.to(perillaAction, {
+      time: 0,
+      duration: 1.5,
+      onComplete: () => perillaAction.stop(),
+    });
+    gsap.to(seguroAction, {
+      time: 0,
+      duration: 1.5,
+      onComplete: () => seguroAction.stop(),
+    });
+
+    console.log("Estado 'off' activado");
+  }
+
+    // Verificar el estado de la animación según la posición de la cámara
+    function verificarEstado() {
+      const z = camera.position.z; // Obtener la posición z de la cámara
+  
+      if (z >= -100 && z < 1000) {
+        console.log("on");
+        activarEstadoOn(); // Llamar al estado 'on'
+       
+      } else if (z > 1000) {
+        console.log("off");
+        activarEstadoOff(); // Llamar al estado 'off'
+  
+
+  
+      } else {
+        console.log("Valor de z fuera del rango esperado");
+      }
+    }
+
+
+
 
   window.addEventListener("resize", () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -905,9 +1005,7 @@ function main() {
         onUpdate: function (self) {
           const progress = self.progress; // Progreso del scroll (0 a 1)
           const frame = Math.round(61 + progress * (endFrame - 61));
-          console.log(
-            `Scroll progress: ${progress}, Calculated frame: ${frame}`
-          );
+
           animationprogres.goToAndStop(frame, true);
         },
       });
@@ -924,6 +1022,7 @@ function main() {
             onUpdate: function () {
               // Cada vez que el scroll se actualiza, revisamos la posición de la cámara
               actualizarTitulo();
+
             },
           },
         })
@@ -935,6 +1034,7 @@ function main() {
           ease: "none",
         })
 
+
         .to(camera.position, {
           duration: 5,
           x: 0,
@@ -942,6 +1042,16 @@ function main() {
           z: 20,
           ease: "power1.inOut",
         })
+
+        .to(backgroundRect.position, {
+          duration: 0,
+          x: 0,
+          y: 10,
+          z: 900,
+          ease: "power1.inOut",
+        })
+
+
 
         .to(camera.position, {
           duration: 0,
@@ -1036,14 +1146,13 @@ function main() {
         } else if (z >= 2 && z < 4) {
           cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
         } else if (z >= 4 && z < 13) {
-          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [
-            timelineUno,
-            timelineTres,
-          ]);
-        } else if (z >= 13 && z <= 1200) {
+          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
+        } else if (z >= 13 && z <= 20) {
           cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
         }
+
       }
+
 
       function cambiarEstado(texto, timeline, estado, revertTimelines) {
         titulorango.textContent = texto;
@@ -1055,6 +1164,61 @@ function main() {
       }
     });
   });
+
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const delta = clock.getDelta(); // Tiempo entre frames
+
+    // Actualizar todos los mixers
+    mixers.forEach(({
+      mixer
+    }) => {
+      if (mixer) {
+        mixer.update(delta);
+      } else {
+        console.warn('Mixer no definido');
+      }
+    });
+
+    if (animateWaves) {
+      const time = clock.getElapsedTime();
+      const positionAttribute = plane.geometry.attributes.position;
+      for (let i = 0; i < positionAttribute.count; i++) {
+        const x = positionAttribute.getX(i);
+        const y = positionAttribute.getY(i);
+        const z =
+          Math.sin(x * 0.5 + time) * 0.04 + Math.cos(y * 0.5 + time) * 0.01;
+        positionAttribute.setZ(i, z);
+      }
+      positionAttribute.needsUpdate = true;
+    }
+
+
+
+    camera.position.x += (mouse.x - camera.position.x) * 0.05;
+    camera.position.x = Math.max(
+      minCameraX,
+      Math.min(camera.position.x, maxCameraX)
+    );
+
+    animateFunctions.forEach((fn) => fn());
+
+    const elapsedTime = clock.getElapsedTime();
+    planes.forEach((plane) => {
+      plane.material.uniforms.uTime.value = elapsedTime;
+    });
+
+    verificarEstado()
+    // Actualiza la visibilidad de los objetos
+    updateVisibility(camera);
+    renderer.render(scene, camera);
+  }
+
+
+  animate();
 }
+
 
 main();
