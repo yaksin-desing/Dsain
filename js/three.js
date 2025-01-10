@@ -599,6 +599,7 @@ function main() {
 
   //////// <<<<< base dos >>>>>> /////////////
 
+
   // Cargar las texturas usando TextureLoader
   const textureLoaderazulejo = new THREE.TextureLoader();
 
@@ -726,11 +727,6 @@ function main() {
     },
   );
 
-
-
-  let animateWaves = false;
-  const clock = new THREE.Clock();
-
   // Define la lista de objetos que deseas optimizar
   const objects = [
     planedos,
@@ -760,9 +756,13 @@ function main() {
     });
   }
 
-  // Declarar las variables fuera de la función de carga para que sean accesibles en todo el código
-let puertaAction, perillaAction, seguroAction;
 
+  let mixerpuerta = null; // Guardar el mixer de la puerta
+  let puertaAnim, perillaAnim, seguroAnim; // Declarar las animaciones globalmente
+
+  const frameTarget = 125; // Frame donde queremos detener
+  const totalFrames = 250; // Total de frames de la animación
+  let isPaused = false; // Controla si la animación está pausada
 
   // Cargar el modelo puerta.glb
   const puerta = new GLTFLoader();
@@ -774,124 +774,140 @@ let puertaAction, perillaAction, seguroAction;
       // Habilitar sombras para el modelo y sus hijos
       modelpuerta.traverse((child) => {
         if (child.isMesh) {
-          child.castShadow = true; // Proyectar sombras
-          child.receiveShadow = true; // Recibir sombras
+          child.castShadow = true;
+          child.receiveShadow = true;
         }
       });
 
       // Ajustar posición y escala
-      modelpuerta.position.set(0, 0, 994);
+      modelpuerta.position.set(0, 0.1, 994);
       modelpuerta.scale.set(1, 1, 1);
       modelpuerta.rotation.set(0, 0, 0);
 
-      // Crear el mixer para el modelo cargado
-      mixer = new THREE.AnimationMixer(modelpuerta);
+      // Agregar el modelo a la escena
+      scene.add(modelpuerta);
 
-      // Inicializar las acciones de animación
-      puertaAction = mixer.clipAction(gltf.animations[0]); // Ajusta el índice según tus animaciones
-      perillaAction = mixer.clipAction(gltf.animations[1]);
-      seguroAction = mixer.clipAction(gltf.animations[2]);
+      mixerpuerta = new THREE.AnimationMixer(modelpuerta);
 
+      // Asociar las animaciones y configurarlas para que puedan ser pausadas o reanudadas
+      puertaAnim = gltf.animations.find((anim) => anim.name === 'puerta');
+      perillaAnim = gltf.animations.find((anim) => anim.name === 'perilla');
+      seguroAnim = gltf.animations.find((anim) => anim.name === 'seguro');
+
+      // Reproducir las animaciones y configurarlas para detenerse en el frame 125
+      if (puertaAnim) {
+        const action = mixerpuerta.clipAction(puertaAnim);
+        action.play();
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+      }
+
+      if (perillaAnim) {
+        const action = mixerpuerta.clipAction(perillaAnim);
+        action.play();
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+      }
+
+      if (seguroAnim) {
+        const action = mixerpuerta.clipAction(seguroAnim);
+        action.play();
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+      }
+    },
+    undefined,
+    (error) => {
+      console.error('Error al cargar el modelo:', error);
+    }
+  );
+
+  function playToFrame125() {
+    if (mixerpuerta) {
+      const puertaAction = mixerpuerta.clipAction(puertaAnim);
+      const perillaAction = mixerpuerta.clipAction(perillaAnim);
+      const seguroAction = mixerpuerta.clipAction(seguroAnim);
+  
+      // Calcular el tiempo correspondiente al frame 125
+      const frame125Time = (frameTarget / totalFrames) * puertaAnim.duration;
+  
       // Configurar las acciones
+      puertaAction.reset();
+      perillaAction.reset();
+      seguroAction.reset();
+  
+      puertaAction.loop = THREE.LoopOnce;
+      perillaAction.loop = THREE.LoopOnce;
+      seguroAction.loop = THREE.LoopOnce;
+  
       puertaAction.clampWhenFinished = true;
       perillaAction.clampWhenFinished = true;
       seguroAction.clampWhenFinished = true;
-
-      // Agregar el modelo a la escena
-      scene.add(modelpuerta);
-    },
-    undefined,
-    (error) => console.error("Error al cargar el modelo: ", error)
-  );
-
-
-
-  // Función para activar el estado 'on'
-  function activarEstadoOn() {
-
-    puertaAction.time = 0;
-    perillaAction.time = 0;
-    seguroAction.time = 0;
-
-    puertaAction.play();
-    perillaAction.play();
-    seguroAction.play();
-
-    puertaAction.setLoop(THREE.LoopOnce);
-    perillaAction.setLoop(THREE.LoopOnce);
-    seguroAction.setLoop(THREE.LoopOnce);
-
-    gsap.to(puertaAction, {
-      time: 50 / 30,
-      duration: 1.5,
-      onComplete: () => puertaAction.stop(),
-    });
-    gsap.to(perillaAction, {
-      time: 50 / 30,
-      duration: 1.5,
-      onComplete: () => perillaAction.stop(),
-    });
-    gsap.to(seguroAction, {
-      time: 50 / 30,
-      duration: 1.5,
-      onComplete: () => seguroAction.stop(),
-    });
-
-    console.log("Estado 'on' activado");
-  }
-
-  // Función para activar el estado 'off'
-  function activarEstadoOff() {
-
-    puertaAction.time = 50 / 30;
-    perillaAction.time = 50 / 30;
-    seguroAction.time = 50 / 30;
-
-    puertaAction.play();
-    perillaAction.play();
-    seguroAction.play();
-
-    puertaAction.setLoop(THREE.LoopOnce);
-    perillaAction.setLoop(THREE.LoopOnce);
-    seguroAction.setLoop(THREE.LoopOnce);
-
-    gsap.to(puertaAction, {
-      time: 0,
-      duration: 1.5,
-      onComplete: () => puertaAction.stop(),
-    });
-    gsap.to(perillaAction, {
-      time: 0,
-      duration: 1.5,
-      onComplete: () => perillaAction.stop(),
-    });
-    gsap.to(seguroAction, {
-      time: 0,
-      duration: 1.5,
-      onComplete: () => seguroAction.stop(),
-    });
-
-    console.log("Estado 'off' activado");
-  }
-
-    // Verificar el estado de la animación según la posición de la cámara
-    function verificarEstado() {
-      const z = camera.position.z; // Obtener la posición z de la cámara
   
-      if (z >= -100 && z < 1000) {
-        console.log("on");
-        activarEstadoOn(); // Llamar al estado 'on'
-       
-      } else if (z > 1000) {
-        console.log("off");
-        activarEstadoOff(); // Llamar al estado 'off'
+      puertaAction.play();
+      perillaAction.play();
+      seguroAction.play();
   
-
+      // Usar `requestAnimationFrame` para detener en el frame 125
+      function monitorAnimation() {
+        mixerpuerta.update(1 / 60); // Actualizar el mixer manualmente
   
-      } else {
-        console.log("Valor de z fuera del rango esperado");
+        if (puertaAction.time >= frame125Time) {
+          puertaAction.time = frame125Time;
+          perillaAction.time = frame125Time;
+          seguroAction.time = frame125Time;
+  
+          puertaAction.paused = true;
+          perillaAction.paused = true;
+          seguroAction.paused = true;
+  
+          console.log('Animaciones detenidas exactamente en el frame 125');
+        } else {
+          requestAnimationFrame(monitorAnimation); // Seguir monitoreando
+        }
       }
+  
+      monitorAnimation();
+      console.log('Reproduciendo animaciones del frame 0 al 125');
     }
+  }
+  
+  function resumeAnimationsFrom125() {
+    if (mixerpuerta) {
+      const puertaAction = mixerpuerta.clipAction(puertaAnim);
+      const perillaAction = mixerpuerta.clipAction(perillaAnim);
+      const seguroAction = mixerpuerta.clipAction(seguroAnim);
+  
+      puertaAction.loop = THREE.LoopOnce;
+      perillaAction.loop = THREE.LoopOnce;
+      seguroAction.loop = THREE.LoopOnce;
+  
+      puertaAction.time = (frameTarget / totalFrames) * puertaAnim.duration;
+      perillaAction.time = (frameTarget / totalFrames) * perillaAnim.duration;
+      seguroAction.time = (frameTarget / totalFrames) * seguroAnim.duration;
+  
+      puertaAction.paused = false;
+      perillaAction.paused = false;
+      seguroAction.paused = false;
+  
+      puertaAction.play();
+      perillaAction.play();
+      seguroAction.play();
+  
+      console.log('Reproduciendo animaciones del frame 125 al 250');
+    }
+  }
+  
+  // Controlar las animaciones según la posición de la cámara
+  function updateAnimations() {
+    if (camera.position.z >= 0 && camera.position.z <= 1009 && !isPaused) {
+      isPaused = true;
+      playToFrame125();
+    } else if (camera.position.z > 1010 && isPaused) {
+      isPaused = false;
+      resumeAnimationsFrom125();
+    }
+  }
 
 
 
@@ -921,6 +937,7 @@ let puertaAction, perillaAction, seguroAction;
       const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
       if (currentFrame < 60) {
         animationprogres.playSegments([currentFrame, 61], true);
+
       }
 
       if (!model) {
@@ -1166,33 +1183,22 @@ let puertaAction, perillaAction, seguroAction;
   });
 
 
+
+
+  let animateWaves = false;
+  const clock = new THREE.Clock();
+
+
+
   function animate() {
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta(); // Tiempo entre frames
 
-    // Actualizar todos los mixers
-    mixers.forEach(({
-      mixer
-    }) => {
-      if (mixer) {
-        mixer.update(delta);
-      } else {
-        console.warn('Mixer no definido');
-      }
-    });
 
-    if (animateWaves) {
-      const time = clock.getElapsedTime();
-      const positionAttribute = plane.geometry.attributes.position;
-      for (let i = 0; i < positionAttribute.count; i++) {
-        const x = positionAttribute.getX(i);
-        const y = positionAttribute.getY(i);
-        const z =
-          Math.sin(x * 0.5 + time) * 0.04 + Math.cos(y * 0.5 + time) * 0.01;
-        positionAttribute.setZ(i, z);
-      }
-      positionAttribute.needsUpdate = true;
+    // Actualizar las animaciones si el mixer está definido
+    if (mixerpuerta) {
+      mixerpuerta.update(delta);
     }
 
 
@@ -1210,7 +1216,8 @@ let puertaAction, perillaAction, seguroAction;
       plane.material.uniforms.uTime.value = elapsedTime;
     });
 
-    verificarEstado()
+    updateAnimations()
+
     // Actualiza la visibilidad de los objetos
     updateVisibility(camera);
     renderer.render(scene, camera);
@@ -1218,6 +1225,9 @@ let puertaAction, perillaAction, seguroAction;
 
 
   animate();
+
+
+
 }
 
 
