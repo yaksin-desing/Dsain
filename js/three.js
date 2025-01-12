@@ -8,11 +8,19 @@ import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
 
+import {
+  EffectComposer
+} from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/postprocessing/EffectComposer.js';
+import {
+  RenderPass
+} from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/postprocessing/RenderPass.js';
+import {
+  UnrealBloomPass
+} from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
-const {
-  AnimationMixer
-} = THREE; // Importar AnimationMixer
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,30 +34,20 @@ function main() {
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
+    alpha: true
   });
 
   renderer.shadowMap.enabled = true;
+
 
   //Puedes probar con otros tipos como THREE.PCFSoftShadowMap - THREE.PCFShadowMap o THREE.VSMShadowMap
 
   renderer.shadowMap.type = THREE.VSMShadowMap;
 
   renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
 
-  // Crear PMREMGenerator después de inicializar el renderer
-  const pmremGenerator = new THREE.PMREMGenerator(renderer);
-
-  // Cargar HDRI global
-  const globalHdrLoader = new RGBELoader();
-  globalHdrLoader.load("./src/objt/escena/cielo.hdr", (texture) => {
-    texture.mapping = THREE.EquirectangularReflectionMapping;
-
-    // Convertir para compatibilidad con PMREM (mejor iluminación)
-    const hdrEquirect = pmremGenerator.fromEquirectangular(texture).texture;
-    scene.environment = hdrEquirect; // HDRI global
-    //scene.background = hdrEquirect;  // Fondo global (opcional)
-  });
 
   // Carga la animación Lottie
   const animationprogres = lottie.loadAnimation({
@@ -104,6 +102,8 @@ function main() {
   backgroundRect.position.set(0, -30, -189); // Colocarlo detrás de la cámara
   backgroundRect.rotation.set(0, 0, 0);
   scene.add(backgroundRect);
+
+
 
   // Cargar texturas
   const textureLoadertrabajos = new THREE.TextureLoader();
@@ -203,158 +203,75 @@ function main() {
     //----------------------------------//
   ];
 
-  // Lista de datos para los textos (contenido y posiciones)
-  const datosTextos = [{
-      contenido: "BEASTDEALLER",
-      posX: 0,
-      posY: -50,
-      posZ: -180, //0.5   
-    },
-    {
-      contenido: "DSAIN",
-      posX: 0,
-      posY: -50,
-      posZ: -180, //3
-    },
-    {
-      contenido: "FINTRA",
-      posX: 0,
-      posY: -50,
-      posZ: -180, //12
-    },
-  ];
 
-  // Lista para almacenar los objetos de texto generados
-  const textos = [];
-
-  // Función para crear y agregar el texto
-  function crearTexto(contenido, posX, posY, posZ) {
-    const loadertexto = new THREE.FontLoader();
-
-    // Cambiar la URL de la fuente a tu fuente local
-    loadertexto.load(
-      "./src/objt/escena/escenados/fuenteescena/bold.json",
-      (font) => {
-        // Calcular el tamaño del texto en función del ancho de la pantalla
-        const baseSize = 50; // Tamaño base del texto
-        const responsiveSize = (window.innerWidth / 2000) * baseSize; // Escalar tamaño dinámicamente
-
-        // Crear la geometría del texto
-        const textGeometry = new THREE.TextGeometry(contenido, {
-          font: font,
-          size: responsiveSize, // Tamaño del texto dinámico
-          height: 0, // Grosor del texto
-        });
-
-        // Calcular las dimensiones de la geometría del texto
-        textGeometry.computeBoundingBox();
-        const textWidth =
-          textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
-
-        const textMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff, // Color base del material
-        });
-
-        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-
-        // Centrar el texto en el eje X
-        textMesh.position.x = -textWidth / 2 + posX; // Centrar en el eje X y agregar desplazamiento
-        textMesh.position.y = posY; // Posición en el eje Y
-        textMesh.position.z = posZ; // Posición en el eje Z
-
-        // Agregar el texto a la escena
-        scene.add(textMesh);
-
-        // Guardar el texto en la lista para animaciones futuras
-        textos.push(textMesh);
-      },
-    );
-  }
-
-  // Crear los textos desde la lista de datos
-  datosTextos.forEach(({
-    contenido,
-    posX,
-    posY,
-    posZ
-  }) => {
-    crearTexto(contenido, posX, posY, posZ);
-  });
-
-
-
-
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-  directionalLight.position.set(-15, 15, -50);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(-15, 16, -50);
   directionalLight.castShadow = true;
   //>>>>>>>>>>>>scene.add(directionalLight);<<<<<<<<<<<<<<<<<<
-  const directionalLightHelper = new THREE.DirectionalLightHelper(
-    directionalLight,
-    5
-  );
-  //scene.add(directionalLightHelper);
+
 
   const segundaLight = new THREE.DirectionalLight(0xff9419, 1);
-  segundaLight.position.set(3, 19, -150);
-  segundaLight.target.position.set(0, 1, 20); // Dirige la luz hacia el origen
+  segundaLight.position.set(0, 5, -40);
+  segundaLight.target.position.set(0, 0, 0); // Dirige la luz hacia el origen
 
-  // Habilitar sombras
-  segundaLight.castShadow = true;
-  segundaLight.shadow.mapSize.width = 1024; // Tamaño del mapa de sombras
-  segundaLight.shadow.mapSize.height = 1024;
-  segundaLight.shadow.bias = -0.001; // Previene artefactos de sombra
-
-  // Puedes ajustar la cámara de sombra para la luz direccional
-  segundaLight.shadow.camera.left = -100;
-  segundaLight.shadow.camera.right = 100;
-  segundaLight.shadow.camera.top = 100;
-  segundaLight.shadow.camera.bottom = 100;
-  segundaLight.shadow.camera.near = 10;
-  segundaLight.shadow.camera.far = 500;
 
   // Agregar la luz a la escena
   //>>>>>>>>>>>>>>>scene.add(segundaLight);<<<<<<<<<<<<<<<<<<<
 
-  const segundasombraHelper = new THREE.CameraHelper(
-    segundaLight.shadow.camera
-  );
-  //scene.add(segundasombraHelper);
-
-  const segundaLightHelper = new THREE.DirectionalLightHelper(segundaLight, 5);
-  //scene.add(segundaLightHelper);
 
 
 
 
 
 
+
+  // Cargar texturas
   const textureLoader = new THREE.TextureLoader();
   const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
   const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
 
+  anormalMap.wrapS = anormalMap.wrapT = THREE.RepeatWrapping;
+  anormalMap.repeat.set(50, 50);
+
+  adisplacementMap.wrapS = adisplacementMap.wrapT = THREE.RepeatWrapping;
+  adisplacementMap.repeat.set(50, 50);
+
+  // Crear geometría
   const planeGeometry = new THREE.PlaneGeometry(50, 50, 100);
   planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
 
+  // Configurar CubeCamera
+  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
+    format: THREE.RGBAFormat,
+    generateMipmaps: true,
+    minFilter: THREE.LinearMipmapLinearFilter,
+  });
+  const cubeCamera = new THREE.CubeCamera(0.1, 180, cubeRenderTarget);
+  scene.add(cubeCamera);
+
+  // Crear material con reflejos
   const planeMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x0026ff,
-    roughness: 0.1,
-    metalness: 0.5,
-    transmission: 0, // Esto hace que el material sea más transparente (efecto vidrio)
+    emissive: 0x0026ff,
+    emissiveIntensity: 1,
+    roughness: 0.5,
+    metalness: 1,
+    transmission: 0,
     thickness: 1,
     clearcoat: 1,
-    clearcoatRoughness: 0.05,
-    envMapIntensity: 1,
+    clearcoatRoughness: 0.02,
     normalMap: anormalMap,
     displacementMap: adisplacementMap,
-    displacementScale: 0.3,
-    transparent: true, // Habilitar la transparencia
-    opacity: 0.7, // Controla el nivel de transparencia (0 es completamente transparente)
+    displacementScale: 0.6,
+    transparent: true,
+    opacity: 0.7,
+    envMap: cubeRenderTarget.texture, // Usar textura generada por CubeCamera
   });
 
+  // Crear malla
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = -Math.PI / 2;
   plane.position.set(0, 0, 9);
-
   //>>>>>>>>>>>>>>>>>scene.add(plane);<<<<<<<<<<<<<<<<<<<<<<<<
 
   let mixer;
@@ -415,7 +332,7 @@ function main() {
     "./src/objt/escena/baselogo.glb",
     (gltf) => {
       const modelbaselogo = gltf.scene;
-      modelbaselogo.position.set(0, -1.1, -5);
+      modelbaselogo.position.set(0, -1.14, -5);
       modelbaselogo.scale.set(0.3, 0.36, 0.3);
       modelbaselogo.rotation.set(0, 0, 0);
 
@@ -734,6 +651,7 @@ function main() {
     luzdospasillo,
     segundaLight,
     directionalLight,
+    cubeCamera,
     sun1,
     sun2,
   ];
@@ -827,77 +745,77 @@ function main() {
       const puertaAction = mixerpuerta.clipAction(puertaAnim);
       const perillaAction = mixerpuerta.clipAction(perillaAnim);
       const seguroAction = mixerpuerta.clipAction(seguroAnim);
-  
+
       // Calcular el tiempo correspondiente al frame 125
       const frame125Time = (frameTarget / totalFrames) * puertaAnim.duration;
-  
+
       // Configurar las acciones
       puertaAction.reset();
       perillaAction.reset();
       seguroAction.reset();
-  
+
       puertaAction.loop = THREE.LoopOnce;
       perillaAction.loop = THREE.LoopOnce;
       seguroAction.loop = THREE.LoopOnce;
-  
+
       puertaAction.clampWhenFinished = true;
       perillaAction.clampWhenFinished = true;
       seguroAction.clampWhenFinished = true;
-  
+
       puertaAction.play();
       perillaAction.play();
       seguroAction.play();
-  
+
       // Usar `requestAnimationFrame` para detener en el frame 125
       function monitorAnimation() {
         mixerpuerta.update(1 / 60); // Actualizar el mixer manualmente
-  
+
         if (puertaAction.time >= frame125Time) {
           puertaAction.time = frame125Time;
           perillaAction.time = frame125Time;
           seguroAction.time = frame125Time;
-  
+
           puertaAction.paused = true;
           perillaAction.paused = true;
           seguroAction.paused = true;
-  
+
           console.log('Animaciones detenidas exactamente en el frame 125');
         } else {
           requestAnimationFrame(monitorAnimation); // Seguir monitoreando
         }
       }
-  
+
       monitorAnimation();
       console.log('Reproduciendo animaciones del frame 0 al 125');
     }
   }
-  
+
   function resumeAnimationsFrom125() {
     if (mixerpuerta) {
       const puertaAction = mixerpuerta.clipAction(puertaAnim);
       const perillaAction = mixerpuerta.clipAction(perillaAnim);
       const seguroAction = mixerpuerta.clipAction(seguroAnim);
-  
+
       puertaAction.loop = THREE.LoopOnce;
       perillaAction.loop = THREE.LoopOnce;
       seguroAction.loop = THREE.LoopOnce;
-  
+
       puertaAction.time = (frameTarget / totalFrames) * puertaAnim.duration;
       perillaAction.time = (frameTarget / totalFrames) * perillaAnim.duration;
       seguroAction.time = (frameTarget / totalFrames) * seguroAnim.duration;
-  
+
       puertaAction.paused = false;
       perillaAction.paused = false;
       seguroAction.paused = false;
-  
+
       puertaAction.play();
       perillaAction.play();
       seguroAction.play();
-  
+
       console.log('Reproduciendo animaciones del frame 125 al 250');
     }
   }
-  
+
   // Controlar las animaciones según la posición de la cámara
   function updateAnimations() {
     if (camera.position.z >= 0 && camera.position.z <= 1009 && !isPaused) {
@@ -908,6 +826,56 @@ function main() {
       resumeAnimationsFrom125();
     }
   }
+
+// Material personalizado para el portal
+const portalMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    time: { value: 0 },
+    color: { value: new THREE.Color(0xFDE5B7) },
+  },
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform float time;
+    uniform vec3 color;
+    varying vec2 vUv;
+    void main() {
+      float glow = sin(vUv.y * 200.0 + time) * 0.1 + 1.0; // Animación de brillo
+      vec3 neon = color * glow; // Color neón
+      gl_FragColor = vec4(neon, 0.6); // Transparencia incluida
+    }
+  `,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+});
+
+  // Crear un cuadrado geométrico y aplicarle el material
+  const portal = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.7, 4.6, 3, 1, 1, 1), // Geometría cuadrada con grosor mínimo
+    portalMaterial
+  );
+
+  portal.position.set(0, 2, 994); // Ajusta la posición del portal
+  scene.add(portal);
+
+  // Configurar el compositor de efectos
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+
+  // Agregar el efecto de brillo (UnrealBloomPass)
+  const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    1.5, // Intensidad
+    0.4, // Radio
+    0.85 // Umbral
+  );
+  composer.addPass(bloomPass);
 
 
 
@@ -988,7 +956,7 @@ function main() {
     inicioescena.to(backgroundRect.position, {
       delay: 0,
       x: 0,
-      y: 45,
+      y: 60,
       z: -190,
       ease: "none",
     });
@@ -1089,14 +1057,9 @@ function main() {
       let timelineUno = gsap.timeline({
         paused: true,
       });
-      timelineUno.to(textos[0].position, {
-        delay: 0,
-        duration: 2,
-        y: 40,
-        ease: "expo.out",
-      });
+
       timelineUno.to(planes[0].position, {
-        delay: -2,
+        delay: 0,
         duration: 2,
         y: 1,
         ease: "expo.out",
@@ -1112,12 +1075,7 @@ function main() {
         paused: true,
       });
 
-      timelineDos.to(textos[1].position, {
-        delay: 0,
-        duration: 2,
-        y: 40,
-        ease: "expo.out",
-      });
+
       timelineDos.to(planes[2].position, {
         delay: -2,
         duration: 2,
@@ -1134,12 +1092,7 @@ function main() {
       let timelineTres = gsap.timeline({
         paused: true,
       });
-      timelineTres.to(textos[2].position, {
-        delay: 0,
-        duration: 2,
-        y: 40,
-        ease: "expo.out",
-      });
+
       timelineTres.to(planes[4].position, {
         delay: -2,
         duration: 2,
@@ -1182,26 +1135,47 @@ function main() {
     });
   });
 
-
-
-
   let animateWaves = false;
   const clock = new THREE.Clock();
-
-
 
   function animate() {
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta(); // Tiempo entre frames
 
-
     // Actualizar las animaciones si el mixer está definido
     if (mixerpuerta) {
       mixerpuerta.update(delta);
     }
 
+    if (camera.position.z >= -10 && camera.position.z < 20) {
 
+      if (animateWaves) {
+        const time = clock.getElapsedTime();
+        const positionAttribute = plane.geometry.attributes.position;
+        for (let i = 0; i < positionAttribute.count; i++) {
+          const x = positionAttribute.getX(i);
+          const y = positionAttribute.getY(i);
+          const z =
+            Math.sin(x * 0.5 + time) * 0.02 + Math.cos(y * 0.5 + time) * 0.02;
+          positionAttribute.setZ(i, z);
+        }
+        positionAttribute.needsUpdate = true;
+      }
+
+
+      // Actualizar la posición del CubeCamera para que coincida con el plano
+      cubeCamera.position.copy(plane.position);
+
+      // Renderizar la escena desde la perspectiva del CubeCamera
+      plane.visible = false; // Ocultar el plano mientras se actualizan los reflejos
+      cubeCamera.update(renderer, scene);
+      plane.visible = true; // Mostrar el plano nuevamente
+
+    }
+
+    portalMaterial.uniforms.time.value += 0.5;
+    composer.render(); // Renderiza usando el compositor
 
     camera.position.x += (mouse.x - camera.position.x) * 0.05;
     camera.position.x = Math.max(
