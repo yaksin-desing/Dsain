@@ -1,5 +1,6 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 
+
 import {
   GLTFLoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
@@ -8,28 +9,49 @@ import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
 
-import {
-  EffectComposer
-} from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/postprocessing/EffectComposer.js';
-import {
-  RenderPass
-} from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/postprocessing/RenderPass.js';
-import {
-  UnrealBloomPass
-} from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/postprocessing/UnrealBloomPass.js';
-
 
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
+
+import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js'
+
+import {
+  sceneDos,
+  cameraDos,
+  mixerpuerta,
+  mixernubes,
+  renderTarget,
+  playToFrame125,
+  resumeAnimationsFrom125,
+} from './scenados.js';
+
 
 
 
 gsap.registerPlugin(ScrollTrigger);
 
 function main() {
+
+
   const container = document.getElementById("scene-container");
+
+  //////////////////////////////////////////
+
   const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    70,
+    container.clientWidth / container.clientHeight,
+    0.1,
+    1000
+  );
+  camera.rotation.set(1, 0, 0);
+  camera.position.set(0, 10.8, -4.9); // Ajusta los valores según tu escena
 
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
+
+  //////////////////////////////////////////
+
+
+
 
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
@@ -58,19 +80,14 @@ function main() {
     path: "./src/img/progreso.json", // Ruta de tu archivo Lottie
   });
 
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    container.clientWidth / container.clientHeight,
-    0.1,
-    1000
-  );
-  camera.rotation.set(1, 0, 0);
-  camera.position.set(0, 10.8, -4.9); // Ajusta los valores según tu escena
-  //camera.lookAt(0, 0, 0); // Asegúrate de que apunte al origen o a donde necesites
+
 
   const mouse = new THREE.Vector2();
   const minCameraX = -1;
   const maxCameraX = 500;
+
+
+
 
   // Crear un gradiente utilizando un Canvas
   const canvas = document.createElement("canvas");
@@ -207,7 +224,7 @@ function main() {
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(-15, 16, -50);
   directionalLight.castShadow = true;
-  //>>>>>>>>>>>>scene.add(directionalLight);<<<<<<<<<<<<<<<<<<
+  scene.add(directionalLight);
 
 
   const segundaLight = new THREE.DirectionalLight(0xff9419, 1);
@@ -216,13 +233,7 @@ function main() {
 
 
   // Agregar la luz a la escena
-  //>>>>>>>>>>>>>>>scene.add(segundaLight);<<<<<<<<<<<<<<<<<<<
-
-
-
-
-
-
+  scene.add(segundaLight);
 
 
   // Cargar texturas
@@ -272,7 +283,7 @@ function main() {
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = -Math.PI / 2;
   plane.position.set(0, 0, 9);
-  //>>>>>>>>>>>>>>>>>scene.add(plane);<<<<<<<<<<<<<<<<<<<<<<<<
+  scene.add(plane);
 
   let mixer;
   const animateFunctions = [];
@@ -297,19 +308,13 @@ function main() {
           if (child.isMesh && child.material) {
             // Aplica el HDRI solo al modelo
             child.material.envMap = texture;
-            child.material.envMapIntensity = 2;
+            child.material.envMapIntensity = 1;
             child.material.metalness = 1;
-            child.material.roughness = 0;
-            child.material.clearcoat = 0;
-            child.material.clearcoatRoughness = 0;
+            child.material.roughness = 0.5;
             child.material.emissive = new THREE.Color(0x9966cc);
             child.material.emissiveIntensity = 0.6;
             child.material.ior = 1;
-            child.material.transmission = 0.5;
-            child.material.thickness = 1;
             child.material.needsUpdate = true;
-            child.castShadow = true;
-            child.receiveShadow = true;
           }
         });
 
@@ -385,44 +390,7 @@ function main() {
     console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
 
-  ///////// Crear luz direccional  ////////////////
-  const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
-  luzdospasillo.position.set(0, 80, 970); // Posición de la luz
-  luzdospasillo.castShadow = true; // Activar sombras
 
-  // Ajustar la cámara de sombras (proyección ortográfica)
-  luzdospasillo.shadow.camera.top = 50; // Límite superior
-  luzdospasillo.shadow.camera.bottom = -50; // Límite inferior
-  luzdospasillo.shadow.camera.left = -50; // Límite izquierdo
-  luzdospasillo.shadow.camera.right = 50; // Límite derecho
-  luzdospasillo.shadow.camera.near = 0.5; // Distancia mínima
-  luzdospasillo.shadow.camera.far = 100; // Distancia máxima
-  luzdospasillo.shadow.mapSize.width = 2048; // Ancho del mapa de sombras
-  luzdospasillo.shadow.mapSize.height = 2048; // Alto del mapa de sombras
-  luzdospasillo.shadow.bias = -0.0001; // Previene artefactos de sombra
-
-  // Cambiar el objetivo de la luz
-  const targetdos = new THREE.Object3D();
-  targetdos.position.set(0, 0, 1000); // Nuevo punto al que apunta la luz
-  scene.add(targetdos); // Agregar el objetivo a la escena
-  luzdospasillo.target = targetdos; // Asignar el objetivo a la luz
-
-  // Opcional: Ayuda visual para la cámara de sombras
-  const shadowHelperdos = new THREE.CameraHelper(luzdospasillo.shadow.camera);
-  //scene.add(shadowHelperdos);
-
-  const luzpasillohelperdos = new THREE.DirectionalLightHelper(
-    luzdospasillo,
-    5
-  );
-  //scene.add(luzpasillohelperdos);
-
-  //>>>>>>>>>>>scene.add(luzdospasillo);<<<<<<<<<<<<<<<<<<
-
-  const ambientLightdos = new THREE.DirectionalLight(0xffffff, 0.2); // Luz ambiental
-  ambientLightdos.position.set(0, -1, 800); // Posición de la luz
-
-  scene.add(ambientLightdos);
 
   // Cargar el modelo de las dunas
   const textureLoaderDunas = new THREE.TextureLoader();
@@ -514,382 +482,60 @@ function main() {
   sun2.position.set(3, 19, -150);
   scene.add(sun2);
 
-  //////// <<<<< base dos >>>>>> /////////////
 
 
-  // Cargar las texturas usando TextureLoader
-  const textureLoaderazulejo = new THREE.TextureLoader();
+  // // Define la lista de objetos que deseas optimizar
+  // const objects = [
+  //   planedos,
+  //   plane,
+  //   luzdospasillo,
+  //   segundaLight,
+  //   directionalLight,
+  //   cubeCamera,
+  //   sun1,
+  //   sun2,
+  // ];
 
-  const colorTexture = textureLoaderazulejo.load(
-    "./src/objt/escena/escenados/azulejo/acolor.jpg"
-  );
-  const normalTexture = textureLoaderazulejo.load(
-    "./src/objt/escena/escenados/azulejo/anorm.jpg"
-  );
-  const roughnessTexture = textureLoaderazulejo.load(
-    "./src/objt/escena/escenados/azulejo/arough.jpg"
-  );
-  const aoTexture = textureLoaderazulejo.load(
-    "./src/objt/escena/escenados/azulejo/aocc.jpg"
-  );
-  const displacementTexture = textureLoaderazulejo.load(
-    "./src/objt/escena/escenados/azulejo/adisp.png"
-  );
-  // Configurar las texturas para que se repitan
-  [
-    colorTexture,
-    normalTexture,
-    roughnessTexture,
-    aoTexture,
-    displacementTexture,
-  ].forEach((texture) => {
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(110, 40); // Ajustar el número de repeticiones (10 en X, 2 en Y)
-  });
+  // // Distancia máxima a la que un objeto es visible
+  // const maxDistance = 250;
 
-  // Crear el material con las texturas cargadas
-  const materialbasedos = new THREE.MeshStandardMaterial({
-    map: colorTexture,
-    normalMap: normalTexture,
-    roughnessMap: roughnessTexture,
-    aoMap: aoTexture,
-    displacementMap: displacementTexture,
-    displacementScale: 0.1,
-    emissive: 0x2fa1ff,
-    emissiveIntensity: 0.5,
-  });
-
-  // Crear la geometría del plano
-  const geometrybasedos = new THREE.PlaneGeometry(600, 200);
-
-  // Crear el mesh y añadirlo a la escena
-  const planedos = new THREE.Mesh(geometrybasedos, materialbasedos);
-
-  // Posicionar y rotar el plano
-  planedos.position.set(0, 0, 1000);
-  planedos.rotation.x = -Math.PI / 2;
-
-  // Habilitar sombras en el modelo
-  planedos.castShadow = true; // El cubo emitirá sombras
-  planedos.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
-
-  scene.add(planedos);
-
-  // Cargar modelo david
-  const david = new GLTFLoader();
-  david.load(
-    "./src/objt/escena/escenados/david.glb",
-    (gltf) => {
-      const modeldavid = gltf.scene;
-      modeldavid.position.set(-5, -10, 980);
-      modeldavid.scale.set(1, 1, 1);
-      modeldavid.rotation.set(0, 0, 0);
-
-      // Material para el pasillo
-      const modeldavidMaterial = new THREE.MeshStandardMaterial({
-        side: THREE.DoubleSide,
-        color: 0xffffff,
-        emissive: 0xc4e5f5,
-        emissiveIntensity: 0.4,
-        envMap: null, // Deshabilitar HDRI solo para este material
-      });
-
-      // Aplicar material y configurar sombras
-      modeldavid.traverse((child) => {
-        if (child.isMesh) {
-          child.material = modeldavidMaterial;
-          child.castShadow = true; // Proyectar sombras
-        }
-      });
-
-      // Agregar modelo a la escena
-      scene.add(modeldavid);
-    },
-    undefined,
-    (error) => console.error("Error al cargar el modelo de pasillo: ", error)
-  );
-
-  // Lista para almacenar los mixers
-  const mixers = [];
-
-
-  // Cargar el modelo nube.glb
-  const nube = new GLTFLoader();
-  nube.load(
-    './src/objt/escena/escenados/nubes.glb', // Ruta al archivo .glb
-    (gltf) => {
-      const modelnube = gltf.scene;
-
-      // Recorrer todos los objetos del modelo y asignar un material de nube
-      modelnube.traverse((child) => {
-        if (child.isMesh) {
-          // Crear un material para las nubes
-          child.material = new THREE.MeshStandardMaterial({
-            color: 0xFFFFFF, // Blanco
-            emissive: 0xc4e5f5,
-            emissiveIntensity: 0.7,
-            envMap: null, // Deshabilitar HDRI solo para este material
-          });
-        }
-      });
-
-      // Ajustar posición y escala
-      modelnube.position.set(0, 15, 950);
-      modelnube.scale.set(2, 1, 1);
-      modelnube.rotation.set(-0.2, 0, 0);
-
-      // Agregar el modelo a la escena
-      scene.add(modelnube);
-    },
-  );
-
-  // Define la lista de objetos que deseas optimizar
-  const objects = [
-    planedos,
-    plane,
-    luzdospasillo,
-    segundaLight,
-    directionalLight,
-    cubeCamera,
-    sun1,
-    sun2,
-  ];
-
-  // Distancia máxima a la que un objeto es visible
-  const maxDistance = 250;
-
-  function updateVisibility(camera) {
-    objects.forEach((object) => {
-      const distance = camera.position.distanceTo(object.position);
-      if (distance <= maxDistance) {
-        if (!scene.children.includes(object)) {
-          scene.add(object); // Añade el objeto si no está en la escena
-        }
-      } else {
-        if (scene.children.includes(object)) {
-          scene.remove(object); // Elimina el objeto si está en la escena
-        }
-      }
-    });
-  }
-
-
-  let mixerpuerta = null; // Guardar el mixer de la puerta
-  let puertaAnim, perillaAnim, seguroAnim; // Declarar las animaciones globalmente
-
-  const frameTarget = 125; // Frame donde queremos detener
-  const totalFrames = 250; // Total de frames de la animación
-  let isPaused = false; // Controla si la animación está pausada
-
-  // Cargar el modelo puerta.glb
-  const puerta = new GLTFLoader();
-  puerta.load(
-    './src/objt/escena/escenados/door.glb', // Ruta al archivo .glb
-    (gltf) => {
-      const modelpuerta = gltf.scene;
-
-      // Habilitar sombras para el modelo y sus hijos
-      modelpuerta.traverse((child) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-
-      // Ajustar posición y escala
-      modelpuerta.position.set(0, 0.1, 994);
-      modelpuerta.scale.set(1, 1, 1);
-      modelpuerta.rotation.set(0, 0, 0);
-
-      // Agregar el modelo a la escena
-      scene.add(modelpuerta);
-
-      mixerpuerta = new THREE.AnimationMixer(modelpuerta);
-
-      // Asociar las animaciones y configurarlas para que puedan ser pausadas o reanudadas
-      puertaAnim = gltf.animations.find((anim) => anim.name === 'puerta');
-      perillaAnim = gltf.animations.find((anim) => anim.name === 'perilla');
-      seguroAnim = gltf.animations.find((anim) => anim.name === 'seguro');
-
-      // Reproducir las animaciones y configurarlas para detenerse en el frame 125
-      if (puertaAnim) {
-        const action = mixerpuerta.clipAction(puertaAnim);
-        action.play();
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-      }
-
-      if (perillaAnim) {
-        const action = mixerpuerta.clipAction(perillaAnim);
-        action.play();
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-      }
-
-      if (seguroAnim) {
-        const action = mixerpuerta.clipAction(seguroAnim);
-        action.play();
-        action.setLoop(THREE.LoopOnce);
-        action.clampWhenFinished = true;
-      }
-    },
-    undefined,
-    (error) => {
-      console.error('Error al cargar el modelo:', error);
-    }
-  );
-
-  function playToFrame125() {
-    if (mixerpuerta) {
-      const puertaAction = mixerpuerta.clipAction(puertaAnim);
-      const perillaAction = mixerpuerta.clipAction(perillaAnim);
-      const seguroAction = mixerpuerta.clipAction(seguroAnim);
-
-      // Calcular el tiempo correspondiente al frame 125
-      const frame125Time = (frameTarget / totalFrames) * puertaAnim.duration;
-
-      // Configurar las acciones
-      puertaAction.reset();
-      perillaAction.reset();
-      seguroAction.reset();
-
-      puertaAction.loop = THREE.LoopOnce;
-      perillaAction.loop = THREE.LoopOnce;
-      seguroAction.loop = THREE.LoopOnce;
-
-      puertaAction.clampWhenFinished = true;
-      perillaAction.clampWhenFinished = true;
-      seguroAction.clampWhenFinished = true;
-
-      puertaAction.play();
-      perillaAction.play();
-      seguroAction.play();
-
-      // Usar `requestAnimationFrame` para detener en el frame 125
-      function monitorAnimation() {
-        mixerpuerta.update(1 / 60); // Actualizar el mixer manualmente
-
-        if (puertaAction.time >= frame125Time) {
-          puertaAction.time = frame125Time;
-          perillaAction.time = frame125Time;
-          seguroAction.time = frame125Time;
-
-          puertaAction.paused = true;
-          perillaAction.paused = true;
-          seguroAction.paused = true;
-
-          console.log('Animaciones detenidas exactamente en el frame 125');
-        } else {
-          requestAnimationFrame(monitorAnimation); // Seguir monitoreando
-        }
-      }
-
-      monitorAnimation();
-      console.log('Reproduciendo animaciones del frame 0 al 125');
-    }
-  }
-
-  function resumeAnimationsFrom125() {
-    if (mixerpuerta) {
-      const puertaAction = mixerpuerta.clipAction(puertaAnim);
-      const perillaAction = mixerpuerta.clipAction(perillaAnim);
-      const seguroAction = mixerpuerta.clipAction(seguroAnim);
-
-      puertaAction.loop = THREE.LoopOnce;
-      perillaAction.loop = THREE.LoopOnce;
-      seguroAction.loop = THREE.LoopOnce;
-
-      puertaAction.time = (frameTarget / totalFrames) * puertaAnim.duration;
-      perillaAction.time = (frameTarget / totalFrames) * perillaAnim.duration;
-      seguroAction.time = (frameTarget / totalFrames) * seguroAnim.duration;
-
-      puertaAction.paused = false;
-      perillaAction.paused = false;
-      seguroAction.paused = false;
-
-      puertaAction.play();
-      perillaAction.play();
-      seguroAction.play();
-
-      console.log('Reproduciendo animaciones del frame 125 al 250');
-    }
-  }
-
-  // Controlar las animaciones según la posición de la cámara
-  function updateAnimations() {
-    if (camera.position.z >= 0 && camera.position.z <= 1009 && !isPaused) {
-      isPaused = true;
-      playToFrame125();
-    } else if (camera.position.z > 1010 && isPaused) {
-      isPaused = false;
-      resumeAnimationsFrom125();
-    }
-  }
-
-// Material personalizado para el portal
-const portalMaterial = new THREE.ShaderMaterial({
-  uniforms: {
-    time: { value: 0 },
-    color: { value: new THREE.Color(0xFDE5B7) },
-  },
-  vertexShader: `
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `,
-  fragmentShader: `
-    uniform float time;
-    uniform vec3 color;
-    varying vec2 vUv;
-    void main() {
-      float glow = sin(vUv.y * 200.0 + time) * 0.1 + 1.0; // Animación de brillo
-      vec3 neon = color * glow; // Color neón
-      gl_FragColor = vec4(neon, 0.6); // Transparencia incluida
-    }
-  `,
-  transparent: true,
-  blending: THREE.AdditiveBlending,
-  depthWrite: false,
-});
-
-  // Crear un cuadrado geométrico y aplicarle el material
-  const portal = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.7, 4.6, 3, 1, 1, 1), // Geometría cuadrada con grosor mínimo
-    portalMaterial
-  );
-
-  portal.position.set(0, 2, 994); // Ajusta la posición del portal
-  scene.add(portal);
-
-  // Configurar el compositor de efectos
-  const composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-
-  // Agregar el efecto de brillo (UnrealBloomPass)
-  const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    1.5, // Intensidad
-    0.4, // Radio
-    0.85 // Umbral
-  );
-  composer.addPass(bloomPass);
+  // function updateVisibility(camera) {
+  //   objects.forEach((object) => {
+  //     const distance = camera.position.distanceTo(object.position);
+  //     if (distance <= maxDistance) {
+  //       if (!scene.children.includes(object)) {
+  //         scene.add(object); // Añade el objeto si no está en la escena
+  //       }
+  //     } else {
+  //       if (scene.children.includes(object)) {
+  //         scene.remove(object); // Elimina el objeto si está en la escena
+  //       }
+  //     }
+  //   });
+  // }
 
 
 
 
-  window.addEventListener("resize", () => {
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-  });
 
   let animationStarted = false; // Definir la variable
 
   function onMouseMove(event) {
     mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25;
+  }
+
+
+  let isPaused = false; // Controla si la animación está pausada
+
+  // Controlar las animaciones según la posición de la cámara
+  function updateAnimations() {
+    if (camera.position.z >= 0 && cameraDos.position.z <= 1011 && !isPaused) {
+      isPaused = true;
+      playToFrame125();
+    } else if (cameraDos.position.z > 1012 && isPaused) {
+      isPaused = false;
+      resumeAnimationsFrom125();
+    }
   }
 
   window.addEventListener("mousemove", onMouseMove);
@@ -901,6 +547,8 @@ const portalMaterial = new THREE.ShaderMaterial({
   const botonInicio = document.getElementById("botoninicio");
 
   botonInicio.addEventListener("click", () => {
+    updateAnimations()
+
     setTimeout(() => { // Agregar el delay de 1 segundo
       const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
       if (currentFrame < 60) {
@@ -990,7 +638,6 @@ const portalMaterial = new THREE.ShaderMaterial({
         onUpdate: function (self) {
           const progress = self.progress; // Progreso del scroll (0 a 1)
           const frame = Math.round(61 + progress * (endFrame - 61));
-
           animationprogres.goToAndStop(frame, true);
         },
       });
@@ -1028,25 +675,15 @@ const portalMaterial = new THREE.ShaderMaterial({
           ease: "power1.inOut",
         })
 
-        .to(backgroundRect.position, {
-          duration: 0,
-          x: 0,
-          y: 10,
-          z: 900,
-          ease: "power1.inOut",
-        })
-
-
-
-        .to(camera.position, {
+        .to(cameraDos.position, {
           duration: 0,
           x: 0,
           y: 2,
-          z: 995,
+          z: 995.5,
           ease: "power1.inOut",
         })
 
-        .to(camera.position, {
+        .to(cameraDos.position, {
           duration: 10,
           x: 0,
           y: 3,
@@ -1138,7 +775,22 @@ const portalMaterial = new THREE.ShaderMaterial({
   let animateWaves = false;
   const clock = new THREE.Clock();
 
+  var stats = new Stats();
+  stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+  container.appendChild(stats.dom);
+ 
+
+
+
+
+
   function animate() {
+
+    stats.begin();
+
+    // monitored code goes here
+
+    stats.end();
     requestAnimationFrame(animate);
 
     const delta = clock.getDelta(); // Tiempo entre frames
@@ -1148,7 +800,12 @@ const portalMaterial = new THREE.ShaderMaterial({
       mixerpuerta.update(delta);
     }
 
-    if (camera.position.z >= -10 && camera.position.z < 20) {
+    if (mixernubes) {
+      mixernubes.update(delta);
+    }
+
+
+    if (camera.position.z >= -10 && camera.position.z < 25) {
 
       if (animateWaves) {
         const time = clock.getElapsedTime();
@@ -1163,19 +820,14 @@ const portalMaterial = new THREE.ShaderMaterial({
         positionAttribute.needsUpdate = true;
       }
 
-
       // Actualizar la posición del CubeCamera para que coincida con el plano
-      cubeCamera.position.copy(plane.position);
-
-      // Renderizar la escena desde la perspectiva del CubeCamera
+      cubeCamera.position.copy(plane.position); // Renderizar la escena desde la perspectiva del CubeCamera
       plane.visible = false; // Ocultar el plano mientras se actualizan los reflejos
       cubeCamera.update(renderer, scene);
       plane.visible = true; // Mostrar el plano nuevamente
 
     }
 
-    portalMaterial.uniforms.time.value += 0.5;
-    composer.render(); // Renderiza usando el compositor
 
     camera.position.x += (mouse.x - camera.position.x) * 0.05;
     camera.position.x = Math.max(
@@ -1190,19 +842,63 @@ const portalMaterial = new THREE.ShaderMaterial({
       plane.material.uniforms.uTime.value = elapsedTime;
     });
 
+
+    // Lógica para cambiar entre escenas según la posición de la cámara principal
+    if (camera.position.z >= 20) {
+
+      // Dividir el ancho de la cámara
+      camera.aspect = (container.clientWidth / 2.5) / container.clientHeight/2;
+      camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
+      // Renderiza la escena primaria al render target
+      renderer.setRenderTarget(renderTarget);
+      renderer.render(scene, camera);
+      renderer.setRenderTarget(null); // Restablece el render target
+      // Actualizar la relación de aspecto de la cámara
+      // Renderiza la escena secundaria en pantalla
+      renderer.render(sceneDos, cameraDos);
+    } else {
+
+      // Restablece la relación de aspecto de la cámara original
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
+
+      // Renderiza la escena primaria si la posición Z de la cámara principal es menor o igual a 20
+      renderer.render(scene, camera); // Renderiza la escena primaria
+    }
+
     updateAnimations()
 
-    // Actualiza la visibilidad de los objetos
-    updateVisibility(camera);
-    renderer.render(scene, camera);
-  }
 
+
+  }
 
   animate();
 
 
+  window.addEventListener('resize', () => {
+    // Actualizar el tamaño del render target con el factor de escala
+    renderTarget.setSize(
+      container.clientWidth, // Aumenta el ancho
+      container.clientHeight // Mantén la altura original
+    );
+
+    // Actualizar las dimensiones del canvas
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    // Actualizar la relación de aspecto de la cámara
+    cameraDos.aspect = width / height;
+    cameraDos.updateProjectionMatrix();
+
+
+    // Actualizar la relación de aspecto de la cámara
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    // Ajustar el tamaño del renderizador
+    renderer.setSize(width, height);
+  });
 
 }
-
 
 main();
