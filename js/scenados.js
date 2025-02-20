@@ -9,8 +9,6 @@ import {
 
 const container = document.getElementById("scene-container");
 
-
-
 const sceneDos = new THREE.Scene();
 const cameraDos = new THREE.PerspectiveCamera(
   75,
@@ -432,5 +430,4 @@ export {
   renderTarget,
   playToFrame125,
   resumeAnimationsFrom125,
-
 };

@@ -14,6 +14,8 @@ import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js'
 
+
+
 import {
   sceneDos,
   cameraDos,
@@ -23,6 +25,14 @@ import {
   playToFrame125,
   resumeAnimationsFrom125,
 } from './scenados.js';
+
+import {
+  sceneTres,
+  cameraTres,
+  water,
+  renderTargetTres
+} from './scenatres.js';
+
 
 
 
@@ -484,6 +494,8 @@ function main() {
 
 
 
+
+
   // // Define la lista de objetos que deseas optimizar
   // const objects = [
   //   planedos,
@@ -513,9 +525,6 @@ function main() {
   //     }
   //   });
   // }
-
-
-
 
 
   let animationStarted = false; // Definir la variable
@@ -647,7 +656,7 @@ function main() {
             trigger: contenedor, // Elemento que activa la animación
             start: "top top", // Punto inicial del scroll
             end: "+=20000", // Punto final (3000px adicionales para el scroll)
-            scrub: true, // Sincroniza con el scroll
+            scrub: 3,
             pin: true, // Fija el contenedor durante la animación
             // Opcional: agrega marcadores si estás depurando
             // markers: { startColor: "red", endColor: "green", fontSize: "10px", fontWeight: "bold" }
@@ -688,6 +697,36 @@ function main() {
           x: 0,
           y: 3,
           z: 1100,
+          ease: "power1.inOut",
+        })
+        .to(cameraTres.position, {
+          duration: 5,
+          x: -5,
+          y: 5,
+          z: 0,
+          ease: "power1.inOut",
+        })
+        .to(cameraTres.rotation, {
+          delay: -5,
+          duration: 5,
+          x: 0,
+          y: -1,
+          z: 0,
+          ease: "power1.inOut",
+        })
+        .to(cameraTres.position, {
+          duration: 5,
+          x: 0,
+          y: 3,
+          z: 30,
+          ease: "power1.inOut",
+        })
+        .to(cameraTres.rotation, {
+          delay: -5,
+          duration: 5,
+          x: 0,
+          y: 0,
+          z: 0,
           ease: "power1.inOut",
         });
 
@@ -742,7 +781,6 @@ function main() {
         y: 1,
         ease: "expo.out",
       });
-
       // Función para actualizar el título según la posición de la cámara
       let estadoActual = null;
 
@@ -760,7 +798,6 @@ function main() {
 
       }
 
-
       function cambiarEstado(texto, timeline, estado, revertTimelines) {
         titulorango.textContent = texto;
         if (estadoActual !== estado) {
@@ -771,20 +808,16 @@ function main() {
       }
     });
   });
-
   let animateWaves = false;
   const clock = new THREE.Clock();
 
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   container.appendChild(stats.dom);
- 
-
-
-
-
 
   function animate() {
+
+
 
     stats.begin();
 
@@ -792,6 +825,12 @@ function main() {
 
     stats.end();
     requestAnimationFrame(animate);
+
+    if (water) {
+      if (water.material.uniforms['time']) {
+        water.material.uniforms['time'].value += 0.02; // Ajusta la velocidad de la animación
+      }
+    }
 
     const delta = clock.getDelta(); // Tiempo entre frames
 
@@ -803,8 +842,6 @@ function main() {
     if (mixernubes) {
       mixernubes.update(delta);
     }
-
-
     if (camera.position.z >= -10 && camera.position.z < 25) {
 
       if (animateWaves) {
@@ -827,8 +864,6 @@ function main() {
       plane.visible = true; // Mostrar el plano nuevamente
 
     }
-
-
     camera.position.x += (mouse.x - camera.position.x) * 0.05;
     camera.position.x = Math.max(
       minCameraX,
@@ -843,11 +878,12 @@ function main() {
     });
 
 
+
+
     // Lógica para cambiar entre escenas según la posición de la cámara principal
     if (camera.position.z >= 20) {
-
       // Dividir el ancho de la cámara
-      camera.aspect = (container.clientWidth / 2.5) / container.clientHeight/2;
+      camera.aspect = (container.clientWidth / 2.5) / container.clientHeight / 2;
       camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
       // Renderiza la escena primaria al render target
       renderer.setRenderTarget(renderTarget);
@@ -856,25 +892,31 @@ function main() {
       // Actualizar la relación de aspecto de la cámara
       // Renderiza la escena secundaria en pantalla
       renderer.render(sceneDos, cameraDos);
-    } else {
 
+      // Nueva condición dentro del primer if
+      if (cameraDos.position.z >= 1100) {
+        // Dividir el ancho de la cámara
+        // Renderiza la escena primaria al render target
+        renderer.setRenderTarget(renderTargetTres);
+        renderer.render(sceneDos, cameraDos);
+        renderer.setRenderTarget(null); // Restablece el render target
+        // Actualizar la relación de aspecto de la cámara
+        // Renderiza la escena secundaria en pantalla
+        renderer.render(sceneTres, cameraTres);
+
+        // Agrega aquí lo que debe pasar si la nueva condición es verdadera
+      }
+    } else {
       // Restablece la relación de aspecto de la cámara original
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
-
       // Renderiza la escena primaria si la posición Z de la cámara principal es menor o igual a 20
       renderer.render(scene, camera); // Renderiza la escena primaria
+
     }
-
     updateAnimations()
-
-
-
   }
-
   animate();
-
-
   window.addEventListener('resize', () => {
     // Actualizar el tamaño del render target con el factor de escala
     renderTarget.setSize(
@@ -885,6 +927,10 @@ function main() {
     // Actualizar las dimensiones del canvas
     const width = container.clientWidth;
     const height = container.clientHeight;
+
+    // Actualizar la relación de aspecto de la cámara
+    cameraTres.aspect = width / height;
+    cameraTres.updateProjectionMatrix();
 
     // Actualizar la relación de aspecto de la cámara
     cameraDos.aspect = width / height;
@@ -900,5 +946,4 @@ function main() {
   });
 
 }
-
 main();
