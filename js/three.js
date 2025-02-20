@@ -65,8 +65,8 @@ function main() {
 
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
+    powerPreference: "high-performance",
     antialias: true,
-    alpha: true
   });
 
   renderer.shadowMap.enabled = true;
@@ -74,10 +74,10 @@ function main() {
 
   //Puedes probar con otros tipos como THREE.PCFSoftShadowMap - THREE.PCFShadowMap o THREE.VSMShadowMap
 
-  renderer.shadowMap.type = THREE.VSMShadowMap;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Máximo x2 para evitar sobrecarga
   container.appendChild(renderer.domElement);
 
 
@@ -817,8 +817,6 @@ function main() {
 
   function animate() {
 
-
-
     stats.begin();
 
     // monitored code goes here
@@ -826,11 +824,7 @@ function main() {
     stats.end();
     requestAnimationFrame(animate);
 
-    if (water) {
-      if (water.material.uniforms['time']) {
-        water.material.uniforms['time'].value += 0.02; // Ajusta la velocidad de la animación
-      }
-    }
+
 
     const delta = clock.getDelta(); // Tiempo entre frames
 
@@ -842,28 +836,7 @@ function main() {
     if (mixernubes) {
       mixernubes.update(delta);
     }
-    if (camera.position.z >= -10 && camera.position.z < 25) {
 
-      if (animateWaves) {
-        const time = clock.getElapsedTime();
-        const positionAttribute = plane.geometry.attributes.position;
-        for (let i = 0; i < positionAttribute.count; i++) {
-          const x = positionAttribute.getX(i);
-          const y = positionAttribute.getY(i);
-          const z =
-            Math.sin(x * 0.5 + time) * 0.02 + Math.cos(y * 0.5 + time) * 0.02;
-          positionAttribute.setZ(i, z);
-        }
-        positionAttribute.needsUpdate = true;
-      }
-
-      // Actualizar la posición del CubeCamera para que coincida con el plano
-      cubeCamera.position.copy(plane.position); // Renderizar la escena desde la perspectiva del CubeCamera
-      plane.visible = false; // Ocultar el plano mientras se actualizan los reflejos
-      cubeCamera.update(renderer, scene);
-      plane.visible = true; // Mostrar el plano nuevamente
-
-    }
     camera.position.x += (mouse.x - camera.position.x) * 0.05;
     camera.position.x = Math.max(
       minCameraX,
@@ -895,6 +868,11 @@ function main() {
 
       // Nueva condición dentro del primer if
       if (cameraDos.position.z >= 1100) {
+        if (water) {
+          if (water.material.uniforms['time']) {
+            water.material.uniforms['time'].value += 0.02; // Ajusta la velocidad de la animación
+          }
+        }
         // Dividir el ancho de la cámara
         // Renderiza la escena primaria al render target
         renderer.setRenderTarget(renderTargetTres);
@@ -907,6 +885,26 @@ function main() {
         // Agrega aquí lo que debe pasar si la nueva condición es verdadera
       }
     } else {
+      
+      if (animateWaves) {
+        const time = clock.getElapsedTime();
+        const positionAttribute = plane.geometry.attributes.position;
+        for (let i = 0; i < positionAttribute.count; i++) {
+          const x = positionAttribute.getX(i);
+          const y = positionAttribute.getY(i);
+          const z =
+            Math.sin(x * 0.5 + time) * 0.02 + Math.cos(y * 0.5 + time) * 0.02;
+          positionAttribute.setZ(i, z);
+        }
+        positionAttribute.needsUpdate = true;
+      }
+
+      // Actualizar la posición del CubeCamera para que coincida con el plano
+      cubeCamera.position.copy(plane.position); // Renderizar la escena desde la perspectiva del CubeCamera
+      plane.visible = false; // Ocultar el plano mientras se actualizan los reflejos
+      cubeCamera.update(renderer, scene);
+      plane.visible = true; // Mostrar el plano nuevamente
+
       // Restablece la relación de aspecto de la cámara original
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
