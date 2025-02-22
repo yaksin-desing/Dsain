@@ -9,11 +9,9 @@ import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
 
-
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js'
-
 
 
 import {
@@ -59,9 +57,6 @@ function main() {
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
   //////////////////////////////////////////
-
-
-
 
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
@@ -493,40 +488,6 @@ function main() {
   scene.add(sun2);
 
 
-
-
-
-  // // Define la lista de objetos que deseas optimizar
-  // const objects = [
-  //   planedos,
-  //   plane,
-  //   luzdospasillo,
-  //   segundaLight,
-  //   directionalLight,
-  //   cubeCamera,
-  //   sun1,
-  //   sun2,
-  // ];
-
-  // // Distancia máxima a la que un objeto es visible
-  // const maxDistance = 250;
-
-  // function updateVisibility(camera) {
-  //   objects.forEach((object) => {
-  //     const distance = camera.position.distanceTo(object.position);
-  //     if (distance <= maxDistance) {
-  //       if (!scene.children.includes(object)) {
-  //         scene.add(object); // Añade el objeto si no está en la escena
-  //       }
-  //     } else {
-  //       if (scene.children.includes(object)) {
-  //         scene.remove(object); // Elimina el objeto si está en la escena
-  //       }
-  //     }
-  //   });
-  // }
-
-
   let animationStarted = false; // Definir la variable
 
   function onMouseMove(event) {
@@ -656,7 +617,7 @@ function main() {
             trigger: contenedor, // Elemento que activa la animación
             start: "top top", // Punto inicial del scroll
             end: "+=20000", // Punto final (3000px adicionales para el scroll)
-            scrub: 3,
+            scrub: 2,
             pin: true, // Fija el contenedor durante la animación
             // Opcional: agrega marcadores si estás depurando
             // markers: { startColor: "red", endColor: "green", fontSize: "10px", fontWeight: "bold" }
@@ -885,7 +846,7 @@ function main() {
         // Agrega aquí lo que debe pasar si la nueva condición es verdadera
       }
     } else {
-      
+
       if (animateWaves) {
         const time = clock.getElapsedTime();
         const positionAttribute = plane.geometry.attributes.position;

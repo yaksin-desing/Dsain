@@ -15,7 +15,7 @@ const contactnav = document.getElementById('contactnav');
 const audio_container = document.getElementById('audio-container');
 const videofondo = document.getElementById('videofondo');
 const parrafodeinicio = document.getElementById('parrafodeinicio');
-const escena = document.getElementById('scene-container');
+const cortina = document.getElementById('cortina');
 const cursor = document.querySelector('.cursor');
 
 
@@ -58,7 +58,6 @@ animaloading.to(ilogoanimador, {
     duration: 0,
     opacity: "0%",
 });
-
 animaloading.to(textologo, {
     duration: 1,
     width: "max-content",
@@ -68,10 +67,7 @@ animaloading.to(imgparrafoinicio, {
     duration: 1,
     opacity: "100%",
 });
-animaloading.to(escena, {
-    delay: -1,
-    opacity: "100%",
-});
+
 animaloading.to(botoninicio, {
     bottom: "1vh",
 
@@ -82,12 +78,19 @@ animaloading.to(cursor, {
 
 });
 
+animaloading.to(cortina, {  
+    opacity: 0,  // Usa valores numéricos en vez de porcentajes
+    duration: 1.5,  // Aumenta la duración para más suavidad
+    ease: 'power3.out',  // Prueba con 'power4.out' si quieres algo aún más suave
+});
 
 
-// Progreso inicial
+
 let progress = 0;
+const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const extraDelay = isMobile ? 500 : 0; // Si es móvil, agrega 2 segundos extra
 
-// Función para actualizar el ancho de la barra de progreso
+// Función para actualizar la barra de progreso
 function updateProgressBar() {
     if (progress < 100) {
         progress += 1;
@@ -97,22 +100,25 @@ function updateProgressBar() {
         clearInterval(progressInterval);
         progressBar.style.width = `${progress}%`;
         pageLoaded = true; // Cambia la variable
+        
         setTimeout(() => {
             audioPlayer.play();
             animateWave();
-            conteprogress.style.display = "none"; // Elimina el contenedor de la vista
-            animaloading.play(); // Ejemplo: Se puede incluir otra animación aquí
-        }, 500);
+            conteprogress.style.display = "none"; // Oculta el loader
+            animaloading.play(); // Inicia animaciones
+        }, 500 + extraDelay); // Suma el tiempo extra si es móvil
     }
 }
 
-// Incrementa el progreso cada 50ms (puedes ajustarlo según tu preferencia)
+// Incrementa el progreso cada 50ms
 const progressInterval = setInterval(updateProgressBar, 50);
 
 // Detecta cuándo la página y los recursos han cargado completamente
 window.addEventListener('load', () => {
-    progress = 100; // Forza el progreso al 100% al terminar la carga
-    updateProgressBar();
+    setTimeout(() => {
+        progress = 100; // Forza el progreso al 100%
+        updateProgressBar();
+    }, extraDelay); // Si es móvil, espera antes de terminar la carga
 });
 
 
@@ -423,27 +429,3 @@ document.getElementById("botoninicio").addEventListener("click", () => {
 
 
 
-// const canvas = document.createElement('canvas');
-// const ctx = canvas.getContext('2d');
-// const noiseLayer = document.getElementById('noise-layer');
-
-// canvas.width = window.innerWidth;
-// canvas.height = window.innerHeight;
-// noiseLayer.appendChild(canvas);
-
-// function generateNoise() {
-//   const imageData = ctx.createImageData(canvas.width, canvas.height);
-//   const pixels = imageData.data;
-
-//   for (let i = 0; i < pixels.length; i += 4) {
-//     const value = Math.random() * 255;
-//     pixels[i] = pixels[i + 1] = pixels[i + 2] = value; // Blanco y negro
-//     pixels[i + 3] = 30; // Transparencia
-//   }
-
-//   ctx.putImageData(imageData, 0, 0);
-// }
-
-// // Actualiza la capa de ruido cada cierto tiempo para animarla
-// setInterval(generateNoise, 150); 
-// generateNoise();

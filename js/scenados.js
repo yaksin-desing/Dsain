@@ -4,7 +4,9 @@ import {
   GLTFLoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 
-
+import {
+  Sky
+} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Sky.js";
 
 
 const container = document.getElementById("scene-container");
@@ -23,36 +25,29 @@ sceneDos.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
 //////// <<<<< base dos >>>>>> /////////////
 
-  // Crear un gradiente utilizando un Canvas
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth; // Ajustamos el tamaño del canvas para que cubra toda la pantalla
-  canvas.height = window.innerHeight;
 
-  // Crear un gradiente lineal de arriba hacia abajo (puedes personalizarlo)
-  const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-  gradient.addColorStop(0, "#FFEBA8FF"); // abajo
-  gradient.addColorStop(1, "#0400FFFF"); // arriba
+// Crear cielo
+const sky = new Sky();
+sky.scale.setScalar(1000); // Tamaño del cielo
+sky.position.set(0, 0, 1000);
 
-  // Rellenar el canvas con el gradiente
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Crear una textura con el canvas
-  const texture = new THREE.CanvasTexture(canvas);
+// Configurar los parámetros del shader del cielo
+const skyUniforms = sky.material.uniforms;
+skyUniforms["turbidity"].value = 0.1; // Turbulencia atmosférica
+skyUniforms["rayleigh"].value = 0.5; // Dispersión de la luz en la atmósfera
+skyUniforms["mieCoefficient"].value = 0.0001; // Dispersión de partículas pequeñas
+skyUniforms["mieDirectionalG"].value = 0.889; // Intensidad de la dispersión Mie
 
-  // Crear un rectángulo (plane geometry) con un material que tenga el gradiente
-  const geometry = new THREE.PlaneGeometry(1500, 150, 1); // Rectángulo de 2x2 unidades para que ocupe toda la pantalla
-  const material = new THREE.MeshBasicMaterial({
-    map: texture,
-    transparent: true, // Hacerlo transparente
-    opacity: 1, // Totalmente opaco
-  });
+// Posición del sol
+const sun = new THREE.Vector3();
+const phi = THREE.MathUtils.degToRad(94 - 20); // Altura del sol (elevación)
+const theta = THREE.MathUtils.degToRad(180); // Dirección del sol (azimutal)
+sun.setFromSphericalCoords(1, phi, theta);
+skyUniforms["sunPosition"].value.copy(sun);
 
-  const backgroundRect = new THREE.Mesh(geometry, material);
-  backgroundRect.position.set(0, 0, 890); // Colocarlo detrás de la cámara
-  backgroundRect.rotation.set(0, 0, 0);
-  sceneDos.add(backgroundRect);
+// Agregar el cielo a la escena
+sceneDos.add(sky);
 
 ///////// Crear luz direccional  ////////////////
 const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
