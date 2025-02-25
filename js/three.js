@@ -52,7 +52,7 @@ function main() {
     1000
   );
   camera.rotation.set(1, 0, 0);
-  camera.position.set(0, 10.8, -4.9); // Ajusta los valores según tu escena
+  camera.position.set(0, 10.5, -4.8); // Ajusta los valores según tu escena
 
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
@@ -313,12 +313,12 @@ function main() {
           if (child.isMesh && child.material) {
             // Aplica el HDRI solo al modelo
             child.material.envMap = texture;
-            child.material.envMapIntensity = 1;
+            child.material.envMapIntensity = 1.5;
             child.material.metalness = 1;
-            child.material.roughness = 0.5;
+            child.material.roughness = 0;
             child.material.emissive = new THREE.Color(0x9966cc);
-            child.material.emissiveIntensity = 0.6;
-            child.material.ior = 1;
+            child.material.emissiveIntensity = 0.4;
+            child.material.ior = 5;
             child.material.needsUpdate = true;
           }
         });
@@ -345,12 +345,8 @@ function main() {
       modelbaselogo.position.set(0, -1.14, -5);
       modelbaselogo.scale.set(0.3, 0.36, 0.3);
       modelbaselogo.rotation.set(0, 0, 0);
-
-      // Habilitar sombras en el modelo
-      modelbaselogo.castShadow = true; // El cubo emitirá sombras
-      modelbaselogo.receiveShadow = true; // El cubo recibirá sombras si hay otras fuentes de luz
-
       const modelbaselogoMaterial = new THREE.MeshStandardMaterial({
+        
         color: 0xfff6e8, // Color base del material
         aoMap: null, // Mapa de oclusión ambiental
         emissive: 0xff9f73, // Color de emisión (luz propia)

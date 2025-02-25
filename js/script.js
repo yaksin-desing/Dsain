@@ -69,8 +69,7 @@ animaloading.to(imgparrafoinicio, {
 });
 
 animaloading.to(botoninicio, {
-    bottom: "1vh",
-
+    bottom: "-20vh",
 });
 animaloading.to(cursor, {
     delay: -1,
@@ -389,7 +388,7 @@ const openescena = gsap.timeline({
 });
 
 openescena.to(botoninicio, {
-    bottom: "-5vh",
+    bottom: "-35vh",
 
 });
 
