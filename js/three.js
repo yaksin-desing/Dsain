@@ -1,5 +1,9 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 
+import {
+  FontLoader,
+  TextGeometry
+} from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
 
 import {
   GLTFLoader
@@ -9,9 +13,19 @@ import {
   RGBELoader
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
 
+import {
+  Water
+} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Water.js";
+
+
+
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
+
+
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js'
+
+
 
 
 import {
@@ -30,8 +44,6 @@ import {
   water,
   renderTargetTres
 } from './scenatres.js';
-
-
 
 
 
@@ -93,6 +105,88 @@ function main() {
 
 
 
+  let textMeshes = {}; // Objeto para almacenar los textos
+  const loadertx = new FontLoader();
+  
+  // Función para obtener la configuración de textos según el ancho de la pantalla
+  function getTextConfig() {
+    let screenWidth = window.innerWidth; // Usar window.innerWidth en vez de container.clientWidth para mejor compatibilidad
+  
+    if (screenWidth < 855) {
+      // Configuración para pantallas pequeñas (<600px)
+      return [
+        { id: "text2", text: "Ultimos Proyectos", font: "src/fonts/Light_Regular.json", size: 2000, y: 2.5 },
+        { id: "text1", text: "BEASTDEALER", font: "src/fonts/false_Semi-bold.json", size: 900, y: 1.5 },
+        { id: "text3", text: "Web y Dashboard Para Aseguradora", font: "src/fonts/Light_Regular.json", size: 2000, y: 1 },
+      ];
+    } else {
+      // Configuración para pantallas grandes (>=600px)
+      return [
+        { id: "text2", text: "Ultimos Proyectos", font: "src/fonts/Light_Regular.json", size: 4000, y: 4 },
+        { id: "text1", text: "BEASTDEALER", font: "src/fonts/false_Semi-bold.json", size: 700, y: 1.5 },
+        { id: "text3", text: "Web y Dashboard Para Aseguradora", font: "src/fonts/Light_Regular.json", size: 4000, y: 0.5 },
+      ];
+    }
+  }
+  
+  // Función para calcular el tamaño dinámico del texto
+  function getResponsiveSize(baseSize) {
+    return Math.max( window.innerWidth / baseSize); // Mínimo tamaño para que el texto nunca sea 0 en móviles
+  }
+  
+  // Función para crear o actualizar textos
+  function createText({ id, text, font, size, y }) {
+    loadertx.load(font, function (loadedFont) {
+      // Eliminar texto anterior si ya existe
+      if (textMeshes[id]) {
+        scene.remove(textMeshes[id]);
+      }
+  
+      const textGeometry = new TextGeometry(text, {
+        font: loadedFont,
+        size: getResponsiveSize(size), // Tamaño dinámico basado en el ancho de pantalla
+        height: 0,
+        curveSegments: 12,
+        bevelEnabled: false
+      });
+  
+      textGeometry.computeBoundingBox();
+      const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
+  
+      const textMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, side: THREE.DoubleSide });
+  
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.position.x=(-textWidth / 2);
+      textMesh.position.y = y;
+  
+      scene.add(textMesh);
+      textMeshes[id] = textMesh; // Guardar el texto en el objeto global
+    });
+  }
+  
+  // Función para actualizar todos los textos según el tamaño de pantalla
+  function updateAllTexts() {
+    let textsConfig = getTextConfig(); // Obtener configuración correcta
+    textsConfig.forEach(createText); // Aplicar los textos
+  }
+  
+  // Crear textos iniciales
+  updateAllTexts();
+  
+  // Redimensionar textos cuando cambia el tamaño de la pantalla
+  window.addEventListener("resize", () => {
+    setTimeout(updateAllTexts, 200); // Retraso para asegurar actualización correcta en móviles
+  });
+  
+  // Manejar cambios en orientación de pantalla (móviles)
+  window.addEventListener("orientationchange", () => {
+    setTimeout(updateAllTexts, 500); // Espera un poco más porque en móviles tarda en ajustarse
+  });
+  
+  
+  
+  
+
 
   // Crear un gradiente utilizando un Canvas
   const canvas = document.createElement("canvas");
@@ -127,104 +221,7 @@ function main() {
 
 
 
-  // Cargar texturas
-  const textureLoadertrabajos = new THREE.TextureLoader();
-
-  // Shader material para la animación tipo ondas
-  const createWaveMaterial = (texture) => {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        uTexture: {
-          value: texture,
-        },
-        uTime: {
-          value: 0,
-        },
-      },
-      vertexShader: `
-            uniform float uTime;
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                vec3 pos = position;
-                pos.y += sin(pos.x * 2.0 + uTime) * 0.1;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-            }
-        `,
-      fragmentShader: `
-            uniform sampler2D uTexture;
-            varying vec2 vUv;
-            void main() {
-                gl_FragColor = texture2D(uTexture, vUv);
-            }
-        `,
-    });
-  };
-
-  // Crear un plano reutilizable
-  const createPlane = (texturePath, position) => {
-    const texture = textureLoadertrabajos.load(texturePath, (texture) => {
-      // Ajustar el tamaño del plano al tamaño de la textura
-      const aspect = texture.image.width / texture.image.height;
-      planes.scale.set(aspect, 1, 1);
-    });
-    const material = createWaveMaterial(texture);
-    const geometry = new THREE.PlaneGeometry(1, 1, 64, 64); // El tamaño base será 1x1 para escalar dinámicamente
-    const planes = new THREE.Mesh(geometry, material);
-    planes.position.set(position.x, position.y, position.z);
-    planes.rotation.y = 0; // Orientación vertical
-    planes.castShadow = true;
-    scene.add(planes);
-
-    return planes;
-  };
-
-  // Crear dos planos con imágenes específicas
-  const planeSpacing = window.innerWidth / 255; // Espaciado basado en el ancho de pantalla
-  const planes = [
-    //grupo uno
-    createPlane("./src/img/proyectounod.png", {
-      x: -planeSpacing / 3,
-      y: -5,
-      z: 0.1,
-    }),
-    createPlane("./src/img/proyectouno.jpg", {
-      x: planeSpacing / 3,
-      y: -5,
-      z: 0.1,
-    }),
-
-    //----------------------------------//
-
-    //grupo dos
-    createPlane("./src/img/proyectounod.png", {
-      x: -planeSpacing / 3,
-      y: -5,
-      z: 2.5,
-    }),
-    createPlane("./src/img/proyectouno.jpg", {
-      x: planeSpacing / 3,
-      y: -5,
-      z: 2.5,
-    }),
-
-    //----------------------------------//
-
-    //grupo tres
-    createPlane("./src/img/proyectounod.png", {
-      x: -planeSpacing / 3,
-      y: -5,
-      z: 11.5,
-    }),
-    createPlane("./src/img/proyectouno.jpg", {
-      x: planeSpacing / 3,
-      y: -5,
-      z: 11.5,
-    }),
-
-    //----------------------------------//
-  ];
-
+  
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(-15, 16, -50);
@@ -241,59 +238,44 @@ function main() {
   scene.add(segundaLight);
 
 
-  // Cargar texturas
-  const textureLoader = new THREE.TextureLoader();
-  const anormalMap = textureLoader.load("./src/objt/agua/norm.jpg");
-  const adisplacementMap = textureLoader.load("./src/objt/agua/disp.png");
+  let wateru; // Definir variable globalmente
 
-  anormalMap.wrapS = anormalMap.wrapT = THREE.RepeatWrapping;
-  anormalMap.repeat.set(50, 50);
+  const textureaguaLoader = new THREE.TextureLoader();
+  textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
+    waterNormal.wrapS = waterNormal.wrapT = THREE.RepeatWrapping;
 
-  adisplacementMap.wrapS = adisplacementMap.wrapT = THREE.RepeatWrapping;
-  adisplacementMap.repeat.set(50, 50);
+    const waterGeometry = new THREE.PlaneGeometry(100, 70);
 
-  // Crear geometría
-  const planeGeometry = new THREE.PlaneGeometry(50, 50, 100);
-  planeGeometry.attributes.uv2 = planeGeometry.attributes.uv;
+    wateru = new Water(waterGeometry, {
+      textureWidth: 50,
+      textureHeight: 50,
+      waterNormals: waterNormal,
+      sunDirection: new THREE.Vector3(0, 1, 0),
+      sunColor: 0xFFDA05,
+      waterColor: 0x0199FF,
+      distortionScale: 4,
+      fog: false,
+      alpha: 0.8, // Nivel de transparencia (0 totalmente transparente, 1 totalmente opaco)
+    });
 
-  // Configurar CubeCamera
-  const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
-    format: THREE.RGBAFormat,
-    generateMipmaps: true,
-    minFilter: THREE.LinearMipmapLinearFilter,
+    wateru.material.transparent = true;
+
+    wateru.rotation.x = -Math.PI / 2;
+    wateru.position.y = 0.2;
+    wateru.position.z = 0;
+
+    scene.add(wateru);
+
+    console.log("¡Agua cargada correctamente!", water);
+  }, undefined, function (error) {
+    console.error("Error al cargar la textura del agua:", error);
   });
-  const cubeCamera = new THREE.CubeCamera(0.1, 180, cubeRenderTarget);
-  scene.add(cubeCamera);
-
-  // Crear material con reflejos
-  const planeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x0026ff,
-    emissive: 0x0026ff,
-    emissiveIntensity: 1,
-    roughness: 0.5,
-    metalness: 1,
-    transmission: 0,
-    thickness: 1,
-    clearcoat: 1,
-    clearcoatRoughness: 0.02,
-    normalMap: anormalMap,
-    displacementMap: adisplacementMap,
-    displacementScale: 0.6,
-    transparent: true,
-    opacity: 0.7,
-    envMap: cubeRenderTarget.texture, // Usar textura generada por CubeCamera
-  });
-
-  // Crear malla
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  plane.rotation.x = -Math.PI / 2;
-  plane.position.set(0, 0, 9);
-  scene.add(plane);
 
   let mixer;
   const animateFunctions = [];
 
   let model = null; // Variable global para el modelo
+
 
   // ((( LOGO ))) Cargar el modelo y aplicar un HDRI local solo al modelo
   const loader = new GLTFLoader();
@@ -346,7 +328,7 @@ function main() {
       modelbaselogo.scale.set(0.3, 0.36, 0.3);
       modelbaselogo.rotation.set(0, 0, 0);
       const modelbaselogoMaterial = new THREE.MeshStandardMaterial({
-        
+
         color: 0xfff6e8, // Color base del material
         aoMap: null, // Mapa de oclusión ambiental
         emissive: 0xff9f73, // Color de emisión (luz propia)
@@ -371,11 +353,9 @@ function main() {
         wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
         wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
         shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
-        reflectivity: 0.5, // Reflexión del material
         envMap: null, // Mapa del entorno para reflejos
         envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
         alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
-        combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
       });
 
       modelbaselogo.traverse((child) => {
@@ -440,11 +420,9 @@ function main() {
         wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
         wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
         shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
-        reflectivity: 0, // Reflexión del material
         envMap: null, // Mapa del entorno para reflejos
         envMapIntensity: 0, // Intensidad de los reflejos del mapa del entorno
         alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
-        combine: THREE.MultiplyOperation, // Método de combinación para la textura (MultiplyOperation, MixOperation, AddOperation, ReplaceOperation)
       });
 
       modelDunas.traverse((child) => {
@@ -579,7 +557,7 @@ function main() {
       delay: -2,
       duration: 2,
       x: 0,
-      y: 1,
+      y: 1.5,
       z: 0,
       ease: "expo.out",
     });
@@ -591,7 +569,6 @@ function main() {
       animationStarted = true; // Permitir que ScrollTrigger controle Lottie
 
       const contenedor = document.getElementById("contenedor");
-      const titulorango = document.getElementById("tituloescena"); // Suponiendo que tienes un título con el ID 'titulo
 
 
       const endFrame = 300; // Suponiendo que la animación tiene 500 frames totales
@@ -600,7 +577,8 @@ function main() {
         trigger: contenedor,
         start: "top top",
         end: "+=20000",
-        scrub: true,
+        scrub: 2, // Elimina easing implícito para evitar desaceleración al inicio y final
+        ease: "none", // Elimina easing implícito para evitar desaceleración al inicio y final
         onUpdate: function (self) {
           const progress = self.progress; // Progreso del scroll (0 a 1)
           const frame = Math.round(61 + progress * (endFrame - 61));
@@ -614,31 +592,22 @@ function main() {
             start: "top top", // Punto inicial del scroll
             end: "+=20000", // Punto final (3000px adicionales para el scroll)
             scrub: 2,
+            ease: "none", // Elimina easing implícito para evitar desaceleración al inicio y final
             pin: true, // Fija el contenedor durante la animación
             // Opcional: agrega marcadores si estás depurando
             // markers: { startColor: "red", endColor: "green", fontSize: "10px", fontWeight: "bold" }
             onUpdate: function () {
               // Cada vez que el scroll se actualiza, revisamos la posición de la cámara
-              actualizarTitulo();
 
             },
           },
         })
-        .to(camera.position, {
-          duration: 5,
-          x: 0,
-          y: 1,
-          z: 5,
-          ease: "none",
-        })
-
 
         .to(camera.position, {
           duration: 5,
           x: 0,
-          y: 1,
-          z: 20,
-          ease: "power1.inOut",
+          y: 1.5,
+          z: 30,
         })
 
         .to(cameraDos.position, {
@@ -646,7 +615,6 @@ function main() {
           x: 0,
           y: 2,
           z: 995.5,
-          ease: "power1.inOut",
         })
 
         .to(cameraDos.position, {
@@ -654,14 +622,13 @@ function main() {
           x: 0,
           y: 3,
           z: 1100,
-          ease: "power1.inOut",
         })
         .to(cameraTres.position, {
           duration: 5,
           x: -5,
           y: 5,
           z: 0,
-          ease: "power1.inOut",
+
         })
         .to(cameraTres.rotation, {
           delay: -5,
@@ -669,14 +636,14 @@ function main() {
           x: 0,
           y: -1,
           z: 0,
-          ease: "power1.inOut",
+
         })
         .to(cameraTres.position, {
           duration: 5,
           x: 0,
           y: 3,
           z: 30,
-          ease: "power1.inOut",
+
         })
         .to(cameraTres.rotation, {
           delay: -5,
@@ -684,88 +651,12 @@ function main() {
           x: 0,
           y: 0,
           z: 0,
-          ease: "power1.inOut",
         });
-
-      let timelineUno = gsap.timeline({
-        paused: true,
-      });
-
-      timelineUno.to(planes[0].position, {
-        delay: 0,
-        duration: 2,
-        y: 1,
-        ease: "expo.out",
-      });
-      timelineUno.to(planes[1].position, {
-        delay: -2,
-        duration: 2,
-        y: 1,
-        ease: "expo.out",
-      });
-
-      let timelineDos = gsap.timeline({
-        paused: true,
-      });
-
-
-      timelineDos.to(planes[2].position, {
-        delay: -2,
-        duration: 2,
-        y: 1,
-        ease: "expo.out",
-      });
-      timelineDos.to(planes[3].position, {
-        delay: -2,
-        duration: 2,
-        y: 1,
-        ease: "expo.out",
-      });
-
-      let timelineTres = gsap.timeline({
-        paused: true,
-      });
-
-      timelineTres.to(planes[4].position, {
-        delay: -2,
-        duration: 2,
-        y: 1,
-        ease: "expo.out",
-      });
-      timelineTres.to(planes[5].position, {
-        delay: -2,
-        duration: 2,
-        y: 1,
-        ease: "expo.out",
-      });
-      // Función para actualizar el título según la posición de la cámara
-      let estadoActual = null;
-
-      function actualizarTitulo() {
-        const z = camera.position.z;
-        if (z >= 0 && z < 2) {
-          cambiarEstado("Scrollea para ver más", timelineUno, "rango1", []);
-        } else if (z >= 2 && z < 4) {
-          cambiarEstado(z.toFixed(2), timelineUno, "rango2", [timelineDos]);
-        } else if (z >= 4 && z < 13) {
-          cambiarEstado(z.toFixed(2), timelineDos, "rango3", [timelineUno, timelineTres]);
-        } else if (z >= 13 && z <= 20) {
-          cambiarEstado(z.toFixed(2), timelineTres, "rango4", [timelineDos]);
-        }
-
-      }
-
-      function cambiarEstado(texto, timeline, estado, revertTimelines) {
-        titulorango.textContent = texto;
-        if (estadoActual !== estado) {
-          timeline.play();
-          revertTimelines.forEach((t) => t.reverse());
-          estadoActual = estado;
-        }
-      }
     });
   });
   let animateWaves = false;
+
+
   const clock = new THREE.Clock();
 
   var stats = new Stats();
@@ -802,16 +693,11 @@ function main() {
 
     animateFunctions.forEach((fn) => fn());
 
-    const elapsedTime = clock.getElapsedTime();
-    planes.forEach((plane) => {
-      plane.material.uniforms.uTime.value = elapsedTime;
-    });
-
 
 
 
     // Lógica para cambiar entre escenas según la posición de la cámara principal
-    if (camera.position.z >= 20) {
+    if (camera.position.z >= 30) {
       // Dividir el ancho de la cámara
       camera.aspect = (container.clientWidth / 2.5) / container.clientHeight / 2;
       camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
@@ -843,30 +729,54 @@ function main() {
       }
     } else {
 
-      if (animateWaves) {
-        const time = clock.getElapsedTime();
-        const positionAttribute = plane.geometry.attributes.position;
-        for (let i = 0; i < positionAttribute.count; i++) {
-          const x = positionAttribute.getX(i);
-          const y = positionAttribute.getY(i);
-          const z =
-            Math.sin(x * 0.5 + time) * 0.02 + Math.cos(y * 0.5 + time) * 0.02;
-          positionAttribute.setZ(i, z);
-        }
-        positionAttribute.needsUpdate = true;
-      }
-
-      // Actualizar la posición del CubeCamera para que coincida con el plano
-      cubeCamera.position.copy(plane.position); // Renderizar la escena desde la perspectiva del CubeCamera
-      plane.visible = false; // Ocultar el plano mientras se actualizan los reflejos
-      cubeCamera.update(renderer, scene);
-      plane.visible = true; // Mostrar el plano nuevamente
-
       // Restablece la relación de aspecto de la cámara original
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
       // Renderiza la escena primaria si la posición Z de la cámara principal es menor o igual a 20
+
       renderer.render(scene, camera); // Renderiza la escena primaria
+      // Capturar fondo en el render target
+
+      if (wateru) {
+        if (wateru.material.uniforms['time']) {
+          wateru.material.uniforms['time'].value += 0.005; // Ajusta la velocidad de la animación
+        }
+      }
+
+      if (textMeshes["text1"]) {
+        textMeshes["text1"].position.lerp(
+          new THREE.Vector3(
+            textMeshes["text1"].position.x,
+            textMeshes["text1"].position.y,
+            camera.position.z - 11
+          ),
+          0.1 // Ajusta este valor para suavizar el movimiento
+        );
+    
+      }
+    
+      if (textMeshes["text2"]) {
+        textMeshes["text2"].position.lerp(
+          new THREE.Vector3(
+            textMeshes["text2"].position.x,
+            textMeshes["text2"].position.y,
+            camera.position.z - 11
+          ),
+          0.1
+        );
+    
+      }
+    
+      if (textMeshes["text3"]) {
+        textMeshes["text3"].position.lerp(
+          new THREE.Vector3(
+            textMeshes["text3"].position.x,
+            textMeshes["text3"].position.y,
+            camera.position.z - 11
+          ),
+          0.1
+        );
+      }
 
     }
     updateAnimations()

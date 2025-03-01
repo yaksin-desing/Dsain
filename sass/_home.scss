@@ -80,6 +80,8 @@
             }
         }
 
+
+
         .contparrafo {
             display: flex;
             flex-direction: column;
@@ -128,8 +130,8 @@
                 width: 30vh;
                 height: 30vh;
                 border-radius: 50%;
-                background-color: rgba(255, 255, 255, 0.918);
-                animation: expandir 2s infinite ease-out;
+                background-color: rgba(255, 255, 255, 0.363);
+                animation: expandir 3s infinite ease-out;
                 z-index: -5;
             }
     
@@ -154,10 +156,10 @@
 
             p {
                 font-family: "Medium";
-                font-size: 12px;
+                font-size: 10px;
                 color: $colorp;
-                font-weight: 700;
-                padding-bottom: 15vh;
+                font-weight: 600;
+                padding-bottom: 18vh;
             }
 
         }
@@ -486,8 +488,6 @@
             }
         }
 
-
-
         #audio-button:hover {
             box-shadow:
                 0em 0em 1em rgba(0, 0, 0, 0.3);
@@ -499,6 +499,55 @@
             }
         }
 
+    }
+
+    .proyectos{
+        display: none;
+        position:absolute;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        .proyecto {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            height: 50%;
+            .subtitulo_p {
+                font-family: "Extralight";
+                color: #ffffff;
+                font-size: 12px;
+                padding: 0% 28% 0% 28%;
+                text-align: center;
+                z-index: 300;
+                font-weight: 600;
+            }
+            .titulo_p {
+                color: white; /* Base en blanco para mayor contraste */
+                font-family: "Extrabold";
+                font-size: 8vw;
+                padding: 0% 28% 0% 28%;
+                text-align: center;
+                z-index: 300;
+                font-weight: 600;
+            }
+            .contexto_p {
+                font-family: "Extralight";
+                color: #ffffff;
+                font-size: 12px;
+                padding: 0% 5% 0% 5%;
+                text-align: center;
+                z-index: 3000;
+                font-weight: 600;
+            }
+            
+        }
     }
 
 

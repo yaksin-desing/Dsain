@@ -101,7 +101,7 @@ function updateProgressBar() {
         pageLoaded = true; // Cambia la variable
         
         setTimeout(() => {
-            audioPlayer.play();
+            // audioPlayer.play();
             animateWave();
             conteprogress.style.display = "none"; // Oculta el loader
             animaloading.play(); // Inicia animaciones
@@ -119,9 +119,6 @@ window.addEventListener('load', () => {
         updateProgressBar();
     }, extraDelay); // Si es móvil, espera antes de terminar la carga
 });
-
-
-
 
 
 // Selecciona todos los elementos h5

@@ -230,8 +230,8 @@ h5 {
   width: 30vh;
   height: 30vh;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.918);
-  animation: expandir 2s infinite ease-out;
+  background-color: rgba(255, 255, 255, 0.363);
+  animation: expandir 3s infinite ease-out;
   z-index: -5;
 }
 #contenedor .loading .bottoninicio .onda:nth-child(2) {
@@ -252,10 +252,10 @@ h5 {
 }
 #contenedor .loading .bottoninicio p {
   font-family: "Medium";
-  font-size: 12px;
+  font-size: 10px;
   color: #0004ee;
-  font-weight: 700;
-  padding-bottom: 15vh;
+  font-weight: 600;
+  padding-bottom: 18vh;
 }
 #contenedor .loading .contactnav {
   display: flex;
@@ -525,6 +525,53 @@ h5 {
 #contenedor .loading #audio-button:hover #wave-path {
   fill: none;
   stroke-width: 2;
+}
+#contenedor .proyectos {
+  display: none;
+  position: absolute;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+#contenedor .proyectos .proyecto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 50%;
+}
+#contenedor .proyectos .proyecto .subtitulo_p {
+  font-family: "Extralight";
+  color: #ffffff;
+  font-size: 12px;
+  padding: 0% 28% 0% 28%;
+  text-align: center;
+  z-index: 300;
+  font-weight: 600;
+}
+#contenedor .proyectos .proyecto .titulo_p {
+  color: white; /* Base en blanco para mayor contraste */
+  font-family: "Extrabold";
+  font-size: 8vw;
+  padding: 0% 28% 0% 28%;
+  text-align: center;
+  z-index: 300;
+  font-weight: 600;
+}
+#contenedor .proyectos .proyecto .contexto_p {
+  font-family: "Extralight";
+  color: #ffffff;
+  font-size: 12px;
+  padding: 0% 5% 0% 5%;
+  text-align: center;
+  z-index: 3000;
+  font-weight: 600;
 }
 #contenedor #scene-container {
   width: 100vw;
