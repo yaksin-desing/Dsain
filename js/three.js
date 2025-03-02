@@ -190,7 +190,7 @@ function main() {
 
   // Función para calcular el tamaño dinámico del texto
   function getResponsiveSize(baseSize) {
-    return Math.max(window.innerWidth / baseSize); // Mínimo tamaño para que el texto nunca sea 0 en móviles
+    return window.innerWidth / baseSize;
   }
 
   // Función para crear o actualizar textos
@@ -222,7 +222,7 @@ function main() {
         color: 0xFFFFFF,
         side: THREE.DoubleSide,
         transparent: true, // Permite transparencia
-        opacity: 0
+        opacity: 0, // Nivel de transparencia (0 = totalmente transparente, 1 = totalmente opaco)
       });
 
       const textMesh = new THREE.Mesh(textGeometry, textMaterial);
@@ -673,6 +673,14 @@ function main() {
           },
         })
 
+        .to([
+          textMeshes["text1"].material,
+          textMeshes["text2"].material,
+          textMeshes["text3"].material
+        ], {
+          opacity: 0,
+        })
+
 
         .to(camera.position, {
           duration: 5,
@@ -680,11 +688,9 @@ function main() {
           y: 1,
           z: 30,
         })
-
-        
         .to([
-          textMeshes["text1"].material, 
-          textMeshes["text2"].material, 
+          textMeshes["text1"].material,
+          textMeshes["text2"].material,
           textMeshes["text3"].material
         ], {
           delay: -5,
