@@ -107,41 +107,106 @@ function main() {
 
   let textMeshes = {}; // Objeto para almacenar los textos
   const loadertx = new FontLoader();
-  
+
   // Función para obtener la configuración de textos según el ancho de la pantalla
   function getTextConfig() {
     let screenWidth = window.innerWidth; // Usar window.innerWidth en vez de container.clientWidth para mejor compatibilidad
-  
-    if (screenWidth < 855) {
-      // Configuración para pantallas pequeñas (<600px)
-      return [
-        { id: "text2", text: "Ultimos Proyectos", font: "src/fonts/Light_Regular.json", size: 2000, y: 2.5 },
-        { id: "text1", text: "BEASTDEALER", font: "src/fonts/false_Semi-bold.json", size: 900, y: 1.5 },
-        { id: "text3", text: "Web y Dashboard Para Aseguradora", font: "src/fonts/Light_Regular.json", size: 2000, y: 1 },
+
+    if (screenWidth < 450) {
+      // Configuración para pantallas muy pequeñas (<400px)
+      return [{
+          id: "text2",
+          text: "Ux-Ui Designer",
+          font: "src/fonts/Light_Regular.json",
+          size: 2000,
+          y: 2.8
+        },
+        {
+          id: "text1",
+          text: "YAKSIN SAIN",
+          font: "src/fonts/false_Semi-bold.json",
+          size: 900,
+          y: 2
+        },
+        {
+          id: "text3",
+          text: "I Design Positive Experiences",
+          font: "src/fonts/Light_Regular.json",
+          size: 2000,
+          y: 1.5
+        },
+      ];
+    } else if (screenWidth < 855) {
+      // Configuración para pantallas pequeñas (<855px)
+      return [{
+          id: "text2",
+          text: "Ux-Ui Designer",
+          font: "src/fonts/Light_Regular.json",
+          size: 2500,
+          y: 2.5
+        },
+        {
+          id: "text1",
+          text: "YAKSIN SAIN",
+          font: "src/fonts/false_Semi-bold.json",
+          size: 800,
+          y: 1.5
+        },
+        {
+          id: "text3",
+          text: "I Design Positive Experiences",
+          font: "src/fonts/Light_Regular.json",
+          size: 2500,
+          y: 1
+        },
       ];
     } else {
-      // Configuración para pantallas grandes (>=600px)
-      return [
-        { id: "text2", text: "Ultimos Proyectos", font: "src/fonts/Light_Regular.json", size: 4000, y: 4 },
-        { id: "text1", text: "BEASTDEALER", font: "src/fonts/false_Semi-bold.json", size: 700, y: 1.5 },
-        { id: "text3", text: "Web y Dashboard Para Aseguradora", font: "src/fonts/Light_Regular.json", size: 4000, y: 0.5 },
+      // Configuración para pantallas grandes (>=855px)
+      return [{
+          id: "text2",
+          text: "Ux-Ui Designer",
+          font: "src/fonts/Light_Regular.json",
+          size: 4000,
+          y: 4
+        },
+        {
+          id: "text1",
+          text: "YAKSIN SAIN",
+          font: "src/fonts/false_Semi-bold.json",
+          size: 700,
+          y: 1.5
+        },
+        {
+          id: "text3",
+          text: "I Design Positive Experiences",
+          font: "src/fonts/Light_Regular.json",
+          size: 4000,
+          y: 0.5
+        },
       ];
     }
+
   }
-  
+
   // Función para calcular el tamaño dinámico del texto
   function getResponsiveSize(baseSize) {
-    return Math.max( window.innerWidth / baseSize); // Mínimo tamaño para que el texto nunca sea 0 en móviles
+    return Math.max(window.innerWidth / baseSize); // Mínimo tamaño para que el texto nunca sea 0 en móviles
   }
-  
+
   // Función para crear o actualizar textos
-  function createText({ id, text, font, size, y }) {
+  function createText({
+    id,
+    text,
+    font,
+    size,
+    y
+  }) {
     loadertx.load(font, function (loadedFont) {
       // Eliminar texto anterior si ya existe
       if (textMeshes[id]) {
         scene.remove(textMeshes[id]);
       }
-  
+
       const textGeometry = new TextGeometry(text, {
         font: loadedFont,
         size: getResponsiveSize(size), // Tamaño dinámico basado en el ancho de pantalla
@@ -149,43 +214,48 @@ function main() {
         curveSegments: 12,
         bevelEnabled: false
       });
-  
+
       textGeometry.computeBoundingBox();
       const textWidth = textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x;
-  
-      const textMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, side: THREE.DoubleSide });
-  
+
+      const textMaterial = new THREE.MeshBasicMaterial({
+        color: 0xFFFFFF,
+        side: THREE.DoubleSide,
+        transparent: true, // Permite transparencia
+        opacity: 0
+      });
+
       const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-      textMesh.position.x=(-textWidth / 2);
+      textMesh.position.x = (-textWidth / 2);
       textMesh.position.y = y;
-  
+
       scene.add(textMesh);
       textMeshes[id] = textMesh; // Guardar el texto en el objeto global
     });
   }
-  
+
   // Función para actualizar todos los textos según el tamaño de pantalla
   function updateAllTexts() {
     let textsConfig = getTextConfig(); // Obtener configuración correcta
     textsConfig.forEach(createText); // Aplicar los textos
   }
-  
+
   // Crear textos iniciales
   updateAllTexts();
-  
+
   // Redimensionar textos cuando cambia el tamaño de la pantalla
   window.addEventListener("resize", () => {
     setTimeout(updateAllTexts, 200); // Retraso para asegurar actualización correcta en móviles
   });
-  
+
   // Manejar cambios en orientación de pantalla (móviles)
   window.addEventListener("orientationchange", () => {
     setTimeout(updateAllTexts, 500); // Espera un poco más porque en móviles tarda en ajustarse
   });
-  
-  
-  
-  
+
+
+
+
 
 
   // Crear un gradiente utilizando un Canvas
@@ -221,7 +291,7 @@ function main() {
 
 
 
-  
+
 
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(-15, 16, -50);
@@ -557,8 +627,8 @@ function main() {
       delay: -2,
       duration: 2,
       x: 0,
-      y: 1.5,
-      z: 0,
+      y: 1,
+      z: -1,
       ease: "expo.out",
     });
 
@@ -603,11 +673,23 @@ function main() {
           },
         })
 
+
         .to(camera.position, {
           duration: 5,
           x: 0,
-          y: 1.5,
+          y: 1,
           z: 30,
+        })
+
+        
+        .to([
+          textMeshes["text1"].material, 
+          textMeshes["text2"].material, 
+          textMeshes["text3"].material
+        ], {
+          delay: -5,
+          duration: 2,
+          opacity: 1,
         })
 
         .to(cameraDos.position, {
@@ -752,9 +834,9 @@ function main() {
           ),
           0.1 // Ajusta este valor para suavizar el movimiento
         );
-    
+
       }
-    
+
       if (textMeshes["text2"]) {
         textMeshes["text2"].position.lerp(
           new THREE.Vector3(
@@ -764,9 +846,9 @@ function main() {
           ),
           0.1
         );
-    
+
       }
-    
+
       if (textMeshes["text3"]) {
         textMeshes["text3"].position.lerp(
           new THREE.Vector3(
