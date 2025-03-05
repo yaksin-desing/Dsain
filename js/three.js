@@ -116,7 +116,7 @@ function main() {
       // Configuración para pantallas muy pequeñas (<400px)
       return [{
           id: "text2",
-          text: "Ux Designer",
+          text: "Middle Ux-Designer",
           font: "src/fonts/Light_Regular.json",
           size: 2000,
           y: 2.8
@@ -140,7 +140,7 @@ function main() {
       // Configuración para pantallas pequeñas (<855px)
       return [{
           id: "text2",
-          text: "Ux Designer",
+          text: "Middle Ux-Designer",
           font: "src/fonts/Light_Regular.json",
           size: 2500,
           y: 2.5
@@ -164,7 +164,7 @@ function main() {
       // Configuración para pantallas grandes (>=855px)
       return [{
           id: "text2",
-          text: "Ux Designer",
+          text: "Middle Ux-Designer",
           font: "src/fonts/Light_Regular.json",
           size: 4000,
           y: 4
