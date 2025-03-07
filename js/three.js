@@ -128,13 +128,6 @@ function main() {
           size: 900,
           y: 2
         },
-        {
-          id: "text3",
-          text: "I Design Positive Experiences",
-          font: "src/fonts/Light_Regular.json",
-          size: 2000,
-          y: 1.5
-        },
       ];
     } else if (screenWidth < 855) {
       // Configuración para pantallas pequeñas (<855px)
@@ -152,13 +145,6 @@ function main() {
           size: 800,
           y: 1.5
         },
-        {
-          id: "text3",
-          text: "I Design Positive Experiences",
-          font: "src/fonts/Light_Regular.json",
-          size: 2500,
-          y: 1
-        },
       ];
     } else {
       // Configuración para pantallas grandes (>=855px)
@@ -167,21 +153,14 @@ function main() {
           text: "Middle Ux-Designer",
           font: "src/fonts/Light_Regular.json",
           size: 4000,
-          y: 4
+          y: 3.5
         },
         {
           id: "text1",
           text: "YAKSIN SAIN",
           font: "src/fonts/false_Semi-bold.json",
           size: 700,
-          y: 1.5
-        },
-        {
-          id: "text3",
-          text: "I Design Positive Experiences",
-          font: "src/fonts/Light_Regular.json",
-          size: 4000,
-          y: 0.5
+          y: 1.2
         },
       ];
     }
@@ -222,7 +201,7 @@ function main() {
         color: 0xFFFFFF,
         side: THREE.DoubleSide,
         transparent: true, // Permite transparencia
-        opacity: 0, // Nivel de transparencia (0 = totalmente transparente, 1 = totalmente opaco)
+        opacity: 1, // Nivel de transparencia (0 = totalmente transparente, 1 = totalmente opaco)
       });
 
       const textMesh = new THREE.Mesh(textGeometry, textMaterial);
@@ -243,15 +222,6 @@ function main() {
   // Crear textos iniciales
   updateAllTexts();
 
-  // Redimensionar textos cuando cambia el tamaño de la pantalla
-  window.addEventListener("resize", () => {
-    setTimeout(updateAllTexts, 200); // Retraso para asegurar actualización correcta en móviles
-  });
-
-  // Manejar cambios en orientación de pantalla (móviles)
-  window.addEventListener("orientationchange", () => {
-    setTimeout(updateAllTexts, 500); // Espera un poco más porque en móviles tarda en ajustarse
-  });
 
 
 
@@ -314,7 +284,7 @@ function main() {
   textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
     waterNormal.wrapS = waterNormal.wrapT = THREE.RepeatWrapping;
 
-    const waterGeometry = new THREE.PlaneGeometry(100, 70);
+    const waterGeometry = new THREE.PlaneGeometry(100, 100);
 
     wateru = new Water(waterGeometry, {
       textureWidth: 50,
@@ -332,7 +302,7 @@ function main() {
 
     wateru.rotation.x = -Math.PI / 2;
     wateru.position.y = 0.2;
-    wateru.position.z = 0;
+    wateru.position.z = 30;
 
     scene.add(wateru);
 
@@ -442,6 +412,143 @@ function main() {
   );
 
 
+  ///////// Crear luz direccional  ////////////////
+const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
+luzdospasillo.position.set(30, 30, -10); // Posición de la luz
+luzdospasillo.castShadow = true; // Activar sombras
+
+// Ajustar la cámara de sombras (proyección ortográfica)
+luzdospasillo.shadow.camera.top = 100; // Límite superior
+luzdospasillo.shadow.camera.bottom = -100; // Límite inferior
+luzdospasillo.shadow.camera.left = -50; // Límite izquierdo
+luzdospasillo.shadow.camera.right = 50; // Límite derecho
+luzdospasillo.shadow.camera.near = 0.5; // Distancia mínima
+luzdospasillo.shadow.camera.far = 200; // Distancia máxima
+luzdospasillo.shadow.mapSize.width = 3000; // Ancho del mapa de sombras
+luzdospasillo.shadow.mapSize.height = 3000; // Alto del mapa de sombras
+luzdospasillo.shadow.bias = -0.001; // Previene artefactos de sombra
+luzdospasillo.shadow.opacity = 0.1; // Un valor entre 0 (transparente) y 1 (opaco)
+
+// Cambiar el objetivo de la luz
+const targetdos = new THREE.Object3D();
+targetdos.position.set(0, 0, 50); // Nuevo punto al que apunta la luz
+scene.add(targetdos); // Agregar el objetivo a la escena
+luzdospasillo.target = targetdos; // Asignar el objetivo a la luz
+
+
+// // Helper para la cámara de sombras
+// const shadowCameraHelper = new THREE.CameraHelper(luzdospasillo.shadow.camera);
+// scene.add(shadowCameraHelper);
+
+// // Helper para la luz direccional
+// const directionalLightHelper = new THREE.DirectionalLightHelper(luzdospasillo, 10); // El tamaño del helper (10) es ajustable
+// scene.add(directionalLightHelper);
+
+scene.add(luzdospasillo);
+  // Cargar pascilloModel
+  const pascilloLoader = new GLTFLoader();
+  pascilloLoader.load(
+    "./src/objt/escena/pasilloescenauno.glb",
+    (gltf) => {
+      const pascilloModel = gltf.scene;
+      pascilloModel.scale.set(0.05, 0.05, 0.05);
+      pascilloModel.position.set(0, 0.5, 35);
+
+      
+
+      pascilloModel.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+
+      scene.add(pascilloModel);
+    },
+    undefined,
+    (error) => console.error("Error al cargar el modelo de pascilloModel:", error)
+  );
+
+
+  // Cargar modelo Planta
+const loadercolumn = new GLTFLoader();
+loadercolumn.load(
+  "./src/objt/escena/columna.glb",
+  (gltf) => {
+    const modeloBase = gltf.scene;
+
+    function crearPalmera(posX, posY, posZ, escalaX, escalaY, escalaZ) {
+      const cloncolumn = modeloBase.clone();
+      cloncolumn.position.set(posX, posY, posZ);
+      cloncolumn.scale.set(escalaX, escalaY, escalaZ);
+
+      cloncolumn.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+
+      scene.add(cloncolumn);
+    }
+
+
+    //derecha
+
+    crearPalmera(2.7, 0.7, 35, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 37, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 39, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 41, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 43, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 45, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 47, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 49, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 51, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 53, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 55, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 57, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 59, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 61, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 63, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 65, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 67, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 69, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 71, 0.05, 0.05,0.05);
+    crearPalmera(2.7, 0.8, 73, 0.05, 0.05,0.05);
+
+
+    //izquierda
+
+    crearPalmera(-2.7, 0.7, 35, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 37, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 39, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 41, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 43, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 45, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 47, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 49, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 51, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 53, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 55, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 57, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 59, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 61, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 63, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 65, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 67, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 69, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 71, 0.05, 0.05,0.05);
+    crearPalmera(-2.7, 0.8, 73, 0.05, 0.05,0.05);
+
+
+
+  },
+  undefined,
+  (error) => console.error("Error al cargar el modelo de columna:", error)
+);
+
+
+
 
   // Cargar el modelo de las dunas
   const textureLoaderDunas = new THREE.TextureLoader();
@@ -517,7 +624,7 @@ function main() {
     metalness: 0.7,
   });
   const sun1 = new THREE.Mesh(sun1Geometry, sun1Material);
-  sun1.position.set(-25, 25, -100);
+  sun1.position.set(-25, 30, -100);
   scene.add(sun1);
 
   // Sol 2
@@ -646,7 +753,7 @@ function main() {
       ScrollTrigger.create({
         trigger: contenedor,
         start: "top top",
-        end: "+=20000",
+        end: "+=30000",
         scrub: 2, // Elimina easing implícito para evitar desaceleración al inicio y final
         ease: "none", // Elimina easing implícito para evitar desaceleración al inicio y final
         onUpdate: function (self) {
@@ -660,7 +767,7 @@ function main() {
           scrollTrigger: {
             trigger: contenedor, // Elemento que activa la animación
             start: "top top", // Punto inicial del scroll
-            end: "+=20000", // Punto final (3000px adicionales para el scroll)
+            end: "+=30000", // Punto final (3000px adicionales para el scroll)
             scrub: 2,
             ease: "none", // Elimina easing implícito para evitar desaceleración al inicio y final
             pin: true, // Fija el contenedor durante la animación
@@ -673,30 +780,34 @@ function main() {
           },
         })
 
+        // .to([
+        //   textMeshes["text1"].material,
+        //   textMeshes["text2"].material,
+        //   textMeshes["text3"].material
+        // ], {
+        //   opacity: 0,
+        // })
+
+
+        .to(camera.position, {
+          duration: 10,
+          x: 0,
+          y: 2,
+          z: 70,
+        })
+
+
         .to([
           textMeshes["text1"].material,
           textMeshes["text2"].material,
-          textMeshes["text3"].material
         ], {
+          delay: -10,
+          duration: 3,
           opacity: 0,
         })
 
 
-        .to(camera.position, {
-          duration: 5,
-          x: 0,
-          y: 1,
-          z: 30,
-        })
-        .to([
-          textMeshes["text1"].material,
-          textMeshes["text2"].material,
-          textMeshes["text3"].material
-        ], {
-          delay: -5,
-          duration: 2,
-          opacity: 1,
-        })
+
 
         .to(cameraDos.position, {
           duration: 0,
@@ -785,7 +896,7 @@ function main() {
 
 
     // Lógica para cambiar entre escenas según la posición de la cámara principal
-    if (camera.position.z >= 30) {
+    if (camera.position.z >= 70) {
       // Dividir el ancho de la cámara
       camera.aspect = (container.clientWidth / 2.5) / container.clientHeight / 2;
       camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
@@ -831,6 +942,7 @@ function main() {
         }
       }
 
+
       if (textMeshes["text1"]) {
         textMeshes["text1"].position.lerp(
           new THREE.Vector3(
@@ -853,17 +965,6 @@ function main() {
           0.1
         );
 
-      }
-
-      if (textMeshes["text3"]) {
-        textMeshes["text3"].position.lerp(
-          new THREE.Vector3(
-            textMeshes["text3"].position.x,
-            textMeshes["text3"].position.y,
-            camera.position.z - 11
-          ),
-          0.1
-        );
       }
 
     }
