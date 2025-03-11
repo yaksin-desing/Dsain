@@ -413,38 +413,38 @@ function main() {
 
 
   ///////// Crear luz direccional  ////////////////
-const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
-luzdospasillo.position.set(30, 30, -10); // Posición de la luz
-luzdospasillo.castShadow = true; // Activar sombras
+  const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
+  luzdospasillo.position.set(30, 30, -10); // Posición de la luz
+  luzdospasillo.castShadow = true; // Activar sombras
 
-// Ajustar la cámara de sombras (proyección ortográfica)
-luzdospasillo.shadow.camera.top = 100; // Límite superior
-luzdospasillo.shadow.camera.bottom = -100; // Límite inferior
-luzdospasillo.shadow.camera.left = -50; // Límite izquierdo
-luzdospasillo.shadow.camera.right = 50; // Límite derecho
-luzdospasillo.shadow.camera.near = 0.5; // Distancia mínima
-luzdospasillo.shadow.camera.far = 200; // Distancia máxima
-luzdospasillo.shadow.mapSize.width = 3000; // Ancho del mapa de sombras
-luzdospasillo.shadow.mapSize.height = 3000; // Alto del mapa de sombras
-luzdospasillo.shadow.bias = -0.001; // Previene artefactos de sombra
-luzdospasillo.shadow.opacity = 0.1; // Un valor entre 0 (transparente) y 1 (opaco)
+  // Ajustar la cámara de sombras (proyección ortográfica)
+  luzdospasillo.shadow.camera.top = 100; // Límite superior
+  luzdospasillo.shadow.camera.bottom = -100; // Límite inferior
+  luzdospasillo.shadow.camera.left = -50; // Límite izquierdo
+  luzdospasillo.shadow.camera.right = 50; // Límite derecho
+  luzdospasillo.shadow.camera.near = 0.5; // Distancia mínima
+  luzdospasillo.shadow.camera.far = 200; // Distancia máxima
+  luzdospasillo.shadow.mapSize.width = 3000; // Ancho del mapa de sombras
+  luzdospasillo.shadow.mapSize.height = 3000; // Alto del mapa de sombras
+  luzdospasillo.shadow.bias = -0.001; // Previene artefactos de sombra
+  luzdospasillo.shadow.opacity = 0.1; // Un valor entre 0 (transparente) y 1 (opaco)
 
-// Cambiar el objetivo de la luz
-const targetdos = new THREE.Object3D();
-targetdos.position.set(0, 0, 50); // Nuevo punto al que apunta la luz
-scene.add(targetdos); // Agregar el objetivo a la escena
-luzdospasillo.target = targetdos; // Asignar el objetivo a la luz
+  // Cambiar el objetivo de la luz
+  const targetdos = new THREE.Object3D();
+  targetdos.position.set(0, 0, 50); // Nuevo punto al que apunta la luz
+  scene.add(targetdos); // Agregar el objetivo a la escena
+  luzdospasillo.target = targetdos; // Asignar el objetivo a la luz
 
 
-// // Helper para la cámara de sombras
-// const shadowCameraHelper = new THREE.CameraHelper(luzdospasillo.shadow.camera);
-// scene.add(shadowCameraHelper);
+  // // Helper para la cámara de sombras
+  // const shadowCameraHelper = new THREE.CameraHelper(luzdospasillo.shadow.camera);
+  // scene.add(shadowCameraHelper);
 
-// // Helper para la luz direccional
-// const directionalLightHelper = new THREE.DirectionalLightHelper(luzdospasillo, 10); // El tamaño del helper (10) es ajustable
-// scene.add(directionalLightHelper);
+  // // Helper para la luz direccional
+  // const directionalLightHelper = new THREE.DirectionalLightHelper(luzdospasillo, 10); // El tamaño del helper (10) es ajustable
+  // scene.add(directionalLightHelper);
 
-scene.add(luzdospasillo);
+  scene.add(luzdospasillo);
   // Cargar pascilloModel
   const pascilloLoader = new GLTFLoader();
   pascilloLoader.load(
@@ -454,7 +454,7 @@ scene.add(luzdospasillo);
       pascilloModel.scale.set(0.05, 0.05, 0.05);
       pascilloModel.position.set(0, 0.5, 35);
 
-      
+
 
       pascilloModel.traverse((child) => {
         if (child.isMesh) {
@@ -471,81 +471,81 @@ scene.add(luzdospasillo);
 
 
   // Cargar modelo Planta
-const loadercolumn = new GLTFLoader();
-loadercolumn.load(
-  "./src/objt/escena/columna.glb",
-  (gltf) => {
-    const modeloBase = gltf.scene;
+  const loadercolumn = new GLTFLoader();
+  loadercolumn.load(
+    "./src/objt/escena/columna.glb",
+    (gltf) => {
+      const modeloBase = gltf.scene;
 
-    function crearPalmera(posX, posY, posZ, escalaX, escalaY, escalaZ) {
-      const cloncolumn = modeloBase.clone();
-      cloncolumn.position.set(posX, posY, posZ);
-      cloncolumn.scale.set(escalaX, escalaY, escalaZ);
+      function crearPalmera(posX, posY, posZ, escalaX, escalaY, escalaZ) {
+        const cloncolumn = modeloBase.clone();
+        cloncolumn.position.set(posX, posY, posZ);
+        cloncolumn.scale.set(escalaX, escalaY, escalaZ);
 
-      cloncolumn.traverse((child) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
+        cloncolumn.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
 
-      scene.add(cloncolumn);
-    }
-
-
-    //derecha
-
-    crearPalmera(2.7, 0.7, 35, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 37, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 39, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 41, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 43, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 45, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 47, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 49, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 51, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 53, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 55, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 57, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 59, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 61, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 63, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 65, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 67, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 69, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 71, 0.05, 0.05,0.05);
-    crearPalmera(2.7, 0.8, 73, 0.05, 0.05,0.05);
+        scene.add(cloncolumn);
+      }
 
 
-    //izquierda
+      //derecha
 
-    crearPalmera(-2.7, 0.7, 35, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 37, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 39, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 41, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 43, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 45, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 47, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 49, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 51, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 53, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 55, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 57, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 59, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 61, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 63, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 65, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 67, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 69, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 71, 0.05, 0.05,0.05);
-    crearPalmera(-2.7, 0.8, 73, 0.05, 0.05,0.05);
+      crearPalmera(2.7, 0.7, 35, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 37, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 39, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 41, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 43, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 45, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 47, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 49, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 51, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 53, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 55, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 57, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 59, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 61, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 63, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 65, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 67, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 69, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 71, 0.05, 0.05, 0.05);
+      crearPalmera(2.7, 0.8, 73, 0.05, 0.05, 0.05);
+
+
+      //izquierda
+
+      crearPalmera(-2.7, 0.7, 35, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 37, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 39, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 41, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 43, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 45, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 47, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 49, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 51, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 53, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 55, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 57, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 59, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 61, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 63, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 65, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 67, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 69, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 71, 0.05, 0.05, 0.05);
+      crearPalmera(-2.7, 0.8, 73, 0.05, 0.05, 0.05);
 
 
 
-  },
-  undefined,
-  (error) => console.error("Error al cargar el modelo de columna:", error)
-);
+    },
+    undefined,
+    (error) => console.error("Error al cargar el modelo de columna:", error)
+  );
 
 
 
@@ -884,7 +884,7 @@ loadercolumn.load(
       mixernubes.update(delta);
     }
 
-    camera.position.x += (mouse.x - camera.position.x) * 0.05;
+    camera.position.x += (mouse.x - camera.position.x) * 0.09;
     camera.position.x = Math.max(
       minCameraX,
       Math.min(camera.position.x, maxCameraX)
@@ -908,6 +908,20 @@ loadercolumn.load(
       // Renderiza la escena secundaria en pantalla
       renderer.render(sceneDos, cameraDos);
 
+      // Ocultar objetos de la escena principal para liberar GPU
+      scene.traverse((child) => {
+        if (child.isMesh) {
+          child.visible = true;
+        }
+      });
+
+      // Ocultar objetos de la escena principal para liberar GPU
+      sceneTres.traverse((child) => {
+        if (child.isMesh) {
+          child.visible = true;
+        }
+      });
+
       // Nueva condición dentro del primer if
       if (cameraDos.position.z >= 1100) {
         if (water) {
@@ -924,9 +938,23 @@ loadercolumn.load(
         // Renderiza la escena secundaria en pantalla
         renderer.render(sceneTres, cameraTres);
 
+        // Ocultar objetos de la escena principal para liberar GPU
+        scene.traverse((child) => {
+          if (child.isMesh) {
+            child.visible = false;
+          }
+        });
+
         // Agrega aquí lo que debe pasar si la nueva condición es verdadera
       }
     } else {
+
+      // Ocultar objetos de la escena principal para liberar GPU
+      sceneTres.traverse((child) => {
+        if (child.isMesh) {
+          child.visible = false;
+        }
+      });
 
       // Restablece la relación de aspecto de la cámara original
       camera.aspect = container.clientWidth / container.clientHeight;
