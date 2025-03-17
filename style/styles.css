@@ -8,9 +8,6 @@
 }
 
 html, body {
-  height: 100dvh; /* Usa 100dvh para evitar cambios con la UI del navegador móvil */
-  scroll-behavior: smooth;
-  position: relative;
   background: white;
   /*scrollbar-width: none;
   /* Firefox */

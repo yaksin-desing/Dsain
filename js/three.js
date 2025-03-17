@@ -780,14 +780,6 @@ function main() {
           },
         })
 
-        // .to([
-        //   textMeshes["text1"].material,
-        //   textMeshes["text2"].material,
-        //   textMeshes["text3"].material
-        // ], {
-        //   opacity: 0,
-        // })
-
 
         .to(camera.position, {
           duration: 10,
@@ -805,9 +797,6 @@ function main() {
           duration: 3,
           opacity: 0,
         })
-
-
-
 
         .to(cameraDos.position, {
           duration: 0,
