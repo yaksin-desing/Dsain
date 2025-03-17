@@ -1,10 +1,9 @@
 #contenedor {
-    position: relative;
-    height: 100%;
-
-
+    height: 100dvh; /* Usa 100dvh para evitar cambios con la UI del navegador móvil */
+    overflow: hidden;
     .loading {
-        height: 100dvh;
+        overflow: hidden;
+        height: 100%; /* Ocupará todo el alto del body */
         width: auto;
         background: $colorp;
         display: flex;
@@ -13,7 +12,7 @@
         flex-direction: column;
         gap: 10px;
         position: relative;
-        overflow: hidden;
+        
 
         #cortina{
             opacity: 100%;
@@ -499,96 +498,52 @@
             }
         }
 
-    }
 
-    .proyectos{
-        display: none;
-        position:absolute;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        z-index: 2;
-        width: 100%;
-        height: 100%;
-        .proyecto {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            height: 50%;
-            .subtitulo_p {
-                font-family: "Extralight";
-                color: #ffffff;
-                font-size: 12px;
-                padding: 0% 28% 0% 28%;
-                text-align: center;
-                z-index: 300;
-                font-weight: 600;
-            }
-            .titulo_p {
-                color: white; /* Base en blanco para mayor contraste */
-                font-family: "Extrabold";
-                font-size: 8vw;
-                padding: 0% 28% 0% 28%;
-                text-align: center;
-                z-index: 300;
-                font-weight: 600;
-            }
-            .contexto_p {
-                font-family: "Extralight";
-                color: #ffffff;
-                font-size: 12px;
-                padding: 0% 5% 0% 5%;
-                text-align: center;
-                z-index: 3000;
-                font-weight: 600;
-            }
-            
-        }
-    }
-
-
-
-    #scene-container {
-        width: 100vw;
-        height: 100dvh;
-        z-index: 0;
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: flex;
-        justify-content: left;
-        align-items: end;
-
-
-        #tituloescena {
-            position: absolute;
-            z-index: 2;
-            font-family: "Regular";
-            color: #ffffff;
-            font-size: 0.8vw;
-            text-align: center;
-            opacity: 100%;
-            width: 100%;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 255, 255, 0.6);
-
-        }
-
-
-
-
-        #lottie-container {
-            position: absolute;
-            bottom: -0.5vw;
-            left: 42.5%;
-            width: 15%;
-            pointer-events: none;
-            /* Evitar que interfiera con los clics */
+        #scene-container {
+            overflow: hidden;
+            width: 100vw;
+            height: 100dvh;
             z-index: 0;
-
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: left;
+            align-items: end;
+    
+    
+            #tituloescena {
+                position: absolute;
+                z-index: 2;
+                font-family: "Regular";
+                color: #ffffff;
+                font-size: 0.8vw;
+                text-align: center;
+                opacity: 100%;
+                width: 100%;
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 255, 255, 0.6);
+    
+            }
+    
+    
+    
+    
+            #lottie-container {
+                position: absolute;
+                bottom: -0.5vw;
+                left: 42.5%;
+                width: 15%;
+                pointer-events: none;
+                /* Evitar que interfiera con los clics */
+                z-index: 0;
+    
+            }
         }
+
     }
+
+
 }
+
+
+@media (max-width: 500px) {}   

@@ -8,17 +8,28 @@ $colorp:#0004ee;
     cursor: url("../src/img/cursor.svg") 10 10, auto;
 }
 
-body {
+
+
+html, body {
+    height: 100dvh; /* Usa 100dvh para evitar cambios con la UI del navegador móvil */
+    scroll-behavior: smooth;
     position: relative;
     background: white;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    /*scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    -webkit-touch-callout: none; /* Evita que aparezca el menú contextual al mantener presionado */
+    -webkit-user-select: none;   /* Evita la selección de texto */
+    -webkit-overflow-scrolling: touch; /* Suaviza el scroll */
+    z-index: -999;
 }
+
 body::-webkit-scrollbar {
     display: none;
     width: 0;
     /* Chrome, Safari y Opera */
-  }
+}
 
 html::-webkit-scrollbar {
     display: none;
@@ -28,7 +39,7 @@ html::-webkit-scrollbar {
 
 
 .cursor {
-    opacity:0;
+    opacity: 0;
     position: fixed;
     width: 70px;
     height: 70px;
@@ -41,6 +52,12 @@ html::-webkit-scrollbar {
     pointer-events: none;
     z-index: 9999;
 }
+
+@media (max-width: 450px){
+    .cursor {
+        display: none;
+    }
+    }
 
 .grow,
 .grow-small {

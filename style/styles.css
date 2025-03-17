@@ -7,11 +7,19 @@
   cursor: url("../src/img/cursor.svg") 10 10, auto;
 }
 
-body {
+html, body {
+  height: 100dvh; /* Usa 100dvh para evitar cambios con la UI del navegador móvil */
+  scroll-behavior: smooth;
   position: relative;
   background: white;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  /*scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  -webkit-touch-callout: none; /* Evita que aparezca el menú contextual al mantener presionado */
+  -webkit-user-select: none; /* Evita la selección de texto */
+  -webkit-overflow-scrolling: touch; /* Suaviza el scroll */
+  z-index: -999;
 }
 
 body::-webkit-scrollbar {
@@ -41,6 +49,11 @@ html::-webkit-scrollbar {
   z-index: 9999;
 }
 
+@media (max-width: 450px) {
+  .cursor {
+    display: none;
+  }
+}
 .grow,
 .grow-small {
   transform: scale(1.5);
@@ -116,11 +129,12 @@ h5 {
   font-style: normal;
 }
 #contenedor {
-  position: relative;
-  height: 100%;
+  height: 100dvh; /* Usa 100dvh para evitar cambios con la UI del navegador móvil */
+  overflow: hidden;
 }
 #contenedor .loading {
-  height: 100dvh;
+  overflow: hidden;
+  height: 100%; /* Ocupará todo el alto del body */
   width: auto;
   background: #0004ee;
   display: flex;
@@ -129,7 +143,6 @@ h5 {
   flex-direction: column;
   gap: 10px;
   position: relative;
-  overflow: hidden;
   /* Contenedor de la barra de carga */
 }
 #contenedor .loading #cortina {
@@ -526,54 +539,8 @@ h5 {
   fill: none;
   stroke-width: 2;
 }
-#contenedor .proyectos {
-  display: none;
-  position: absolute;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-}
-#contenedor .proyectos .proyecto {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  height: 50%;
-}
-#contenedor .proyectos .proyecto .subtitulo_p {
-  font-family: "Extralight";
-  color: #ffffff;
-  font-size: 12px;
-  padding: 0% 28% 0% 28%;
-  text-align: center;
-  z-index: 300;
-  font-weight: 600;
-}
-#contenedor .proyectos .proyecto .titulo_p {
-  color: white; /* Base en blanco para mayor contraste */
-  font-family: "Extrabold";
-  font-size: 8vw;
-  padding: 0% 28% 0% 28%;
-  text-align: center;
-  z-index: 300;
-  font-weight: 600;
-}
-#contenedor .proyectos .proyecto .contexto_p {
-  font-family: "Extralight";
-  color: #ffffff;
-  font-size: 12px;
-  padding: 0% 5% 0% 5%;
-  text-align: center;
-  z-index: 3000;
-  font-weight: 600;
-}
-#contenedor #scene-container {
+#contenedor .loading #scene-container {
+  overflow: hidden;
   width: 100vw;
   height: 100dvh;
   z-index: 0;
@@ -584,7 +551,7 @@ h5 {
   justify-content: left;
   align-items: end;
 }
-#contenedor #scene-container #tituloescena {
+#contenedor .loading #scene-container #tituloescena {
   position: absolute;
   z-index: 2;
   font-family: "Regular";
@@ -595,7 +562,7 @@ h5 {
   width: 100%;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 255, 255, 0.6);
 }
-#contenedor #scene-container #lottie-container {
+#contenedor .loading #scene-container #lottie-container {
   position: absolute;
   bottom: -0.5vw;
   left: 42.5%;

@@ -19,70 +19,200 @@ const cortina = document.getElementById('cortina');
 const cursor = document.querySelector('.cursor');
 
 
-//timeline loading
-const animaloading = gsap.timeline({
-    paused: true
-});
-animaloading.to(parrafodeinicio, {
-    duration: 1,
-    opacity: "100%",
-});
-animaloading.to(contenedor_loading, {
-    duration: 1,
-    ease: 'power2.out',
-    margin: "2vh",
-    height: "96dvh",
-    borderRadius: "2vh",
-});
-animaloading.to(tituloh1, {
-    opacity: "100%",
-});
-animaloading.to(logoanimado, {
-    duration: 1,
-    ease: 'power2.out',
-    top: "3vh",
-    left: "3vh",
-    width: "max-content",
-});
-animaloading.to(contactnav, {
-    opacity: "100%",
-});
-animaloading.to(audio_container, {
-    opacity: "100%",
-});
-animaloading.to(ilogoestatico, {
-    duration: 0,
-    opacity: "100%",
-});
-animaloading.to(ilogoanimador, {
-    duration: 0,
-    opacity: "0%",
-});
-animaloading.to(textologo, {
-    duration: 1,
-    width: "max-content",
-    display: "flex"
-});
-animaloading.to(imgparrafoinicio, {
-    duration: 1,
-    opacity: "100%",
-});
+function createAnimation() {
+    let screenWidth = window.innerWidth; // Obtiene el ancho de la pantalla
+    let animaloading = gsap.timeline({
+        paused: true
+    });
 
-animaloading.to(botoninicio, {
-    bottom: "-20vh",
-});
-animaloading.to(cursor, {
-    delay: -1,
-    opacity: "100%",
+    if (screenWidth <= 550) {
+        // Animaciones para móviles
+        //timeline loading
+        animaloading.to(parrafodeinicio, {
+            duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(contenedor_loading, {
+            duration: 1,
+            ease: 'power2.out',
+            margin: "2vh",
+            height: "96dvh",
+            borderRadius: "2vh",
+        });
+        animaloading.to(tituloh1, {
+            opacity: "100%",
+        });
+        animaloading.to(logoanimado, {
+            duration: 1,
+            ease: 'power2.out',
+            top: "3vh",
+            left: "3vh",
+            width: "max-content",
+        });
+        animaloading.to(contactnav, {
+            opacity: "100%",
+        });
+        animaloading.to(audio_container, {
+            opacity: "100%",
+        });
+        animaloading.to(ilogoestatico, {
+            duration: 0,
+            opacity: "100%",
+        });
+        animaloading.to(ilogoanimador, {
+            duration: 0,
+            opacity: "0%",
+        });
+        animaloading.to(textologo, {
+            duration: 1,
+            width: "max-content",
+            display: "flex"
+        });
+        animaloading.to(imgparrafoinicio, {
+            duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(botoninicio, {
+            bottom: "-20vh",
+        });
+        animaloading.to(cursor, {
+            delay: -1,
+            opacity: "100%",
+        });
+        animaloading.to(cortina, {
+            opacity: 0, // Usa valores numéricos en vez de porcentajes
+            duration: 1.5, // Aumenta la duración para más suavidad
+            ease: 'power3.out', // Prueba con 'power4.out' si quieres algo aún más suave
+        });
+    } else if (screenWidth > 550 && screenWidth <= 1024) {
+        // Animaciones para tablets
 
-});
+        animaloading.to(parrafodeinicio, {
+            duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(contenedor_loading, {
+            duration: 1,
+            ease: 'power2.out',
+            margin: "2vh",
+            height: "96dvh",
+            borderRadius: "2vh",
+        });
+        animaloading.to(tituloh1, {
+            opacity: "100%",
+        });
+        animaloading.to(logoanimado, {
+            duration: 1,
+            ease: 'power2.out',
+            top: "3vh",
+            left: "3vh",
+            width: "max-content",
+        });
+        animaloading.to(contactnav, {
+            opacity: "100%",
+        });
+        animaloading.to(audio_container, {
+            opacity: "100%",
+        });
+        animaloading.to(ilogoestatico, {
+            duration: 0,
+            opacity: "100%",
+        });
+        animaloading.to(ilogoanimador, {
+            duration: 0,
+            opacity: "0%",
+        });
+        animaloading.to(textologo, {
+            duration: 1,
+            width: "max-content",
+            display: "flex"
+        });
+        animaloading.to(imgparrafoinicio, {
+            duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(botoninicio, {
+            bottom: "-20vh",
+        });
+        animaloading.to(cursor, {
+            delay: -1,
+            opacity: "100%",
+        });
+        animaloading.to(cortina, {
+            opacity: 0, // Usa valores numéricos en vez de porcentajes
+            duration: 1.5, // Aumenta la duración para más suavidad
+            ease: 'power3.out', // Prueba con 'power4.out' si quieres algo aún más suave
+        });
+    } else {
+        // Animaciones para pantallas grandes
+        animaloading.to(parrafodeinicio, {
+            duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(contenedor_loading, {
+            duration: 1,
+            ease: 'power2.out',
+            margin: "2vh",
+            height: "96vh",
+            borderRadius: "2vh",
+        });
+        animaloading.to(tituloh1, {
+            opacity: "100%",
+        });
+        animaloading.to(logoanimado, {
+            duration: 1,
+            ease: 'power2.out',
+            top: "3vh",
+            left: "3vh",
+            width: "max-content",
+        });
+        animaloading.to(contactnav, {
+            opacity: "100%",
+        });
+        animaloading.to(audio_container, {
+            opacity: "100%",
+        });
+        animaloading.to(ilogoestatico, {
+            duration: 0,
+            opacity: "100%",
+        });
+        animaloading.to(ilogoanimador, {
+            duration: 0,
+            opacity: "0%",
+        });
+        animaloading.to(textologo, {
+            duration: 1,
+            width: "max-content",
+            display: "flex"
+        });
+        animaloading.to(imgparrafoinicio, {
+            duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(botoninicio, {
+            bottom: "-20vh",
+        });
+        animaloading.to(cursor, {
+            delay: -1,
+            opacity: "100%",
+        });
+        animaloading.to(cortina, {
+            opacity: 0, // Usa valores numéricos en vez de porcentajes
+            duration: 1.5, // Aumenta la duración para más suavidad
+            ease: 'power3.out', // Prueba con 'power4.out' si quieres algo aún más suave
+        });
+    }
 
-animaloading.to(cortina, {  
-    opacity: 0,  // Usa valores numéricos en vez de porcentajes
-    duration: 1.5,  // Aumenta la duración para más suavidad
-    ease: 'power3.out',  // Prueba con 'power4.out' si quieres algo aún más suave
-});
+    return animaloading;
+}
 
+// Crear la animación al cargar la página
+let animaloading = createAnimation();
+
+// Ejecutar la animación cuando termine la carga
+setTimeout(() => {
+    animaloading.play();
+},0);
 
 
 let progress = 0;
@@ -99,7 +229,7 @@ function updateProgressBar() {
         clearInterval(progressInterval);
         progressBar.style.width = `${progress}%`;
         pageLoaded = true; // Cambia la variable
-        
+
         setTimeout(() => {
             // audioPlayer.play();
             animateWave();
@@ -375,6 +505,7 @@ cursorScale.forEach(link => {
 
 
 //Animacion de inicio de escena
+const contenedor = document.querySelector('.contenedor');
 
 
 //timeline loading
@@ -388,8 +519,6 @@ openescena.to(botoninicio, {
     bottom: "-35vh",
 
 });
-
-
 
 openescena.to(imgparrafoinicio, {
 
@@ -411,10 +540,9 @@ openescena.to(contenedor_loading, {
     duration: 1,
     ease: 'power2.out',
     margin: "0vh",
-    height: "100dvh",
+    height: "100%",
     borderRadius: "0vh",
 });
-
 
 
 // Escuchar el evento click en el botón
@@ -422,6 +550,3 @@ document.getElementById("botoninicio").addEventListener("click", () => {
     openescena.play(); // Iniciar el timeline
     audioPlayer.play();
 });
-
-
-
