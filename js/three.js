@@ -548,6 +548,82 @@ function main() {
   );
 
 
+  // Cargar múltiples texturas
+  const loaderbanderas = new THREE.TextureLoader();
+  const textures = [
+    loaderbanderas.load('./src/img/proyectounod.png'),
+    loaderbanderas.load('./src/img/proyectounod.png'),
+    loaderbanderas.load('./src/img/proyectounod.png'),
+    loaderbanderas.load('./src/img/proyectounod.png'),
+    loaderbanderas.load('./src/img/proyectounod.png'),
+  ];
+
+  // Geometría del plano
+  const geometrybanderas = new THREE.PlaneGeometry(2, 1, 50, 50);
+
+  // Función para crear materiales únicos con diferentes texturas
+  function createMaterial(texture) {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: {
+          value: 0
+        },
+        uTexture: {
+          value: texture
+        },
+      },
+      vertexShader: `
+      uniform float uTime;
+      varying vec2 vUv;
+
+      void main() {
+        vUv = uv;
+        vec3 pos = position;
+
+        // Ondulación tipo bandera
+        float wave = sin(pos.y * 3.0 + uTime * 1.0) * 0.1;
+        pos.x += wave;
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `,
+      fragmentShader: `
+      uniform sampler2D uTexture;
+      varying vec2 vUv;
+
+      void main() {
+        vec4 color = texture2D(uTexture, vUv);
+        if (color.a < 0.1) discard; // Manejo de transparencia
+        gl_FragColor = color;
+      }
+    `,
+      transparent: true
+    });
+  }
+
+  // Crear planos con nombres específicos, posiciones y materiales distintos
+  const plane = new THREE.Mesh(geometrybanderas, createMaterial(textures[0]));
+  plane.position.set(0, 1.5, 32);
+  scene.add(plane);
+
+  const planeuno = new THREE.Mesh(geometrybanderas, createMaterial(textures[1]));
+  planeuno.position.set(0, 1.6, 40);
+  scene.add(planeuno);
+
+  const planedos = new THREE.Mesh(geometrybanderas, createMaterial(textures[2]));
+  planedos.position.set(0, 1.75, 50);
+  scene.add(planedos);
+
+  const planetre = new THREE.Mesh(geometrybanderas, createMaterial(textures[3]));
+  planetre.position.set(0, 1.85, 60);
+  scene.add(planetre);
+
+  const planecuatro = new THREE.Mesh(geometrybanderas, createMaterial(textures[4]));
+  planecuatro.position.set(0, 3, 1090);
+  sceneDos.add(planecuatro);
+
+
+
 
 
   // Cargar el modelo de las dunas
@@ -700,7 +776,7 @@ function main() {
       delay: -2,
       duration: 2,
       x: 0,
-      y: 1,
+      y: 1.5,
       z: -1,
       ease: "expo.out",
     });
@@ -783,7 +859,6 @@ function main() {
 
         .to(camera.position, {
           duration: 10,
-          x: 0,
           y: 2,
           z: 70,
         })
@@ -800,14 +875,13 @@ function main() {
 
         .to(cameraDos.position, {
           duration: 0,
-          x: 0,
           y: 2,
           z: 995.5,
         })
 
         .to(cameraDos.position, {
           duration: 10,
-          x: 0,
+
           y: 3,
           z: 1100,
         })
@@ -852,6 +926,12 @@ function main() {
   container.appendChild(stats.dom);
 
   function animate() {
+    // Actualizar el tiempo en cada material de forma independiente
+    plane.material.uniforms.uTime.value += 0.02;
+    planeuno.material.uniforms.uTime.value += 0.02;
+    planedos.material.uniforms.uTime.value += 0.02;
+    planetre.material.uniforms.uTime.value += 0.02;
+    planecuatro.material.uniforms.uTime.value += 0.02;
 
     stats.begin();
 

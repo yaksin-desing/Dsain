@@ -16,7 +16,7 @@ const audio_container = document.getElementById('audio-container');
 const videofondo = document.getElementById('videofondo');
 const parrafodeinicio = document.getElementById('parrafodeinicio');
 const cortina = document.getElementById('cortina');
-const cursor = document.querySelector('.cursor');
+const cursors = document.querySelector('.cursor');
 
 
 function createAnimation() {
@@ -75,7 +75,7 @@ function createAnimation() {
         animaloading.to(botoninicio, {
             bottom: "-20vh",
         });
-        animaloading.to(cursor, {
+        animaloading.to(cursors, {
             delay: -1,
             opacity: "100%",
         });
@@ -134,7 +134,7 @@ function createAnimation() {
         animaloading.to(botoninicio, {
             bottom: "-20vh",
         });
-        animaloading.to(cursor, {
+        animaloading.to(cursors, {
             delay: -1,
             opacity: "100%",
         });
@@ -192,7 +192,7 @@ function createAnimation() {
         animaloading.to(botoninicio, {
             bottom: "-20vh",
         });
-        animaloading.to(cursor, {
+        animaloading.to(cursors, {
             delay: -1,
             opacity: "100%",
         });
@@ -212,7 +212,7 @@ let animaloading = createAnimation();
 // Ejecutar la animación cuando termine la carga
 setTimeout(() => {
     animaloading.play();
-},0);
+}, 0);
 
 
 let progress = 0;
@@ -454,45 +454,98 @@ document.addEventListener("click", (event) => {
     }
 });
 
-//Animacion del cursor
+let screenWidth = window.innerWidth; // Obtiene el ancho de la ventana del navegador
 
-var cursorScale = document.querySelectorAll('.cursor-scale'),
-    mouseX = 0,
-    mouseY = 0
+if (screenWidth > 1020) {
+    var cursor = document.querySelector('.cursor'),
+        cursorScale = document.querySelectorAll('.cursor-scale'),
+        mouseX = 0,
+        mouseY = 0,
+        targetX = 0,
+        targetY = 0,
+        prevX = 0,
+        prevY = 0,
+        lerpFactor = 0.12; // Suavizado
 
+    // Animación del cursor
+    gsap.to({}, 0.016, {
+        repeat: -1,
+        onRepeat: function () {
+            // Movimiento suavizado
+            targetX += (mouseX - targetX) * lerpFactor;
+            targetY += (mouseY - targetY) * lerpFactor;
 
-gsap.to({}, 0.050, {
-    repeat: -1,
-    onRepeat: function () {
-        gsap.set(cursor, {
-            css: {
-                left: mouseX,
-                top: mouseY
-            }
-        })
-    }
-});
+            // Diferencias de movimiento
+            let deltaX = targetX - prevX;
+            let deltaY = targetY - prevY;
+            let speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 0.1;
+            speed = Math.min(speed, 1);
 
+            // Estiramiento según dirección y velocidad
+            let scaleX = 1 + Math.abs(deltaX) * 0.02 + speed * 0.3;
+            let scaleY = 1 + Math.abs(deltaY) * 0.02 + speed * 0.3;
+            let rotation = deltaX * 2;
 
-window.addEventListener("mousemove", function (e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY
-});
+            // Aplicar transformaciones
+            gsap.set(cursor, {
+                x: targetX,
+                y: targetY,
+                scaleX: scaleX,
+                scaleY: scaleY,
+                rotation: rotation,
+                ease: "power2.out"
+            });
 
-
-cursorScale.forEach(link => {
-    link.addEventListener('mouseleave', () => {
-        cursor.classList.remove('grow');
-        cursor.classList.remove('grow-small');
-    });
-    link.addEventListener('mousemove', () => {
-        cursor.classList.add('grow');
-        if (link.classList.contains('small')) {
-            cursor.classList.remove('grow');
-            cursor.classList.add('grow-small');
+            prevX = targetX;
+            prevY = targetY;
         }
     });
-});
+
+    // Capturar el movimiento del mouse
+    window.addEventListener("mousemove", function (e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    // Regresar el cursor a su forma original cuando el mouse sale de la ventana
+    window.addEventListener("mouseout", function () {
+        gsap.to(cursor, {
+            scaleX: 1,
+            scaleY: 1,
+            rotation: 0,
+            duration: 0.3,
+            ease: "elastic.out(1, 0.5)"
+        });
+    });
+
+    // Efecto de escala y adhesión
+    cursorScale.forEach(link => {
+        link.addEventListener('mouseleave', () => {
+            cursor.classList.remove('grow', 'grow-small');
+        });
+
+        link.addEventListener('mousemove', (e) => {
+            // Determinar qué clase aplicar
+            if (link.classList.contains('small')) {
+                cursor.classList.remove('grow');
+                cursor.classList.add('grow-small');
+            } else {
+                cursor.classList.add('grow');
+            }
+
+            // Mover el cursor al centro del elemento interactivo
+            let rect = link.getBoundingClientRect();
+            let centerX = rect.left + rect.width / 2;
+            let centerY = rect.top + rect.height / 2;
+            mouseX = centerX;
+            mouseY = centerY;
+        });
+    });
+}
+
+
+
+
 
 
 
@@ -513,6 +566,10 @@ const openescena = gsap.timeline({
     paused: true,
     duration: 1,
     delay: -1,
+});
+
+openescena.to(cursors, {
+    marginTop: "-37px",
 });
 
 openescena.to(botoninicio, {
@@ -543,6 +600,8 @@ openescena.to(contenedor_loading, {
     height: "100%",
     borderRadius: "0vh",
 });
+
+
 
 
 // Escuchar el evento click en el botón
