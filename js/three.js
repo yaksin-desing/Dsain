@@ -159,7 +159,7 @@ function main() {
           id: "text1",
           text: "YAKSIN SAIN",
           font: "src/fonts/false_Semi-bold.json",
-          size: 700,
+          size: 900,
           y: 1.2
         },
       ];
@@ -552,9 +552,9 @@ function main() {
   const loaderbanderas = new THREE.TextureLoader();
   const textures = [
     loaderbanderas.load('./src/img/proyectounod.png'),
+    loaderbanderas.load('./src/img/proyectouno.jpg'),
     loaderbanderas.load('./src/img/proyectounod.png'),
-    loaderbanderas.load('./src/img/proyectounod.png'),
-    loaderbanderas.load('./src/img/proyectounod.png'),
+    loaderbanderas.load('./src/img/proyectouno.jpg'),
     loaderbanderas.load('./src/img/proyectounod.png'),
   ];
 

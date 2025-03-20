@@ -179,8 +179,9 @@ h5 {
 }
 #contenedor .loading #progress {
   position: absolute;
-  left: 46.4dvw;
   top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100px;
   height: 3px;
   background-color: #5686FF;
@@ -581,6 +582,7 @@ h5 {
   gap: 1px;
   z-index: 1;
   overflow: hidden;
+  opacity: 0;
 }
 #contenedor .cont-proyectos .subtitulo-proyecto {
   font-family: "light";

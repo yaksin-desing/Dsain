@@ -60,8 +60,9 @@
         /* Contenedor de la barra de carga */
         #progress {
             position: absolute;
-            left: 46.4dvw;
             top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 100px;
             height: 3px;
             background-color: #5686FF;
@@ -555,6 +556,7 @@
         gap: 1px;
         z-index: 1;
         overflow: hidden;
+        opacity: 0;
         .subtitulo-proyecto{
             font-family: "light";
             font-size: 1.5vw;
