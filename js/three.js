@@ -561,7 +561,7 @@ function main() {
   // Geometría del plano
   const geometrybanderas = new THREE.PlaneGeometry(2, 1, 50, 50);
 
-  // Función para crear materiales únicos con diferentes texturas
+  // Función para crear materiales únicos con diferentes texturas y opacidad
   function createMaterial(texture) {
     return new THREE.ShaderMaterial({
       uniforms: {
@@ -571,6 +571,9 @@ function main() {
         uTexture: {
           value: texture
         },
+        uOpacity: {
+          value: 0
+        } // Inicialmente invisible
       },
       vertexShader: `
       uniform float uTime;
@@ -589,12 +592,13 @@ function main() {
     `,
       fragmentShader: `
       uniform sampler2D uTexture;
+      uniform float uOpacity;
       varying vec2 vUv;
 
       void main() {
         vec4 color = texture2D(uTexture, vUv);
         if (color.a < 0.1) discard; // Manejo de transparencia
-        gl_FragColor = color;
+        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
       }
     `,
       transparent: true
@@ -603,25 +607,74 @@ function main() {
 
   // Crear planos con nombres específicos, posiciones y materiales distintos
   const plane = new THREE.Mesh(geometrybanderas, createMaterial(textures[0]));
-  plane.position.set(0, 1.5, 32);
   scene.add(plane);
 
   const planeuno = new THREE.Mesh(geometrybanderas, createMaterial(textures[1]));
-  planeuno.position.set(0, 1.6, 40);
   scene.add(planeuno);
 
   const planedos = new THREE.Mesh(geometrybanderas, createMaterial(textures[2]));
-  planedos.position.set(0, 1.75, 50);
   scene.add(planedos);
 
   const planetre = new THREE.Mesh(geometrybanderas, createMaterial(textures[3]));
-  planetre.position.set(0, 1.85, 60);
   scene.add(planetre);
 
   const planecuatro = new THREE.Mesh(geometrybanderas, createMaterial(textures[4]));
-  planecuatro.position.set(0, 3, 1090);
   sceneDos.add(planecuatro);
 
+  // Crear planos con materiales
+  const planes = textures.map(texture => new THREE.Mesh(geometrybanderas, createMaterial(texture)));
+  planes.forEach(plane => scene.add(plane));
+
+  function updatePlanes() {
+    const cameraZ = camera.position.z;
+    const cameraX = camera.position.x;
+    const cameraY = camera.position.y;
+
+    const visibilityRanges = [{
+        plane: planes[0],
+        minZ: 5,
+        maxZ: 10
+      },
+      {
+        plane: planes[1],
+        minZ: 15,
+        maxZ: 25
+      },
+      {
+        plane: planes[2],
+        minZ: 30,
+        maxZ: 35
+      },
+      {
+        plane: planes[3],
+        minZ: 40,
+        maxZ: 45
+      },
+      {
+        plane: planes[4],
+        minZ: 50,
+        maxZ: 55
+      }
+    ];
+
+    visibilityRanges.forEach(({
+      plane,
+      minZ,
+      maxZ
+    }) => {
+      // Suavizar posición
+      plane.position.z += (cameraZ - 1 - plane.position.z) * 0.1;
+      plane.position.x += (cameraX - plane.position.x) * 0.1;
+      plane.position.y += (cameraY - plane.position.y) * 0.1;
+
+      // Mantener los planos mirando a la cámara
+      plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
+
+      // Suavizar visibilidad usando el uniforme de opacidad
+      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
+      plane.material.uniforms.uOpacity.value += (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
+    });
+  }
 
 
 
@@ -926,12 +979,13 @@ function main() {
   container.appendChild(stats.dom);
 
   function animate() {
-    // Actualizar el tiempo en cada material de forma independiente
-    plane.material.uniforms.uTime.value += 0.02;
-    planeuno.material.uniforms.uTime.value += 0.02;
-    planedos.material.uniforms.uTime.value += 0.02;
-    planetre.material.uniforms.uTime.value += 0.02;
-    planecuatro.material.uniforms.uTime.value += 0.02;
+
+    // Actualizar el tiempo en cada material
+    planes.forEach(plane => {
+      if (plane.material.uniforms.uTime) {
+        plane.material.uniforms.uTime.value += 0.01;
+      }
+    });
 
     stats.begin();
 
@@ -1066,6 +1120,8 @@ function main() {
 
     }
     updateAnimations()
+    // Actualizar planos
+    updatePlanes();
   }
   animate();
   window.addEventListener('resize', () => {
