@@ -29,13 +29,15 @@ import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js'
 
 
 import {
-  sceneDos,
-  cameraDos,
   mixerpuerta,
   mixernubes,
+  sceneDos,
+  cameraDos,
   renderTarget,
   playToFrame125,
   resumeAnimationsFrom125,
+  updatePlanesDos,
+  planesD,
 } from './scenados.js';
 
 import {
@@ -86,6 +88,8 @@ function main() {
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Máximo x2 para evitar sobrecarga
   container.appendChild(renderer.domElement);
+
+
 
 
   // Carga la animación Lottie
@@ -549,33 +553,24 @@ function main() {
 
 
   // Cargar múltiples texturas
-  const loaderbanderas = new THREE.TextureLoader();
-  const textures = [
-    loaderbanderas.load('./src/img/proyectounod.png'),
-    loaderbanderas.load('./src/img/proyectouno.jpg'),
-    loaderbanderas.load('./src/img/proyectounod.png'),
-    loaderbanderas.load('./src/img/proyectouno.jpg'),
-    loaderbanderas.load('./src/img/proyectounod.png'),
-  ];
+const loaderbanderas = new THREE.TextureLoader();
+const textures = [
+  loaderbanderas.load('./src/img/proyectounod.png'),
+  loaderbanderas.load('./src/img/proyectouno.jpg'),
+];
 
-  // Geometría del plano
-  const geometrybanderas = new THREE.PlaneGeometry(2, 1, 50, 50);
+// Geometría del plano
+let geometrybanderas = new THREE.PlaneGeometry(2, 1, 50, 50);
 
-  // Función para crear materiales únicos con diferentes texturas y opacidad
-  function createMaterial(texture) {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: {
-          value: 0
-        },
-        uTexture: {
-          value: texture
-        },
-        uOpacity: {
-          value: 0
-        } // Inicialmente invisible
-      },
-      vertexShader: `
+// Función para crear materiales únicos con diferentes texturas y opacidad
+function createMaterial(texture) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uTime: { value: 0 },
+      uTexture: { value: texture },
+      uOpacity: { value: 0 } // Inicialmente invisible
+    },
+    vertexShader: `
       uniform float uTime;
       varying vec2 vUv;
 
@@ -590,7 +585,7 @@ function main() {
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
     `,
-      fragmentShader: `
+    fragmentShader: `
       uniform sampler2D uTexture;
       uniform float uOpacity;
       varying vec2 vUv;
@@ -601,80 +596,63 @@ function main() {
         gl_FragColor = vec4(color.rgb, color.a * uOpacity);
       }
     `,
-      transparent: true
-    });
-  }
+    transparent: true
+  });
+}
 
-  // Crear planos con nombres específicos, posiciones y materiales distintos
-  const plane = new THREE.Mesh(geometrybanderas, createMaterial(textures[0]));
-  scene.add(plane);
+// Crear planos con materiales
+const planes = textures.map(texture => new THREE.Mesh(geometrybanderas, createMaterial(texture)));
+planes.forEach(plane => scene.add(plane));
 
-  const planeuno = new THREE.Mesh(geometrybanderas, createMaterial(textures[1]));
-  scene.add(planeuno);
+// Función para actualizar el tamaño de los planos dinámicamente
+function updatePlanesSize() {
+  const aspectRatio = window.innerWidth / window.innerHeight;
+  const width = 1; // Ancho base
+  const height = 1; // Alto base
 
-  const planedos = new THREE.Mesh(geometrybanderas, createMaterial(textures[2]));
-  scene.add(planedos);
+  planes.forEach(plane => {
+    plane.scale.set(width, height, 1);
+  });
 
-  const planetre = new THREE.Mesh(geometrybanderas, createMaterial(textures[3]));
-  scene.add(planetre);
+  camera.aspect = aspectRatio;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
-  const planecuatro = new THREE.Mesh(geometrybanderas, createMaterial(textures[4]));
-  sceneDos.add(planecuatro);
+// Ejecutar en el inicio y en el evento de redimensionamiento
+window.addEventListener('resize', updatePlanesSize);
+updatePlanesSize();
 
-  // Crear planos con materiales
-  const planes = textures.map(texture => new THREE.Mesh(geometrybanderas, createMaterial(texture)));
-  planes.forEach(plane => scene.add(plane));
+// Función para actualizar la visibilidad y posición de los planos
+function updatePlanes() {
+  const cameraZ = camera.position.z;
+  const cameraX = camera.position.x;
+  const cameraY = camera.position.y;
 
-  function updatePlanes() {
-    const cameraZ = camera.position.z;
-    const cameraX = camera.position.x;
-    const cameraY = camera.position.y;
+  const visibilityRanges = [
+    { plane: planes[0], minZ: 35, maxZ: 50 },
+    { plane: planes[1], minZ: 50, maxZ: 68 },
+  ];
 
-    const visibilityRanges = [{
-        plane: planes[0],
-        minZ: 5,
-        maxZ: 10
-      },
-      {
-        plane: planes[1],
-        minZ: 15,
-        maxZ: 25
-      },
-      {
-        plane: planes[2],
-        minZ: 30,
-        maxZ: 35
-      },
-      {
-        plane: planes[3],
-        minZ: 40,
-        maxZ: 45
-      },
-      {
-        plane: planes[4],
-        minZ: 50,
-        maxZ: 55
-      }
-    ];
+  visibilityRanges.forEach(({ plane, minZ, maxZ }) => {
+    // Suavizar posición
+    plane.position.z += (cameraZ - 2 - plane.position.z) * 0.1;
+    plane.position.x += (cameraX - plane.position.x) * 0.1;
+    plane.position.y += (cameraY - plane.position.y) * 0.1;
 
-    visibilityRanges.forEach(({
-      plane,
-      minZ,
-      maxZ
-    }) => {
-      // Suavizar posición
-      plane.position.z += (cameraZ - 1 - plane.position.z) * 0.1;
-      plane.position.x += (cameraX - plane.position.x) * 0.1;
-      plane.position.y += (cameraY - plane.position.y) * 0.1;
+    // Mantener los planos mirando a la cámara
+    plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
 
-      // Mantener los planos mirando a la cámara
-      plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
+    // Suavizar visibilidad usando el uniforme de opacidad
+    const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
+    plane.material.uniforms.uOpacity.value += (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
+  });
+}
 
-      // Suavizar visibilidad usando el uniforme de opacidad
-      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
-      plane.material.uniforms.uOpacity.value += (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
-    });
-  }
+
+
+
+
 
 
 
@@ -980,12 +958,7 @@ function main() {
 
   function animate() {
 
-    // Actualizar el tiempo en cada material
-    planes.forEach(plane => {
-      if (plane.material.uniforms.uTime) {
-        plane.material.uniforms.uTime.value += 0.01;
-      }
-    });
+
 
     stats.begin();
 
@@ -1030,6 +1003,16 @@ function main() {
       // Actualizar la relación de aspecto de la cámara
       // Renderiza la escena secundaria en pantalla
       renderer.render(sceneDos, cameraDos);
+
+      // Actualizar el tiempo en cada material
+      planesD.forEach(planeD => {
+        if (planeD.material.uniforms.uTime) {
+          planeD.material.uniforms.uTime.value += 0.02;
+        }
+      });
+
+      updatePlanesDos();
+
 
       // Ocultar objetos de la escena principal para liberar GPU
       scene.traverse((child) => {
@@ -1118,10 +1101,23 @@ function main() {
 
       }
 
+      if (camera.position.z >= 35) { // Actualizar el tiempo en cada material
+        planes.forEach(plane => {
+          if (plane.material.uniforms.uTime) {
+            plane.material.uniforms.uTime.value += 0.02;
+          }
+        });
+
+        // Actualizar planos
+        updatePlanes();
+      }
+
+
+
+
     }
     updateAnimations()
-    // Actualizar planos
-    updatePlanes();
+
   }
   animate();
   window.addEventListener('resize', () => {
@@ -1151,6 +1147,10 @@ function main() {
     // Ajustar el tamaño del renderizador
     renderer.setSize(width, height);
   });
+  
+  
+
+
 
 }
 main();

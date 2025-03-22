@@ -25,6 +25,9 @@ sceneDos.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
 //////// <<<<< base dos >>>>>> /////////////
 
+const rendererDos = new THREE.WebGLRenderer();
+rendererDos.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(rendererDos.domElement);
 
 // Crear cielo
 const sky = new Sky();
@@ -417,6 +420,104 @@ function resumeAnimationsFrom125() {
   }
 }
 
+// Cargar múltiples texturas
+const loaderbanderasD = new THREE.TextureLoader();
+const texturesD = [
+  loaderbanderasD.load('./src/img/proyectounod.png'),
+  loaderbanderasD.load('./src/img/proyectouno.jpg'), 
+];
+
+// Geometría del plano
+let geometrybanderasD = new THREE.PlaneGeometry(2, 1, 50, 50);
+
+// Función para crear materiales únicos con diferentes texturas y opacidad
+function createMaterial(texture) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uTime: { value: 0 },
+      uTexture: { value: texture },
+      uOpacity: { value: 0 } // Inicialmente invisible
+    },
+    vertexShader: `
+      uniform float uTime;
+      varying vec2 vUv;
+
+      void main() {
+        vUv = uv;
+        vec3 pos = position;
+
+        // Ondulación tipo bandera
+        float wave = sin(pos.y * 3.0 + uTime * 1.0) * 0.1;
+        pos.x += wave;
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D uTexture;
+      uniform float uOpacity;
+      varying vec2 vUv;
+
+      void main() {
+        vec4 color = texture2D(uTexture, vUv);
+        if (color.a < 0.1) discard; // Manejo de transparencia
+        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
+      }
+    `,
+    transparent: true
+  });
+}
+
+// Crear planos con materiales
+const planesD = texturesD.map(texture => new THREE.Mesh(geometrybanderasD, createMaterial(texture)));
+planesD.forEach(planeD => sceneDos.add(planeD));
+
+// Función para actualizar el tamaño de los planos dinámicamente
+function updatePlanesSizeDos() {
+  const aspectRatio = window.innerWidth / window.innerHeight;
+  const width = 1; // Ancho base
+  const height = 1; // Alto base
+
+  planesD.forEach(planeD => {
+    planeD.scale.set(width, height, 1);
+  });
+
+  cameraDos.aspect = aspectRatio;
+  cameraDos.updateProjectionMatrix();
+  rendererDos.setSize(window.innerWidth, window.innerHeight);
+}
+
+// Ejecutar en el inicio y en el evento de redimensionamiento
+window.addEventListener('resize', updatePlanesSizeDos);
+updatePlanesSizeDos();
+
+function updatePlanesDos() {
+  const cameraZ = cameraDos.position.z;
+  const cameraX = cameraDos.position.x;
+  const cameraY = cameraDos.position.y;
+
+  const visibilityRanges = [
+    { planeD: planesD[0], minZ: 1040, maxZ: 1070 },
+    { planeD: planesD[1], minZ: 1070, maxZ: 1098 },
+  ];
+
+  visibilityRanges.forEach(({ planeD, minZ, maxZ }) => {
+    // Suavizar posición
+    planeD.position.z += (cameraZ - 2 - planeD.position.z) * 0.1;
+    planeD.position.x += (cameraX - planeD.position.x) * 0.1;
+    planeD.position.y += (cameraY - planeD.position.y) * 0.1;
+
+    // Mantener los planos mirando a la cámara
+    planeD.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
+
+    // Suavizar visibilidad usando el uniforme de opacidad
+    const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
+    planeD.material.uniforms.uOpacity.value += (targetOpacity - planeD.material.uniforms.uOpacity.value) * 0.1;
+  });
+}
+
+
+
 export {
   mixerpuerta,
   mixernubes,
@@ -425,4 +526,6 @@ export {
   renderTarget,
   playToFrame125,
   resumeAnimationsFrom125,
+  updatePlanesDos,
+  planesD,
 };
