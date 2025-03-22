@@ -13,15 +13,35 @@ const container = document.getElementById("scene-container");
 
 const sceneDos = new THREE.Scene();
 const cameraDos = new THREE.PerspectiveCamera(
-  75,
+  80,
   container.clientWidth / container.clientHeight,
   0.1,
   1000
 );
 cameraDos.rotation.set(0, 0, 0);
-cameraDos.position.set(0, 2, 995); // Ajusta los valores según tu escena
+cameraDos.position.set(0, 2, 995.5); // Ajusta los valores según tu escena
 
 sceneDos.background = new THREE.Color(0x0000ff); // Fondo azul cielo
+
+
+const mouse = new THREE.Vector2();
+const minCameraX = -5;
+const maxCameraX = 5;
+
+function onMouseMove(event) {
+  mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25; // Normaliza entre -1 y 1
+}
+
+window.addEventListener("mousemove", onMouseMove);
+
+function updateCamera() {
+  cameraDos.position.x += (mouse.x * maxCameraX - cameraDos.position.x) * 0.09;
+  cameraDos.position.x = Math.max(minCameraX, Math.min(cameraDos.position.x, maxCameraX));
+
+  requestAnimationFrame(updateCamera);
+}
+
+updateCamera();
 
 //////// <<<<< base dos >>>>>> /////////////
 
@@ -503,7 +523,7 @@ function updatePlanesDos() {
 
   visibilityRanges.forEach(({ planeD, minZ, maxZ }) => {
     // Suavizar posición
-    planeD.position.z += (cameraZ - 2 - planeD.position.z) * 0.1;
+    planeD.position.z += (cameraZ - 1 - planeD.position.z) * 0.1;
     planeD.position.x += (cameraX - planeD.position.x) * 0.1;
     planeD.position.y += (cameraY - planeD.position.y) * 0.1;
 

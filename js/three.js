@@ -108,6 +108,13 @@ function main() {
   const maxCameraX = 500;
 
 
+  function onMouseMove(event) {
+    mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25;
+  }
+
+  window.addEventListener("mousemove", onMouseMove);
+
+
 
   let textMeshes = {}; // Objeto para almacenar los textos
   const loadertx = new FontLoader();
@@ -748,11 +755,6 @@ function updatePlanes() {
 
   let animationStarted = false; // Definir la variable
 
-  function onMouseMove(event) {
-    mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25;
-  }
-
-
   let isPaused = false; // Controla si la animación está pausada
 
   // Controlar las animaciones según la posición de la cámara
@@ -766,7 +768,7 @@ function updatePlanes() {
     }
   }
 
-  window.addEventListener("mousemove", onMouseMove);
+
 
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   texture.encoding = THREE.sRGBEncoding; // Para texturas
@@ -904,11 +906,6 @@ function updatePlanes() {
           opacity: 0,
         })
 
-        .to(cameraDos.position, {
-          duration: 0,
-          y: 2,
-          z: 995.5,
-        })
 
         .to(cameraDos.position, {
           duration: 10,
@@ -985,6 +982,8 @@ function updatePlanes() {
       minCameraX,
       Math.min(camera.position.x, maxCameraX)
     );
+
+
 
     animateFunctions.forEach((fn) => fn());
 
