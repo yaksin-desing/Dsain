@@ -581,15 +581,13 @@ h5 {
   align-items: center;
   gap: 1px;
   z-index: 1;
-  overflow: hidden;
-  opacity: 0;
 }
 #contenedor .cont-proyectos .subtitulo-proyecto {
-  font-family: "light";
-  font-size: 1.5vw;
+  font-family: "regular";
+  font-size: 1.7vw;
   color: #ffffff;
   text-align: center;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.349), -2px -2px 10px rgba(0, 0, 0, 0.281);
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5), -2px -2px 10px rgba(0, 0, 0, 0.5);
 }
 #contenedor .cont-proyectos .tituloproyecto {
   font-family: "bold";
@@ -597,4 +595,12 @@ h5 {
   color: #ffffff;
   text-align: center;
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.26), -2px -2px 10px rgba(0, 0, 0, 0.26);
+}
+#contenedor .cont-proyectos .letter-wrapperp {
+  display: inline-block;
+  overflow-y: hidden;
+}
+#contenedor .cont-proyectos .letterp {
+  display: inline-block;
+  transform: translateY(100px);
 }

@@ -559,28 +559,18 @@ if (screenWidth > 1020) {
 
 //Animacion de inicio de escena
 const contenedor = document.querySelector('.contenedor');
-
-
 //timeline loading
 const openescena = gsap.timeline({
     paused: true,
     duration: 1,
     delay: -1,
 });
-
 openescena.to(cursors, {
     marginTop: "-37px",
 });
-
 openescena.to(botoninicio, {
     bottom: "-35vh",
 
-});
-
-openescena.to(imgparrafoinicio, {
-
-    opacity: "0",
-    display: "none"
 });
 openescena.to(parrafodeinicio, {
 
@@ -588,11 +578,14 @@ openescena.to(parrafodeinicio, {
     display: "none"
 });
 openescena.to(tituloh1, {
+    opacity: "0",
+    display: "none"
+});
+openescena.to(imgparrafoinicio, {
 
     opacity: "0",
     display: "none"
 });
-
 openescena.to(contenedor_loading, {
     duration: 1,
     ease: 'power2.out',

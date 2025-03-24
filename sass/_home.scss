@@ -555,16 +555,14 @@
         align-items: center;
         gap: 1px;
         z-index: 1;
-        overflow: hidden;
-        opacity: 0;
         .subtitulo-proyecto{
-            font-family: "light";
-            font-size: 1.5vw;
+            font-family: "regular";
+            font-size: 1.7vw;
             color: #ffffff;
             text-align: center;
             text-shadow: 
-            2px 2px 10px rgba(0, 0, 0, 0.349), 
-            -2px -2px 10px rgba(0, 0, 0, 0.281);
+            2px 2px 10px rgba(0, 0, 0, 0.5), 
+            -2px -2px 10px rgba(0, 0, 0, 0.5);
         }
         .tituloproyecto{
             font-family: "bold";
@@ -574,6 +572,15 @@
             text-shadow: 
             2px 2px 10px rgba(0, 0, 0, 0.26), 
             -2px -2px 10px rgba(0, 0, 0, 0.26);
+        }
+
+        .letter-wrapperp {
+            display: inline-block;
+            overflow-y: hidden;
+        }
+        .letterp {
+            display: inline-block;
+            transform: translateY(100px);
         }
     }
 
