@@ -22,6 +22,7 @@ const cameraTres = new THREE.PerspectiveCamera(
 cameraTres.position.set(26, 13, -21);
 cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05,-1.58, 0, "YXZ"));
 
+
 // Configuración de la luz direccional
 const luzdospasillo = new THREE.DirectionalLight(0xffffff, 3);
 luzdospasillo.position.set(0, 80, 0);

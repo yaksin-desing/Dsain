@@ -34,14 +34,14 @@ function onMouseMove(event) {
 
 window.addEventListener("mousemove", onMouseMove);
 
-function updateCamera() {
+function updateCameraDos() {
   cameraDos.position.x += (mouse.x * maxCameraX - cameraDos.position.x) * 0.09;
   cameraDos.position.x = Math.max(minCameraX, Math.min(cameraDos.position.x, maxCameraX));
 
-  requestAnimationFrame(updateCamera);
+  requestAnimationFrame(updateCameraDos);
 }
 
-updateCamera();
+updateCameraDos();
 
 //////// <<<<< base dos >>>>>> /////////////
 

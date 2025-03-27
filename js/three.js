@@ -948,12 +948,14 @@ function updatePlanesDos() {
           animationprogres.goToAndStop(frame, true);
         },
       });
+
+
       // Configurar ScrollTrigger después de la animación inicial
       gsap.timeline({
           scrollTrigger: {
             trigger: contenedor, // Elemento que activa la animación
             start: "top top", // Punto inicial del scroll
-            end: "+=30000", // Punto final (3000px adicionales para el scroll)
+            end: () => window.innerWidth > 768 ? "40000vh" : "50000vh", // 200vh para desktop, 500vh para móvil
             scrub: 2,
             ease: "none", // Elimina easing implícito para evitar desaceleración al inicio y final
             pin: true, // Fija el contenedor durante la animación

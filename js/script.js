@@ -25,8 +25,8 @@ function createAnimation() {
         paused: true
     });
 
+    // Animaciones para móviles
     if (screenWidth <= 550) {
-        // Animaciones para móviles
         //timeline loading
         animaloading.to(parrafodeinicio, {
             duration: 1,
@@ -424,6 +424,7 @@ menuButton.addEventListener("click", (event) => {
 
         // Animar del frame 0 al 30
         lottiePlayer.playSegments([0, 30], true);
+        playAnimation()
     } else {
         // Ocultar el menú
         navMenu.classList.remove("show");
@@ -433,6 +434,7 @@ menuButton.addEventListener("click", (event) => {
 
         // Animar del frame 30 al 0
         lottiePlayer.playSegments([30, 0], true);
+        reverseAnimation()
     }
 
     // Evitar que el clic en el botón del menú cierre el menú (propagación)
@@ -550,13 +552,6 @@ if (screenWidth > 1020) {
 
 
 
-
-
-
-
-
-
-
 //Animacion de inicio de escena
 const contenedor = document.querySelector('.contenedor');
 //timeline loading
@@ -602,3 +597,46 @@ document.getElementById("botoninicio").addEventListener("click", () => {
     openescena.play(); // Iniciar el timeline
     audioPlayer.play();
 });
+
+
+let timelinemenu = gsap.timeline({
+    paused: true
+}); // Timeline pausado al inicio
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Función para dividir el texto en caracteres
+    function splitText(element) {
+        let text = element.textContent;
+        let newHTML = "";
+        for (let char of text) {
+            newHTML += `<span class="char">${char}</span>`;
+        }
+        element.innerHTML = newHTML;
+    }
+
+    // Selecciona todos los textos animados
+    document.querySelectorAll(".animated-text").forEach(el => {
+        splitText(el);
+        let delay = parseFloat(el.getAttribute("data-delay")) || 0; // Obtiene el delay personalizado
+
+        // Agrega animaciones al timeline
+        timelinemenu.to(el.querySelectorAll(".char"), {
+            y: 0,
+            opacity: 1,
+            stagger: 0.05,
+            duration: 0.5,
+            ease: "power2.out",
+            delay: delay
+        }, "<"); // "<" hace que las animaciones empiecen en paralelo respetando sus delays
+    });
+});
+
+// Función para iniciar la animación
+function playAnimation() {
+    timelinemenu.timeScale(1).play(); // Asegura que la velocidad sea normal al reproducir
+}
+
+// Función para reiniciar la animación rápidamente y dejarla en su estado inicial
+function reverseAnimation() {
+    timelinemenu.timeScale(10).reverse(); // Hace que la reversa sea más rápida
+}
