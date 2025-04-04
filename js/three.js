@@ -23,6 +23,8 @@ import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
 
 
+
+
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js'
 
 
@@ -49,6 +51,9 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 function main() {
+
+
+
 
 
   const container = document.getElementById("scene-container");
@@ -556,22 +561,28 @@ function main() {
   // );
 
 
-// Cargar múltiples texturas
-const loaderbanderas = new THREE.TextureLoader();
-const textures = [
-  loaderbanderas.load('./src/img/proyectounod.png'),
-  loaderbanderas.load('./src/img/proyectouno.jpg'),
-];
+  // Cargar múltiples texturas
+  const loaderbanderas = new THREE.TextureLoader();
+  const textures = [
+    loaderbanderas.load('./src/img/proyectounod.png'),
+    loaderbanderas.load('./src/img/proyectouno.jpg'),
+  ];
 
-// Función para crear materiales únicos con diferentes texturas y opacidad
-function createMaterial(texture) {
-  return new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-      uTexture: { value: texture },
-      uOpacity: { value: 0 }, // Inicialmente invisible
-    },
-    vertexShader: `
+  // Función para crear materiales únicos con diferentes texturas y opacidad
+  function createMaterial(texture) {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: {
+          value: 0
+        },
+        uTexture: {
+          value: texture
+        },
+        uOpacity: {
+          value: 0
+        }, // Inicialmente invisible
+      },
+      vertexShader: `
       uniform float uTime;
       varying vec2 vUv;
 
@@ -583,7 +594,7 @@ function createMaterial(texture) {
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
     `,
-    fragmentShader: `
+      fragmentShader: `
       uniform sampler2D uTexture;
       uniform float uOpacity;
       varying vec2 vUv;
@@ -594,79 +605,96 @@ function createMaterial(texture) {
         gl_FragColor = vec4(color.rgb, color.a * uOpacity);
       }
     `,
-    transparent: true
-  });
-}
+      transparent: true
+    });
+  }
 
-// Crear planos con materiales
-const planes = textures.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
-planes.forEach(plane => scene.add(plane));
+  // Crear planos con materiales
+  const planes = textures.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
+  planes.forEach(plane => scene.add(plane));
 
-// Función para actualizar el tamaño de los planos dinámicamente
-function updatePlanesSize() {
-  const screenWidth = window.innerWidth;
-  const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
-  const newHeight = newWidth / 2; // Mantener proporción 2:1
+  // Función para actualizar el tamaño de los planos dinámicamente
+  function updatePlanesSize() {
+    const screenWidth = window.innerWidth;
+    const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
+    const newHeight = newWidth / 2; // Mantener proporción 2:1
 
-  planes.forEach(plane => {
-    plane.geometry.dispose();
-    plane.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
-  });
+    planes.forEach(plane => {
+      plane.geometry.dispose();
+      plane.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
+    });
 
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
 
-window.addEventListener('resize', updatePlanesSize);
-updatePlanesSize();
+  window.addEventListener('resize', updatePlanesSize);
+  updatePlanesSize();
 
-// Función para actualizar la visibilidad y posición de los planos
-function updatePlanes() {
-  const cameraZ = camera.position.z;
-  const cameraX = camera.position.x;
-  const cameraY = camera.position.y;
+  // Función para actualizar la visibilidad y posición de los planos
+  function updatePlanes() {
+    const cameraZ = camera.position.z;
+    const cameraX = camera.position.x;
+    const cameraY = camera.position.y;
 
-  const visibilityRanges = [
-    { plane: planes[0], minZ: 35, maxZ: 60 },
-    { plane: planes[1], minZ: 60, maxZ: 80 },
+    const visibilityRanges = [{
+        plane: planes[0],
+        minZ: 35,
+        maxZ: 60
+      },
+      {
+        plane: planes[1],
+        minZ: 60,
+        maxZ: 80
+      },
+    ];
+
+    visibilityRanges.forEach(({
+      plane,
+      minZ,
+      maxZ
+    }) => {
+      plane.position.z += (cameraZ - 2 - plane.position.z) * 0.1;
+      plane.position.x += (cameraX - plane.position.x) * 0.1;
+      plane.position.y += (cameraY - plane.position.y) * 0.1;
+
+      plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
+
+      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
+      plane.material.uniforms.uOpacity.value += (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
+    });
+  }
+
+
+
+
+
+
+
+
+  // Cargar múltiples texturas
+  const loaderbanderasD = new THREE.TextureLoader();
+  const texturesD = [
+    loaderbanderasD.load('./src/img/proyectounod.png'),
+    loaderbanderasD.load('./src/img/proyectouno.jpg'),
   ];
 
-  visibilityRanges.forEach(({ plane, minZ, maxZ }) => {
-    plane.position.z += (cameraZ - 2 - plane.position.z) * 0.1;
-    plane.position.x += (cameraX - plane.position.x) * 0.1;
-    plane.position.y += (cameraY - plane.position.y) * 0.1;
-
-    plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
-
-    const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
-    plane.material.uniforms.uOpacity.value += (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
-  });
-}
-
-
-
-
-
-
-
-
-// Cargar múltiples texturas
-const loaderbanderasD = new THREE.TextureLoader();
-const texturesD = [
-  loaderbanderasD.load('./src/img/proyectounod.png'),
-  loaderbanderasD.load('./src/img/proyectouno.jpg'),
-];
-
-// Función para crear materiales únicos con diferentes texturas y opacidad
-function createMaterial(texture) {
-  return new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-      uTexture: { value: texture },
-      uOpacity: { value: 0 }, // Inicialmente invisible
-    },
-    vertexShader: `
+  // Función para crear materiales únicos con diferentes texturas y opacidad
+  function createMaterial(texture) {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: {
+          value: 0
+        },
+        uTexture: {
+          value: texture
+        },
+        uOpacity: {
+          value: 0
+        }, // Inicialmente invisible
+      },
+      vertexShader: `
       uniform float uTime;
       varying vec2 vUv;
 
@@ -678,7 +706,7 @@ function createMaterial(texture) {
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
     `,
-    fragmentShader: `
+      fragmentShader: `
       uniform sampler2D uTexture;
       uniform float uOpacity;
       varying vec2 vUv;
@@ -689,54 +717,65 @@ function createMaterial(texture) {
         gl_FragColor = vec4(color.rgb, color.a * uOpacity);
       }
     `,
-    transparent: true
-  });
-}
+      transparent: true
+    });
+  }
 
-// Crear planos con materiales
-const planesD = texturesD.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
-planesD.forEach(planeD => sceneDos.add(planeD));
+  // Crear planos con materiales
+  const planesD = texturesD.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
+  planesD.forEach(planeD => sceneDos.add(planeD));
 
-// Función para actualizar el tamaño de los planos dinámicamente
-function updatePlanesSizeDos() {
-  const screenWidth = window.innerWidth;
-  const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
-  const newHeight = newWidth * (1 / 2); // Mantener la proporción 2:1
+  // Función para actualizar el tamaño de los planos dinámicamente
+  function updatePlanesSizeDos() {
+    const screenWidth = window.innerWidth;
+    const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
+    const newHeight = newWidth * (1 / 2); // Mantener la proporción 2:1
 
-  planesD.forEach(planeD => {
-    planeD.geometry.dispose();
-    planeD.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
-    planeD.scale.set(1, 1, 1);
-  });
+    planesD.forEach(planeD => {
+      planeD.geometry.dispose();
+      planeD.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
+      planeD.scale.set(1, 1, 1);
+    });
 
-  cameraDos.aspect = window.innerWidth / window.innerHeight;
-  cameraDos.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth, container.clientHeight);
-}
+    cameraDos.aspect = window.innerWidth / window.innerHeight;
+    cameraDos.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  }
 
-window.addEventListener('resize', updatePlanesSizeDos);
-updatePlanesSizeDos();
+  window.addEventListener('resize', updatePlanesSizeDos);
+  updatePlanesSizeDos();
 
-function updatePlanesDos() {
-  const cameraZ = cameraDos.position.z;
-  const cameraX = cameraDos.position.x;
-  const cameraY = cameraDos.position.y;
+  function updatePlanesDos() {
+    const cameraZ = cameraDos.position.z;
+    const cameraX = cameraDos.position.x;
+    const cameraY = cameraDos.position.y;
 
-  const visibilityRanges = [
-    { planeD: planesD[0], minZ: 1040, maxZ: 1070 },
-    { planeD: planesD[1], minZ: 1070, maxZ: 1098 },
-  ];
+    const visibilityRanges = [{
+        planeD: planesD[0],
+        minZ: 1040,
+        maxZ: 1070
+      },
+      {
+        planeD: planesD[1],
+        minZ: 1070,
+        maxZ: 1098
+      },
+    ];
 
-  visibilityRanges.forEach(({ planeD, minZ, maxZ }) => {
-    planeD.position.z += (cameraZ - 2 - planeD.position.z) * 0.12;
-    planeD.position.x += (cameraX - planeD.position.x) * 0.1;
-    planeD.position.y += (cameraY - planeD.position.y) * 0.1;
-    planeD.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
+    visibilityRanges.forEach(({
+      planeD,
+      minZ,
+      maxZ
+    }) => {
+      planeD.position.z += (cameraZ - 2 - planeD.position.z) * 0.12;
+      planeD.position.x += (cameraX - planeD.position.x) * 0.1;
+      planeD.position.y += (cameraY - planeD.position.y) * 0.1;
+      planeD.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
 
-    const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
-    planeD.material.uniforms.uOpacity.value += (targetOpacity - planeD.material.uniforms.uOpacity.value) * 0.1;
-  });
-}
+      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
+      planeD.material.uniforms.uOpacity.value += (targetOpacity - planeD.material.uniforms.uOpacity.value) * 0.1;
+    });
+  }
 
 
 
@@ -855,6 +894,8 @@ function updatePlanesDos() {
 
   botonInicio.addEventListener("click", () => {
     updateAnimations()
+    document.getElementById("contenedor").classList.add("fijo");
+    ScrollTrigger.refresh(); // Actualiza el cálculo de ScrollTrigger
 
     setTimeout(() => { // Agregar el delay de 1 segundo
       const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
@@ -869,10 +910,14 @@ function updatePlanesDos() {
       }
     }, 1000);
 
+
+
     animateWaves = true;
 
     // Animación inicial
-    const inicioescena = gsap.timeline({ delay: 1 });
+    const inicioescena = gsap.timeline({
+      delay: 1
+    });
 
     inicioescena.to(camera.rotation, {
       duration: 2,
@@ -931,64 +976,41 @@ function updatePlanesDos() {
 
       animationStarted = true; // Permitir que ScrollTrigger controle Lottie
 
-      const contenedor = document.getElementById("contenedor");
-
 
       const endFrame = 300; // Suponiendo que la animación tiene 500 frames totales
-      // Configurar ScrollTrigger para la animación de Lottie
-      ScrollTrigger.create({
-        trigger: contenedor,
-        start: "top top",
-        end: "+=30000",
-        scrub: 2, // Elimina easing implícito para evitar desaceleración al inicio y final
-        ease: "none", // Elimina easing implícito para evitar desaceleración al inicio y final
-        onUpdate: function (self) {
-          const progress = self.progress; // Progreso del scroll (0 a 1)
-          const frame = Math.round(61 + progress * (endFrame - 61));
-          animationprogres.goToAndStop(frame, true);
-        },
-      });
 
 
-      // Configurar ScrollTrigger después de la animación inicial
+
+      // Animación con GSAP y ScrollTrigger
       gsap.timeline({
           scrollTrigger: {
-            trigger: contenedor, // Elemento que activa la animación
-            start: "top top", // Punto inicial del scroll
-            end: () => window.innerWidth > 768 ? "40000vh" : "50000vh", // 200vh para desktop, 500vh para móvil
+            scroller: "#scroll-content", // Usar el contenedor virtual
+            trigger: "#contenedor",
+            start: "top top",
+            end: () => window.innerWidth > 768 ? "25000vh" : "20000vh", // 200vh para desktop, 500vh para móvil
             scrub: 2,
-            ease: "none", // Elimina easing implícito para evitar desaceleración al inicio y final
-            pin: true, // Fija el contenedor durante la animación
-            // Opcional: agrega marcadores si estás depurando
-            // markers: { startColor: "red", endColor: "green", fontSize: "10px", fontWeight: "bold" }
-            onUpdate: function () {
-              // Cada vez que el scroll se actualiza, revisamos la posición de la cámara
-
+            pin: true,
+            markers: false,
+            onUpdate: function (self) {
+              const progress = self.progress; // Progreso del scroll (0 a 1)
+              const frame = Math.round(61 + progress * (endFrame - 61));
+              animationprogres.goToAndStop(frame, true);
             },
+            
           },
         })
-
-
         .to(camera.position, {
           duration: 10,
           y: 2,
           z: 90,
         })
-
-
-        .to([
-          textMeshes["text1"].material,
-          textMeshes["text2"].material,
-        ], {
+        .to([textMeshes["text1"].material, textMeshes["text2"].material], {
           delay: -10,
           duration: 3,
           opacity: 0,
         })
-
-
         .to(cameraDos.position, {
           duration: 10,
-
           y: 3,
           z: 1100,
         })
@@ -997,7 +1019,6 @@ function updatePlanesDos() {
           x: -5,
           y: 5,
           z: 0,
-
         })
         .to(cameraTres.rotation, {
           delay: -5,
@@ -1005,14 +1026,12 @@ function updatePlanesDos() {
           x: 0,
           y: -1,
           z: 0,
-
         })
         .to(cameraTres.position, {
           duration: 5,
           x: 0,
           y: 3,
           z: 30,
-
         })
         .to(cameraTres.rotation, {
           delay: -5,
@@ -1021,90 +1040,120 @@ function updatePlanesDos() {
           y: 0,
           z: 0,
         });
+        
     });
   });
+
   let animateWaves = false;
 
 
-// Definir rangos personalizados para cada par de textos
-const ranges = [
-  { id: "proyecto-1", min: 35, max: 60 },
-  { id: "proyecto-2", min: 60, max: 80 },
-  { id: "proyecto-3", min: 1040, max: 1070 },
-  { id: "proyecto-4", min: 1070, max: 1098 },
-  { id: "proyecto-5", min: 0, max: 30 }
-];
 
-// Función para animar texto letra por letra
-function animateText(element) {
-  const text = element.innerText;
-  element.innerHTML = "";
+  // Definir rangos personalizados para cada par de textos
+  const ranges = [{
+      id: "proyecto-1",
+      min: 35,
+      max: 60
+    },
+    {
+      id: "proyecto-2",
+      min: 60,
+      max: 80
+    },
+    {
+      id: "proyecto-3",
+      min: 1040,
+      max: 1070
+    },
+    {
+      id: "proyecto-4",
+      min: 1070,
+      max: 1098
+    },
+    {
+      id: "proyecto-5",
+      min: 0,
+      max: 30
+    }
+  ];
 
-  let timeline = gsap.timeline({ paused: true });
+  // Función para animar texto letra por letra
+  function animateText(element) {
+    const text = element.innerText;
+    element.innerHTML = "";
 
-  text.split("").forEach((char, index) => {
-    let letterWrapper = document.createElement("span");
-    letterWrapper.classList.add("letter-wrapperp");
+    let timeline = gsap.timeline({
+      paused: true
+    });
 
-    let letter = document.createElement("span");
-    letter.classList.add("letterp");
-    letter.textContent = char === " " ? "\u00A0" : char;
+    text.split("").forEach((char, index) => {
+      let letterWrapper = document.createElement("span");
+      letterWrapper.classList.add("letter-wrapperp");
 
-    letterWrapper.appendChild(letter);
-    element.appendChild(letterWrapper);
+      let letter = document.createElement("span");
+      letter.classList.add("letterp");
+      letter.textContent = char === " " ? "\u00A0" : char;
 
-    // Animación de cada letra
-    timeline.to(letter, {
-      y: 0,
-      duration: 0.6,
-      delay: index * 0.05,
-      ease: "power2.out"
-    }, 0);
+      letterWrapper.appendChild(letter);
+      element.appendChild(letterWrapper);
+
+      // Animación de cada letra
+      timeline.to(letter, {
+        y: 0,
+        duration: 0.6,
+        delay: index * 0.05,
+        ease: "power2.out"
+      }, 0);
+    });
+
+    return timeline;
+  }
+
+  // Guardamos las animaciones de los subtítulos y títulos
+  const animations = {};
+  ranges.forEach((range) => {
+    const container = document.getElementById(range.id);
+    const subtitle = container.querySelector(".subtitulo-proyecto");
+    const title = container.querySelector(".tituloproyecto");
+
+    animations[range.id] = {
+      container: container,
+      subtitleAnim: animateText(subtitle),
+      titleAnim: animateText(title),
+      min: range.min,
+      max: range.max
+    };
   });
 
-  return timeline;
-}
+  // Función para actualizar visibilidad de textos según la posición de la cámara activa
+  function updateTextVisibility(activeCamera) {
+    Object.keys(animations).forEach((id) => {
+      const {
+        container,
+        subtitleAnim,
+        titleAnim,
+        min,
+        max
+      } = animations[id];
 
-// Guardamos las animaciones de los subtítulos y títulos
-const animations = {};
-ranges.forEach((range) => {
-  const container = document.getElementById(range.id);
-  const subtitle = container.querySelector(".subtitulo-proyecto");
-  const title = container.querySelector(".tituloproyecto");
+      // Solo permitir que "proyecto-3" funcione si cameraTres está activa
+      if (id === "proyecto-5" && activeCamera !== cameraTres) {
+        container.style.opacity = 0;
+        subtitleAnim.reverse();
+        titleAnim.reverse();
+        return;
+      }
 
-  animations[range.id] = {
-    container: container,
-    subtitleAnim: animateText(subtitle),
-    titleAnim: animateText(title),
-    min: range.min,
-    max: range.max
-  };
-});
-
-// Función para actualizar visibilidad de textos según la posición de la cámara activa
-function updateTextVisibility(activeCamera) {
-  Object.keys(animations).forEach((id) => {
-    const { container, subtitleAnim, titleAnim, min, max } = animations[id];
-
-    // Solo permitir que "proyecto-3" funcione si cameraTres está activa
-    if (id === "proyecto-5" && activeCamera !== cameraTres) {
-      container.style.opacity = 0;
-      subtitleAnim.reverse();
-      titleAnim.reverse();
-      return;
-    }
-
-    if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
-      container.style.opacity = 1;
-      subtitleAnim.play();
-      titleAnim.play();
-    } else {
-      container.style.opacity = 0;
-      subtitleAnim.reverse();
-      titleAnim.reverse();
-    }
-  });
-}
+      if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
+        container.style.opacity = 1;
+        subtitleAnim.play();
+        titleAnim.play();
+      } else {
+        container.style.opacity = 0;
+        subtitleAnim.reverse();
+        titleAnim.reverse();
+      }
+    });
+  }
 
 
 
@@ -1282,6 +1331,7 @@ function updateTextVisibility(activeCamera) {
   }
   animate();
   window.addEventListener('resize', () => {
+
     // Actualizar el tamaño del render target con el factor de escala
     renderTarget.setSize(
       container.clientWidth, // Aumenta el ancho

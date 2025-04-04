@@ -12,15 +12,12 @@ $colorp:#0004ee;
 
 html, body {
     background: white;
-    /*scrollbar-width: none;
-    /* Firefox */
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    -webkit-touch-callout: none; /* Evita que aparezca el menú contextual al mantener presionado */
-    -webkit-user-select: none;   /* Evita la selección de texto */
-    -webkit-overflow-scrolling: touch; /* Suaviza el scroll */
     z-index: -999;
+    height: 100dvh;
+    width: 100vw;
 }
+
+
 
 body::-webkit-scrollbar {
     display: none;
@@ -34,6 +31,12 @@ html::-webkit-scrollbar {
     /* Chrome, Safari y Opera */
 }
 
+#scroll-content::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    /* Chrome, Safari y Opera */
+}
+
 
 .cursor {
     opacity: 0;
@@ -41,7 +44,7 @@ html::-webkit-scrollbar {
     width: 70px;
     height: 70px;
     margin-left: -37px;
-    margin-top: -47px;
+    margin-top: -37px;
     border-radius: 50%;
     border: 1px solid rgb(255, 255, 255);
     transition: transform 0.1s ease;

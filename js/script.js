@@ -640,3 +640,36 @@ function playAnimation() {
 function reverseAnimation() {
     timelinemenu.timeScale(10).reverse(); // Hace que la reversa sea más rápida
 }
+
+
+
+const contenedorsc = document.querySelector("#scroll-content");
+// Inicializar Smooth Scrollbar
+let scrollbar = Scrollbar.init(contenedorsc, {
+    damping: 0.1, // Suavidad del scroll
+    renderByPixels: false,
+    alwaysShowTracks: false,
+});
+
+// Conectar ScrollTrigger con Smooth Scrollbar
+ScrollTrigger.scrollerProxy(contenedorsc, {
+    scrollTop(value) {
+        if (arguments.length) {
+            scrollbar.scrollTop = value;
+        }
+        return scrollbar.scrollTop;
+    },
+    getBoundingClientRect() {
+        // Obtener altura del contenedor real
+        return {
+            top: 0,
+            left: 0,
+            width: contenedorsc.clientWidth,
+            height: contenedorsc.clientHeight // Usar altura real del contenedor
+        };
+    },
+});
+
+// Escuchar los eventos de scroll de Smooth Scrollbar
+scrollbar.addListener(ScrollTrigger.update);
+
