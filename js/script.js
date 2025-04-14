@@ -16,6 +16,7 @@ const audio_container = document.getElementById('audio-container');
 const videofondo = document.getElementById('videofondo');
 const parrafodeinicio = document.getElementById('parrafodeinicio');
 const cortina = document.getElementById('cortina');
+const contparrafo = document.querySelector('.contparrafo');
 const cursors = document.querySelector('.cursor');
 
 
@@ -28,6 +29,10 @@ function createAnimation() {
     // Animaciones para móviles
     if (screenWidth <= 550) {
         //timeline loading
+        animaloading.to(contparrafo, {
+            duration: 0,
+            opacity: "100%",
+        });
         animaloading.to(parrafodeinicio, {
             duration: 1,
             opacity: "100%",
@@ -45,7 +50,7 @@ function createAnimation() {
         animaloading.to(logoanimado, {
             duration: 1,
             ease: 'power2.out',
-            top: "3vh",
+            top: "5vh",
             left: "3vh",
             width: "max-content",
         });
@@ -86,6 +91,10 @@ function createAnimation() {
         });
     } else if (screenWidth > 550 && screenWidth <= 1024) {
         // Animaciones para tablets
+        animaloading.to(contparrafo, {
+            duration: 0,
+            opacity: "100%",
+        });
 
         animaloading.to(parrafodeinicio, {
             duration: 1,
@@ -145,6 +154,10 @@ function createAnimation() {
         });
     } else {
         // Animaciones para pantallas grandes
+        animaloading.to(contparrafo, {
+            duration: 0,
+            opacity: "100%",
+        });
         animaloading.to(parrafodeinicio, {
             duration: 1,
             opacity: "100%",

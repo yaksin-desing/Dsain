@@ -128,53 +128,53 @@ function main() {
     if (screenWidth < 450) {
       // Configuración para pantallas muy pequeñas (<400px)
       return [{
-          id: "text2",
-          text: "Middle Ux-Designer",
-          font: "src/fonts/Light_Regular.json",
-          size: 2000,
-          y: 2.8
-        },
-        {
-          id: "text1",
-          text: "YAKSIN SAIN",
-          font: "src/fonts/false_Semi-bold.json",
-          size: 900,
-          y: 2
-        },
+        id: "text2",
+        text: "Middle Ux-Designer",
+        font: "src/fonts/Light_Regular.json",
+        size: 2000,
+        y: 2.8
+      },
+      {
+        id: "text1",
+        text: "YAKSIN SAIN",
+        font: "src/fonts/false_Semi-bold.json",
+        size: 900,
+        y: 2
+      },
       ];
     } else if (screenWidth < 855) {
       // Configuración para pantallas pequeñas (<855px)
       return [{
-          id: "text2",
-          text: "Middle Ux-Designer",
-          font: "src/fonts/Light_Regular.json",
-          size: 2500,
-          y: 2.5
-        },
-        {
-          id: "text1",
-          text: "YAKSIN SAIN",
-          font: "src/fonts/false_Semi-bold.json",
-          size: 800,
-          y: 1.5
-        },
+        id: "text2",
+        text: "Middle Ux-Designer",
+        font: "src/fonts/Light_Regular.json",
+        size: 2500,
+        y: 2.5
+      },
+      {
+        id: "text1",
+        text: "YAKSIN SAIN",
+        font: "src/fonts/false_Semi-bold.json",
+        size: 800,
+        y: 1.5
+      },
       ];
     } else {
       // Configuración para pantallas grandes (>=855px)
       return [{
-          id: "text2",
-          text: "Middle Ux-Designer",
-          font: "src/fonts/Light_Regular.json",
-          size: 4000,
-          y: 3.5
-        },
-        {
-          id: "text1",
-          text: "YAKSIN SAIN",
-          font: "src/fonts/false_Semi-bold.json",
-          size: 900,
-          y: 1.2
-        },
+        id: "text2",
+        text: "Middle Ux-Designer",
+        font: "src/fonts/Light_Regular.json",
+        size: 4000,
+        y: 3.5
+      },
+      {
+        id: "text1",
+        text: "YAKSIN SAIN",
+        font: "src/fonts/false_Semi-bold.json",
+        size: 900,
+        y: 1.2
+      },
       ];
     }
 
@@ -421,7 +421,7 @@ function main() {
     },
     undefined,
     (error) =>
-    console.error("Error al cargar el modelo de modelbaselogo ", error)
+      console.error("Error al cargar el modelo de modelbaselogo ", error)
   );
 
 
@@ -639,15 +639,15 @@ function main() {
     const cameraY = camera.position.y;
 
     const visibilityRanges = [{
-        plane: planes[0],
-        minZ: 35,
-        maxZ: 60
-      },
-      {
-        plane: planes[1],
-        minZ: 60,
-        maxZ: 80
-      },
+      plane: planes[0],
+      minZ: 35,
+      maxZ: 60
+    },
+    {
+      plane: planes[1],
+      minZ: 60,
+      maxZ: 80
+    },
     ];
 
     visibilityRanges.forEach(({
@@ -751,15 +751,15 @@ function main() {
     const cameraY = cameraDos.position.y;
 
     const visibilityRanges = [{
-        planeD: planesD[0],
-        minZ: 1040,
-        maxZ: 1070
-      },
-      {
-        planeD: planesD[1],
-        minZ: 1070,
-        maxZ: 1098
-      },
+      planeD: planesD[0],
+      minZ: 1040,
+      maxZ: 1070
+    },
+    {
+      planeD: planesD[1],
+      minZ: 1070,
+      maxZ: 1098
+    },
     ];
 
     visibilityRanges.forEach(({
@@ -983,26 +983,27 @@ function main() {
 
       // Animación con GSAP y ScrollTrigger
       gsap.timeline({
-          scrollTrigger: {
-            scroller: "#scroll-content", // Usar el contenedor virtual
-            trigger: "#contenedor",
-            start: "top top",
-            end: () => window.innerWidth > 768 ? "25000vh" : "20000vh", // 200vh para desktop, 500vh para móvil
-            scrub: 2,
-            pin: true,
-            markers: false,
-            onUpdate: function (self) {
-              const progress = self.progress; // Progreso del scroll (0 a 1)
-              const frame = Math.round(61 + progress * (endFrame - 61));
-              animationprogres.goToAndStop(frame, true);
-            },
-            
+        scrollTrigger: {
+          scroller: "#scroll-content", // Usar el contenedor virtual
+          trigger: "#contenedor",
+          start: "top top",
+          end: () => window.innerWidth > 768 ? "25000vh" : "10000vh", // 200vh para desktop, 500vh para móvil
+          scrub: 2,
+          pin: true,
+          markers: false,
+          onUpdate: function (self) {
+            const progress = self.progress; // Progreso del scroll (0 a 1)
+            const frame = Math.round(61 + progress * (endFrame - 61));
+            animationprogres.goToAndStop(frame, true);
           },
-        })
+
+        },
+      })
         .to(camera.position, {
           duration: 10,
           y: 2,
           z: 90,
+          ease: "none",
         })
         .to([textMeshes["text1"].material, textMeshes["text2"].material], {
           delay: -10,
@@ -1013,12 +1014,18 @@ function main() {
           duration: 10,
           y: 3,
           z: 1100,
+          ease: "sine.in",
+          onStart: () => {
+            renderer.setRenderTarget(renderTargetTres);
+            renderer.render(sceneDos, cameraDos);
+          }
         })
         .to(cameraTres.position, {
           duration: 5,
           x: -5,
           y: 5,
           z: 0,
+          ease: "power2.inOut"
         })
         .to(cameraTres.rotation, {
           delay: -5,
@@ -1040,7 +1047,7 @@ function main() {
           y: 0,
           z: 0,
         });
-        
+
     });
   });
 
@@ -1050,30 +1057,30 @@ function main() {
 
   // Definir rangos personalizados para cada par de textos
   const ranges = [{
-      id: "proyecto-1",
-      min: 35,
-      max: 60
-    },
-    {
-      id: "proyecto-2",
-      min: 60,
-      max: 80
-    },
-    {
-      id: "proyecto-3",
-      min: 1040,
-      max: 1070
-    },
-    {
-      id: "proyecto-4",
-      min: 1070,
-      max: 1098
-    },
-    {
-      id: "proyecto-5",
-      min: 0,
-      max: 30
-    }
+    id: "proyecto-1",
+    min: 35,
+    max: 60
+  },
+  {
+    id: "proyecto-2",
+    min: 60,
+    max: 80
+  },
+  {
+    id: "proyecto-3",
+    min: 1040,
+    max: 1070
+  },
+  {
+    id: "proyecto-4",
+    min: 1070,
+    max: 1098
+  },
+  {
+    id: "proyecto-5",
+    min: 0,
+    max: 30
+  }
   ];
 
   // Función para animar texto letra por letra

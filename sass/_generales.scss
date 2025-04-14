@@ -10,11 +10,13 @@ $colorp:#0004ee;
 
 
 
-html, body {
+html,
+body {
     background: white;
     z-index: -999;
     height: 100dvh;
     width: 100vw;
+    overflow: hidden;
 }
 
 
@@ -53,11 +55,11 @@ html::-webkit-scrollbar {
     z-index: 9999;
 }
 
-@media (max-width: 450px){
+@media (max-width: 786px) {
     .cursor {
         display: none;
     }
-    }
+}
 
 .grow,
 .grow-small {
