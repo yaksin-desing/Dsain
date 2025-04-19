@@ -1,7 +1,9 @@
 .scroll-contents {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     #scroll-content {
         position: fixed;
@@ -115,7 +117,7 @@
                     margin-top: 5vh;
                     font-family: Extrabold;
                     color: #ffffff;
-                    font-size: 20vw;
+                    font-size: 21vw;
                     white-space: nowrap;
                     display: flex;
                     overflow: hidden;
@@ -274,8 +276,8 @@
 
 
                             #menu-button {
-                                width: 4vw;
-                                height: 4vw;
+                                width: 2.5vw;
+                                height: 2.5vw;
                                 z-index: 1000;
                                 cursor: pointer;
                                 border-radius: 100%;
@@ -660,9 +662,15 @@
             }
         }
     }
+    .piedepagina{
+        background: #5686FF;
+        width: 100%;
+        height: 1px;
+    }
 
 
 }
+
 
 
 /* Móviles pequeños (hasta 480px) */
@@ -670,7 +678,7 @@
 
     .scroll-contents {
         width: 100%;
-        height: 100%;
+        height: 100vh;
         overflow: hidden;
 
         #scroll-content {
@@ -686,7 +694,7 @@
             }
 
             #contenedor {
-                height: 100dvh;
+                height:100dvh;
                 overflow: hidden;
 
                 #contenedor.fijo {
@@ -824,7 +832,7 @@
 
                     .bottoninicio {
                         position: absolute;
-                        bottom: -45vh;
+                        bottom: -100vh;
                         display: flex;
                         flex-direction: row;
                         justify-content: center;
@@ -832,8 +840,8 @@
                         text-decoration: none;
                         border-radius: 1000px;
                         background: #ffffff;
-                        width: 30vh;
-                        height: 30vh;
+                        width: 27vh;
+                        height: 27vh;
                         justify-items: center;
                         align-items: center;
                         z-index: 3;
@@ -871,7 +879,7 @@
 
                         p {
                             font-family: "Medium";
-                            font-size: 3vw;
+                            font-size: 2.8vw;
                             color: $colorp;
                             font-weight: 600;
                             padding-bottom: 18vh;
@@ -1074,14 +1082,17 @@
                                 padding: 0;
                                 margin: 0;
                                 width: 100%;
+                                position: absolute;
+
+                                top: 20%;
+                                left: 10%;
 
                                 p {
                                     text-decoration: none;
-                                    font-size: 18px;
                                     opacity: 100%;
                                     font-family: "Regular";
                                     color: #c0c0c0;
-                                    font-size: 0.9vw;
+                                    font-size: 3vw;
                                     opacity: 100%;
                                 }
 
@@ -1090,11 +1101,10 @@
 
                                     a {
                                         text-decoration: none;
-                                        font-size: 18px;
                                         opacity: 100%;
                                         font-family: "Medium";
                                         color: #999999;
-                                        font-size: 2.2vw;
+                                        font-size: 8vw;
                                         width: 100%;
                                         position: relative;
                                         overflow: hidden;
@@ -1123,7 +1133,7 @@
                                 padding: 0;
                                 margin: 0;
                                 bottom: 5%;
-                                left: 15%;
+                                left: 10%;
                                 display: flex;
                                 flex-direction: column;
                                 width: 60%;
@@ -1131,11 +1141,10 @@
 
                                 p {
                                     text-decoration: none;
-                                    font-size: 18px;
                                     opacity: 100%;
                                     font-family: "Regular";
                                     color: #c0c0c0;
-                                    font-size: 0.9vw;
+                                    font-size: 3vw;
                                     opacity: 100%;
                                 }
 
@@ -1154,7 +1163,7 @@
                                             opacity: 100%;
                                             font-family: "Medium";
                                             color: #000000;
-                                            font-size: 0.9vw;
+                                            font-size: 2vw;
                                             width: 100%;
                                             position: relative;
                                             overflow: hidden;
@@ -1207,7 +1216,7 @@
                             position: absolute;
                             top: 0;
                             left: 0;
-                            width: 8vw;
+                            width: 15vw;
                             /* Duplica el tamaño para que la onda se repita */
                             height: 100%;
                             animation: moveWave 6s linear infinite;
@@ -1216,11 +1225,11 @@
 
                         @keyframes moveWave {
                             0% {
-                                transform: translateX(-0.2vw);
+                                transform: translateX(0vw);
                             }
 
                             100% {
-                                transform: translateX(-5.5vw);
+                                transform: translateX(-5vw);
                                 /* Desplaza una longitud del SVG */
                             }
                         }
@@ -1228,7 +1237,7 @@
                         #wave-path {
                             fill: none;
                             stroke: #0077ff;
-                            stroke-width: 1.5;
+                            stroke-width: 2;
                         }
                     }
 
@@ -1332,6 +1341,12 @@
                 }
             }
         }
+        .piedepagina{
+            background: #ffffff;
+            width: 100%;
+            height: 1px;
+        }
+        
     }
 }
 

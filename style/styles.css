@@ -9,10 +9,10 @@
 
 html,
 body {
+  width: 100%;
+  height: 100%;
   background: white;
   z-index: -999;
-  height: 100dvh;
-  width: 100vw;
   overflow: hidden;
 }
 
@@ -130,8 +130,10 @@ h5 {
 }
 .scroll-contents {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .scroll-contents #scroll-content {
   position: fixed;
@@ -233,7 +235,7 @@ h5 {
   margin-top: 5vh;
   font-family: Extrabold;
   color: #ffffff;
-  font-size: 20vw;
+  font-size: 21vw;
   white-space: nowrap;
   display: flex;
   overflow: hidden;
@@ -367,8 +369,8 @@ h5 {
   background: #ffffff;
 }
 .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu #menu-button {
-  width: 4vw;
-  height: 4vw;
+  width: 2.5vw;
+  height: 2.5vw;
   z-index: 1000;
   cursor: pointer;
   border-radius: 100%;
@@ -670,12 +672,17 @@ h5 {
   display: inline-block;
   transform: translateY(100px);
 }
+.scroll-contents .piedepagina {
+  background: #5686FF;
+  width: 100%;
+  height: 1px;
+}
 
 /* Móviles pequeños (hasta 480px) */
 @media (max-width: 481px) {
   .scroll-contents {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
   }
   .scroll-contents #scroll-content {
@@ -811,7 +818,7 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .bottoninicio {
     position: absolute;
-    bottom: -45vh;
+    bottom: -100vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -819,8 +826,8 @@ h5 {
     text-decoration: none;
     border-radius: 1000px;
     background: #ffffff;
-    width: 30vh;
-    height: 30vh;
+    width: 27vh;
+    height: 27vh;
     justify-items: center;
     align-items: center;
     z-index: 3;
@@ -852,7 +859,7 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .bottoninicio p {
     font-family: "Medium";
-    font-size: 3vw;
+    font-size: 2.8vw;
     color: #0004ee;
     font-weight: 600;
     padding-bottom: 18vh;
@@ -1017,14 +1024,16 @@ h5 {
     padding: 0;
     margin: 0;
     width: 100%;
+    position: absolute;
+    top: 20%;
+    left: 10%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu p {
     text-decoration: none;
-    font-size: 18px;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 0.9vw;
+    font-size: 3vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li {
@@ -1032,11 +1041,10 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li a {
     text-decoration: none;
-    font-size: 18px;
     opacity: 100%;
     font-family: "Medium";
     color: #999999;
-    font-size: 2.2vw;
+    font-size: 8vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -1055,7 +1063,7 @@ h5 {
     padding: 0;
     margin: 0;
     bottom: 5%;
-    left: 15%;
+    left: 10%;
     display: flex;
     flex-direction: column;
     width: 60%;
@@ -1063,11 +1071,10 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial p {
     text-decoration: none;
-    font-size: 18px;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 0.9vw;
+    font-size: 3vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial .list_social {
@@ -1084,7 +1091,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #000000;
-    font-size: 0.9vw;
+    font-size: 2vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -1123,7 +1130,7 @@ h5 {
     position: absolute;
     top: 0;
     left: 0;
-    width: 8vw;
+    width: 15vw;
     /* Duplica el tamaño para que la onda se repita */
     height: 100%;
     animation: moveWave 6s linear infinite;
@@ -1131,17 +1138,17 @@ h5 {
   }
   @keyframes moveWave {
     0% {
-      transform: translateX(-0.2vw);
+      transform: translateX(0vw);
     }
     100% {
-      transform: translateX(-5.5vw);
+      transform: translateX(-5vw);
       /* Desplaza una longitud del SVG */
     }
   }
   .scroll-contents #scroll-content #contenedor .loading #audio-button #wave-path {
     fill: none;
     stroke: #0077ff;
-    stroke-width: 1.5;
+    stroke-width: 2;
   }
   .scroll-contents #scroll-content #contenedor .loading #audio-button:hover {
     box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.3);
@@ -1216,6 +1223,11 @@ h5 {
   .scroll-contents #scroll-content #contenedor .cont-proyectos .letterp {
     display: inline-block;
     transform: translateY(100px);
+  }
+  .scroll-contents .piedepagina {
+    background: #ffffff;
+    width: 100%;
+    height: 1px;
   }
 }
 /* Móviles grandes y phablets (481px a 767px) */

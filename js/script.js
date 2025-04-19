@@ -50,7 +50,7 @@ function createAnimation() {
         animaloading.to(logoanimado, {
             duration: 1,
             ease: 'power2.out',
-            top: "5vh",
+            top: "4.5vh",
             left: "3vh",
             width: "max-content",
         });
@@ -685,4 +685,3 @@ ScrollTrigger.scrollerProxy(contenedorsc, {
 
 // Escuchar los eventos de scroll de Smooth Scrollbar
 scrollbar.addListener(ScrollTrigger.update);
-
