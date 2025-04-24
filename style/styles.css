@@ -359,6 +359,9 @@ h5 {
 }
 .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu {
   display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu {
   display: flex;
@@ -741,19 +744,18 @@ h5 {
     flex-direction: row;
     align-items: center;
     gap: 5px;
-    height: 2vw;
+    height: auto;
     z-index: 1000;
-    margin-top: 2.5vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoanimador {
-    width: 4vw;
-    height: 4vw;
+    width: 7vw;
+    height: 7vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoestatico {
     position: absolute;
-    width: 5vw;
+    width: 7vw;
     opacity: 0%;
-    height: 5vw;
+    height: 7vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading #nombrelogo {
     font-family: "Extrabold";
@@ -1464,6 +1466,9 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu {
     display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu {
     display: flex;
@@ -1474,8 +1479,8 @@ h5 {
     background: #ffffff;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu #menu-button {
-    width: 4vw;
-    height: 4vw;
+    width: 3.5vw;
+    height: 3.5vw;
     z-index: 1000;
     cursor: pointer;
     border-radius: 100%;
@@ -2016,6 +2021,9 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu {
     display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu {
     display: flex;
@@ -2028,7 +2036,7 @@ h5 {
     align-items: center;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu #menu-button {
-    width: 3.5vw;
+    width: 3vw;
     height: 3vw;
     z-index: 1000;
     cursor: pointer;

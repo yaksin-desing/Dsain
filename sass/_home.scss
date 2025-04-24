@@ -265,6 +265,9 @@
 
                     .cont_menu {
                         display: flex;
+                        height:100%;
+                        justify-content: center;
+                        align-items: center;
 
                         .cont_boton_menu {
                             display: flex;
@@ -674,8 +677,6 @@
 
 }
 
-
-
 /* Móviles pequeños (hasta 480px) */
 @media (max-width: 481px) {
 
@@ -741,26 +742,25 @@
                         flex-direction: row;
                         align-items: center;
                         gap: 5px;
-                        height: 2vw;
+                        height: auto;
                         z-index: 1000;
-                        margin-top: 2.5vw;
 
                         .logoanimador {
-                            width: 4vw;
-                            height: 4vw;
+                            width: 7vw;
+                            height: 7vw;
                         }
 
 
                         .logoestatico {
                             position: absolute;
-                            width: 5vw;
+                            width: 7vw;
                             opacity: 0%;
-                            height: 5vw;
+                            height: 7vw;
                         }
 
                         #nombrelogo {
                             font-family: "Extrabold";
-                            font-size: 7vw ;
+                            font-size: 7vw;
                             color: #ffffff;
                             overflow: hidden;
                             width: 0%;
@@ -1623,6 +1623,9 @@
 
                         .cont_menu {
                             display: flex;
+                            height:100%;
+                            justify-content: center;
+                            align-items: center;
 
                             .cont_boton_menu {
                                 display: flex;
@@ -1634,8 +1637,8 @@
 
 
                                 #menu-button {
-                                    width: 4vw;
-                                    height: 4vw;
+                                    width: 3.5vw;
+                                    height: 3.5vw;
                                     z-index: 1000;
                                     cursor: pointer;
                                     border-radius: 100%;
@@ -2301,6 +2304,9 @@
 
                         .cont_menu {
                             display: flex;
+                            height:100%;
+                            justify-content: center;
+                            align-items: center;
 
                             .cont_boton_menu {
                                 display: flex;
@@ -2312,10 +2318,8 @@
                                 justify-content: center;
                                 align-items: center;
 
-
-
                                 #menu-button {
-                                    width: 3.5vw;
+                                    width: 3vw;
                                     height: 3vw;
                                     z-index: 1000;
                                     cursor: pointer;

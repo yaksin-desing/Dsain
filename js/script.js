@@ -52,7 +52,7 @@ function createAnimation() {
         animaloading.to(logoanimado, {
             duration: 1,
             ease: 'power2.out',
-            top: "4.5vh",
+            top: "3vh",
             left: "3vh",
             width: "max-content",
         });
