@@ -105,16 +105,20 @@ function main() {
 
 
 
+  
   const mouse = new THREE.Vector2();
   const minCameraX = -5;
   const maxCameraX = 5;
-
+  if (screenWidth >= 990){
 
   function onMouseMove(event) {
     mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25;
   }
 
   window.addEventListener("mousemove", onMouseMove);
+  }
+
+
 
 
 
@@ -425,140 +429,6 @@ function main() {
   );
 
 
-  ///////// Crear luz direccional  ////////////////
-  const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
-  luzdospasillo.position.set(30, 30, -10); // Posición de la luz
-  luzdospasillo.castShadow = true; // Activar sombras
-
-  // Ajustar la cámara de sombras (proyección ortográfica)
-  luzdospasillo.shadow.camera.top = 100; // Límite superior
-  luzdospasillo.shadow.camera.bottom = -100; // Límite inferior
-  luzdospasillo.shadow.camera.left = -50; // Límite izquierdo
-  luzdospasillo.shadow.camera.right = 50; // Límite derecho
-  luzdospasillo.shadow.camera.near = 0.5; // Distancia mínima
-  luzdospasillo.shadow.camera.far = 200; // Distancia máxima
-  luzdospasillo.shadow.mapSize.width = 3000; // Ancho del mapa de sombras
-  luzdospasillo.shadow.mapSize.height = 3000; // Alto del mapa de sombras
-  luzdospasillo.shadow.bias = -0.001; // Previene artefactos de sombra
-  luzdospasillo.shadow.opacity = 0.1; // Un valor entre 0 (transparente) y 1 (opaco)
-
-  // Cambiar el objetivo de la luz
-  const targetdos = new THREE.Object3D();
-  targetdos.position.set(0, 0, 50); // Nuevo punto al que apunta la luz
-  scene.add(targetdos); // Agregar el objetivo a la escena
-  luzdospasillo.target = targetdos; // Asignar el objetivo a la luz
-
-
-  // // Helper para la cámara de sombras
-  // const shadowCameraHelper = new THREE.CameraHelper(luzdospasillo.shadow.camera);
-  // scene.add(shadowCameraHelper);
-
-  // // Helper para la luz direccional
-  // const directionalLightHelper = new THREE.DirectionalLightHelper(luzdospasillo, 10); // El tamaño del helper (10) es ajustable
-  // scene.add(directionalLightHelper);
-
-  scene.add(luzdospasillo);
-  // // Cargar pascilloModel
-  // const pascilloLoader = new GLTFLoader();
-  // pascilloLoader.load(
-  //   "./src/objt/escena/pasilloescenauno.glb",
-  //   (gltf) => {
-  //     const pascilloModel = gltf.scene;
-  //     pascilloModel.scale.set(0.05, 0.05, 0.05);
-  //     pascilloModel.position.set(0, 0.5, 35);
-
-
-
-  //     pascilloModel.traverse((child) => {
-  //       if (child.isMesh) {
-  //         child.castShadow = true;
-  //         child.receiveShadow = true;
-  //       }
-  //     });
-
-  //     //scene.add(pascilloModel);
-  //   },
-  //   undefined,
-  //   (error) => console.error("Error al cargar el modelo de pascilloModel:", error)
-  // );
-
-
-  // // Cargar modelo Planta
-  // const loadercolumn = new GLTFLoader();
-  // loadercolumn.load(
-  //   "./src/objt/escena/columna.glb",
-  //   (gltf) => {
-  //     const modeloBase = gltf.scene;
-
-  //     function crearPalmera(posX, posY, posZ, escalaX, escalaY, escalaZ) {
-  //       const cloncolumn = modeloBase.clone();
-  //       cloncolumn.position.set(posX, posY, posZ);
-  //       cloncolumn.scale.set(escalaX, escalaY, escalaZ);
-
-  //       cloncolumn.traverse((child) => {
-  //         if (child.isMesh) {
-  //           child.castShadow = true;
-  //           child.receiveShadow = true;
-  //         }
-  //       });
-
-  //       //scene.add(cloncolumn);
-  //     }
-
-
-  //     //derecha
-
-  //     crearPalmera(2.7, 0.7, 35, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 39, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 43, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 47, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 51, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 55, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 59, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 63, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 67, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(2.7, 0.8, 71, 0.05, 0.05, 0.05);
-
-
-
-  //     //izquierda
-
-  //     crearPalmera(-2.7, 0.7, 35, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 39, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 43, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 47, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 51, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 55, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 59, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 63, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 67, 0.05, 0.05, 0.05);
-
-  //     crearPalmera(-2.7, 0.8, 71, 0.05, 0.05, 0.05);
-
-
-
-
-  //   },
-  //   undefined,
-  //   (error) => console.error("Error al cargar el modelo de columna:", error)
-  // );
 
 
   // Cargar múltiples texturas

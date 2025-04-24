@@ -49,7 +49,7 @@ html::-webkit-scrollbar {
   z-index: 9999;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 1000px) {
   .cursor {
     display: none;
   }
@@ -367,6 +367,8 @@ h5 {
   overflow: hidden;
   width: 100%;
   background: #ffffff;
+  justify-content: center;
+  align-items: center;
 }
 .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu #menu-button {
   width: 2.5vw;
@@ -741,10 +743,11 @@ h5 {
     gap: 5px;
     height: 2vw;
     z-index: 1000;
+    margin-top: 2.5vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoanimador {
-    width: 5vw;
-    height: 5vw;
+    width: 4vw;
+    height: 4vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoestatico {
     position: absolute;
@@ -754,7 +757,7 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading #nombrelogo {
     font-family: "Extrabold";
-    font-size: 21px;
+    font-size: 7vw;
     color: #ffffff;
     overflow: hidden;
     width: 0%;
@@ -1295,14 +1298,14 @@ h5 {
     z-index: 1000;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoanimador {
-    width: 5vw;
-    height: 5vw;
+    width: 4vw;
+    height: 4vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoestatico {
     position: absolute;
-    width: 5vw;
+    width: 4vw;
     opacity: 0%;
-    height: 5vw;
+    height: 4vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading #nombrelogo {
     font-family: "Extrabold";
@@ -1411,7 +1414,7 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .bottoninicio p {
     font-family: "Medium";
-    font-size: 2.8vw;
+    font-size: 1.5vw;
     color: #0004ee;
     font-weight: 600;
     padding-bottom: 18vh;
@@ -1420,7 +1423,7 @@ h5 {
     display: flex;
     flex-direction: row;
     position: absolute;
-    top: 3vh;
+    top: 2vh;
     right: 3vh;
     gap: 10px;
     opacity: 0%;
@@ -1471,8 +1474,8 @@ h5 {
     background: #ffffff;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu #menu-button {
-    width: 7vw;
-    height: 7vw;
+    width: 4vw;
+    height: 4vw;
     z-index: 1000;
     cursor: pointer;
     border-radius: 100%;
@@ -1783,7 +1786,7 @@ h5 {
   }
 }
 /* Tablets (vertical) (768px a 991px) */
-@media (min-width: 701px) and (max-width: 991px) {
+@media (min-width: 701px) and (max-width: 1000px) {
   .scroll-contents {
     width: 100%;
     height: 100vh;
@@ -1847,14 +1850,14 @@ h5 {
     z-index: 1000;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoanimador {
-    width: 5vw;
-    height: 5vw;
+    width: 3vw;
+    height: 3vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading .logoestatico {
     position: absolute;
-    width: 5vw;
+    width: 3vw;
     opacity: 0%;
-    height: 5vw;
+    height: 3vw;
   }
   .scroll-contents #scroll-content #contenedor .loading .logo_loading #nombrelogo {
     font-family: "Extrabold";
@@ -1963,7 +1966,7 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .bottoninicio p {
     font-family: "Medium";
-    font-size: 2.8vw;
+    font-size: 1vw;
     color: #0004ee;
     font-weight: 600;
     padding-bottom: 18vh;
@@ -1972,8 +1975,8 @@ h5 {
     display: flex;
     flex-direction: row;
     position: absolute;
-    top: 3vh;
-    right: 3vh;
+    top: 2vh;
+    right: 2vh;
     gap: 10px;
     opacity: 0%;
     z-index: 3;
@@ -1981,7 +1984,7 @@ h5 {
     /* Clase para mostrar el menú */
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .bottoniniciocontact {
-    display: none;
+    display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -2021,10 +2024,12 @@ h5 {
     overflow: hidden;
     width: 100%;
     background: #ffffff;
+    justify-content: center;
+    align-items: center;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu #menu-button {
-    width: 7vw;
-    height: 7vw;
+    width: 3.5vw;
+    height: 3vw;
     z-index: 1000;
     cursor: pointer;
     border-radius: 100%;
@@ -2046,7 +2051,6 @@ h5 {
     transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
     border-radius: 100%;
     overflow: hidden;
-    z-index: 999;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu {
     position: absolute;
@@ -2114,13 +2118,12 @@ h5 {
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show {
     top: 0vh;
     right: 0vh;
-    width: 100dvw;
+    width: 50dvw;
     height: 100dvh;
     right: 0;
     box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
     border-radius: 0;
     background-color: #ffffff;
-    z-index: 999;
     /* Desliza el menú hacia dentro */
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu {
@@ -2128,16 +2131,14 @@ h5 {
     padding: 0;
     margin: 0;
     width: 100%;
-    position: absolute;
-    top: 20%;
-    left: 10%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu p {
     text-decoration: none;
+    font-size: 18px;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 3vw;
+    font-size: 0.9vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li {
@@ -2145,10 +2146,11 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li a {
     text-decoration: none;
+    font-size: 18px;
     opacity: 100%;
     font-family: "Medium";
     color: #999999;
-    font-size: 8vw;
+    font-size: 2.2vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -2167,7 +2169,7 @@ h5 {
     padding: 0;
     margin: 0;
     bottom: 5%;
-    left: 10%;
+    left: 15%;
     display: flex;
     flex-direction: column;
     width: 60%;
@@ -2175,10 +2177,11 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial p {
     text-decoration: none;
+    font-size: 18px;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 3vw;
+    font-size: 0.9vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial .list_social {
@@ -2195,7 +2198,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #000000;
-    font-size: 2vw;
+    font-size: 0.9vw;
     width: 100%;
     position: relative;
     overflow: hidden;

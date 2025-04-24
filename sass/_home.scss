@@ -273,6 +273,8 @@
                             overflow: hidden;
                             width: 100%;
                             background: #ffffff;
+                            justify-content: center;
+                            align-items: center;
 
 
                             #menu-button {
@@ -662,7 +664,8 @@
             }
         }
     }
-    .piedepagina{
+
+    .piedepagina {
         background: #5686FF;
         width: 100%;
         height: 1px;
@@ -694,7 +697,7 @@
             }
 
             #contenedor {
-                height:100dvh;
+                height: 100dvh;
                 overflow: hidden;
 
                 #contenedor.fijo {
@@ -740,10 +743,11 @@
                         gap: 5px;
                         height: 2vw;
                         z-index: 1000;
+                        margin-top: 2.5vw;
 
                         .logoanimador {
-                            width: 5vw;
-                            height: 5vw;
+                            width: 4vw;
+                            height: 4vw;
                         }
 
 
@@ -756,7 +760,7 @@
 
                         #nombrelogo {
                             font-family: "Extrabold";
-                            font-size: 21px;
+                            font-size: 7vw ;
                             color: #ffffff;
                             overflow: hidden;
                             width: 0%;
@@ -1341,18 +1345,19 @@
                 }
             }
         }
-        .piedepagina{
+
+        .piedepagina {
             background: #ffffff;
             width: 100%;
             height: 1px;
         }
-        
+
     }
 }
 
 /* Móviles grandes y phablets (481px a 767px) */
 @media (min-width: 481px) and (max-width: 700px) {
-    
+
     .scroll-contents {
         width: 100%;
         height: 100vh;
@@ -1371,7 +1376,7 @@
             }
 
             #contenedor {
-                height:100dvh;
+                height: 100dvh;
                 overflow: hidden;
 
                 #contenedor.fijo {
@@ -1419,16 +1424,16 @@
                         z-index: 1000;
 
                         .logoanimador {
-                            width: 5vw;
-                            height: 5vw;
+                            width: 4vw;
+                            height: 4vw;
                         }
 
 
                         .logoestatico {
                             position: absolute;
-                            width: 5vw;
+                            width: 4vw;
                             opacity: 0%;
-                            height: 5vw;
+                            height: 4vw;
                         }
 
                         #nombrelogo {
@@ -1556,7 +1561,7 @@
 
                         p {
                             font-family: "Medium";
-                            font-size: 2.8vw;
+                            font-size: 1.5vw;
                             color: $colorp;
                             font-weight: 600;
                             padding-bottom: 18vh;
@@ -1568,7 +1573,7 @@
                         display: flex;
                         flex-direction: row;
                         position: absolute;
-                        top: 3vh;
+                        top: 2vh;
                         right: 3vh;
                         gap: 10px;
                         opacity: 0%;
@@ -1629,8 +1634,8 @@
 
 
                                 #menu-button {
-                                    width: 7vw;
-                                    height: 7vw;
+                                    width: 4vw;
+                                    height: 4vw;
                                     z-index: 1000;
                                     cursor: pointer;
                                     border-radius: 100%;
@@ -2018,17 +2023,18 @@
                 }
             }
         }
-        .piedepagina{
+
+        .piedepagina {
             background: #ffffff;
             width: 100%;
             height: 1px;
         }
-        
+
     }
 }
 
 /* Tablets (vertical) (768px a 991px) */
-@media (min-width: 701px) and (max-width: 991px) {
+@media (min-width: 701px) and (max-width: 1000px) {
     .scroll-contents {
         width: 100%;
         height: 100vh;
@@ -2047,7 +2053,7 @@
             }
 
             #contenedor {
-                height:100dvh;
+                height: 100dvh;
                 overflow: hidden;
 
                 #contenedor.fijo {
@@ -2094,17 +2100,18 @@
                         height: 2vw;
                         z-index: 1000;
 
+
                         .logoanimador {
-                            width: 5vw;
-                            height: 5vw;
+                            width: 3vw;
+                            height: 3vw;
                         }
 
 
                         .logoestatico {
                             position: absolute;
-                            width: 5vw;
+                            width: 3vw;
                             opacity: 0%;
-                            height: 5vw;
+                            height: 3vw;
                         }
 
                         #nombrelogo {
@@ -2232,7 +2239,7 @@
 
                         p {
                             font-family: "Medium";
-                            font-size: 2.8vw;
+                            font-size: 1vw;
                             color: $colorp;
                             font-weight: 600;
                             padding-bottom: 18vh;
@@ -2244,14 +2251,14 @@
                         display: flex;
                         flex-direction: row;
                         position: absolute;
-                        top: 3vh;
-                        right: 3vh;
+                        top: 2vh;
+                        right: 2vh;
                         gap: 10px;
                         opacity: 0%;
                         z-index: 3;
 
                         .bottoniniciocontact {
-                            display: none;
+                            display: flex;
                             flex-direction: row;
                             justify-content: center;
                             align-items: center;
@@ -2302,11 +2309,14 @@
                                 overflow: hidden;
                                 width: 100%;
                                 background: #ffffff;
+                                justify-content: center;
+                                align-items: center;
+
 
 
                                 #menu-button {
-                                    width: 7vw;
-                                    height: 7vw;
+                                    width: 3.5vw;
+                                    height: 3vw;
                                     z-index: 1000;
                                     cursor: pointer;
                                     border-radius: 100%;
@@ -2334,7 +2344,6 @@
                             transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
                             border-radius: 100%;
                             overflow: hidden;
-                            z-index: 999;
 
 
 
@@ -2421,13 +2430,12 @@
                         #nav-menu.show {
                             top: 0vh;
                             right: 0vh;
-                            width: 100dvw;
+                            width: 50dvw;
                             height: 100dvh;
                             right: 0;
                             box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
                             border-radius: 0;
                             background-color: #ffffff;
-                            z-index: 999;
 
                             /* Desliza el menú hacia dentro */
                             .contlistmenu {
@@ -2435,17 +2443,14 @@
                                 padding: 0;
                                 margin: 0;
                                 width: 100%;
-                                position: absolute;
-
-                                top: 20%;
-                                left: 10%;
 
                                 p {
                                     text-decoration: none;
+                                    font-size: 18px;
                                     opacity: 100%;
                                     font-family: "Regular";
                                     color: #c0c0c0;
-                                    font-size: 3vw;
+                                    font-size: 0.9vw;
                                     opacity: 100%;
                                 }
 
@@ -2454,10 +2459,11 @@
 
                                     a {
                                         text-decoration: none;
+                                        font-size: 18px;
                                         opacity: 100%;
                                         font-family: "Medium";
                                         color: #999999;
-                                        font-size: 8vw;
+                                        font-size: 2.2vw;
                                         width: 100%;
                                         position: relative;
                                         overflow: hidden;
@@ -2486,7 +2492,7 @@
                                 padding: 0;
                                 margin: 0;
                                 bottom: 5%;
-                                left: 10%;
+                                left: 15%;
                                 display: flex;
                                 flex-direction: column;
                                 width: 60%;
@@ -2494,10 +2500,11 @@
 
                                 p {
                                     text-decoration: none;
+                                    font-size: 18px;
                                     opacity: 100%;
                                     font-family: "Regular";
                                     color: #c0c0c0;
-                                    font-size: 3vw;
+                                    font-size: 0.9vw;
                                     opacity: 100%;
                                 }
 
@@ -2516,7 +2523,7 @@
                                             opacity: 100%;
                                             font-family: "Medium";
                                             color: #000000;
-                                            font-size: 2vw;
+                                            font-size: 0.9vw;
                                             width: 100%;
                                             position: relative;
                                             overflow: hidden;
@@ -2694,11 +2701,12 @@
                 }
             }
         }
-        .piedepagina{
+
+        .piedepagina {
             background: #ffffff;
             width: 100%;
             height: 1px;
         }
-        
+
     }
 }
