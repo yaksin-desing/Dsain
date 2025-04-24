@@ -23,7 +23,7 @@ cameraDos.position.set(0, 2, 995.5); // Ajusta los valores según tu escena
 
 sceneDos.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
-
+if (screenWidth >= 990) {
 const mouse = new THREE.Vector2();
 const minCameraX = -5;
 const maxCameraX = 5;
@@ -42,6 +42,7 @@ function updateCameraDos() {
 }
 
 updateCameraDos();
+}
 
 //////// <<<<< base dos >>>>>> /////////////
 

@@ -29,12 +29,14 @@ function createAnimation() {
     // Animaciones para móviles
     if (screenWidth <= 550) {
         //timeline loading
-        animaloading.to(contparrafo, {
-            duration: 0,
-            opacity: "100%",
-        });
+
         animaloading.to(parrafodeinicio, {
             duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(contparrafo, {
+            delay: -1,
+            duration: 0,
             opacity: "100%",
         });
         animaloading.to(contenedor_loading, {
@@ -154,12 +156,14 @@ function createAnimation() {
         });
     } else {
         // Animaciones para pantallas grandes
-        animaloading.to(contparrafo, {
-            duration: 0,
-            opacity: "100%",
-        });
+
         animaloading.to(parrafodeinicio, {
             duration: 1,
+            opacity: "100%",
+        });
+        animaloading.to(contparrafo, {
+            delay: -1,
+            duration: 0,
             opacity: "100%",
         });
         animaloading.to(contenedor_loading, {
