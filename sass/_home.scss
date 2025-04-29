@@ -609,10 +609,12 @@
 
 
                     #lottie-container {
-                        position: absolute;
+                        display: none;
+                        position: fixed;
                         bottom: -0.5vw;
-                        left: 42.5%;
-                        width: 15%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 25%;
                         pointer-events: none;
                         /* Evitar que interfiera con los clics */
                         z-index: 0;

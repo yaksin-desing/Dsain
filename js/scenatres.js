@@ -7,7 +7,9 @@ import {
   Water
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Water.js";
 
-import { Sky } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Sky.js";
+import {
+  Sky
+} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Sky.js";
 
 
 const container = document.getElementById("scene-container");
@@ -20,15 +22,15 @@ const cameraTres = new THREE.PerspectiveCamera(
   1000
 );
 cameraTres.position.set(26, 13, -21);
-cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05,-1.58, 0, "YXZ"));
+cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
 
 
 // Configuración de la luz direccional
 const luzdospasillo = new THREE.DirectionalLight(0xffffff, 3);
-luzdospasillo.position.set(0, 80, 0);
+luzdospasillo.position.set(0, 80, -5);
 luzdospasillo.castShadow = true;
 luzdospasillo.shadow.camera.top = 100;
-luzdospasillo.shadow.camera.bottom = -50;
+luzdospasillo.shadow.camera.bottom = -100;
 luzdospasillo.shadow.camera.left = -30;
 luzdospasillo.shadow.camera.right = 30;
 luzdospasillo.shadow.camera.near = 0.5;
@@ -81,18 +83,18 @@ loaderroca.load(
       sceneTres.add(clonRoca);
     }
 
-    crearRoca(28, 0, -100,  0.5, 0.8, 0.2,  0.2, 0, 0);
-    crearRoca(40, 0, -15,   0.5, 0.3, 0.3,  0, -1.8, 0);
-    crearRoca(30, 0, -40,   1, 2, 1,  0, -5, 0);
-    crearRoca(28, 0, -150,   1, 2, 1,  0, -4.5, 0);
+    crearRoca(28, 0, -100, 0.5, 0.8, 0.2, 0.2, 0, 0);
+    crearRoca(40, 0, -15, 0.5, 0.3, 0.3, 0, -1.8, 0);
+    crearRoca(30, 0, -40, 1, 2, 1, 0, -5, 0);
+    crearRoca(28, 0, -150, 1, 2, 1, 0, -4.5, 0);
 
 
     crearRoca(-15, 0, -100, 0.3, 0.5, 0.2, 0.2, -0.5, 0);
     crearRoca(-30, 0, -60, 0.3, 0.5, 0.3, 0.2, 1, 0);
     crearRoca(-20, -1, -20, 0.3, 0.5, 0.3, 0, -1.8, 0);
-    crearRoca(-40, 0, -40,   1, 2, 0.4,  0, -1.8, 0);
-    crearRoca(-30, 0, -140,   1, 2, 0.4,  0, -2, 0);
-    crearRoca(-15, -5, -230,   1, 2.5, 0.4,  1, -2.5, 1);
+    crearRoca(-40, 0, -40, 1, 2, 0.4, 0, -1.8, 0);
+    crearRoca(-30, 0, -140, 1, 2, 0.4, 0, -2, 0);
+    crearRoca(-15, -5, -230, 1, 2.5, 0.4, 1, -2.5, 1);
 
 
   },
@@ -128,7 +130,7 @@ loaderpalmera.load(
 
 
     crearPalmera(-25, 10, -40, 0.4, 0.3, 0.4, 0, 0, 0);
-    
+
 
   },
   undefined,
@@ -193,7 +195,7 @@ const textuportal = new THREE.Mesh(planeGeometryportal, planeMaterialportal);
 
 // Configura la posición del plano si es necesario
 textuportal.position.set(31, 12.8, -21); // Cambia las coordenadas según tu escena
-textuportal.quaternion.setFromEuler(new THREE.Euler(0.05,-1.58, 0, "YXZ"));
+textuportal.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
 
 
 // Agrega el plano a la escena secundaria
@@ -228,7 +230,7 @@ const textureaguaLoader = new THREE.TextureLoader();
 textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
   waterNormal.wrapS = waterNormal.wrapT = THREE.RepeatWrapping;
 
-  const waterGeometry = new THREE.PlaneGeometry(200, 300);
+  const waterGeometry = new THREE.PlaneGeometry(400, 400);
 
   water = new Water(waterGeometry, {
     textureWidth: 512,
@@ -237,13 +239,14 @@ textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
     sunDirection: new THREE.Vector3(0, 1, 0),
     sunColor: 0xffffff,
     waterColor: 0x0199FF,
-    distortionScale: 3.7,
+    distortionScale: 0.5,
     fog: false,
+    alpha: 0.8, // Nivel de transparencia (0 totalmente transparente, 1 totalmente opaco)
   });
-
+  water.material.transparent = true;
   water.rotation.x = -Math.PI / 2;
   water.position.y = 0.5;
-  water.position.z = -100;
+  water.position.z = 0;
 
   sceneTres.add(water);
 
@@ -258,8 +261,8 @@ sky.scale.setScalar(1000); // Tamaño del cielo
 
 // Configurar los parámetros del shader del cielo
 const skyUniforms = sky.material.uniforms;
-skyUniforms["turbidity"].value = 0.1;  // Turbulencia atmosférica
-skyUniforms["rayleigh"].value = 4;    // Dispersión de la luz en la atmósfera
+skyUniforms["turbidity"].value = 0.1; // Turbulencia atmosférica
+skyUniforms["rayleigh"].value = 4; // Dispersión de la luz en la atmósfera
 skyUniforms["mieCoefficient"].value = 0.0001; // Dispersión de partículas pequeñas
 skyUniforms["mieDirectionalG"].value = 0.9; // Intensidad de la dispersión Mie
 
@@ -272,6 +275,135 @@ skyUniforms["sunPosition"].value.copy(sun);
 
 // Agregar el cielo a la escena
 sceneTres.add(sky);
+
+
+// Crear la geometría del suelo
+const sueloGeometry = new THREE.PlaneGeometry(500, 500); // tamaño del suelo
+
+// Crear el material del suelo
+const sueloMaterial = new THREE.MeshStandardMaterial({ 
+  color:0x141730, // color blanco
+  side: THREE.DoubleSide // visible por ambos lados
+});
+
+// Crear el mesh combinando geometría y material
+const suelo = new THREE.Mesh(sueloGeometry, sueloMaterial);
+
+// Rotar el suelo para que quede horizontal
+suelo.rotation.x = -Math.PI / 2; // rotarlo 90 grados en el eje X
+
+// Opcional: posicionarlo un poco más abajo
+suelo.position.y = -2;
+
+// Añadir el suelo a la escena
+//sceneTres.add(suelo);
+
+
+
+sceneTres.add(luzdospasillo);
+// Cargar pascilloModel
+const pascilloLoader = new GLTFLoader();
+pascilloLoader.load(
+  "./src/objt/escena/pasilloescenauno.glb",
+  (gltf) => {
+    const pascilloModel = gltf.scene;
+    pascilloModel.scale.set(3, 3, 3);
+    pascilloModel.position.set(0, 0, 116);
+
+
+
+    pascilloModel.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+
+    sceneTres.add(pascilloModel);
+  },
+  undefined,
+  (error) => console.error("Error al cargar el modelo de pascilloModel:", error)
+);
+
+
+// // Cargar modelo Planta
+// const loadercolumn = new GLTFLoader();
+// loadercolumn.load(
+//   "./src/objt/escena/columna.glb",
+//   (gltf) => {
+//     const modeloBase = gltf.scene;
+
+//     function crearPalmera(posX, posY, posZ, escalaX, escalaY, escalaZ) {
+//       const cloncolumn = modeloBase.clone();
+//       cloncolumn.position.set(posX, posY, posZ);
+//       cloncolumn.scale.set(escalaX, escalaY, escalaZ);
+
+//       cloncolumn.traverse((child) => {
+//         if (child.isMesh) {
+//           child.castShadow = true;
+//           child.receiveShadow = true;
+//         }
+//       });
+
+//       sceneTres.add(cloncolumn);
+//     }
+
+
+//     //derecha
+
+//     crearPalmera(4.7, 0.7, 35, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 37, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 39, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 41, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 43, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 45, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 47, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 49, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 51, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 53, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 55, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 57, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 59, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 61, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 63, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 65, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 67, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 69, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 71, 0.05, 0.05, 0.05);
+//     crearPalmera(4.7, 0.8, 73, 0.05, 0.05, 0.05);
+
+//     // izquierda
+
+//     crearPalmera(-4.7, 0.7, 35, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 37, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 39, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 41, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 43, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 45, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 47, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 49, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 51, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 53, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 55, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 57, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 59, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 61, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 63, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 65, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 67, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 69, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 71, 0.05, 0.05, 0.05);
+//     crearPalmera(-4.7, 0.8, 73, 0.05, 0.05, 0.05);
+
+
+
+
+
+
+//   },
+//   undefined,
+//   (error) => console.error("Error al cargar el modelo de columna:", error)
+// );
 
 
 
