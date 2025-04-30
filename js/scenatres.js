@@ -55,17 +55,17 @@ sceneTres.add(luzdospasillo);
 
 // Configuración de la luz direccional
 const luzdospasillotres = new THREE.DirectionalLight(0xFDFFA2, 0.5);
-luzdospasillotres.position.set(-5, 10, 100);
+luzdospasillotres.position.set(-5, 5, 500);
 
 const targetres = new THREE.Object3D();
-targetres.position.set(0, 0, 0);
+targetres.position.set(0, 0, 50);
 sceneTres.add(targetres);
 luzdospasillotres.target = targetres;
 sceneTres.add(luzdospasillotres);
 
 //luz suelo
 
-const luzHemisferica = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
+const luzHemisferica = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
 luzHemisferica.position.set(0, -5, 0);
 sceneTres.add(luzHemisferica);
 
@@ -292,7 +292,7 @@ const sueloGeometry = new THREE.PlaneGeometry(500, 500); // tamaño del suelo
 
 // Crear el material del suelo
 const sueloMaterial = new THREE.MeshStandardMaterial({
-  color: 0x141730, // color blanco
+  color: 0xA1A83F, // color blanco
   side: THREE.DoubleSide // visible por ambos lados
 });
 
@@ -303,10 +303,10 @@ const suelo = new THREE.Mesh(sueloGeometry, sueloMaterial);
 suelo.rotation.x = -Math.PI / 2; // rotarlo 90 grados en el eje X
 
 // Opcional: posicionarlo un poco más abajo
-suelo.position.y = -2;
+suelo.position.y = 0;
 
 // Añadir el suelo a la escena
-//sceneTres.add(suelo);
+sceneTres.add(suelo);
 
 
 // Cargar texturas
@@ -344,7 +344,7 @@ const materialTress = new THREE.MeshStandardMaterial({
 });
 
 // Crear un Plane
-const geometryTress = new THREE.PlaneGeometry(60, 60, 1, 1);
+const geometryTress = new THREE.PlaneGeometry(90, 90, 1, 1);
 
 // MUY IMPORTANTE: Necesitas UV2 para que el aoMap funcione
 geometryTress.setAttribute('uv2', new THREE.BufferAttribute(geometryTress.attributes.uv.array, 2));
@@ -354,7 +354,7 @@ sceneTres.add(planeTress);
 
 // Opcional: rotarlo para que esté horizontal
 planeTress.rotation.x = -Math.PI / 2;
-planeTress.position.set(0, 0.1, 95);
+planeTress.position.set(0, -0.1, 115);
 
 
 
@@ -367,7 +367,7 @@ pascilloLoader.load(
   (gltf) => {
     const pascilloModel = gltf.scene;
     pascilloModel.scale.set(3, 3, 3);
-    pascilloModel.position.set(0, -0.7, 116);
+    pascilloModel.position.set(0, 0, 116);
 
 
 
