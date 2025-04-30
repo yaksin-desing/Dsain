@@ -27,7 +27,7 @@ cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
 
 // Configuración de la luz direccional
 const luzdospasillo = new THREE.DirectionalLight(0xffffff, 3);
-luzdospasillo.position.set(0, 80, -5);
+luzdospasillo.position.set(10, 80, -7);
 luzdospasillo.castShadow = true;
 luzdospasillo.shadow.camera.top = 100;
 luzdospasillo.shadow.camera.bottom = -100;
@@ -52,6 +52,16 @@ luzdospasillo.target = targetdos;
 // sceneTres.add(directionalLightHelper);
 
 sceneTres.add(luzdospasillo);
+
+// Configuración de la luz direccional
+const luzdospasillotres = new THREE.DirectionalLight(0xFDFFA2, 0.5);
+luzdospasillotres.position.set(-5, 10, 100);
+
+const targetres = new THREE.Object3D();
+targetres.position.set(0, 0, 0);
+sceneTres.add(targetres);
+luzdospasillotres.target = targetres;
+sceneTres.add(luzdospasillotres);
 
 //luz suelo
 
@@ -245,7 +255,7 @@ textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
   });
   water.material.transparent = true;
   water.rotation.x = -Math.PI / 2;
-  water.position.y = 0.5;
+  water.position.y = 0.7;
   water.position.z = 0;
 
   sceneTres.add(water);
@@ -281,8 +291,8 @@ sceneTres.add(sky);
 const sueloGeometry = new THREE.PlaneGeometry(500, 500); // tamaño del suelo
 
 // Crear el material del suelo
-const sueloMaterial = new THREE.MeshStandardMaterial({ 
-  color:0x141730, // color blanco
+const sueloMaterial = new THREE.MeshStandardMaterial({
+  color: 0x141730, // color blanco
   side: THREE.DoubleSide // visible por ambos lados
 });
 
@@ -299,6 +309,55 @@ suelo.position.y = -2;
 //sceneTres.add(suelo);
 
 
+// Cargar texturas
+const loaderTress = new THREE.TextureLoader();
+
+const baseColorTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/basecolor.jpg');
+const aoMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/ambientOcclusion.jpg');
+const heightMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/height.png');
+const normalMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/normal.jpg');
+const roughnessMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/roughness.jpg');
+
+// Hacer que las texturas se repitan
+baseColorTress.wrapS = baseColorTress.wrapT = THREE.RepeatWrapping;
+aoMapTress.wrapS = aoMapTress.wrapT = THREE.RepeatWrapping;
+heightMapTress.wrapS = heightMapTress.wrapT = THREE.RepeatWrapping;
+normalMapTress.wrapS = normalMapTress.wrapT = THREE.RepeatWrapping;
+roughnessMapTress.wrapS = roughnessMapTress.wrapT = THREE.RepeatWrapping;
+
+// Definir cuánto quieres que se repitan (por ejemplo 4x4 veces)
+const repeatCountTress = 20;
+baseColorTress.repeat.set(repeatCountTress, repeatCountTress);
+aoMapTress.repeat.set(repeatCountTress, repeatCountTress);
+heightMapTress.repeat.set(repeatCountTress, repeatCountTress);
+normalMapTress.repeat.set(repeatCountTress, repeatCountTress);
+roughnessMapTress.repeat.set(repeatCountTress, repeatCountTress);
+
+// Crear el material
+const materialTress = new THREE.MeshStandardMaterial({
+  map: baseColorTress,
+  aoMap: aoMapTress,
+  normalMap: normalMapTress,
+  displacementMap: heightMapTress,
+  displacementScale: 0.8,
+  roughnessMap: roughnessMapTress,
+});
+
+// Crear un Plane
+const geometryTress = new THREE.PlaneGeometry(60, 60, 1, 1);
+
+// MUY IMPORTANTE: Necesitas UV2 para que el aoMap funcione
+geometryTress.setAttribute('uv2', new THREE.BufferAttribute(geometryTress.attributes.uv.array, 2));
+
+const planeTress = new THREE.Mesh(geometryTress, materialTress);
+sceneTres.add(planeTress);
+
+// Opcional: rotarlo para que esté horizontal
+planeTress.rotation.x = -Math.PI / 2;
+planeTress.position.set(0, 0.1, 95);
+
+
+
 
 sceneTres.add(luzdospasillo);
 // Cargar pascilloModel
@@ -308,7 +367,7 @@ pascilloLoader.load(
   (gltf) => {
     const pascilloModel = gltf.scene;
     pascilloModel.scale.set(3, 3, 3);
-    pascilloModel.position.set(0, 0, 116);
+    pascilloModel.position.set(0, -0.7, 116);
 
 
 
@@ -324,86 +383,6 @@ pascilloLoader.load(
   undefined,
   (error) => console.error("Error al cargar el modelo de pascilloModel:", error)
 );
-
-
-// // Cargar modelo Planta
-// const loadercolumn = new GLTFLoader();
-// loadercolumn.load(
-//   "./src/objt/escena/columna.glb",
-//   (gltf) => {
-//     const modeloBase = gltf.scene;
-
-//     function crearPalmera(posX, posY, posZ, escalaX, escalaY, escalaZ) {
-//       const cloncolumn = modeloBase.clone();
-//       cloncolumn.position.set(posX, posY, posZ);
-//       cloncolumn.scale.set(escalaX, escalaY, escalaZ);
-
-//       cloncolumn.traverse((child) => {
-//         if (child.isMesh) {
-//           child.castShadow = true;
-//           child.receiveShadow = true;
-//         }
-//       });
-
-//       sceneTres.add(cloncolumn);
-//     }
-
-
-//     //derecha
-
-//     crearPalmera(4.7, 0.7, 35, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 37, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 39, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 41, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 43, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 45, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 47, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 49, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 51, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 53, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 55, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 57, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 59, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 61, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 63, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 65, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 67, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 69, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 71, 0.05, 0.05, 0.05);
-//     crearPalmera(4.7, 0.8, 73, 0.05, 0.05, 0.05);
-
-//     // izquierda
-
-//     crearPalmera(-4.7, 0.7, 35, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 37, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 39, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 41, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 43, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 45, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 47, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 49, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 51, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 53, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 55, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 57, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 59, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 61, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 63, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 65, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 67, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 69, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 71, 0.05, 0.05, 0.05);
-//     crearPalmera(-4.7, 0.8, 73, 0.05, 0.05, 0.05);
-
-
-
-
-
-
-//   },
-//   undefined,
-//   (error) => console.error("Error al cargar el modelo de columna:", error)
-// );
 
 
 
