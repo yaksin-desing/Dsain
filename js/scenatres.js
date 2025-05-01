@@ -346,7 +346,7 @@ normalMapTress.wrapS = normalMapTress.wrapT = THREE.RepeatWrapping;
 
 
 // Definir cuánto quieres que se repitan (por ejemplo 4x4 veces)
-const repeatCountTress = 20;
+const repeatCountTress = 15;
 baseColorTress.repeat.set(repeatCountTress, repeatCountTress);
 aoMapTress.repeat.set(repeatCountTress, repeatCountTress);
 heightMapTress.repeat.set(repeatCountTress, repeatCountTress);
