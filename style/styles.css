@@ -384,6 +384,10 @@ h5 {
 .scroll-contents #scroll-content #contenedor .loading .contactnav .cont_menu .cont_boton_menu:hover {
   box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.247);
 }
+.scroll-contents #scroll-content #contenedor .loading .contactnav .magnetic-button {
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
 .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu {
   position: fixed;
   top: 5vh;
@@ -564,6 +568,10 @@ h5 {
   right: 3vh;
   opacity: 0%;
   z-index: 3;
+}
+.scroll-contents #scroll-content #contenedor .loading .magnetic-button {
+  transition: transform 0.2s ease;
+  will-change: transform;
 }
 .scroll-contents #scroll-content #contenedor .loading #audio-button {
   width: 40px;
