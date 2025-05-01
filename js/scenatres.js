@@ -26,7 +26,7 @@ cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
 
 
 // Configuración de la luz direccional
-const luzdospasillo = new THREE.DirectionalLight(0xffffff, 3);
+const luzdospasillo = new THREE.DirectionalLight(0xffffff, 1);
 luzdospasillo.position.set(10, 80, -7);
 luzdospasillo.castShadow = true;
 luzdospasillo.shadow.camera.top = 100;
@@ -54,7 +54,7 @@ luzdospasillo.target = targetdos;
 sceneTres.add(luzdospasillo);
 
 // Configuración de la luz direccional
-const luzdospasillotres = new THREE.DirectionalLight(0xFDFFA2, 0.5);
+const luzdospasillotres = new THREE.DirectionalLight(0xFDFFA2, 0.7);
 luzdospasillotres.position.set(-5, 5, 500);
 
 const targetres = new THREE.Object3D();
@@ -62,6 +62,26 @@ targetres.position.set(0, 0, 50);
 sceneTres.add(targetres);
 luzdospasillotres.target = targetres;
 sceneTres.add(luzdospasillotres);
+
+
+const luzLinterna = new THREE.SpotLight(0xffffff, 1.7);
+luzLinterna.position.set(0, 0, 0);
+
+// Ángulo más cerrado (en radianes, por ejemplo 0.1 para ángulo pequeño)
+luzLinterna.angle = 2;
+
+// Qué tan difuso es el borde (0 = borde duro, 1 = difuso)
+luzLinterna.penumbra = 0.9;
+
+
+// Configurar el target
+const targetLinterna = new THREE.Object3D();
+targetLinterna.position.set(0, 0, -5);
+sceneTres.add(targetLinterna);
+luzLinterna.target = targetLinterna;
+
+sceneTres.add(luzLinterna);
+
 
 //luz suelo
 
@@ -255,7 +275,7 @@ textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
   });
   water.material.transparent = true;
   water.rotation.x = -Math.PI / 2;
-  water.position.y = 0.7;
+  water.position.y = 0.9;
   water.position.z = 0;
 
   sceneTres.add(water);
@@ -292,7 +312,7 @@ const sueloGeometry = new THREE.PlaneGeometry(500, 500); // tamaño del suelo
 
 // Crear el material del suelo
 const sueloMaterial = new THREE.MeshStandardMaterial({
-  color: 0xA1A83F, // color blanco
+  color: 0x6EBFD3, // color blanco
   side: THREE.DoubleSide // visible por ambos lados
 });
 
@@ -312,18 +332,18 @@ sceneTres.add(suelo);
 // Cargar texturas
 const loaderTress = new THREE.TextureLoader();
 
-const baseColorTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/basecolor.jpg');
-const aoMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/ambientOcclusion.jpg');
+const baseColorTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/basecolor.png');
+const aoMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/ambientOcclusion.png');
 const heightMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/height.png');
-const normalMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/normal.jpg');
-const roughnessMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/roughness.jpg');
+const normalMapTress = loaderTress.load('./src/objt/escena/escenatres/textpiso/normal.png');
+
 
 // Hacer que las texturas se repitan
 baseColorTress.wrapS = baseColorTress.wrapT = THREE.RepeatWrapping;
 aoMapTress.wrapS = aoMapTress.wrapT = THREE.RepeatWrapping;
 heightMapTress.wrapS = heightMapTress.wrapT = THREE.RepeatWrapping;
 normalMapTress.wrapS = normalMapTress.wrapT = THREE.RepeatWrapping;
-roughnessMapTress.wrapS = roughnessMapTress.wrapT = THREE.RepeatWrapping;
+
 
 // Definir cuánto quieres que se repitan (por ejemplo 4x4 veces)
 const repeatCountTress = 20;
@@ -331,7 +351,7 @@ baseColorTress.repeat.set(repeatCountTress, repeatCountTress);
 aoMapTress.repeat.set(repeatCountTress, repeatCountTress);
 heightMapTress.repeat.set(repeatCountTress, repeatCountTress);
 normalMapTress.repeat.set(repeatCountTress, repeatCountTress);
-roughnessMapTress.repeat.set(repeatCountTress, repeatCountTress);
+
 
 // Crear el material
 const materialTress = new THREE.MeshStandardMaterial({
@@ -339,8 +359,8 @@ const materialTress = new THREE.MeshStandardMaterial({
   aoMap: aoMapTress,
   normalMap: normalMapTress,
   displacementMap: heightMapTress,
-  displacementScale: 0.8,
-  roughnessMap: roughnessMapTress,
+  displacementScale: 0.2,
+
 });
 
 // Crear un Plane
@@ -354,7 +374,7 @@ sceneTres.add(planeTress);
 
 // Opcional: rotarlo para que esté horizontal
 planeTress.rotation.x = -Math.PI / 2;
-planeTress.position.set(0, -0.1, 115);
+planeTress.position.set(0, 0, 115);
 
 
 

@@ -304,13 +304,13 @@ function main() {
     const waterGeometry = new THREE.PlaneGeometry(50, 150);
 
     wateru = new Water(waterGeometry, {
-      textureWidth: 50,
-      textureHeight: 50,
+      textureWidth: 500,
+      textureHeight: 500,
       waterNormals: waterNormal,
       sunDirection: new THREE.Vector3(0, 1, 0),
       sunColor: 0xFFDA05,
       waterColor: 0x0199FF,
-      distortionScale: 2,
+      distortionScale: 1,
       fog: false,
       alpha: 0.8, // Nivel de transparencia (0 totalmente transparente, 1 totalmente opaco)
     });
