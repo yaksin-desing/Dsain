@@ -30,10 +30,6 @@ function createAnimation() {
     if (screenWidth <= 550) {
         //timeline loading
 
-        animaloading.to(parrafodeinicio, {
-            duration: 1,
-            opacity: "100%",
-        });
         animaloading.to(contparrafo, {
             delay: -1,
             duration: 0,
@@ -47,6 +43,9 @@ function createAnimation() {
             borderRadius: "2vh",
         });
         animaloading.to(tituloh1, {
+            opacity: "100%",
+        });
+        animaloading.to(parrafodeinicio, {
             opacity: "100%",
         });
         animaloading.to(logoanimado, {
@@ -98,10 +97,10 @@ function createAnimation() {
             opacity: "100%",
         });
 
-        animaloading.to(parrafodeinicio, {
-            duration: 1,
-            opacity: "100%",
-        });
+        // animaloading.to(parrafodeinicio, {
+        //     duration: 1,
+        //     opacity: "100%",
+        // });
         animaloading.to(contenedor_loading, {
             duration: 1,
             ease: 'power2.out',
@@ -157,10 +156,6 @@ function createAnimation() {
     } else {
         // Animaciones para pantallas grandes
 
-        animaloading.to(parrafodeinicio, {
-            duration: 1,
-            opacity: "100%",
-        });
         animaloading.to(contparrafo, {
             delay: -1,
             duration: 0,
@@ -174,6 +169,9 @@ function createAnimation() {
             borderRadius: "2vh",
         });
         animaloading.to(tituloh1, {
+            opacity: "100%",
+        });
+        animaloading.to(parrafodeinicio, {
             opacity: "100%",
         });
         animaloading.to(logoanimado, {
@@ -300,9 +298,7 @@ function animateWords() {
         });
     });
 }
-
-// Inicia la animación cuando el DOM esté listo
-document.addEventListener("DOMContentLoaded", animateWords);
+animateWords();
 
 
 
@@ -406,10 +402,6 @@ function fadeVolume(audioElement, targetVolume) {
         }
     }, intervalTime);
 }
-
-
-
-
 
 
 
@@ -564,11 +556,6 @@ if (screenWidth > 1020) {
 
 
 
-
-
-
-
-
 //Animacion de inicio de escena
 const contenedor = document.querySelector('.contenedor');
 //timeline loading
@@ -577,27 +564,30 @@ const openescena = gsap.timeline({
     duration: 1,
     delay: -1,
 });
+
 openescena.to(cursors, {
     marginTop: "-37px",
 });
+
 openescena.to(botoninicio, {
     bottom: "-35vh",
-
 });
-openescena.to(parrafodeinicio, {
 
+openescena.to(parrafodeinicio, {
     opacity: "0",
     display: "none"
 });
+
+openescena.to(imgparrafoinicio, {
+    opacity: "0",
+    display: "none"
+});
+
 openescena.to(tituloh1, {
     opacity: "0",
     display: "none"
 });
-openescena.to(imgparrafoinicio, {
 
-    opacity: "0",
-    display: "none"
-});
 openescena.to(contenedor_loading, {
     duration: 1,
     ease: 'power2.out',
@@ -605,8 +595,6 @@ openescena.to(contenedor_loading, {
     height: "100%",
     borderRadius: "0vh",
 });
-
-
 
 
 // Escuchar el evento click en el botón

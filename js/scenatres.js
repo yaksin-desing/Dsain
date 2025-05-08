@@ -374,12 +374,10 @@ sceneTres.add(planeTress);
 
 // Opcional: rotarlo para que esté horizontal
 planeTress.rotation.x = -Math.PI / 2;
-planeTress.position.set(0, 0, 115);
+planeTress.position.set(0, 0.4, 115);
+planeTress.receiveShadow = true; // Asegúrate de que el plano reciba sombras
 
-
-
-
-sceneTres.add(luzdospasillo);
+sceneTres.add(luzdospasillo); 
 // Cargar pascilloModel
 const pascilloLoader = new GLTFLoader();
 pascilloLoader.load(

@@ -240,6 +240,8 @@ function main() {
   updateAllTexts();
 
 
+ 
+
 
 
 
@@ -421,7 +423,7 @@ function main() {
         }
       });
 
-      scene.add(modelbaselogo);
+      //scene.add(modelbaselogo);
     },
     undefined,
     (error) =>
@@ -810,7 +812,7 @@ function main() {
     inicioescena.to(model.position, {
       delay: -1,
       x: 0,
-      y: 1,
+      y: 0.8,
       z: -5,
       duration: 2,
       ease: "power3.easeInOut",
@@ -886,10 +888,10 @@ function main() {
           y: 3,
           z: 1100,
           ease: "sine.in",
-          onStart: () => {
-            renderer.setRenderTarget(renderTargetTres);
-            renderer.render(sceneDos, cameraDos);
-          }
+          // onStart: () => {
+          //   renderer.setRenderTarget(renderTargetTres);
+          //   renderer.render(sceneDos, cameraDos);
+          // }
         })
         .to(cameraTres.position, {
           duration: 5,
@@ -923,7 +925,7 @@ function main() {
           duration: 10,
           x: 0,
           y: 3,
-          z: 160,
+          z: 163,
         })
 
     });
@@ -1048,6 +1050,7 @@ function main() {
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   container.appendChild(stats.dom);
+
   function animate() {
     stats.begin();
     //monitored code goes here
@@ -1203,6 +1206,11 @@ function main() {
         // Actualizar planos
         updatePlanes();
       }
+
+
+
+
+      
 
 
 

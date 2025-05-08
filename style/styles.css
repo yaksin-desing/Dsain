@@ -249,7 +249,6 @@ h5 {
   align-items: center;
   width: 100%;
   z-index: 3;
-  opacity: 0%;
 }
 .scroll-contents #scroll-content #contenedor .loading .contparrafo #imgparrafoinicio {
   opacity: 0%;
@@ -262,9 +261,9 @@ h5 {
   font-size: 12px;
   padding: 0% 28% 0% 28%;
   text-align: center;
-  opacity: 0%;
   z-index: 3;
   font-weight: 600;
+  opacity: 0%;
 }
 .scroll-contents #scroll-content #contenedor .loading .bottoninicio {
   position: absolute;
@@ -814,7 +813,6 @@ h5 {
     align-items: center;
     width: 100%;
     z-index: 3;
-    opacity: 0%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contparrafo #imgparrafoinicio {
     opacity: 0%;
@@ -827,9 +825,9 @@ h5 {
     font-size: 12px;
     padding: 0% 5% 0% 5%;
     text-align: center;
-    opacity: 0%;
     z-index: 3;
     font-weight: 600;
+    opacity: 0%;
   }
   .scroll-contents #scroll-content #contenedor .loading .bottoninicio {
     position: absolute;
@@ -1366,7 +1364,6 @@ h5 {
     align-items: center;
     width: 100%;
     z-index: 3;
-    opacity: 0%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contparrafo #imgparrafoinicio {
     opacity: 0%;
@@ -1379,9 +1376,9 @@ h5 {
     font-size: 12px;
     padding: 0% 5% 0% 5%;
     text-align: center;
-    opacity: 0%;
     z-index: 3;
     font-weight: 600;
+    opacity: 0%;
   }
   .scroll-contents #scroll-content #contenedor .loading .bottoninicio {
     position: absolute;
@@ -1921,7 +1918,6 @@ h5 {
     align-items: center;
     width: 100%;
     z-index: 3;
-    opacity: 0%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contparrafo #imgparrafoinicio {
     opacity: 0%;
@@ -1934,9 +1930,9 @@ h5 {
     font-size: 12px;
     padding: 0% 5% 0% 5%;
     text-align: center;
-    opacity: 0%;
     z-index: 3;
     font-weight: 600;
+    opacity: 0%;
   }
   .scroll-contents #scroll-content #contenedor .loading .bottoninicio {
     position: absolute;
