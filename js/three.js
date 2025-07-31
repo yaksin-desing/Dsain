@@ -1250,9 +1250,5 @@ function main() {
     renderer.setSize(width, height);
   });
 
-
-
-
-
 }
 main();
