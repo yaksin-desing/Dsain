@@ -21,7 +21,7 @@ const cameraTres = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-cameraTres.position.set(26, 13, -21);
+cameraTres.position.set(26, 9, -21);
 cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
 
 
@@ -113,18 +113,18 @@ loaderroca.load(
       sceneTres.add(clonRoca);
     }
 
-    crearRoca(28, 0, -100, 0.5, 0.8, 0.2, 0.2, 0, 0);
-    crearRoca(40, 0, -15, 0.5, 0.3, 0.3, 0, -1.8, 0);
-    crearRoca(30, 0, -40, 1, 2, 1, 0, -5, 0);
-    crearRoca(28, 0, -150, 1, 2, 1, 0, -4.5, 0);
+    //crearRoca(28, 0, -100, 0.5, 0.8, 0.2, 0.2, 0, 0);
+    crearRoca(40, -1, -13, 0.5, 0.3, 0.3, 0, -1.8, 0);
+    //crearRoca(30, 0, -40, 1, 2, 1, 0, -5, 0);
+    //crearRoca(28, 0, -150, 1, 2, 1, 0, -4.5, 0);
 
 
     crearRoca(-15, 0, -100, 0.3, 0.5, 0.2, 0.2, -0.5, 0);
-    crearRoca(-30, 0, -60, 0.3, 0.5, 0.3, 0.2, 1, 0);
+    //crearRoca(-30, 0, -60, 0.3, 0.5, 0.3, 0.2, 1, 0);
     crearRoca(-20, -1, -20, 0.3, 0.5, 0.3, 0, -1.8, 0);
-    crearRoca(-40, 0, -40, 1, 2, 0.4, 0, -1.8, 0);
-    crearRoca(-30, 0, -140, 1, 2, 0.4, 0, -2, 0);
-    crearRoca(-15, -5, -230, 1, 2.5, 0.4, 1, -2.5, 1);
+    //crearRoca(-40, 0, -40, 1, 2, 0.4, 0, -1.8, 0);
+    //crearRoca(-30, 0, -140, 1, 2, 0.4, 0, -2, 0);
+    //crearRoca(-15, -5, -230, 1, 2.5, 0.4, 1, -2.5, 1);
 
 
   },
@@ -135,7 +135,7 @@ loaderroca.load(
 // Cargar modelo Palmera
 const loaderpalmera = new GLTFLoader();
 loaderpalmera.load(
-  "./src/objt/escena/escenatres/palmera.glb",
+  "./src/objt/escena/escenatres/palma.glb",
   (gltf) => {
     const modeloBase = gltf.scene;
 
@@ -155,11 +155,13 @@ loaderpalmera.load(
       sceneTres.add(clonPalmera);
     }
 
-    crearPalmera(30, 15, -85, 0.3, 0.3, 0.3, 0, 0, 0);
-    crearPalmera(-25, 10, -100, 0.4, 0.4, 0.4, 0, 0, 0);
+    crearPalmera(30, 25, -85, 0.3, 0.3, 0.3, 0, 0, 0);
+    crearPalmera(27, 25, 7, 0.3, 0.3, 0.3, 0, 2, 0);
 
 
-    crearPalmera(-25, 10, -40, 0.4, 0.3, 0.4, 0, 0, 0);
+
+    crearPalmera(-25, 20, -100, 0.4, 0.4, 0.4, 0, 0, 0);
+    crearPalmera(-25, 20, -40, 0.4, 0.3, 0.4, 0, 0, 0);
 
 
   },
@@ -190,10 +192,10 @@ loaderplanta.load(
       sceneTres.add(clonplanta);
     }
 
-    crearPalmera(15, 0, -15, 0.4, 0.3, 0.4, 0, 0, 0);
+    crearPalmera(5, -0.5, 100, 0.1, 0.1, 0.1, 0, 0, 0);
 
 
-    crearPalmera(-45, 3, -25, 0.4, 0.3, 0.4, 0, 0, 0);
+    crearPalmera(-11, -0.5, 120, 0.1, 0.1, 0.1, 0, 0, 0);
 
   },
   undefined,
@@ -213,7 +215,7 @@ const renderTargetTres = new THREE.WebGLRenderTarget(
 
 
 // Crea la geometría del plano
-const planeGeometryportal = new THREE.PlaneGeometry(17.5, 9.5);
+const planeGeometryportal = new THREE.PlaneGeometry(16, 8);
 
 // Crea el material usando la textura del render target
 const planeMaterialportal = new THREE.MeshBasicMaterial({
@@ -224,7 +226,7 @@ const planeMaterialportal = new THREE.MeshBasicMaterial({
 const textuportal = new THREE.Mesh(planeGeometryportal, planeMaterialportal);
 
 // Configura la posición del plano si es necesario
-textuportal.position.set(31, 12.8, -21); // Cambia las coordenadas según tu escena
+textuportal.position.set(31, 9.8, -21); // Cambia las coordenadas según tu escena
 textuportal.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
 
 
@@ -237,8 +239,8 @@ loaderpared.load(
   "./src/objt/escena/escenatres/paredtres.glb",
   (gltf) => {
     const paredtres = gltf.scene;
-    paredtres.position.set(35, -3, -20);
-    paredtres.scale.set(0.4, 0.4, 0.4);
+    paredtres.position.set(34.3, -6.1, -20);
+    paredtres.scale.set(0.4, 0.4, 0.35);
     paredtres.rotation.set(0, -1.58, 0);
 
     paredtres.traverse((child) => {
@@ -260,7 +262,7 @@ const textureaguaLoader = new THREE.TextureLoader();
 textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
   waterNormal.wrapS = waterNormal.wrapT = THREE.RepeatWrapping;
 
-  const waterGeometry = new THREE.PlaneGeometry(400, 400);
+  const waterGeometry = new THREE.PlaneGeometry(550, 550);
 
   water = new Water(waterGeometry, {
     textureWidth: 512,
@@ -308,7 +310,7 @@ sceneTres.add(sky);
 
 
 // Crear la geometría del suelo
-const sueloGeometry = new THREE.PlaneGeometry(500, 500); // tamaño del suelo
+const sueloGeometry = new THREE.PlaneGeometry(700, 700); // tamaño del suelo
 
 // Crear el material del suelo
 const sueloMaterial = new THREE.MeshStandardMaterial({
@@ -346,7 +348,7 @@ normalMapTress.wrapS = normalMapTress.wrapT = THREE.RepeatWrapping;
 
 
 // Definir cuánto quieres que se repitan (por ejemplo 4x4 veces)
-const repeatCountTress = 15;
+const repeatCountTress = 27;
 baseColorTress.repeat.set(repeatCountTress, repeatCountTress);
 aoMapTress.repeat.set(repeatCountTress, repeatCountTress);
 heightMapTress.repeat.set(repeatCountTress, repeatCountTress);
@@ -360,11 +362,10 @@ const materialTress = new THREE.MeshStandardMaterial({
   normalMap: normalMapTress,
   displacementMap: heightMapTress,
   displacementScale: 0.2,
-
 });
 
 // Crear un Plane
-const geometryTress = new THREE.PlaneGeometry(90, 90, 1, 1);
+const geometryTress = new THREE.PlaneGeometry(200, 300, 1, 1);
 
 // MUY IMPORTANTE: Necesitas UV2 para que el aoMap funcione
 geometryTress.setAttribute('uv2', new THREE.BufferAttribute(geometryTress.attributes.uv.array, 2));
@@ -374,10 +375,10 @@ sceneTres.add(planeTress);
 
 // Opcional: rotarlo para que esté horizontal
 planeTress.rotation.x = -Math.PI / 2;
-planeTress.position.set(0, 0.4, 115);
+planeTress.position.set(0, 0.4, 50);
 planeTress.receiveShadow = true; // Asegúrate de que el plano reciba sombras
 
-sceneTres.add(luzdospasillo); 
+sceneTres.add(luzdospasillo);
 // Cargar pascilloModel
 const pascilloLoader = new GLTFLoader();
 pascilloLoader.load(
@@ -401,10 +402,6 @@ pascilloLoader.load(
   undefined,
   (error) => console.error("Error al cargar el modelo de pascilloModel:", error)
 );
-
-
-
-
 
 // // Agregar controles de cámara
 // const controls = new OrbitControls(cameraTres, container);

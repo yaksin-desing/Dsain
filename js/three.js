@@ -898,13 +898,13 @@ function main() {
           x: -5,
           y: 5,
           z: 0,
-          ease: "power2.inOut"
+          
         })
         .to(cameraTres.rotation, {
           delay: -5,
           duration: 5,
           x: 0,
-          y: -1,
+          y: -1.2,
           z: 0,
         })
         .to(cameraTres.position, {
@@ -913,7 +913,6 @@ function main() {
           y: 3,
           z: 30,
         })
-
         .to(cameraTres.rotation, {
           delay: -5,
           duration: 5,
@@ -1171,7 +1170,6 @@ function main() {
         }
       }
 
-
       if (textMeshes["text1"]) {
         textMeshes["text1"].position.lerp(
           new THREE.Vector3(
@@ -1206,14 +1204,6 @@ function main() {
         // Actualizar planos
         updatePlanes();
       }
-
-
-
-
-      
-
-
-
 
     }
     //console.log("Posición de cameraTres en Z:", cameraTres.position.z);

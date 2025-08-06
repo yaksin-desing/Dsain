@@ -652,19 +652,26 @@ h5 {
   z-index: 0;
 }
 .scroll-contents #scroll-content #contenedor .cont-proyectos {
-  top: 0;
+  bottom: 0;
   left: 0;
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 10%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-content: center;
   align-items: center;
-  gap: 1px;
   z-index: 1;
+  /* Fondo semitransparente para que el blur se note */
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Efecto blur */
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  /* Para compatibilidad con Safari */
 }
 .scroll-contents #scroll-content #contenedor .cont-proyectos .subtitulo-proyecto {
+  display: none;
   font-family: "regular";
   font-size: 1.7vw;
   color: #ffffff;
@@ -672,11 +679,11 @@ h5 {
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5), -2px -2px 10px rgba(0, 0, 0, 0.5);
 }
 .scroll-contents #scroll-content #contenedor .cont-proyectos .tituloproyecto {
-  font-family: "bold";
-  font-size: 5vw;
+  margin-top: 2vh;
+  font-family: "Medium";
+  font-size: 2vw;
   color: #ffffff;
   text-align: center;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.26), -2px -2px 10px rgba(0, 0, 0, 0.26);
 }
 .scroll-contents #scroll-content #contenedor .cont-proyectos .letter-wrapperp {
   display: inline-block;
