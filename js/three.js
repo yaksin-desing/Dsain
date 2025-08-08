@@ -240,10 +240,6 @@ function main() {
   updateAllTexts();
 
 
- 
-
-
-
 
 
 
@@ -377,67 +373,12 @@ function main() {
     (error) => console.error("Error al cargar el modelo:", error)
   );
 
-  // cargar modelo base logo
-  const baselogo = new GLTFLoader();
-  baselogo.load(
-    "./src/objt/escena/baselogo.glb",
-    (gltf) => {
-      const modelbaselogo = gltf.scene;
-      modelbaselogo.position.set(0, -1.14, -5);
-      modelbaselogo.scale.set(0.3, 0.36, 0.3);
-      modelbaselogo.rotation.set(0, 0, 0);
-      const modelbaselogoMaterial = new THREE.MeshStandardMaterial({
-
-        color: 0xfff6e8, // Color base del material
-        aoMap: null, // Mapa de oclusión ambiental
-        emissive: 0xff9f73, // Color de emisión (luz propia)
-        emissiveIntensity: 0.5, // Intensidad de la emisión
-        emissiveMap: null, // Textura de emisión
-        metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
-        metalnessMap: null, // Mapa de metalicidad
-        roughness: 1, // Rugosidad de la superficie (0 = completamente suave, 1 = completamente rugoso)
-        roughnessMap: null, // Mapa de rugosidad
-        bumpMap: null, // Mapa de relieve (bump)
-        normalMap: null, // Mapa normal (para efectos de iluminación)
-        displacementMap: null, // Mapa de desplazamiento
-        displacementScale: 0.2, // Escala del desplazamiento
-        displacementBias: 0, // Desplazamiento de la altura
-        alphaMap: null, // Mapa de transparencia
-        transparent: false, // Si es transparente (se usa con alphaMap o opacity)
-        opacity: 1, // Opacidad del material (0 = completamente transparente)
-        side: THREE.FrontSide, // Qué caras del material se deben renderizar (FrontSide, BackSide, DoubleSide)
-        flatShading: false, // Si se aplica sombreado plano en las caras
-        wireframe: false, // Si se muestra como líneas (wireframe)
-        wireframeLinewidth: 1, // Grosor de las líneas en el modo wireframe
-        wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
-        wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
-        shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
-        envMap: null, // Mapa del entorno para reflejos
-        envMapIntensity: 1, // Intensidad de los reflejos del mapa del entorno
-        alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
-      });
-
-      modelbaselogo.traverse((child) => {
-        if (child.isMesh) {
-          child.material = modelbaselogoMaterial;
-        }
-      });
-
-      //scene.add(modelbaselogo);
-    },
-    undefined,
-    (error) =>
-    console.error("Error al cargar el modelo de modelbaselogo ", error)
-  );
-
-
 
 
   // Cargar múltiples texturas
   const loaderbanderas = new THREE.TextureLoader();
   const textures = [
     loaderbanderas.load('./src/img/proyectounod.png'),
-    loaderbanderas.load('./src/img/proyectouno.jpg'),
   ];
 
   // Función para crear materiales únicos con diferentes texturas y opacidad
@@ -511,16 +452,10 @@ function main() {
     const cameraY = camera.position.y;
 
     const visibilityRanges = [{
-        plane: planes[0],
-        minZ: 35,
-        maxZ: 60
-      },
-      {
-        plane: planes[1],
-        minZ: 60,
-        maxZ: 80
-      },
-    ];
+      plane: planes[0],
+      minZ: 30,
+      maxZ: 80
+    }, ];
 
     visibilityRanges.forEach(({
       plane,
@@ -540,15 +475,9 @@ function main() {
 
 
 
-
-
-
-
-
   // Cargar múltiples texturas
   const loaderbanderasD = new THREE.TextureLoader();
   const texturesD = [
-    loaderbanderasD.load('./src/img/proyectounod.png'),
     loaderbanderasD.load('./src/img/proyectouno.jpg'),
   ];
 
@@ -623,16 +552,10 @@ function main() {
     const cameraY = cameraDos.position.y;
 
     const visibilityRanges = [{
-        planeD: planesD[0],
-        minZ: 1040,
-        maxZ: 1070
-      },
-      {
-        planeD: planesD[1],
-        minZ: 1070,
-        maxZ: 1098
-      },
-    ];
+      planeD: planesD[0],
+      minZ: 1040,
+      maxZ: 1090
+    }, ];
 
     visibilityRanges.forEach(({
       planeD,
@@ -646,6 +569,104 @@ function main() {
 
       const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
       planeD.material.uniforms.uOpacity.value += (targetOpacity - planeD.material.uniforms.uOpacity.value) * 0.1;
+    });
+  }
+
+
+  // Cargar múltiples texturas Tres
+  const loaderbanderasT = new THREE.TextureLoader();
+  const texturesT = [
+    loaderbanderasT.load('./src/img/proyectouno.jpg'),
+  ];
+
+  // Función para crear materiales únicos con diferentes texturas y opacidad
+  function createMaterial(texture) {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: {
+          value: 0
+        },
+        uTexture: {
+          value: texture
+        },
+        uOpacity: {
+          value: 0
+        }, // Inicialmente invisible
+      },
+      vertexShader: `
+      uniform float uTime;
+      varying vec2 vUv;
+
+      void main() {
+        vUv = uv;
+        vec3 pos = position;
+        float wave = sin(pos.y * 3.0 + uTime * 1.0) * 0.1;
+        pos.x += wave;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `,
+      fragmentShader: `
+      uniform sampler2D uTexture;
+      uniform float uOpacity;
+      varying vec2 vUv;
+
+      void main() {
+        vec4 color = texture2D(uTexture, vUv);
+        if (color.a < 0.1) discard;
+        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
+      }
+    `,
+      transparent: true
+    });
+  }
+
+  // Crear planos con materiales
+  const planesT = texturesT.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
+  planesT.forEach(planesT => sceneTres.add(planesT));
+
+  // Función para actualizar el tamaño de los planos dinámicamente
+  function updatePlanesSizeTres() {
+    const screenWidth = window.innerWidth;
+    const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
+    const newHeight = newWidth * (1 / 2); // Mantener la proporción 2:1
+
+    planesT.forEach(planeT => {
+      planeT.geometry.dispose();
+      planeT.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
+      planeT.scale.set(1, 1, 1);
+    });
+
+    cameraTres.aspect = window.innerWidth / window.innerHeight;
+    cameraTres.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  }
+
+  window.addEventListener('resize', updatePlanesSizeTres);
+  updatePlanesSizeTres();
+
+  function updatePlanesTres() {
+    const cameraZ = cameraTres.position.z;
+    const cameraX = cameraTres.position.x;
+    const cameraY = cameraTres.position.y;
+
+    const visibilityRanges = [{
+      planeT: planesT[0],
+      minZ: 20,
+      maxZ: 110
+    }, ];
+
+    visibilityRanges.forEach(({
+      planeT,
+      minZ,
+      maxZ
+    }) => {
+      planeT.position.z += (cameraZ - 2 - planeT.position.z) * 0.12;
+      planeT.position.x += (cameraX - planeT.position.x) * 0.1;
+      planeT.position.y += (cameraY - planeT.position.y) * 0.1;
+      planeT.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
+
+      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
+      planeT.material.uniforms.uOpacity.value += (targetOpacity - planeT.material.uniforms.uOpacity.value) * 0.1;
     });
   }
 
@@ -898,7 +919,7 @@ function main() {
           x: -5,
           y: 5,
           z: 0,
-          
+
         })
         .to(cameraTres.rotation, {
           delay: -5,
@@ -934,32 +955,25 @@ function main() {
 
 
 
-  // Definir rangos personalizados para cada par de textos
+  // Definir rangos personalizados con sus respectivas cámaras
   const ranges = [{
       id: "proyecto-1",
-      min: 35,
-      max: 60
+      min: 30,
+      max: 80,
+      camera: camera
     },
     {
       id: "proyecto-2",
-      min: 60,
-      max: 80
+      min: 1040,
+      max: 1100,
+      camera: cameraDos
     },
     {
       id: "proyecto-3",
-      min: 1040,
-      max: 1070
+      min: 20,
+      max: 110,
+      camera: cameraTres
     },
-    {
-      id: "proyecto-4",
-      min: 1070,
-      max: 1098
-    },
-    {
-      id: "proyecto-5",
-      min: 0,
-      max: 30
-    }
   ];
 
   // Función para animar texto letra por letra
@@ -982,7 +996,6 @@ function main() {
       letterWrapper.appendChild(letter);
       element.appendChild(letterWrapper);
 
-      // Animación de cada letra
       timeline.to(letter, {
         y: 0,
         duration: 0.6,
@@ -998,15 +1011,14 @@ function main() {
   const animations = {};
   ranges.forEach((range) => {
     const container = document.getElementById(range.id);
-    const subtitle = container.querySelector(".subtitulo-proyecto");
     const title = container.querySelector(".tituloproyecto");
 
     animations[range.id] = {
       container: container,
-      subtitleAnim: animateText(subtitle),
       titleAnim: animateText(title),
       min: range.min,
-      max: range.max
+      max: range.max,
+      camera: range.camera
     };
   });
 
@@ -1015,31 +1027,30 @@ function main() {
     Object.keys(animations).forEach((id) => {
       const {
         container,
-        subtitleAnim,
         titleAnim,
         min,
-        max
+        max,
+        camera
       } = animations[id];
 
-      // Solo permitir que "proyecto-3" funcione si cameraTres está activa
-      if (id === "proyecto-5" && activeCamera !== cameraTres) {
+      // Solo mostrar si la cámara activa coincide
+      if (activeCamera !== camera) {
         container.style.opacity = 0;
-        subtitleAnim.reverse();
         titleAnim.reverse();
         return;
       }
 
+      // Mostrar si está dentro del rango y con la cámara correcta
       if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
         container.style.opacity = 1;
-        subtitleAnim.play();
         titleAnim.play();
       } else {
         container.style.opacity = 0;
-        subtitleAnim.reverse();
         titleAnim.reverse();
       }
     });
   }
+
 
 
 
@@ -1055,11 +1066,7 @@ function main() {
     //monitored code goes here
     stats.end();
 
-
-
     requestAnimationFrame(animate);
-
-
 
     const delta = clock.getDelta(); // Tiempo entre frames
 
@@ -1068,19 +1075,13 @@ function main() {
       mixerpuerta.update(delta);
     }
 
-
     camera.position.x += (mouse.x - camera.position.x) * 0.09;
     camera.position.x = Math.max(
       minCameraX,
       Math.min(camera.position.x, maxCameraX)
     );
 
-
-
     animateFunctions.forEach((fn) => fn());
-
-
-
 
     // Lógica para cambiar entre escenas según la posición de la cámara principal
     if (camera.position.z >= 90) {
@@ -1096,6 +1097,8 @@ function main() {
       renderer.render(sceneDos, cameraDos);
       updateTextVisibility(cameraDos);
 
+
+
       // Actualizar el tiempo en cada material
       planesD.forEach(planeD => {
         if (planeD.material.uniforms.uTime) {
@@ -1104,6 +1107,18 @@ function main() {
       });
 
       updatePlanesDos();
+
+
+            if (cameraTres.position.z >= 5) { // Actualizar el tiempo en cada material
+      planesT.forEach(planeT => {
+        if (planeT.material.uniforms.uTime) {
+          planeT.material.uniforms.uTime.value += 0.02;
+        }
+      });
+        // Actualizar planos
+        updatePlanesTres();
+      }
+    
 
 
       // Ocultar objetos de la escena principal para liberar GPU
@@ -1200,10 +1215,10 @@ function main() {
             plane.material.uniforms.uTime.value += 0.02;
           }
         });
-
         // Actualizar planos
         updatePlanes();
       }
+
 
     }
     //console.log("Posición de cameraTres en Z:", cameraTres.position.z);
