@@ -977,79 +977,76 @@ function main() {
   ];
 
   // Función para animar texto letra por letra
-  function animateText(element) {
-    const text = element.innerText;
-    element.innerHTML = "";
+function animateText(element) {
+  const text = element.innerText;
+  element.innerHTML = "";
 
-    let timeline = gsap.timeline({
-      paused: true
-    });
+  let timeline = gsap.timeline({ paused: true });
 
-    text.split("").forEach((char, index) => {
-      let letterWrapper = document.createElement("span");
-      letterWrapper.classList.add("letter-wrapperp");
+  text.split("").forEach((char, index) => {
+    let letterWrapper = document.createElement("span");
+    letterWrapper.classList.add("letter-wrapperp");
 
-      let letter = document.createElement("span");
-      letter.classList.add("letterp");
-      letter.textContent = char === " " ? "\u00A0" : char;
+    let letter = document.createElement("span");
+    letter.classList.add("letterp");
+    letter.textContent = char === " " ? "\u00A0" : char;
 
-      letterWrapper.appendChild(letter);
-      element.appendChild(letterWrapper);
+    letterWrapper.appendChild(letter);
+    element.appendChild(letterWrapper);
 
-      timeline.to(letter, {
-        y: 0,
-        duration: 0.6,
-        delay: index * 0.05,
-        ease: "power2.out"
-      }, 0);
-    });
-
-    return timeline;
-  }
-
-  // Guardamos las animaciones de los subtítulos y títulos
-  const animations = {};
-  ranges.forEach((range) => {
-    const container = document.getElementById(range.id);
-    const title = container.querySelector(".tituloproyecto");
-
-    animations[range.id] = {
-      container: container,
-      titleAnim: animateText(title),
-      min: range.min,
-      max: range.max,
-      camera: range.camera
-    };
+    timeline.to(letter, {
+      y: 0,
+      duration: 0.6,
+      delay: index * 0.05,
+      ease: "power2.out"
+    }, 0);
   });
 
-  // Función para actualizar visibilidad de textos según la posición de la cámara activa
-  function updateTextVisibility(activeCamera) {
-    Object.keys(animations).forEach((id) => {
-      const {
-        container,
-        titleAnim,
-        min,
-        max,
-        camera
-      } = animations[id];
+  return timeline;
+}
 
-      // Solo mostrar si la cámara activa coincide
-      if (activeCamera !== camera) {
-        container.style.opacity = 0;
-        titleAnim.reverse();
-        return;
-      }
+// Guardamos las animaciones de los subtítulos y títulos
+const animations = {};
 
-      // Mostrar si está dentro del rango y con la cámara correcta
-      if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
-        container.style.opacity = 1;
-        titleAnim.play();
-      } else {
-        container.style.opacity = 0;
-        titleAnim.reverse();
-      }
-    });
-  }
+ranges.forEach((range) => {
+  const container = document.getElementById(range.id);
+
+  // Ahora selecciona TODOS los h3 dentro del contenedor
+  const titles = container.querySelectorAll(".tituloproyecto");
+
+  // Creamos un array de timelines para todos los h3
+  const titleAnims = Array.from(titles).map(title => animateText(title));
+
+  animations[range.id] = {
+    container: container,
+    titleAnims: titleAnims, // ahora es un array
+    min: range.min,
+    max: range.max,
+    camera: range.camera
+  };
+});
+
+// Función para actualizar visibilidad de textos según la posición de la cámara activa
+function updateTextVisibility(activeCamera) {
+  Object.keys(animations).forEach((id) => {
+    const { container, titleAnims, min, max, camera } = animations[id];
+
+    if (activeCamera !== camera) {
+      container.style.opacity = 0;
+      titleAnims.forEach(anim => anim.reverse());
+      return;
+    }
+
+    if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
+      container.style.opacity = 1;
+      titleAnims.forEach(anim => anim.play());
+    } else {
+      container.style.opacity = 0;
+      titleAnims.forEach(anim => anim.reverse());
+    }
+  });
+}
+
 
 
 
