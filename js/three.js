@@ -375,7 +375,7 @@ function main() {
 
 
 
-  // Cargar múltiples texturas
+  // EVENTO UNO
   const loaderbanderas = new THREE.TextureLoader();
   const textures = [
     loaderbanderas.load('./src/img/proyectounod.png'),
@@ -398,7 +398,6 @@ function main() {
       vertexShader: `
       uniform float uTime;
       varying vec2 vUv;
-
       void main() {
         vUv = uv;
         vec3 pos = position;
@@ -411,7 +410,6 @@ function main() {
       uniform sampler2D uTexture;
       uniform float uOpacity;
       varying vec2 vUv;
-
       void main() {
         vec4 color = texture2D(uTexture, vUv);
         if (color.a < 0.1) discard;
@@ -423,14 +421,16 @@ function main() {
   }
 
   // Crear planos con materiales
-  const planes = textures.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
+  const planes = textures.map(texture =>
+    new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture))
+  );
   planes.forEach(plane => scene.add(plane));
 
   // Función para actualizar el tamaño de los planos dinámicamente
   function updatePlanesSize() {
     const screenWidth = window.innerWidth;
-    const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
-    const newHeight = newWidth / 2; // Mantener proporción 2:1
+    const newWidth = screenWidth * 0.003;
+    const newHeight = newWidth / 2;
 
     planes.forEach(plane => {
       plane.geometry.dispose();
@@ -441,41 +441,49 @@ function main() {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   }
-
   window.addEventListener('resize', updatePlanesSize);
   updatePlanesSize();
 
-  // Función para actualizar la visibilidad y posición de los planos
+  // Función para actualizar la visibilidad y posición de los planos + botón
   function updatePlanes() {
     const cameraZ = camera.position.z;
     const cameraX = camera.position.x;
     const cameraY = camera.position.y;
 
-    const visibilityRanges = [{
-      plane: planes[0],
-      minZ: 30,
-      maxZ: 80
-    }, ];
+    const minZ = 30;
+    const maxZ = 80;
 
-    visibilityRanges.forEach(({
-      plane,
-      minZ,
-      maxZ
-    }) => {
+    let isVisible = false;
+
+    planes.forEach(plane => {
       plane.position.z += (cameraZ - 2 - plane.position.z) * 0.1;
       plane.position.x += (cameraX - plane.position.x) * 0.1;
       plane.position.y += (cameraY - plane.position.y) * 0.1;
-
       plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
 
       const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
-      plane.material.uniforms.uOpacity.value += (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
+      if (targetOpacity === 1) {
+        isVisible = true;
+      }
+
+      plane.material.uniforms.uOpacity.value +=
+        (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
     });
+
+    // Control del botón (igual que en EVENTO DOS)
+    const boton = document.getElementById("botonsecundariouno");
+    if (boton) {
+      boton.style.bottom = isVisible ? "-20vh" : "-45vh";
+    }
   }
 
 
 
-  // Cargar múltiples texturas
+
+
+
+
+  // EVENTO DOS
   const loaderbanderasD = new THREE.TextureLoader();
   const texturesD = [
     loaderbanderasD.load('./src/img/proyectouno.jpg'),
@@ -557,6 +565,8 @@ function main() {
       maxZ: 1090
     }, ];
 
+    let isVisible = false; // ← Aquí lo inicializamos
+
     visibilityRanges.forEach(({
       planeD,
       minZ,
@@ -568,12 +578,24 @@ function main() {
       planeD.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
 
       const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
-      planeD.material.uniforms.uOpacity.value += (targetOpacity - planeD.material.uniforms.uOpacity.value) * 0.1;
+
+      if (targetOpacity === 1) {
+        isVisible = true; // Si entra en rango, marcamos visible
+      }
+
+      planeD.material.uniforms.uOpacity.value +=
+        (targetOpacity - planeD.material.uniforms.uOpacity.value) * 0.1;
     });
+
+    // Mover el botón con CSS
+    const boton = document.getElementById("botonsecundariodos");
+    if (boton) {
+      boton.style.bottom = isVisible ? "-20vh" : "-45vh";
+    }
   }
 
 
-  // Cargar múltiples texturas Tres
+  // EVENTO TRES
   const loaderbanderasT = new THREE.TextureLoader();
   const texturesT = [
     loaderbanderasT.load('./src/img/proyectouno.jpg'),
@@ -653,7 +675,7 @@ function main() {
       planeT: planesT[0],
       minZ: 20,
       maxZ: 110
-    }, ];
+    }];
 
     visibilityRanges.forEach(({
       planeT,
@@ -665,8 +687,19 @@ function main() {
       planeT.position.y += (cameraY - planeT.position.y) * 0.1;
       planeT.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
 
-      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
+      const isVisible = cameraZ >= minZ && cameraZ <= maxZ;
+      const targetOpacity = isVisible ? 1 : 0;
       planeT.material.uniforms.uOpacity.value += (targetOpacity - planeT.material.uniforms.uOpacity.value) * 0.1;
+
+      // Mover el botón con CSS
+      const boton = document.getElementById("botonsecundariotres");
+      if (boton) {
+        if (isVisible) {
+          boton.style.bottom = "-20vh"; // Sube el botón
+        } else {
+          boton.style.bottom = "-45vh"; // Lo baja fuera de vista
+        }
+      }
     });
   }
 
@@ -965,7 +998,7 @@ function main() {
     {
       id: "proyecto-2",
       min: 1040,
-      max: 1100,
+      max: 1090,
       camera: cameraDos
     },
     {
@@ -977,75 +1010,83 @@ function main() {
   ];
 
   // Función para animar texto letra por letra
-function animateText(element) {
-  const text = element.innerText;
-  element.innerHTML = "";
+  function animateText(element) {
+    const text = element.innerText;
+    element.innerHTML = "";
 
-  let timeline = gsap.timeline({ paused: true });
+    let timeline = gsap.timeline({
+      paused: true
+    });
 
-  text.split("").forEach((char, index) => {
-    let letterWrapper = document.createElement("span");
-    letterWrapper.classList.add("letter-wrapperp");
+    text.split("").forEach((char, index) => {
+      let letterWrapper = document.createElement("span");
+      letterWrapper.classList.add("letter-wrapperp");
 
-    let letter = document.createElement("span");
-    letter.classList.add("letterp");
-    letter.textContent = char === " " ? "\u00A0" : char;
+      let letter = document.createElement("span");
+      letter.classList.add("letterp");
+      letter.textContent = char === " " ? "\u00A0" : char;
 
-    letterWrapper.appendChild(letter);
-    element.appendChild(letterWrapper);
+      letterWrapper.appendChild(letter);
+      element.appendChild(letterWrapper);
 
-    timeline.to(letter, {
-      y: 0,
-      duration: 0.6,
-      delay: index * 0.05,
-      ease: "power2.out"
-    }, 0);
+      timeline.to(letter, {
+        y: 0,
+        duration: 0.6,
+        delay: index * 0.05,
+        ease: "power2.out"
+      }, 0);
+    });
+
+    return timeline;
+  }
+
+  // Guardamos las animaciones de los subtítulos y títulos
+  const animations = {};
+
+  ranges.forEach((range) => {
+    const container = document.getElementById(range.id);
+
+    // Ahora selecciona TODOS los h3 dentro del contenedor
+    const titles = container.querySelectorAll(".tituloproyecto");
+
+    // Creamos un array de timelines para todos los h3
+    const titleAnims = Array.from(titles).map(title => animateText(title));
+
+    animations[range.id] = {
+      container: container,
+      titleAnims: titleAnims, // ahora es un array
+      min: range.min,
+      max: range.max,
+      camera: range.camera
+    };
   });
 
-  return timeline;
-}
+  // Función para actualizar visibilidad de textos según la posición de la cámara activa
+  function updateTextVisibility(activeCamera) {
+    Object.keys(animations).forEach((id) => {
+      const {
+        container,
+        titleAnims,
+        min,
+        max,
+        camera
+      } = animations[id];
 
-// Guardamos las animaciones de los subtítulos y títulos
-const animations = {};
+      if (activeCamera !== camera) {
+        container.style.opacity = 0;
+        titleAnims.forEach(anim => anim.reverse());
+        return;
+      }
 
-ranges.forEach((range) => {
-  const container = document.getElementById(range.id);
-
-  // Ahora selecciona TODOS los h3 dentro del contenedor
-  const titles = container.querySelectorAll(".tituloproyecto");
-
-  // Creamos un array de timelines para todos los h3
-  const titleAnims = Array.from(titles).map(title => animateText(title));
-
-  animations[range.id] = {
-    container: container,
-    titleAnims: titleAnims, // ahora es un array
-    min: range.min,
-    max: range.max,
-    camera: range.camera
-  };
-});
-
-// Función para actualizar visibilidad de textos según la posición de la cámara activa
-function updateTextVisibility(activeCamera) {
-  Object.keys(animations).forEach((id) => {
-    const { container, titleAnims, min, max, camera } = animations[id];
-
-    if (activeCamera !== camera) {
-      container.style.opacity = 0;
-      titleAnims.forEach(anim => anim.reverse());
-      return;
-    }
-
-    if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
-      container.style.opacity = 1;
-      titleAnims.forEach(anim => anim.play());
-    } else {
-      container.style.opacity = 0;
-      titleAnims.forEach(anim => anim.reverse());
-    }
-  });
-}
+      if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
+        container.style.opacity = 1;
+        titleAnims.forEach(anim => anim.play());
+      } else {
+        container.style.opacity = 0;
+        titleAnims.forEach(anim => anim.reverse());
+      }
+    });
+  }
 
 
 
@@ -1106,16 +1147,16 @@ function updateTextVisibility(activeCamera) {
       updatePlanesDos();
 
 
-            if (cameraTres.position.z >= 5) { // Actualizar el tiempo en cada material
-      planesT.forEach(planeT => {
-        if (planeT.material.uniforms.uTime) {
-          planeT.material.uniforms.uTime.value += 0.02;
-        }
-      });
+      if (cameraTres.position.z >= 5) { // Actualizar el tiempo en cada material
+        planesT.forEach(planeT => {
+          if (planeT.material.uniforms.uTime) {
+            planeT.material.uniforms.uTime.value += 0.02;
+          }
+        });
         // Actualizar planos
         updatePlanesTres();
       }
-    
+
 
 
       // Ocultar objetos de la escena principal para liberar GPU
@@ -1205,21 +1246,17 @@ function updateTextVisibility(activeCamera) {
         );
 
       }
-
-      if (camera.position.z >= 35) { // Actualizar el tiempo en cada material
-        planes.forEach(plane => {
-          if (plane.material.uniforms.uTime) {
-            plane.material.uniforms.uTime.value += 0.02;
-          }
-        });
-        // Actualizar planos
-        updatePlanes();
-      }
-
-
     }
     //console.log("Posición de cameraTres en Z:", cameraTres.position.z);
     updateAnimations()
+
+    // SIEMPRE ejecuta updatePlanes para que el botón también baje cuando z < 30
+    planes.forEach(plane => {
+      if (plane.material?.uniforms?.uTime) {
+        plane.material.uniforms.uTime.value += 0.02;
+      }
+    });
+    updatePlanes(); // <- sin condicional
 
   }
   animate();

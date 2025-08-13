@@ -153,6 +153,13 @@
                     }
                 }
 
+                #botonsecundariouno,
+                #botonsecundariodos,
+                #botonsecundariotres {
+                    bottom: -45vh;
+                    transition: bottom 0.5s ease;
+                }
+
                 .bottoninicio {
                     position: absolute;
                     bottom: -45vh;
@@ -655,7 +662,7 @@
                 /* Para compatibilidad con Safari */
 
                 .tituloproyecto {
-                    
+
                     padding-left: 1vw;
                     white-space: nowrap;
                     text-align: center;
