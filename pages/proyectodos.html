@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body data-barba="wrapper" style="background: rgb(255, 255, 255)">
+    <div class="barba-container" data-barba="container" data-barba-namespace="proyectodos">
+        <a href="proyectouno.html">botondos</a>
+
+        <div id="transition">
+            <svg viewBox="0 0 1920 700" preserveAspectRatio="none">
+                <path id="wave" fill="#0004ee" d="M0,1080 L0,800 Q960,750 1920,800 L1920,1080 Z" />
+            </svg>
+        </div>
+
+        <div id="gif-overlay">
+            <img src="../src/img/loadinglogo.gif" alt="gif animacion" />
+        </div>
+    </div>
+    </div>
+
+
+    <style>
+        #gif-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+            /* oculto hasta que aparezca */
+        }
+
+        #gif-overlay img {
+            max-width: 40px;
+            /* ajusta tamaño */
+            max-height: 40px;
+        }
+
+        /* Estilos para los cuadros */
+        #transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            /* No bloquear interacción */
+        }
+
+        #transition svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MorphSVGPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+    <script>
+        // use a script tag or an external JS file
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(MorphSVGPlugin)
+            // gsap code here!
+        });
+
+    </script>
+    <script src="../js/barva.js"></script>
+
+</body>
+
+</html>

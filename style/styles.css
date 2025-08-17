@@ -270,6 +270,7 @@ h5 {
 .scroll-contents #scroll-content #contenedor .loading #botonsecundariotres {
   bottom: -45vh;
   transition: bottom 0.5s ease;
+  background: #ffffff;
 }
 .scroll-contents #scroll-content #contenedor .loading .bottoninicio {
   position: absolute;

@@ -677,3 +677,5 @@ ScrollTrigger.scrollerProxy(contenedorsc, {
 
 // Escuchar los eventos de scroll de Smooth Scrollbar
 scrollbar.addListener(ScrollTrigger.update);
+
+
