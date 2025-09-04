@@ -659,12 +659,12 @@ h5 {
   z-index: 0;
 }
 .scroll-contents #scroll-content #contenedor .cont-proyectos {
+  display: none;
   bottom: 0;
   left: 0;
   position: absolute;
   width: 100%;
   height: 10%;
-  display: flex;
   flex-direction: row;
   justify-content: start;
   align-content: center;
