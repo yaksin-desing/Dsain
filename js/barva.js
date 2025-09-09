@@ -76,3 +76,198 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }]
   });
 });
+
+
+let screenWidth = window.innerWidth; // Obtiene el ancho de la ventana del navegador
+
+if (screenWidth > 1020) {
+    var cursor = document.querySelector('.cursorp'),
+        cursorScale = document.querySelectorAll('.cursor-scale'),
+        mouseX = 0,
+        mouseY = 0,
+        targetX = 0,
+        targetY = 0,
+        prevX = 0,
+        prevY = 0,
+        lerpFactor = 0.12; // Suavizado
+
+    // Animación del cursor
+    gsap.to({}, 0.016, {
+        repeat: -1,
+        onRepeat: function () {
+            // Movimiento suavizado
+            targetX += (mouseX - targetX) * lerpFactor;
+            targetY += (mouseY - targetY) * lerpFactor;
+
+            // Diferencias de movimiento
+            let deltaX = targetX - prevX;
+            let deltaY = targetY - prevY;
+            let speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 0.1;
+            speed = Math.min(speed, 1);
+
+            // Estiramiento según dirección y velocidad
+            let scaleX = 1 + Math.abs(deltaX) * 0.02 + speed * 0.3;
+            let scaleY = 1 + Math.abs(deltaY) * 0.02 + speed * 0.3;
+            let rotation = deltaX * 2;
+
+            // Aplicar transformaciones
+            gsap.set(cursor, {
+                x: targetX,
+                y: targetY,
+                scaleX: scaleX,
+                scaleY: scaleY,
+                rotation: rotation,
+                ease: "power2.out"
+            });
+
+            prevX = targetX;
+            prevY = targetY;
+        }
+    });
+
+    // Capturar el movimiento del mouse
+    window.addEventListener("mousemove", function (e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    // Regresar el cursor a su forma original cuando el mouse sale de la ventana
+    window.addEventListener("mouseout", function () {
+        gsap.to(cursor, {
+            scaleX: 1,
+            scaleY: 1,
+            rotation: 0,
+            duration: 0.3,
+            ease: "elastic.out(1, 0.5)"
+        });
+    });
+
+    // Efecto de escala y adhesión
+    cursorScale.forEach(link => {
+        link.addEventListener('mouseleave', () => {
+            cursor.classList.remove('grow', 'grow-small');
+        });
+
+        link.addEventListener('mousemove', (e) => {
+            // Determinar qué clase aplicar
+            if (link.classList.contains('small')) {
+                cursor.classList.remove('grow');
+                cursor.classList.add('grow-small');
+            } else {
+                cursor.classList.add('grow');
+            }
+
+            // Mover el cursor al centro del elemento interactivo
+            let rect = link.getBoundingClientRect();
+            let centerX = rect.left + rect.width / 2;
+            let centerY = rect.top + rect.height / 2;
+            mouseX = centerX;
+            mouseY = centerY;
+        });
+    });
+}
+
+
+//lottie menu
+
+// Inicializar la animación de Lottie
+const lottiePlayer = lottie.loadAnimation({
+    container: document.getElementById('menu-button'), // Contenedor del botón
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    path: '../src/img/iconmenu.json', // Cambia esto por la ruta de tu archivo JSON
+    speed: 2,
+});
+lottiePlayer.setSpeed(2);
+
+const menuButton = document.getElementById("menu-button");
+const navMenu = document.getElementById("nav-menu");
+
+let isMenuOpen = false;
+
+menuButton.addEventListener("click", (event) => {
+    isMenuOpen = !isMenuOpen;
+
+    if (isMenuOpen) {
+        // Mostrar el menú
+        navMenu.classList.add("show");
+        navMenu.classList.remove("hidden");
+
+        // Animar del frame 0 al 30
+        lottiePlayer.playSegments([0, 30], true);
+        playAnimation()
+    } else {
+        // Ocultar el menú
+        navMenu.classList.remove("show");
+        setTimeout(() => {
+            navMenu.classList.add("hidden");
+        }, 500); // Coincide con la duración de la animación
+
+        // Animar del frame 30 al 0
+        lottiePlayer.playSegments([30, 0], true);
+        reverseAnimation()
+    }
+
+    // Evitar que el clic en el botón del menú cierre el menú (propagación)
+    event.stopPropagation();
+});
+
+// Cerrar el menú al hacer clic fuera de él
+document.addEventListener("click", (event) => {
+    if (!navMenu.contains(event.target) && !menuButton.contains(event.target) && isMenuOpen) {
+        isMenuOpen = false;
+        navMenu.classList.remove("show");
+
+        // Animar del frame 30 al 0
+        lottiePlayer.playSegments([30, 0], true);
+
+        setTimeout(() => {
+            navMenu.classList.add("hidden");
+        }, 500); // Coincide con la duración de la animación
+    }
+});
+
+
+
+let timelinemenu = gsap.timeline({
+    paused: true
+}); // Timeline pausado al inicio
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Función para dividir el texto en caracteres
+    function splitText(element) {
+        let text = element.textContent;
+        let newHTML = "";
+        for (let char of text) {
+            newHTML += `<span class="char">${char}</span>`;
+        }
+        element.innerHTML = newHTML;
+    }
+
+    // Selecciona todos los textos animados
+    document.querySelectorAll(".animated-text").forEach(el => {
+        splitText(el);
+        let delay = parseFloat(el.getAttribute("data-delay")) || 0; // Obtiene el delay personalizado
+
+        // Agrega animaciones al timeline
+        timelinemenu.to(el.querySelectorAll(".char"), {
+            y: 0,
+            opacity: 1,
+            stagger: 0.05,
+            duration: 0.5,
+            ease: "power2.out",
+            delay: delay
+        }, "<"); // "<" hace que las animaciones empiecen en paralelo respetando sus delays
+    });
+});
+
+// Función para iniciar la animación
+function playAnimation() {
+    timelinemenu.timeScale(1).play(); // Asegura que la velocidad sea normal al reproducir
+}
+
+// Función para reiniciar la animación rápidamente y dejarla en su estado inicial
+function reverseAnimation() {
+    timelinemenu.timeScale(10).reverse(); // Hace que la reversa sea más rápida
+}

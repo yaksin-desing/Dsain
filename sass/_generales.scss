@@ -1,4 +1,5 @@
 $colorp:#0004ee;
+$fondoboto:#eff3ff;
 
 * {
     margin: 0;
@@ -8,8 +9,6 @@ $colorp:#0004ee;
     cursor: url("../src/img/cursor.svg") 10 10, auto;
 }
 
-
-
 html,
 body {
     width: 100%;
@@ -18,8 +17,6 @@ body {
     z-index: -999;
     overflow: hidden;
 }
-
-
 
 body::-webkit-scrollbar {
     display: none;
@@ -53,6 +50,22 @@ html::-webkit-scrollbar {
     transform-origin: center center;
     pointer-events: none;
     z-index: 9999;
+}
+
+
+.cursorp {
+    position: fixed;
+    width: 70px;
+    height: 70px;
+    margin-left: -37px;
+    margin-top: -37px;
+    border-radius: 50%;
+    border: 1px solid #bec0ff;
+    transition: transform 0.1s ease;
+    transform-origin: center center;
+    pointer-events: none;
+    z-index: 9999;
+    
 }
 
 @media (max-width: 1000px) {
@@ -148,7 +161,6 @@ h5 {
     font-display: swap;
     font-style: normal;
 }
-
 
 @font-face {
     font-family: 'Variable';
