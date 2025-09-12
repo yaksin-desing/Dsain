@@ -2389,6 +2389,7 @@ body {
 body .contenedorproyecto {
   /* CONTENEDOR DE TRANSICION */
   /* INICIO DE PAGINA */
+  /* Contenedor de la barra */
 }
 body .contenedorproyecto #transition {
   position: fixed;
@@ -2417,6 +2418,25 @@ body .contenedorproyecto #gif-overlay img {
   max-width: 40px;
   /* ajusta tamaño */
   max-height: 40px;
+}
+body .contenedorproyecto #progress-container {
+  position: fixed;
+  top: 50%;
+  right: 2vw;
+  width: 0.2vw;
+  height: 30vh;
+  background: #eff3ff;
+  transform: translateY(-50%);
+  border-radius: 100px;
+  overflow: hidden;
+  /* "Thumb" que crece con el scroll */
+}
+body .contenedorproyecto #progress-container #progress-bar {
+  border-radius: 1000px;
+  height: 0%;
+  width: 100%;
+  background: #0004ee;
+  transition: height 0.1s linear;
 }
 body .contenedorproyecto .text_guia {
   position: fixed;

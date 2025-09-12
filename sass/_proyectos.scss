@@ -3,7 +3,6 @@ $fondoboto: #eff3ff;
 
 body {
     overflow: auto;
-
     .contenedorproyecto {
 
         /* CONTENEDOR DE TRANSICION */
@@ -40,6 +39,29 @@ body {
         }
 
         /* INICIO DE PAGINA */
+
+        /* Contenedor de la barra */
+        #progress-container {
+            position: fixed;
+            top: 50%;
+            right: 2vw;
+            width: 0.2vw;
+            height: 30vh;
+            background:$fondoboto;
+            transform: translateY(-50%);
+            border-radius: 100px;
+            overflow: hidden;
+            /* "Thumb" que crece con el scroll */
+            #progress-bar {
+                border-radius: 1000px;
+                height: 0%;
+                width: 100%;
+                background: $colorp;
+                transition: height 0.1s linear;
+            }
+        }
+
+
 
         .text_guia {
             position: fixed;
