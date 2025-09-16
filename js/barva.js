@@ -288,3 +288,20 @@ container.addEventListener("scroll", () => {
 
   progressBar.style.height = scrollPercent + "%"; // crecerá hacia abajo
 });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const lotties = document.querySelectorAll(".lottie");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const lottie = entry.target;
+        if (entry.isIntersecting) {
+          lottie.play();
+        } else {
+          lottie.stop(); // o lottie.pause() si prefieres que quede en el frame actual
+        }
+      });
+    }, { threshold: 0.5 });
+
+    lotties.forEach(lottie => observer.observe(lottie));
+  });
