@@ -2710,7 +2710,7 @@ body .contenedorproyectos .barra_nav #nav-menu.show .contsocial .list_social li 
 body .contenedorproyectos .barra_nav .hidden {
   display: none;
 }
-body .contenedorproyectos .section_uno {
+body .contenedorproyectos #section_uno {
   padding-top: 10%;
   width: 100%;
   height: 100dvh;
@@ -2720,13 +2720,13 @@ body .contenedorproyectos .section_uno {
   flex-direction: column;
   position: relative;
 }
-body .contenedorproyectos .section_uno .cont_titulo {
+body .contenedorproyectos #section_uno .cont_titulo {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
 }
-body .contenedorproyectos .section_uno .cont_titulo .data {
+body .contenedorproyectos #section_uno .cont_titulo .data {
   font-family: "Regular";
   font-size: 12px;
   font-weight: normal;
@@ -2737,7 +2737,7 @@ body .contenedorproyectos .section_uno .cont_titulo .data {
   text-align: center;
   color: #0048ff;
 }
-body .contenedorproyectos .section_uno .cont_titulo .tituloproyecto {
+body .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
   padding-bottom: 10vh;
   font-family: "Extrabold";
   font-size: 7vw;
@@ -2749,7 +2749,7 @@ body .contenedorproyectos .section_uno .cont_titulo .tituloproyecto {
   text-align: center;
   color: #0048ff;
 }
-body .contenedorproyectos .section_uno .parrafo {
+body .contenedorproyectos #section_uno .parrafo {
   bottom: 1vw;
   position: absolute;
   padding-left: 30vw;
@@ -2763,13 +2763,13 @@ body .contenedorproyectos .section_uno .parrafo {
   text-align: center;
   color: #0048ff;
 }
-body .contenedorproyectos .section_uno .cont_imagen_proyecto img {
+body .contenedorproyectos #section_uno .cont_imagen_proyecto img {
   width: 15vw;
   height: auto;
   border-radius: 5px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
-body .contenedorproyectos .section_dos {
+body .contenedorproyectos #section_dos {
   width: 100%;
   height: 100dvh;
   display: flex;
@@ -2779,11 +2779,11 @@ body .contenedorproyectos .section_dos {
   padding: 5vw 4vw 5vw 4vw;
   gap: 2vw;
 }
-body .contenedorproyectos .section_dos .column_uno {
+body .contenedorproyectos #section_dos .column_uno {
   width: 50%;
   height: 100%;
 }
-body .contenedorproyectos .section_dos .column_uno .titulo {
+body .contenedorproyectos #section_dos .column_uno .titulo {
   font-family: "bold";
   font-size: 3vw;
   font-weight: bold;
@@ -2795,7 +2795,7 @@ body .contenedorproyectos .section_dos .column_uno .titulo {
   color: #0048FF;
   padding-bottom: 2vw;
 }
-body .contenedorproyectos .section_dos .column_uno .parrafo {
+body .contenedorproyectos #section_dos .column_uno .parrafo {
   font-family: "Regular";
   font-size: 1vw;
   font-weight: normal;
@@ -2807,7 +2807,7 @@ body .contenedorproyectos .section_dos .column_uno .parrafo {
   color: #0048FF;
   padding-bottom: 2vw;
 }
-body .contenedorproyectos .section_dos .column_uno .cont_info_proyecto {
+body .contenedorproyectos #section_dos .column_uno .cont_info_proyecto {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   /* 2 columnas */
@@ -2815,12 +2815,12 @@ body .contenedorproyectos .section_dos .column_uno .cont_info_proyecto {
   /* 2 filas */
   place-items: start;
 }
-body .contenedorproyectos .section_dos .column_uno .cont_info_proyecto .info_proyecto {
+body .contenedorproyectos #section_dos .column_uno .cont_info_proyecto .info_proyecto {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-body .contenedorproyectos .section_dos .column_uno .cont_info_proyecto .info_proyecto .subtitulo {
+body .contenedorproyectos #section_dos .column_uno .cont_info_proyecto .info_proyecto .subtitulo {
   font-family: "regular";
   font-size: 1vw;
   font-weight: 500;
@@ -2831,7 +2831,7 @@ body .contenedorproyectos .section_dos .column_uno .cont_info_proyecto .info_pro
   text-align: left;
   color: rgba(143, 143, 143, 0.5);
 }
-body .contenedorproyectos .section_dos .column_uno .cont_info_proyecto .info_proyecto .detalle {
+body .contenedorproyectos #section_dos .column_uno .cont_info_proyecto .info_proyecto .detalle {
   font-family: "Regular";
   font-size: 1vw;
   font-weight: normal;
@@ -2842,7 +2842,7 @@ body .contenedorproyectos .section_dos .column_uno .cont_info_proyecto .info_pro
   text-align: left;
   color: #0048FF;
 }
-body .contenedorproyectos .section_dos .column_dos {
+body .contenedorproyectos #section_dos .column_dos {
   padding: 0vw 2vw 5vw 2vw;
   border-left: 1px solid #0048FF;
   width: 50%;
@@ -2851,7 +2851,7 @@ body .contenedorproyectos .section_dos .column_dos {
   display: flex;
   flex-direction: column;
 }
-body .contenedorproyectos .section_dos .column_dos .cont_cabecera {
+body .contenedorproyectos #section_dos .column_dos .cont_cabecera {
   padding-top: 6vw;
   padding-right: 5vw;
   display: flex;
@@ -2860,7 +2860,7 @@ body .contenedorproyectos .section_dos .column_dos .cont_cabecera {
   justify-content: space-between;
   width: 100%;
 }
-body .contenedorproyectos .section_dos .column_dos .cont_cabecera .-Usd {
+body .contenedorproyectos #section_dos .column_dos .cont_cabecera .-Usd {
   flex-grow: 0;
   font-family: "Regular";
   font-size: 1vw;
@@ -2872,24 +2872,24 @@ body .contenedorproyectos .section_dos .column_dos .cont_cabecera .-Usd {
   text-align: left;
   color: #0048ff;
 }
-body .contenedorproyectos .section_dos .column_dos .cont_cabecera .text-style-1 {
+body .contenedorproyectos #section_dos .column_dos .cont_cabecera .text-style-1 {
   font-family: "medium";
   font-size: 3vw;
   line-height: 0.8;
 }
-body .contenedorproyectos .section_dos .column_dos .cont_data {
+body .contenedorproyectos #section_dos .column_dos .cont_data {
   display: flex;
   flex-direction: row;
   width: 100%;
   align-items: start;
   justify-content: space-between;
 }
-body .contenedorproyectos .section_dos .column_dos .cont_data .info_proyecto {
+body .contenedorproyectos #section_dos .column_dos .cont_data .info_proyecto {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-body .contenedorproyectos .section_dos .column_dos .cont_data .info_proyecto .subtitulo {
+body .contenedorproyectos #section_dos .column_dos .cont_data .info_proyecto .subtitulo {
   font-family: "regular";
   font-size: 1vw;
   font-weight: 500;
@@ -2900,7 +2900,7 @@ body .contenedorproyectos .section_dos .column_dos .cont_data .info_proyecto .su
   text-align: left;
   color: rgba(143, 143, 143, 0.5);
 }
-body .contenedorproyectos .section_dos .column_dos .cont_data .info_proyecto .detalle {
+body .contenedorproyectos #section_dos .column_dos .cont_data .info_proyecto .detalle {
   font-family: "Regular";
   font-size: 1vw;
   font-weight: normal;
@@ -2911,7 +2911,7 @@ body .contenedorproyectos .section_dos .column_dos .cont_data .info_proyecto .de
   text-align: left;
   color: #0048FF;
 }
-body .contenedorproyectos .section_tres {
+body .contenedorproyectos #section_tres {
   padding: 5vw 4vw 0vw 4vw;
   width: 100%;
   height: 100dvh;
@@ -2921,7 +2921,7 @@ body .contenedorproyectos .section_tres {
   flex-direction: column;
   position: relative;
 }
-body .contenedorproyectos .section_tres .titulo_seccion {
+body .contenedorproyectos #section_tres .titulo_seccion {
   font-family: "medium";
   font-size: 0.7vw;
   text-transform: uppercase;
@@ -2931,13 +2931,13 @@ body .contenedorproyectos .section_tres .titulo_seccion {
   border-bottom: #0048FF 1px solid;
   padding-bottom: 5px;
 }
-body .contenedorproyectos .section_tres .cont_color {
+body .contenedorproyectos #section_tres .cont_color {
   display: flex;
   flex-direction: row;
   gap: 5vw;
   margin: 3vw;
 }
-body .contenedorproyectos .section_tres .cont_color .coloruno {
+body .contenedorproyectos #section_tres .cont_color .coloruno {
   width: 20vw;
   height: 30vw;
   display: flex;
@@ -2948,7 +2948,7 @@ body .contenedorproyectos .section_tres .cont_color .coloruno {
   border-radius: 5px;
   background-color: #0048ff;
 }
-body .contenedorproyectos .section_tres .cont_color .coloruno .hex {
+body .contenedorproyectos #section_tres .cont_color .coloruno .hex {
   width: 100%;
   font-family: "Regular";
   font-size: 12px;
@@ -2960,7 +2960,7 @@ body .contenedorproyectos .section_tres .cont_color .coloruno .hex {
   text-align: start;
   color: #fff;
 }
-body .contenedorproyectos .section_tres .cont_color .coloruno .titulo {
+body .contenedorproyectos #section_tres .cont_color .coloruno .titulo {
   font-family: "light";
   font-size: 0.7vw;
   font-stretch: normal;
@@ -2969,7 +2969,7 @@ body .contenedorproyectos .section_tres .cont_color .coloruno .titulo {
   text-align: center;
   color: #fff;
 }
-body .contenedorproyectos .section_tres .cont_color .coloruno .texto {
+body .contenedorproyectos #section_tres .cont_color .coloruno .texto {
   width: 100%;
   font-family: "Regular";
   font-size: 70px;
@@ -2981,7 +2981,7 @@ body .contenedorproyectos .section_tres .cont_color .coloruno .texto {
   text-align: end;
   color: #fff;
 }
-body .contenedorproyectos .section_tres .cont_color .colordos {
+body .contenedorproyectos #section_tres .cont_color .colordos {
   width: 20vw;
   height: 30vw;
   display: flex;
@@ -2992,7 +2992,7 @@ body .contenedorproyectos .section_tres .cont_color .colordos {
   border-radius: 5px;
   background-color: #F4F6FF;
 }
-body .contenedorproyectos .section_tres .cont_color .colordos .hex {
+body .contenedorproyectos #section_tres .cont_color .colordos .hex {
   width: 100%;
   font-family: "Regular";
   font-size: 12px;
@@ -3004,7 +3004,7 @@ body .contenedorproyectos .section_tres .cont_color .colordos .hex {
   text-align: start;
   color: #0048ff;
 }
-body .contenedorproyectos .section_tres .cont_color .colordos .titulo {
+body .contenedorproyectos #section_tres .cont_color .colordos .titulo {
   font-family: "light";
   font-size: 0.7vw;
   font-stretch: normal;
@@ -3013,7 +3013,7 @@ body .contenedorproyectos .section_tres .cont_color .colordos .titulo {
   text-align: center;
   color: #0048ff;
 }
-body .contenedorproyectos .section_tres .cont_color .colordos .texto {
+body .contenedorproyectos #section_tres .cont_color .colordos .texto {
   width: 100%;
   font-family: "Regular";
   font-size: 70px;
@@ -3025,7 +3025,7 @@ body .contenedorproyectos .section_tres .cont_color .colordos .texto {
   text-align: end;
   color: #0048ff;
 }
-body .contenedorproyectos .section_cuatro {
+body .contenedorproyectos #section_cuatro {
   padding: 5vw 4vw 0vw 4vw;
   width: 100%;
   height: 100dvh;
@@ -3035,7 +3035,7 @@ body .contenedorproyectos .section_cuatro {
   flex-direction: column;
   position: relative;
 }
-body .contenedorproyectos .section_cuatro .titulo_seccion {
+body .contenedorproyectos #section_cuatro .titulo_seccion {
   font-family: "medium";
   font-size: 0.7vw;
   text-transform: uppercase;
@@ -3045,7 +3045,7 @@ body .contenedorproyectos .section_cuatro .titulo_seccion {
   border-bottom: #0048FF 1px solid;
   padding-bottom: 5px;
 }
-body .contenedorproyectos .section_cuatro .cont_fuente {
+body .contenedorproyectos #section_cuatro .cont_fuente {
   justify-content: start;
   display: flex;
   flex-direction: column;
@@ -3054,7 +3054,7 @@ body .contenedorproyectos .section_cuatro .cont_fuente {
   margin: 3vw;
   width: 100%;
 }
-body .contenedorproyectos .section_cuatro .cont_fuente .titulo_fuente {
+body .contenedorproyectos #section_cuatro .cont_fuente .titulo_fuente {
   font-family: "bold";
   font-size: 3vw;
   font-weight: bold;
@@ -3065,7 +3065,7 @@ body .contenedorproyectos .section_cuatro .cont_fuente .titulo_fuente {
   text-align: left;
   color: #0048FF;
 }
-body .contenedorproyectos .section_cuatro .cont_fuente .parrafo_fuente {
+body .contenedorproyectos #section_cuatro .cont_fuente .parrafo_fuente {
   font-family: "Regular";
   font-size: 1vw;
   font-weight: normal;
@@ -3076,26 +3076,26 @@ body .contenedorproyectos .section_cuatro .cont_fuente .parrafo_fuente {
   text-align: center;
   color: #0048FF;
 }
-body .contenedorproyectos .section_cuatro .cont_fuente .cont_tipe_texto {
+body .contenedorproyectos #section_cuatro .cont_fuente .cont_tipe_texto {
   justify-content: space-between;
   display: flex;
   flex-direction: row;
 }
-body .contenedorproyectos .section_cuatro .cont_fuente .cont_tipe_texto img {
+body .contenedorproyectos #section_cuatro .cont_fuente .cont_tipe_texto img {
   width: 10vw;
   height: auto;
 }
-body .contenedorproyectos .section_cuatro .cont_fuente .cont_alfabeto {
+body .contenedorproyectos #section_cuatro .cont_fuente .cont_alfabeto {
   justify-content: space-between;
   display: flex;
   flex-direction: row;
   gap: 5vw;
 }
-body .contenedorproyectos .section_cuatro .cont_fuente .cont_alfabeto img {
+body .contenedorproyectos #section_cuatro .cont_fuente .cont_alfabeto img {
   width: 40vw;
   height: auto;
 }
-body .contenedorproyectos .section_cinco {
+body .contenedorproyectos #section_cinco {
   padding: 5vw 4vw 0vw 4vw;
   width: 100%;
   height: 100dvh;
@@ -3105,7 +3105,7 @@ body .contenedorproyectos .section_cinco {
   flex-direction: column;
   position: relative;
 }
-body .contenedorproyectos .section_cinco .titulo_seccion {
+body .contenedorproyectos #section_cinco .titulo_seccion {
   font-family: "medium";
   font-size: 0.7vw;
   text-transform: uppercase;
@@ -3115,7 +3115,7 @@ body .contenedorproyectos .section_cinco .titulo_seccion {
   border-bottom: #0048FF 1px solid;
   padding-bottom: 5px;
 }
-body .contenedorproyectos .section_cinco .cont_moodboard {
+body .contenedorproyectos #section_cinco .cont_moodboard {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -3123,12 +3123,12 @@ body .contenedorproyectos .section_cinco .cont_moodboard {
   padding-left: 1vw;
   padding-right: 1vw;
 }
-body .contenedorproyectos .section_cinco .cont_moodboard .lottie {
+body .contenedorproyectos #section_cinco .cont_moodboard .lottie {
   width: 40%;
   height: auto;
   margin-top: 1vw;
 }
-body .contenedorproyectos .section_seis {
+body .contenedorproyectos #section_seis {
   padding: 5vw 4vw 0vw 4vw;
   width: 100%;
   height: 100dvh;
@@ -3138,7 +3138,7 @@ body .contenedorproyectos .section_seis {
   flex-direction: column;
   position: relative;
 }
-body .contenedorproyectos .section_seis .titulo_seccion {
+body .contenedorproyectos #section_seis .titulo_seccion {
   font-family: "medium";
   font-size: 0.7vw;
   text-transform: uppercase;
@@ -3148,7 +3148,7 @@ body .contenedorproyectos .section_seis .titulo_seccion {
   border-bottom: #0048FF 1px solid;
   padding-bottom: 5px;
 }
-body .contenedorproyectos .section_seis .img_titemap {
+body .contenedorproyectos #section_seis .img_titemap {
   width: 100%;
   height: auto;
   margin-top: 2vw;
