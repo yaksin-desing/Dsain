@@ -308,7 +308,6 @@ container.addEventListener("scroll", () => {
 
 gsap.registerPlugin(SplitText);
 
-// Diccionario de textos según sección
 const textos = {
   section_uno: "Proyecto terminado",
   section_dos: "Detalles del proyecto",
@@ -321,29 +320,42 @@ const textos = {
 const textoGuia = document.getElementById("texto-guia");
 
 function animarTexto(nuevoTexto) {
-  // revertimos splits anteriores
+  // Si ya existe un split previo → animamos la salida
   if (textoGuia.splitText) {
-    textoGuia.splitText.revert();
+    gsap.to(textoGuia.splitText.chars, {
+      x: -30,
+      opacity: 0,
+      stagger: 0.03,
+      duration: 0.3,
+      ease: "power2.in",
+      onComplete: () => {
+        textoGuia.splitText.revert(); // limpiar anterior
+        mostrarNuevoTexto(nuevoTexto); // animar entrada
+      }
+    });
+  } else {
+    mostrarNuevoTexto(nuevoTexto);
   }
+}
 
-  // reemplazamos el texto
+function mostrarNuevoTexto(nuevoTexto) {
   textoGuia.textContent = nuevoTexto;
 
-  // dividimos en caracteres
+  // nuevo split
   const split = new SplitText(textoGuia, { type: "chars", charsClass: "char" });
   textoGuia.splitText = split;
 
-  // animación letra por letra
+  // animación de entrada
   gsap.from(split.chars, {
-    x: -50,
+    x: 30,
     opacity: 0,
     stagger: 0.05,
-    duration: 0.8,
-    ease: "back.out(1.7)",
+    duration: 0.4,
+    ease: "back.out(1.7)"
   });
 }
 
-// Observer para cambiar el texto según la sección
+// Observer
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -358,10 +370,9 @@ const observer = new IntersectionObserver(
   { threshold: 0.5 }
 );
 
-// observar todas las secciones
 document.querySelectorAll("section").forEach((section) => {
   observer.observe(section);
 });
 
-// ✅ Mostrar el primer texto desde el inicio
+// ✅ Texto inicial
 animarTexto(textos.section_uno);
