@@ -282,10 +282,6 @@ container.addEventListener("scroll", () => {
   const docHeight = container.scrollHeight - container.clientHeight;
   const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
 
-  console.log("scrollTop:", scrollTop);
-  console.log("docHeight:", docHeight);
-  console.log("scrollPercent:", scrollPercent);
-
   progressBar.style.height = scrollPercent + "%"; // crecerá hacia abajo
 });
 
@@ -305,3 +301,67 @@ container.addEventListener("scroll", () => {
 
     lotties.forEach(lottie => observer.observe(lottie));
   });
+
+
+
+
+
+gsap.registerPlugin(SplitText);
+
+// Diccionario de textos según sección
+const textos = {
+  section_uno: "Proyecto terminado",
+  section_dos: "Detalles del proyecto",
+  section_tres: "Colores",
+  section_cuatro: "Fonts",
+  section_cinco: "Branding",
+  section_seis: "Mapa del sitio",
+};
+
+const textoGuia = document.getElementById("texto-guia");
+
+function animarTexto(nuevoTexto) {
+  // revertimos splits anteriores
+  if (textoGuia.splitText) {
+    textoGuia.splitText.revert();
+  }
+
+  // reemplazamos el texto
+  textoGuia.textContent = nuevoTexto;
+
+  // dividimos en caracteres
+  const split = new SplitText(textoGuia, { type: "chars", charsClass: "char" });
+  textoGuia.splitText = split;
+
+  // animación letra por letra
+  gsap.from(split.chars, {
+    x: -50,
+    opacity: 0,
+    stagger: 0.05,
+    duration: 0.8,
+    ease: "back.out(1.7)",
+  });
+}
+
+// Observer para cambiar el texto según la sección
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        if (textos[id]) {
+          animarTexto(textos[id]);
+        }
+      }
+    });
+  },
+  { threshold: 0.5 }
+);
+
+// observar todas las secciones
+document.querySelectorAll("section").forEach((section) => {
+  observer.observe(section);
+});
+
+// ✅ Mostrar el primer texto desde el inicio
+animarTexto(textos.section_uno);

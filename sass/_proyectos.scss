@@ -4,6 +4,16 @@ $fondoboto: #eff3ff;
 body {
     overflow: auto;
 
+    .word {
+        display: inline-block;
+        /* necesario para que GSAP anime cada palabra */
+    }
+
+    .char {
+        display: inline-block;
+        /* necesario para que GSAP pueda animar cada letra */
+    }
+
     .contenedorproyectos {
 
         /* CONTENEDOR DE TRANSICION */
@@ -628,7 +638,7 @@ body {
 
 
         }
-        
+
         #section_tres {
             padding: 5vw 4vw 0vw 4vw;
             width: 100%;
@@ -868,6 +878,7 @@ body {
                 justify-content: space-between;
                 padding-left: 1vw;
                 padding-right: 1vw;
+
                 .lottie {
                     width: 40%;
                     height: auto;
@@ -897,7 +908,7 @@ body {
                 padding-bottom: 5px;
             }
 
-            .img_titemap{
+            .img_titemap {
                 width: 100%;
                 height: auto;
                 margin-top: 2vw;

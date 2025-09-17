@@ -2386,6 +2386,14 @@ h5 {
 body {
   overflow: auto;
 }
+body .word {
+  display: inline-block;
+  /* necesario para que GSAP anime cada palabra */
+}
+body .char {
+  display: inline-block;
+  /* necesario para que GSAP pueda animar cada letra */
+}
 body .contenedorproyectos {
   /* CONTENEDOR DE TRANSICION */
   /* INICIO DE PAGINA */
