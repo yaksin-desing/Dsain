@@ -1,255 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style/styles.css" />
+    <link rel="icon" type="image/svg" href="../src/img/logo.svg" />
+    <title>Proyecto Dsains</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../style/styles.css" />
-  <link rel="icon" type="image/svg" href="../src/img/logo.svg" />
-  <title>Proyecto Dsains</title>
-</head>
+  <body
+    data-barba="wrapper"
+    style="background: #fff"
+    data-textura1="../src/img/assetproyectos/proyectodsains/movilraight.png"
+    data-textura2="../src/img/assetproyectos/proyectodsains/movilleft.png"
+  >
+    <div
+      class="contenedorproyectos"
+      data-barba="container"
+      data-barba-namespace="proyectouno"
+    >
+      <!-- CONTENEDOR DE TRANSICION -->
+      <div id="transition">
+        <svg viewBox="0 0 1920 700" preserveAspectRatio="none">
+          <path
+            id="wave"
+            fill="#0004ee"
+            d="M0,1080 L0,800 Q960,750 1920,800 L1920,1080 Z"
+          />
+        </svg>
+      </div>
+      <div id="gif-overlay">
+        <img src="../src/img/loadinglogo.gif" alt="gif animacion" />
+      </div>
 
-<body data-barba="wrapper" style="background: #fff">
-  <div class="contenedorproyectos" data-barba="container" data-barba-namespace="proyectouno">
-    <!-- CONTENEDOR DE TRANSICION -->
-    <div id="transition">
-      <svg viewBox="0 0 1920 700" preserveAspectRatio="none">
-        <path id="wave" fill="#0004ee" d="M0,1080 L0,800 Q960,750 1920,800 L1920,1080 Z" />
-      </svg>
-    </div>
-    <div id="gif-overlay">
-      <img src="../src/img/loadinglogo.gif" alt="gif animacion" />
-    </div>
+      <!-- INICIO DE PAGINA -->
 
-    <!-- INICIO DE PAGINA -->
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
 
-    <div id="progress-container">
-      <div id="progress-bar"></div>
-    </div>
+      <div class="text_guia">
+        <p id="texto-guia">Texto guia</p>
+        <img src="../src/img/star.svg" alt="" />
+      </div>
+      <div class="cursorp"></div>
+      <div class="barra_nav">
+        <a href="../index.html">
+          <img class="logo" src="../src/img/logoazul.svg" alt="logo dsains" />
+        </a>
 
-
-    <div class="text_guia">
-      <p id="texto-guia">Texto guia</p>
-      <img src="../src/img/star.svg" alt="" />
-    </div>
-    <div class="cursorp"></div>
-    <div class="barra_nav">
-      <a href="../index.html">
-        <img class="logo" src="../src/img/logoazul.svg" alt="logo dsains" />
-      </a>
-
-      <div class="cont_menu">
-        <div class="boton_contact cursor-scale">
-          <p>Talk me</p>
-          <img src="../src/img/flechabotoncontact.svg" alt="" />
-        </div>
-
-        <div class="contd_menu cursor-scale">
-          <div class="cont_boton_menu">
-            <div id="menu-button"></div>
+        <div class="cont_menu">
+          <div class="boton_contact cursor-scale">
+            <p>Talk me</p>
+            <img src="../src/img/flechabotoncontact.svg" alt="" />
           </div>
-        </div>
 
-        <nav id="nav-menu" class="hidden">
-          <ul class="contlistmenu">
-            <p id="menuTitle">Menu</p>
-            <li>
-              <a class="animated-text" href="../index.html" data-delay="0.1">Home</a>
-            </li>
-            <li>
-              <a class="cursor-scale animated-text" href="#about" data-delay="0.1">Blogs</a>
-            </li>
-            <li>
-              <a class="cursor-scale animated-text" href="#services" data-delay="0.1">Works</a>
-            </li>
-            <li>
-              <a class="cursor-scale animated-text" href="#contact" data-delay="0.1">About me</a>
-            </li>
-          </ul>
-          <ul class="contsocial">
-            <p>Social</p>
-            <div class="list_social">
-              <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#home">Whatsapp</a>
-              </li>
-              <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#about">Gmail</a>
-              </li>
-              <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#services">Instagram</a>
-              </li>
-              <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#contact">Facebook</a>
-              </li>
+          <div class="contd_menu cursor-scale">
+            <div class="cont_boton_menu">
+              <div id="menu-button"></div>
             </div>
-          </ul>
-        </nav>
-      </div>
-    </div>
-    <!-- SECCION UNO -->
-    <section id="section_uno">
-      <div class="cont_titulo">
-        <p class="data">finished project - Aug 8 2025</p>
-        <h1 class="tituloproyecto">DSAINS</h1>
-      </div>
-      <p class="parrafo">
-        Hello, I am the ux ui designer you are looking for, I am very happy to
-        have you here, I welcome you to my portfolio.
-      </p>
-      <div class="cont_imagen_proyecto">
-        <img src="../src/img/proydsains.png" alt="imagen proyecto uno" />
-      </div>
-    </section>
+          </div>
 
-    <!-- SECCION DOS -->
-    <section id="section_dos">
-      <div class="column_uno">
-        <h3 class="titulo">Proyect details</h3>
+          <nav id="nav-menu" class="hidden">
+            <ul class="contlistmenu">
+              <p id="menuTitle">Menu</p>
+              <li>
+                <a class="animated-text" href="../index.html" data-delay="0.1"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#about"
+                  data-delay="0.1"
+                  >Blogs</a
+                >
+              </li>
+              <li>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#services"
+                  data-delay="0.1"
+                  >Works</a
+                >
+              </li>
+              <li>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#contact"
+                  data-delay="0.1"
+                  >About me</a
+                >
+              </li>
+            </ul>
+            <ul class="contsocial">
+              <p>Social</p>
+              <div class="list_social">
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#home"
+                    >Whatsapp</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#about"
+                    >Gmail</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#services"
+                    >Instagram</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#contact"
+                    >Facebook</a
+                  >
+                </li>
+              </div>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- SECCION UNO -->
+      <section id="section_uno">
+        <div class="cont_titulo">
+          <p class="data">finished project - Aug 8 2025</p>
+          <h1 class="tituloproyecto">DSAINS</h1>
+        </div>
         <p class="parrafo">
-          Lorem ipsum dolor sit amet consectetur. Tortor nibh in quis diam at
-          scelerisque posuere urna. Fringilla id amet sodales augue egestas
-          amet nibh. Lorem elit tristique quis non et. Lorem ut id mauris
-          commodo magna elementum commodo tincidunt.
+          Hello, I am the ux ui designer you are looking for, I am very happy to
+          have you here, I welcome you to my portfolio.
         </p>
-        <div class="cont_info_proyecto">
-          <div class="info_proyecto">
-            <h4 class="subtitulo">Client</h4>
-            <p class="detalle">Yaksin sains</p>
-          </div>
-          <div class="info_proyecto">
-            <h4 class="subtitulo">Location</h4>
-            <p class="detalle">Colombia</p>
-          </div>
-          <div class="info_proyecto">
-            <h4 class="subtitulo">Industry</h4>
-            <p class="detalle">Design</p>
-            <p class="detalle">Ti</p>
-          </div>
-          <div class="info_proyecto">
-            <h4 class="subtitulo">Services</h4>
-            <p class="detalle">Front and Development</p>
-            <p class="detalle">Brand Identity Design</p>
-            <p class="detalle">Ux-Ui Design</p>
-            <p class="detalle">Web Design</p>
-          </div>
+        <div class="cont_imagen_proyecto">
+          <img src="../src/img/proydsains.png" alt="imagen proyecto uno" />
         </div>
-      </div>
-
-      <div class="column_dos">
-        <div class="cont_cabecera">
-          <span class="-Usd"> <span class="text-style-1">7</span>Meses </span>
-          <span class="-Usd">
-            <span class="text-style-1">400</span>$ Usd
-          </span>
-        </div>
-        <div class="cont_data">
-          <div class="info_proyecto">
-            <h4 class="subtitulo">Tools</h4>
-            <p class="detalle">Js vanilla</p>
-            <p class="detalle">Barba.js</p>
-            <p class="detalle">Three.js</p>
-            <p class="detalle">Gsap.js</p>
-            <p class="detalle">Blender</p>
-            <p class="detalle">Lottie</p>
-            <p class="detalle">Figma</p>
-          </div>
-
-          <div class="info_proyecto">
-            <h4 class="subtitulo">Project team and roles</h4>
-            <p class="detalle">( Ux - Ui ) Yaksin sains</p>
-            <p class="detalle">( Frontend ) Yaksin sains</p>
-            <p class="detalle">( 3D modeler ) Yaksin sains</p>
-            <p class="detalle">( Illustrator ) Yaksin sains</p>
-            <p class="detalle">( Creative Dev ) Yaksin sains</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCION TRES -->
-    <section id="section_tres">
-      <p class="titulo_seccion">COLORS</p>
-      <div class="cont_color">
-
-        <div class="coloruno">
-          <p class="hex">Hex - #0048ff</p>
-          <p class="titulo">Primary color</p>
-          <p class="texto">Aa</p>
-        </div>
-
-        <div class="colordos">
-          <p class="hex">Hex - #F4F6FF</p>
-          <p class="titulo">Secondary color</p>
-          <p class="texto">Aa</p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SECCION CUATRO -->
-    <section id="section_cuatro">
-      <p class="titulo_seccion">MAIN TYPE</p>
-      <div class="cont_fuente">
-        <h3 class="titulo_fuente">Panchang Variable</h3>
-
-        <p class="parrafo_fuente"> Ranging in weight from Light through ExtraBold, the Panchang family has six wide sans
-          serif fonts on offer. The typeface features letters so wide that they are almost panoramic. The family
-          supports all European languages written with the Latin script. Panchang’s lowercase letters have a tall
-          x-height, and their ascenders are visibly taller than the capitals. The design’s broad letterforms look very
-          industrial on the whole. Most terminals end with horizontal and vertical strokes, giving them a clean and
-          streamlined look. There are a few exceptions to keep texts from becoming too monotonous.
-        </p>
-        <div class="cont_tipe_texto">
-          <img src="../src/img/assetproyectos/proyectodsains/textsemibold.svg" alt="">
-          <img src="../src/img/assetproyectos/proyectodsains/textmedio.svg" alt="">
-          <img src="../src/img/assetproyectos/proyectodsains/textregular.svg" alt="">
-          <img src="../src/img/assetproyectos/proyectodsains/textlight.svg" alt="">
-        </div>
-
-        <div class="cont_alfabeto">
-          <img src="../src/img/assetproyectos/proyectodsains/alfabetomayus.svg" alt="">
-          <img src="../src/img/assetproyectos/proyectodsains/alfabetominus.svg" alt="">
-        </div>
-
-
-      </div>
-    </section>
-
-    <!-- SECCION CINCO -->
-    <section id="section_cinco" >
-      <p class="titulo_seccion">BRANDING</p>
-      <div class="cont_moodboard">
-
-        <lottie-player class="lottie" src="../src/img/assetproyectos/proyectodsains/brandingdsainsizq.json" background="transparent" speed="1.5"  ></lottie-player>
-
-        <lottie-player class="lottie" src="../src/img/assetproyectos/proyectodsains/brandingdsainsderch.json" background="transparent" speed="1"  ></lottie-player>
-      </div>
-    </section>
-
-    <!-- SECCION SEIS -->
-    <section id="section_seis">
-      <p class="titulo_seccion">SITE MAP</p>
-
-      <img class="img_titemap" src="../src/img/assetproyectos/proyectodsains/sitemap.svg" alt="">
       </section>
 
-  </div>
+      <!-- SECCION DOS -->
+      <section id="section_dos">
+        <div class="column_uno">
+          <h3 class="titulo">Proyect details</h3>
+          <p class="parrafo">
+            Lorem ipsum dolor sit amet consectetur. Tortor nibh in quis diam at
+            scelerisque posuere urna. Fringilla id amet sodales augue egestas
+            amet nibh. Lorem elit tristique quis non et. Lorem ut id mauris
+            commodo magna elementum commodo tincidunt.
+          </p>
+          <div class="cont_info_proyecto">
+            <div class="info_proyecto">
+              <h4 class="subtitulo">Client</h4>
+              <p class="detalle">Yaksin sains</p>
+            </div>
+            <div class="info_proyecto">
+              <h4 class="subtitulo">Location</h4>
+              <p class="detalle">Colombia</p>
+            </div>
+            <div class="info_proyecto">
+              <h4 class="subtitulo">Industry</h4>
+              <p class="detalle">Design</p>
+              <p class="detalle">Ti</p>
+            </div>
+            <div class="info_proyecto">
+              <h4 class="subtitulo">Services</h4>
+              <p class="detalle">Front and Development</p>
+              <p class="detalle">Brand Identity Design</p>
+              <p class="detalle">Ux-Ui Design</p>
+              <p class="detalle">Web Design</p>
+            </div>
+          </div>
+        </div>
 
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MorphSVGPlugin.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-  <script>
-    // use a script tag or an external JS file
-    document.addEventListener("DOMContentLoaded", (event) => {
-      gsap.registerPlugin(MorphSVGPlugin);
-      // gsap code here!
-    });
-  </script>
-  <script src="../js/barva.js"></script>
-</body>
+        <div class="column_dos">
+          <div class="cont_cabecera">
+            <span class="-Usd"> <span class="text-style-1">7</span>Meses </span>
+            <span class="-Usd">
+              <span class="text-style-1">400</span>$ Usd
+            </span>
+          </div>
+          <div class="cont_data">
+            <div class="info_proyecto">
+              <h4 class="subtitulo">Tools</h4>
+              <p class="detalle">Js vanilla</p>
+              <p class="detalle">Barba.js</p>
+              <p class="detalle">Three.js</p>
+              <p class="detalle">Gsap.js</p>
+              <p class="detalle">Blender</p>
+              <p class="detalle">Lottie</p>
+              <p class="detalle">Figma</p>
+            </div>
 
+            <div class="info_proyecto">
+              <h4 class="subtitulo">Project team and roles</h4>
+              <p class="detalle">( Ux - Ui ) Yaksin sains</p>
+              <p class="detalle">( Frontend ) Yaksin sains</p>
+              <p class="detalle">( 3D modeler ) Yaksin sains</p>
+              <p class="detalle">( Illustrator ) Yaksin sains</p>
+              <p class="detalle">( Creative Dev ) Yaksin sains</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION TRES -->
+      <section id="section_tres">
+        <p class="titulo_seccion">COLORS</p>
+        <div class="cont_color">
+          <div class="coloruno">
+            <p class="hex">Hex - #0048ff</p>
+            <p class="titulo">Primary color</p>
+            <p class="texto">Aa</p>
+          </div>
+
+          <div class="colordos">
+            <p class="hex">Hex - #F4F6FF</p>
+            <p class="titulo">Secondary color</p>
+            <p class="texto">Aa</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION CUATRO -->
+      <section id="section_cuatro">
+        <p class="titulo_seccion">MAIN TYPE</p>
+        <div class="cont_fuente">
+          <h3 class="titulo_fuente">Panchang Variable</h3>
+
+          <p class="parrafo_fuente">
+            Ranging in weight from Light through ExtraBold, the Panchang family
+            has six wide sans serif fonts on offer. The typeface features
+            letters so wide that they are almost panoramic. The family supports
+            all European languages written with the Latin script. Panchang’s
+            lowercase letters have a tall x-height, and their ascenders are
+            visibly taller than the capitals. The design’s broad letterforms
+            look very industrial on the whole. Most terminals end with
+            horizontal and vertical strokes, giving them a clean and streamlined
+            look. There are a few exceptions to keep texts from becoming too
+            monotonous.
+          </p>
+          <div class="cont_tipe_texto">
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textsemibold.svg"
+              alt=""
+            />
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textmedio.svg"
+              alt=""
+            />
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textregular.svg"
+              alt=""
+            />
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textlight.svg"
+              alt=""
+            />
+          </div>
+
+          <div class="cont_alfabeto">
+            <img
+              src="../src/img/assetproyectos/proyectodsains/alfabetomayus.svg"
+              alt=""
+            />
+            <img
+              src="../src/img/assetproyectos/proyectodsains/alfabetominus.svg"
+              alt=""
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION CINCO -->
+      <section id="section_cinco">
+        <p class="titulo_seccion">BRANDING</p>
+        <div class="cont_moodboard">
+          <lottie-player
+            class="lottie"
+            src="../src/img/assetproyectos/proyectodsains/brandingdsainsizq.json"
+            background="transparent"
+            speed="1.5"
+          ></lottie-player>
+
+          <lottie-player
+            class="lottie"
+            src="../src/img/assetproyectos/proyectodsains/brandingdsainsderch.json"
+            background="transparent"
+            speed="1"
+          ></lottie-player>
+        </div>
+      </section>
+
+      <!-- SECCION SEIS -->
+      <section id="section_seis">
+        <p class="titulo_seccion">SITE MAP</p>
+
+        <img
+          class="img_titemap"
+          src="../src/img/assetproyectos/proyectodsains/sitemap.svg"
+          alt=""
+        />
+      </section>
+
+      <!-- SECCION SIETE -->
+      <section id="section_siete"></section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MorphSVGPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+    <script>
+      // use a script tag or an external JS file
+      document.addEventListener("DOMContentLoaded", (event) => {
+        gsap.registerPlugin(MorphSVGPlugin);
+        // gsap code here!
+      });
+    </script>
+    <script type="module" src="../js/proyectos/phone.js"></script>
+    <script src="../js/barva.js"></script>
+  </body>
 </html>
