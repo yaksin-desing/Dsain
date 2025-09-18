@@ -70,7 +70,7 @@ function cargarModelo(rutaModelo, texturaRuta, posicionX, offset) {
           node.add(screenPlane);
 
           // ✅ Respetamos tus rotaciones y escala originales
-          screenPlane.position.set(0, 0.0093, 0);
+          screenPlane.position.set(0, 0.01099, 0);
           screenPlane.rotation.x = Math.PI / -2;
           screenPlane.rotation.z = Math.PI / 1;
           screenPlane.scale.set(0.1, 0.1, 1);
