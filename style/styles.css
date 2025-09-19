@@ -3162,7 +3162,6 @@ body .contenedorproyectos #section_seis .img_titemap {
   margin-top: 2vw;
 }
 body .contenedorproyectos #section_siete {
-  padding: 5vw 4vw 0vw 4vw;
   width: 100%;
   height: 100dvh;
   display: flex;
@@ -3170,5 +3169,4 @@ body .contenedorproyectos #section_siete {
   align-items: center;
   flex-direction: column;
   position: relative;
-  background: #999999;
 }
