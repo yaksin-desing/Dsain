@@ -2,7 +2,7 @@ $colorp: #0048FF;
 $fondoboto: #eff3ff;
 
 body {
-    overflow: auto;
+    overflow: hidden;
 
     .word {
         display: inline-block;
@@ -62,6 +62,7 @@ body {
             transform: translateY(-50%);
             border-radius: 100px;
             overflow: hidden;
+            z-index: 1000;
 
             /* "Thumb" que crece con el scroll */
             #progress-bar {

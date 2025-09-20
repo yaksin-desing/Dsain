@@ -2384,7 +2384,7 @@ h5 {
   }
 }
 body {
-  overflow: auto;
+  overflow: hidden;
 }
 body .word {
   display: inline-block;
@@ -2437,6 +2437,7 @@ body .contenedorproyectos #progress-container {
   transform: translateY(-50%);
   border-radius: 100px;
   overflow: hidden;
+  z-index: 1000;
   /* "Thumb" que crece con el scroll */
 }
 body .contenedorproyectos #progress-container #progress-bar {
