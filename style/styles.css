@@ -2778,6 +2778,11 @@ body .contenedorproyectos #section_uno .cont_imagen_proyecto img {
   border-radius: 5px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
+body .contenedorproyectos #section_screen_uno {
+  width: 100%;
+  min-height: 100vh;
+  /* da espacio para ver la animación */
+}
 body .contenedorproyectos #section_dos {
   width: 100%;
   height: 100dvh;

@@ -3,20 +3,28 @@ document.addEventListener("DOMContentLoaded", () => {
   let current = 0;
   let isAnimating = false;
 
-  function goTo(index) {
-    if (isAnimating) return;
-    if (index < 0 || index >= sections.length) return;
+ function goTo(index) {
+  if (isAnimating) return;
+  if (index < 0 || index >= sections.length) return;
 
-    isAnimating = true;
-    current = index;
+  isAnimating = true;
+  current = index;
 
-    sections[current].scrollIntoView({ behavior: "smooth" });
+  sections[current].scrollIntoView({ behavior: "smooth" });
 
-    // bloquea múltiples saltos seguidos
-    setTimeout(() => {
-      isAnimating = false;
-    }, 300);
+  // animación de la imagen cuando llegamos a la sección 1
+  if (sections[current].id === "section_screen_uno") {
+    gsap.to(".imagen_proyecto", { width: "85vw", duration: 1, ease: "power2.out" });
+    gsap.to(".imagen_proyecto", { y: "35vw", duration: 1, ease: "power2.out" });
+  } else {
+    gsap.to(".imagen_proyecto", { width: "15vw", duration: 1, ease: "power2.out" });
+    gsap.to(".imagen_proyecto", { y: "0vw", duration: 1, ease: "power2.out" });
   }
+
+  setTimeout(() => {
+    isAnimating = false;
+  }, 300);
+}
 
   // --- Scroll con mouse (desktop) ---
   window.addEventListener("wheel", (e) => {
@@ -42,3 +50,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+

@@ -474,6 +474,13 @@ body {
             }
         }
 
+        #section_screen_uno {
+            width: 100%;
+            min-height: 100vh;
+            /* da espacio para ver la animación */
+
+        }
+
         #section_dos {
             width: 100%;
             height: 100dvh;

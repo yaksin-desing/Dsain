@@ -310,6 +310,7 @@ gsap.registerPlugin(SplitText);
 
 const textos = {
   section_uno: "Proyecto terminado",
+  section_screen_uno: "Vista web",
   section_dos: "Detalles del proyecto",
   section_tres: "Colores",
   section_cuatro: "Fonts",
