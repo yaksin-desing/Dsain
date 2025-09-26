@@ -317,6 +317,7 @@ const textos = {
   section_cinco: "Branding",
   section_seis: "Mapa del sitio",
   section_siete: "Versión móvil",
+  section_ocho: "Contáctame",
 };
 
 const textoGuia = document.getElementById("texto-guia");

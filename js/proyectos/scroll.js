@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // animación de la imagen cuando llegamos a la sección 1
   if (sections[current].id === "section_screen_uno") {
     gsap.to(".imagen_proyecto", { width: "85vw", duration: 1, ease: "power2.out" });
-    gsap.to(".imagen_proyecto", { y: "35vw", duration: 1, ease: "power2.out" });
+    gsap.to(".imagen_proyecto", { y: "38vw", duration: 1, ease: "power2.out" });
   } else {
     gsap.to(".imagen_proyecto", { width: "15vw", duration: 1, ease: "power2.out" });
     gsap.to(".imagen_proyecto", { y: "0vw", duration: 1, ease: "power2.out" });

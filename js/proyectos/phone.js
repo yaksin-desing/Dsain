@@ -37,27 +37,25 @@ scene.add(dirLight);
 // 🔹 Guardamos los modelos y sus offsets
 const modelos = [];
 
-// Map para controlar los tweens que generan la rotación por mouse (uno por modelo)
+// Map para controlar los tweens que generan la rotación por mouse
 const mouseTweens = new Map();
 
 // Estado del efecto mouse / click
 let efectoMouseActivo = false;
-let mouseEffectPaused = false; // pausa el efecto del mouse durante la animación de click
-let clickInProgress = false;   // evita clicks simultáneos
+let mouseEffectPaused = false;
+let clickInProgress = false;
 let lastMouseX = 0;
 let lastMouseY = 0;
 
 // Función para actualizar (crear) los tweens de rotación que siguen al mouse
 function updateMouseTweens(mx, my) {
   modelos.forEach(({ model, baseRotX, baseRotY }) => {
-    // matar tween previo si existe
     const prev = mouseTweens.get(model);
     if (prev) prev.kill();
 
-    // crear tween hacia la rotación objetivo basada en la rotación base
     const t = gsap.to(model.rotation, {
-      x: baseRotX + my * 0.1,   // ajuste a tu gusto
-      y: baseRotY + mx * 0.3,    // ajuste a tu gusto
+      x: baseRotX + my * 0.1,
+      y: baseRotY + mx * 0.3,
       duration: 0.5,
       ease: "power2.out",
     });
@@ -103,11 +101,8 @@ function cargarModelo(rutaModelo, texturaRuta, posicionX, offset, rotY = Math.PI
         }
       });
 
-      // Posición inicial fuera de la cámara
       model.position.x = posicionX < 0 ? -5 : 5;
       model.position.y = 0;
-
-      // Aplicar rotaciones iniciales configuradas
       model.rotation.set(rotX, rotY, 0);
 
       scene.add(model);
@@ -117,8 +112,8 @@ function cargarModelo(rutaModelo, texturaRuta, posicionX, offset, rotY = Math.PI
         offset,
         baseY: model.position.y,
         targetX: posicionX,
-        baseRotX: model.rotation.x, // guardamos rotación base inicial
-        baseRotY: model.rotation.y, // guardamos rotación base inicial
+        baseRotX: model.rotation.x,
+        baseRotY: model.rotation.y,
       });
     },
     undefined,
@@ -126,14 +121,14 @@ function cargarModelo(rutaModelo, texturaRuta, posicionX, offset, rotY = Math.PI
   );
 }
 
-// 🔹 Cargar los 2 modelos
+// 🔹 Cargar modelos
 const texturaRuta1 = document.body.dataset.textura1;
 const texturaRuta2 = document.body.dataset.textura2;
 
 cargarModelo("../src/objt/phone/iphone.glb", texturaRuta1, -0.4, 0, Math.PI, 0);
 cargarModelo("../src/objt/phone/iphone.glb", texturaRuta2, 0.5, Math.PI / 2, Math.PI, -0.05);
 
-// Animación flotante (NO la tocamos; sigue con sin() en el loop)
+// Animación flotante
 function animate() {
   requestAnimationFrame(animate);
 
@@ -147,7 +142,7 @@ function animate() {
 }
 animate();
 
-// ✅ IntersectionObserver para disparar animación una sola vez
+// ✅ IntersectionObserver para animación de entrada
 let animacionEjecutada = false;
 
 const observer = new IntersectionObserver(
@@ -158,41 +153,28 @@ const observer = new IntersectionObserver(
 
         const timeline = gsap.timeline({
           onComplete: () => {
-            // Al terminar la animación de entrada: activamos el efecto mouse
-            // y actualizamos las rotaciones base a lo que tenga cada modelo ahora,
-            // para evitar que el efecto mouse "resetee" la rotación de entrada.
             modelos.forEach((m) => {
               m.baseRotX = m.model.rotation.x;
               m.baseRotY = m.model.rotation.y;
             });
 
             efectoMouseActivo = true;
-
-            // Si ya tenemos una posición de mouse, inicializamos los tweens
             updateMouseTweens(lastMouseX, lastMouseY);
           },
         });
 
         modelos.forEach(({ model, targetX }) => {
-          timeline.to(
-            model.position,
-            {
-              x: targetX,
-              duration: 2,
-              ease: "power2.out",
-            },
-            0
-          );
+          timeline.to(model.position, {
+            x: targetX,
+            duration: 2,
+            ease: "power2.out",
+          }, 0);
 
-          timeline.to(
-            model.rotation,
-            {
-              y: "+=" + Math.PI * 2,
-              duration: 2,
-              ease: "power2.out",
-            },
-            0
-          );
+          timeline.to(model.rotation, {
+            y: "+=" + Math.PI * 2,
+            duration: 2,
+            ease: "power2.out",
+          }, 0);
         });
 
         observer.disconnect();
@@ -204,25 +186,27 @@ const observer = new IntersectionObserver(
 
 observer.observe(container);
 
-// ✅ Listener de mouse para inclinar modelos en X e Y (crea/actualiza tweens)
-window.addEventListener("mousemove", (event) => {
-  // guardamos la última posición del mouse (normalizada) para reanudar después de click
-  lastMouseX = (event.clientX / window.innerWidth - 0.5) * 2; // -1..1
-  lastMouseY = (event.clientY / window.innerHeight - 0.5) * 2; // -1..1
+// ✅ Detectar si es móvil/tablet
+const isMobileOrTablet = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  if (!efectoMouseActivo || mouseEffectPaused) return;
+// ✅ Solo activar el hover de mouse en desktop
+if (!isMobileOrTablet) {
+  window.addEventListener("mousemove", (event) => {
+    lastMouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+    lastMouseY = (event.clientY / window.innerHeight - 0.5) * 2;
 
-  // actualizamos tweens hacia la nueva rotación objetivo
-  updateMouseTweens(lastMouseX, lastMouseY);
-});
+    if (!efectoMouseActivo || mouseEffectPaused) return;
+    updateMouseTweens(lastMouseX, lastMouseY);
+  });
+}
 
-// ✅ Raycaster para detectar clicks en modelos (pausa el efecto mouse → rota modelo → reanuda)
+// ✅ Raycaster para detectar clicks
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 container.addEventListener("click", (event) => {
-  if (!efectoMouseActivo) return; // si el efecto mouse no está activo, ignorar clicks
-  if (clickInProgress) return;   // evitar clicks múltiples simultáneos
+  if (!efectoMouseActivo) return;
+  if (clickInProgress) return;
 
   const rect = container.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -233,7 +217,6 @@ container.addEventListener("click", (event) => {
 
   if (intersects.length === 0) return;
 
-  // subir en la jerarquía hasta encontrar el modelo raíz que guardamos en `modelos`
   let clicked = intersects[0].object;
   while (clicked.parent && !modelos.find((m) => m.model === clicked)) {
     clicked = clicked.parent;
@@ -242,29 +225,21 @@ container.addEventListener("click", (event) => {
   const modeloData = modelos.find((m) => m.model === clicked);
   if (!modeloData) return;
 
-  // Pausamos/limpiamos el efecto mouse (no la flotación)
   mouseEffectPaused = true;
   clickInProgress = true;
 
-  // matar tweens actuales del mouse
   mouseTweens.forEach((t) => t.kill());
   mouseTweens.clear();
 
-  // Animación del click: rota solo el modelo clicado
   gsap.to(modeloData.model.rotation, {
     y: modeloData.model.rotation.y + Math.PI * 2,
     duration: 3,
     ease: "power2.inOut",
     onComplete: () => {
-      // Actualizamos la rotación base para que el efecto mouse sea relativo a la nueva orientación
       modeloData.baseRotX = modeloData.model.rotation.x;
       modeloData.baseRotY = modeloData.model.rotation.y;
-
-      // reanudar efecto mouse
       mouseEffectPaused = false;
       clickInProgress = false;
-
-      // restaurar tweens con la última posición del mouse
       updateMouseTweens(lastMouseX, lastMouseY);
     },
   });

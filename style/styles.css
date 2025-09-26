@@ -2720,7 +2720,7 @@ body .contenedorproyectos .barra_nav .hidden {
   display: none;
 }
 body .contenedorproyectos #section_uno {
-  padding-top: 10%;
+  padding-top: 7%;
   width: 100%;
   height: 100dvh;
   display: flex;
@@ -2747,7 +2747,7 @@ body .contenedorproyectos #section_uno .cont_titulo .data {
   color: #0048ff;
 }
 body .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
-  padding-bottom: 10vh;
+  padding-bottom: 4vh;
   font-family: "Extrabold";
   font-size: 7vw;
   font-weight: bold;
@@ -2759,7 +2759,7 @@ body .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
   color: #0048ff;
 }
 body .contenedorproyectos #section_uno .parrafo {
-  bottom: 1vw;
+  bottom: 7vw;
   position: absolute;
   padding-left: 30vw;
   padding-right: 30vw;
@@ -3175,4 +3175,29 @@ body .contenedorproyectos #section_siete {
   align-items: center;
   flex-direction: column;
   position: relative;
+}
+body .contenedorproyectos #section_ocho {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+body .contenedorproyectos #section_ocho canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  /* 👈 fuerza transparencia */
+  pointer-events: none;
+  /* opcional: para que el mouse pase */
+}
+body .contenedorproyectos #section_ocho footer {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
 }
