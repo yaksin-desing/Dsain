@@ -20,8 +20,19 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1, 2);
 
+// ✅ Detectar si es móvil/tablet
+const isMobileOrTablet = /Mobi|Android|iPad|iPod/i.test(navigator.userAgent);
+
 // Renderizador
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+// 🔹 Ajuste de resolución según dispositivo
+if (isMobileOrTablet) {
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+} else {
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+}
+
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.shadowMap.enabled = true;
 container.appendChild(renderer.domElement);
@@ -33,6 +44,12 @@ dirLight.position.set(3, 5, 7);
 dirLight.castShadow = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 scene.add(dirLight);
+
+// 🔹 Quitar sombras en móvil
+if (isMobileOrTablet) {
+  renderer.shadowMap.enabled = false;
+  dirLight.castShadow = false;
+}
 
 // 🔹 Guardamos los modelos y sus offsets
 const modelos = [];
@@ -128,9 +145,25 @@ const texturaRuta2 = document.body.dataset.textura2;
 cargarModelo("../src/objt/phone/iphone.glb", texturaRuta1, -0.4, 0, Math.PI, 0);
 cargarModelo("../src/objt/phone/iphone.glb", texturaRuta2, 0.5, Math.PI / 2, Math.PI, -0.05);
 
+// 🔹 Controlar si el canvas está visible
+let isInViewport = true;
+
+const observerVisibility = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      isInViewport = entry.isIntersecting;
+    });
+  },
+  { threshold: 0.2 }
+);
+observerVisibility.observe(container);
+
 // Animación flotante
 function animate() {
   requestAnimationFrame(animate);
+
+  // 🚀 Pausar render si no está en viewport
+  if (!isInViewport) return;
 
   const time = Date.now() * 0.002;
 
@@ -185,9 +218,6 @@ const observer = new IntersectionObserver(
 );
 
 observer.observe(container);
-
-// ✅ Detectar si es móvil/tablet
-const isMobileOrTablet = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 // ✅ Solo activar el hover de mouse en desktop
 if (!isMobileOrTablet) {
