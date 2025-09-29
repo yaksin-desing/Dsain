@@ -19,10 +19,11 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0, 7);
 
 // Renderizador
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // 👈 activa alpha
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true,  }); // 👈 activa alpha
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setClearColor(0x000000, 0); // 👈 color negro pero totalmente transparente
 renderer.shadowMap.enabled = true;
+
 container.appendChild(renderer.domElement);
 
 // --- Controles ---
@@ -71,9 +72,9 @@ loader.load(
           caraSimbolo.traverse((child) => {
             if (child.isMesh) {
               // Color aleatorio entre blanco (#ffffff) y gris claro (#cccccc)
-              const value = Math.random() * 0.2 + 0.8; 
+              const value = Math.random() * 0.8 + 0.5; 
               // genera un número entre 0.8 y 1.0
-              const color = new THREE.Color(value, value, value);
+              const color = new THREE.Color(0, 0, value);
 
               child.material = new THREE.MeshStandardMaterial({
                 color: color,
@@ -155,3 +156,4 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
 });
+
