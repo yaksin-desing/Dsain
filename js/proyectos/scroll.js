@@ -3,28 +3,91 @@ document.addEventListener("DOMContentLoaded", () => {
   let current = 0;
   let isAnimating = false;
 
- function goTo(index) {
-  if (isAnimating) return;
-  if (index < 0 || index >= sections.length) return;
+  function goTo(index) {
+    if (isAnimating) return;
+    if (index < 0 || index >= sections.length) return;
 
-  isAnimating = true;
-  current = index;
+    isAnimating = true;
+    current = index;
 
-  sections[current].scrollIntoView({ behavior: "smooth" });
+    sections[current].scrollIntoView({
+      behavior: "smooth"
+    });
 
-  // animación de la imagen cuando llegamos a la sección 1
-  if (sections[current].id === "section_screen_uno") {
-    gsap.to(".imagen_proyecto", { width: "85vw", duration: 1, ease: "power2.out" });
-    gsap.to(".imagen_proyecto", { y: "38vw", duration: 1, ease: "power2.out" });
-  } else {
-    gsap.to(".imagen_proyecto", { width: "15vw", duration: 1, ease: "power2.out" });
-    gsap.to(".imagen_proyecto", { y: "0vw", duration: 1, ease: "power2.out" });
+    // --- Animación de la imagen ---
+    if (sections[current].id === "section_screen_uno") {
+      gsap.to(".imagen_proyecto", {
+        width: "85vw",
+        duration: 1,
+        ease: "power2.out"
+      });
+      gsap.to(".imagen_proyecto", {
+        y: "38vw",
+        duration: 1,
+        ease: "power2.out"
+      });
+    } else {
+      gsap.to(".imagen_proyecto", {
+        width: "15vw",
+        duration: 1,
+        ease: "power2.out"
+      });
+      gsap.to(".imagen_proyecto", {
+        y: "0vw",
+        duration: 1,
+        ease: "power2.out"
+      });
+    }
+
+    // --- Animación barra_nav y text_guia ---
+    if (sections[current].id === "section_ocho") {
+      gsap.to(".barra_nav", {
+        top: "-5vh",
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+      gsap.to(".text_guia", {
+        left: "-3vw",
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+
+      gsap.to("#progress-container", {
+        x: "3vw",
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+
+    } else {
+      gsap.to(".barra_nav", {
+        top: "0vh",
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+      gsap.to(".text_guia", {
+        left: "2vw",
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+
+      gsap.to("#progress-container", {
+        x: "0vw",
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+
+    }
+
+    setTimeout(() => {
+      isAnimating = false;
+    }, 800); // coincide con la duración de la animación
   }
-
-  setTimeout(() => {
-    isAnimating = false;
-  }, 300);
-}
 
   // --- Scroll con mouse (desktop) ---
   window.addEventListener("wheel", (e) => {
@@ -50,4 +113,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-

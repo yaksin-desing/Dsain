@@ -3214,16 +3214,15 @@ body .contenedorproyectos #section_ocho footer .cont_pie {
   gap: 1vw;
 }
 body .contenedorproyectos #section_ocho footer .cont_pie .titulo_pie {
-  font-family: "medium";
+  font-family: "Semibold";
   font-size: 3vw;
-  font-weight: 500;
+  font-weight: 700;
   font-stretch: normal;
-  font-style: normal;
   line-height: 1.33;
   letter-spacing: -0.25px;
   text-align: center;
   color: #fff;
-  text-shadow: 0 0 7px rgb(7, 0, 70);
+  text-shadow: 0 0 3px rgb(7, 0, 70);
 }
 body .contenedorproyectos #section_ocho footer .cont_pie .cont_boton_contacto .boton_contact {
   display: flex;
