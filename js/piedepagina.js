@@ -4,7 +4,7 @@ import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/js
 import { gsap } from "https://cdn.skypack.dev/gsap@3.12.2";
 
 // Contenedor
-const container = document.getElementById("section_ocho");
+const container = document.getElementById("section_once");
 
 // --- Escena, cámara y renderer ---
 const scene = new THREE.Scene();

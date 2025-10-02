@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- Animación barra_nav y text_guia ---
-    if (sections[current].id === "section_ocho") {
+    if (sections[current].id === "section_once") {
       gsap.to(".barra_nav", {
         top: "-5vh",
         opacity: 0,

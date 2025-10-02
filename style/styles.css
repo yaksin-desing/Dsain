@@ -3173,12 +3173,45 @@ body .contenedorproyectos #section_ocho {
   height: 100dvh;
   display: flex;
   justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+body .contenedorproyectos #section_ocho #cont_escena_tubo {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: wheat;
+}
+body .contenedorproyectos #section_nueve {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+body .contenedorproyectos #section_diez {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+body .contenedorproyectos #section_once {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: start;
   align-items: start;
   flex-direction: column;
   position: relative;
   overflow: hidden;
 }
-body .contenedorproyectos #section_ocho canvas {
+body .contenedorproyectos #section_once canvas {
   position: absolute;
   top: 0;
   left: 0;
@@ -3189,12 +3222,12 @@ body .contenedorproyectos #section_ocho canvas {
   pointer-events: none;
   /* opcional: para que el mouse pase */
 }
-body .contenedorproyectos #section_ocho footer {
+body .contenedorproyectos #section_once footer {
   z-index: 1000;
   width: 100%;
   height: 100%;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie {
+body .contenedorproyectos #section_once footer .cont_pie {
   width: 100%;
   height: 100%;
   display: flex;
@@ -3203,7 +3236,7 @@ body .contenedorproyectos #section_ocho footer .cont_pie {
   align-items: start;
   gap: 1vw;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .titulo_pie {
+body .contenedorproyectos #section_once footer .cont_pie .titulo_pie {
   padding-left: 20vw;
   padding-right: 20vw;
   font-family: "Semibold";
@@ -3216,12 +3249,12 @@ body .contenedorproyectos #section_ocho footer .cont_pie .titulo_pie {
   color: #fff;
   text-shadow: 0 0 3px rgb(7, 0, 70);
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_boton_contacto {
+body .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto {
   width: 100%;
   display: flex;
   justify-content: center;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_boton_contacto .boton_contact {
+body .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto .boton_contact {
   white-space: nowrap;
   width: -moz-min-content;
   width: min-content;
@@ -3245,11 +3278,11 @@ body .contenedorproyectos #section_ocho footer .cont_pie .cont_boton_contacto .b
   cursor: pointer;
   transition: all 0.3s ease;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_boton_contacto .boton_contact:hover {
+body .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto .boton_contact:hover {
   background-color: #eff3ff;
   transform: scale(1.05);
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie {
+body .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie {
   height: 7vw;
   overflow: hidden;
   display: flex;
@@ -3258,13 +3291,13 @@ body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie {
   backdrop-filter: blur(5px);
   justify-content: start;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie .espacio_riel {
+body .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel {
   display: flex;
   width: -moz-max-content;
   width: max-content;
   animation: scroll 15s linear infinite;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie .espacio_riel .riel_pie {
+body .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel .riel_pie {
   width: 33.333%;
   display: flex;
   align-items: center;
@@ -3272,11 +3305,11 @@ body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie .espacio
   gap: 10px;
   padding: 0 20px;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie .espacio_riel .riel_pie img {
+body .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel .riel_pie img {
   width: 20px;
   height: 20px;
 }
-body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie .espacio_riel .riel_pie p {
+body .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel .riel_pie p {
   font-family: "Medium", sans-serif;
   font-size: 20px;
   font-weight: 500;
@@ -3291,7 +3324,7 @@ body .contenedorproyectos #section_ocho footer .cont_pie .cont_riel_pie .espacio
     transform: translateX(-50%);
   }
 }
-body .contenedorproyectos #section_ocho footer .nombre_logo {
+body .contenedorproyectos #section_once footer .nombre_logo {
   position: absolute;
   bottom: -12vw;
   font-family: Extrabold;
