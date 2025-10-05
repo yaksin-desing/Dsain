@@ -285,22 +285,24 @@ container.addEventListener("scroll", () => {
   progressBar.style.height = scrollPercent + "%"; // crecerá hacia abajo
 });
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const lotties = document.querySelectorAll(".lottie");
+document.addEventListener("DOMContentLoaded", () => {
+  const lotties = document.querySelectorAll(".lottie");
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const lottie = entry.target;
-        if (entry.isIntersecting) {
-          lottie.play();
-        } else {
-          lottie.stop(); // o lottie.pause() si prefieres que quede en el frame actual
-        }
-      });
-    }, { threshold: 0.5 });
-
-    lotties.forEach(lottie => observer.observe(lottie));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const lottie = entry.target;
+      if (entry.isIntersecting) {
+        lottie.play();
+      } else {
+        lottie.stop(); // o lottie.pause() si prefieres que quede en el frame actual
+      }
+    });
+  }, {
+    threshold: 0.5
   });
+
+  lotties.forEach(lottie => observer.observe(lottie));
+});
 
 
 
@@ -317,7 +319,10 @@ const textos = {
   section_cinco: "Branding",
   section_seis: "Mapa del sitio",
   section_siete: "Versión móvil",
-  section_ocho: "Contáctame",
+  cont_escena_tubo: "tubo",
+  section_ocho: "ocho",
+  section_nueve: "nueve",
+  section_diez: "diez",
 };
 
 const textoGuia = document.getElementById("texto-guia");
@@ -345,7 +350,10 @@ function mostrarNuevoTexto(nuevoTexto) {
   textoGuia.textContent = nuevoTexto;
 
   // nuevo split
-  const split = new SplitText(textoGuia, { type: "chars", charsClass: "char" });
+  const split = new SplitText(textoGuia, {
+    type: "chars",
+    charsClass: "char"
+  });
   textoGuia.splitText = split;
 
   // animación de entrada
@@ -369,8 +377,9 @@ const observer = new IntersectionObserver(
         }
       }
     });
-  },
-  { threshold: 0.5 }
+  }, {
+    threshold: 0.5
+  }
 );
 
 document.querySelectorAll("section").forEach((section) => {

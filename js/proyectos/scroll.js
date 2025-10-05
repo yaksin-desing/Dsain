@@ -53,14 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
         duration: 0.8,
         ease: "power2.inOut"
       });
-
       gsap.to("#progress-container", {
         x: "3vw",
         opacity: 0,
         duration: 0.8,
         ease: "power2.inOut"
       });
-
     } else {
       gsap.to(".barra_nav", {
         top: "0vh",
@@ -74,14 +72,47 @@ document.addEventListener("DOMContentLoaded", () => {
         duration: 0.8,
         ease: "power2.inOut"
       });
-
       gsap.to("#progress-container", {
         x: "0vw",
         opacity: 1,
         duration: 0.8,
         ease: "power2.inOut"
       });
+    }
 
+    // --- Animación del tubo dentro de las secciones 8, 9 y 10 ---
+    // --- Animación del tubo dentro de las secciones 8, 9 y 10 ---
+    const tubo = document.getElementById("cont_escena_tubo");
+    const idSeccion = sections[current].id;
+
+    if (idSeccion === "section_ocho") {
+      gsap.to(tubo, {
+        y: "100vh",
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+
+    } else if (idSeccion === "section_nueve") {
+      gsap.to(tubo, {
+        y: "200vh",
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+
+    } else if (idSeccion === "section_diez") {
+      gsap.to(tubo, {
+        y: "300vh",
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
+
+    } else {
+      // En cualquier otra sección, lo regresamos al inicio
+      gsap.to(tubo, {
+        y: "100vh",
+        duration: 0.8,
+        ease: "power2.inOut"
+      });
     }
 
     setTimeout(() => {
@@ -103,7 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("touchstart", (e) => {
     startY = e.touches[0].clientY;
   });
-
   window.addEventListener("touchend", (e) => {
     let endY = e.changedTouches[0].clientY;
     if (startY - endY > 50) {

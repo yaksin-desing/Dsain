@@ -924,6 +924,15 @@ body {
             position: relative;
         }
 
+        #cont_escena_tubo {
+            width: 100%;
+            height: 100vh;
+            background: wheat;
+            will-change: transform;
+            position: relative;
+            transform: translate(0, 100vh);
+        }
+
         #section_ocho {
             width: 100%;
             height: 100dvh;
@@ -932,15 +941,14 @@ body {
             align-items: center;
             flex-direction: column;
             position: relative;
-
-            #cont_escena_tubo {
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                background: wheat;
-
-            }
         }
+
+
+
+
+
+
+
 
         #section_nueve {
             width: 100%;
