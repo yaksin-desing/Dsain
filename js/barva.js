@@ -319,7 +319,6 @@ const textos = {
   section_cinco: "Branding",
   section_seis: "Mapa del sitio",
   section_siete: "Versión móvil",
-  cont_escena_tubo: "tubo",
   section_ocho: "ocho",
   section_nueve: "nueve",
   section_diez: "diez",
