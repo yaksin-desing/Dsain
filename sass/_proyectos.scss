@@ -922,6 +922,7 @@ body {
             align-items: center;
             flex-direction: column;
             position: relative;
+            z-index: 1;
         }
 
 
@@ -935,12 +936,14 @@ body {
             flex-direction: column;
             position: relative;
             overflow: visible;
+            background: transparent;
 
             #cont_escena_tubo {
                 width: 100%;
                 height: 200dvh;
                 position: absolute;
-                top: 0;
+                top: -10dvh;
+                z-index: 0;
             }
         }
 
