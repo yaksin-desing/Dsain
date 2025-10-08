@@ -1,9 +1,6 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import {
-  gsap
-} from "https://cdn.skypack.dev/gsap";
+import { gsap } from "https://cdn.skypack.dev/gsap";
 
-// Esperar a que cargue todo el DOM
 window.addEventListener("load", () => {
   const container = document.getElementById("cont_escena_tubo");
   if (!container) {
@@ -22,12 +19,10 @@ window.addEventListener("load", () => {
     0.1,
     1000
   );
-  camera.position.set(0, 1.5, 3.4);
+  camera.position.set(0, 1.4, 3.4);
 
   // 🖥️ Renderizador
-  const renderer = new THREE.WebGLRenderer({
-    antialias: true
-  });
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
@@ -38,7 +33,7 @@ window.addEventListener("load", () => {
   dirLight.position.set(3, 5, 7);
   scene.add(dirLight);
 
-  // 🎞️ Video Material
+  // 🎞️ Función para crear materiales desde un video
   function crearMaterialVideo(ruta) {
     const video = document.createElement("video");
     video.src = ruta;
@@ -60,11 +55,15 @@ window.addEventListener("load", () => {
     });
   }
 
-  const materiales = [
-    crearMaterialVideo("../src/img/assetproyectos/proyectodsains/videodsain.mp4"),
-    crearMaterialVideo("../src/img/assetproyectos/proyectodsains/videodsain.mp4"),
-    crearMaterialVideo("../src/img/assetproyectos/proyectodsains/videodsain.mp4"),
-  ];
+  // 🧠 Leer las 3 URLs desde el HTML
+  const videoURLs = [
+    container.dataset.video1,
+    container.dataset.video2,
+    container.dataset.video3,
+  ].filter(Boolean); // elimina vacíos si no se ponen los 3
+
+  // Crear materiales según las URLs del HTML
+  const materiales = videoURLs.map((url) => crearMaterialVideo(url));
 
   // 🌀 Crear el tubo
   const grupoTubo = new THREE.Group();
@@ -72,7 +71,7 @@ window.addEventListener("load", () => {
   const altura = 0.7;
   const segmentos = 64;
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < materiales.length; i++) {
     const inicio = i * ((2 * Math.PI) / 3);
     const geometry = new THREE.CylinderGeometry(
       radio,
@@ -88,9 +87,10 @@ window.addEventListener("load", () => {
     mesh.position.y = i * 1;
     grupoTubo.add(mesh);
   }
+
   scene.add(grupoTubo);
 
-  // 🎬 Animación constante (rotación lenta base)
+  // 🎬 Animación
   function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
@@ -104,59 +104,28 @@ window.addEventListener("load", () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
   });
 
-  // 🧭 Detectar sección visible
+  // 🧭 Observer para animar rotaciones según secciones
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
-
           if (id === "section_ocho") {
-            gsap.to(grupoTubo.rotation, {
-              y: 1.57,
-              duration: 1,
-              ease: "power2.out",
-            });
-            gsap.to(grupoTubo.position, {
-              y: -0.13,
-              duration: 1,
-              ease: "power2.out",
-            });
-
+            gsap.to(grupoTubo.rotation, { y: 1.57, duration: 1, ease: "power2.out" });
+            gsap.to(grupoTubo.position, { y: -0.13, duration: 1, ease: "power2.out" });
           } else if (id === "section_nueve") {
-            gsap.to(grupoTubo.rotation, {
-              y: 3.7,
-              duration: 1,
-              ease: "power2.out",
-            });
-            gsap.to(grupoTubo.position, {
-              y: 0.87,
-              duration: 1,
-              ease: "power2.out",
-            });
-
-
+            gsap.to(grupoTubo.rotation, { y: 3.7, duration: 1, ease: "power2.out" });
+            gsap.to(grupoTubo.position, { y: 0.87, duration: 1, ease: "power2.out" });
           } else if (id === "section_diez") {
-            gsap.to(grupoTubo.rotation, {
-              y: 5.75,
-              duration: 1,
-              ease: "power2.out",
-            });
-            gsap.to(grupoTubo.position, {
-              y: 1.87,
-              duration: 1,
-              ease: "power2.out",
-            });
-
+            gsap.to(grupoTubo.rotation, { y: 5.75, duration: 1, ease: "power2.out" });
+            gsap.to(grupoTubo.position, { y: 1.87, duration: 1, ease: "power2.out" });
           }
         }
       });
-    }, {
-      threshold: 0.5
-    }
+    },
+    { threshold: 0.5 }
   );
 
-  // 🔍 Observar secciones
   ["section_ocho", "section_nueve", "section_diez"].forEach((id) => {
     const section = document.getElementById(id);
     if (section) observer.observe(section);

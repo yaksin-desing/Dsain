@@ -3187,6 +3187,36 @@ body .contenedorproyectos #section_ocho #cont_escena_tubo {
   top: -10dvh;
   z-index: 0;
 }
+body .contenedorproyectos #section_ocho #cont_escena_tubo .parrafo_escena {
+  position: absolute;
+  bottom: 97dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+body .contenedorproyectos #section_ocho #cont_escena_tubo .parrafo_escena .titulo_parrafo {
+  font-family: "Semibold";
+  font-size: 1.5vw;
+  font-weight: 700;
+  font-stretch: normal;
+  text-align: center;
+  color: #0048FF;
+  text-shadow: 0 0 1px rgb(7, 0, 70);
+}
+body .contenedorproyectos #section_ocho #cont_escena_tubo .parrafo_escena .parrafo {
+  font-family: "Regular";
+  font-size: 0.8vw;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #0048FF;
+  padding-top: 0.8vw;
+  padding-left: 20vw;
+  padding-right: 20vw;
+}
 body .contenedorproyectos #section_nueve {
   width: 100%;
   height: 100dvh;
