@@ -3184,38 +3184,54 @@ body .contenedorproyectos #section_ocho #cont_escena_tubo {
   width: 100%;
   height: 200dvh;
   position: absolute;
-  top: -10dvh;
+  top: -15dvh;
   z-index: 0;
 }
-body .contenedorproyectos #section_ocho #cont_escena_tubo .parrafo_escena {
+body .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena {
   position: absolute;
-  bottom: 97dvh;
+  bottom: 90dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  padding-left: 20vw;
+  padding-right: 20vw;
 }
-body .contenedorproyectos #section_ocho #cont_escena_tubo .parrafo_escena .titulo_parrafo {
+body .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena .titulo_parrafo_escena {
   font-family: "Semibold";
   font-size: 1.5vw;
   font-weight: 700;
-  font-stretch: normal;
-  text-align: center;
+  text-align: left;
   color: #0048FF;
-  text-shadow: 0 0 1px rgb(7, 0, 70);
+  text-shadow: 0 0 1px rgb(20, 0, 199);
+  display: inline-block;
+  line-height: 1.3;
+  white-space: pre-wrap;
 }
-body .contenedorproyectos #section_ocho #cont_escena_tubo .parrafo_escena .parrafo {
+body .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena .titulo_parrafo_escena .char {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform, opacity;
+}
+body .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena .parrafo_escena {
   font-family: "Regular";
   font-size: 0.8vw;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
   letter-spacing: normal;
-  text-align: center;
   color: #0048FF;
   padding-top: 0.8vw;
-  padding-left: 20vw;
-  padding-right: 20vw;
+  text-align: left;
+  line-height: 1.5;
+  max-width: 60vw;
+  display: inline-block;
+  white-space: pre-wrap;
+}
+body .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena .parrafo_escena .char {
+  display: inline-block;
+  white-space: pre;
+  margin-right: 0.5px;
+  will-change: transform, opacity;
 }
 body .contenedorproyectos #section_nueve {
   width: 100%;
