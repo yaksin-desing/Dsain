@@ -1062,17 +1062,18 @@ body {
                     gap: 1vw;
 
                     .titulo_pie {
+                        mix-blend-mode: exclusion; /* o difference */
                         padding-left: 20vw;
                         padding-right: 20vw;
-                        font-family: "Semibold";
+                        font-family: "bold";
                         font-size: 3vw;
                         font-weight: 700;
                         font-stretch: normal;
                         line-height: 1.33;
                         letter-spacing: -0.25px;
                         text-align: center;
-                        color: #fff;
-                        text-shadow: 0 0 3px rgb(7, 0, 70);
+                        color: #ffffff; /* Color base del texto */
+                        text-shadow: 0 0 7px rgb(16, 0, 156);
                     }
 
                     .cont_boton_contacto {
@@ -1159,10 +1160,6 @@ body {
                             // se mueve el ancho de 3 items (3 × 33.333vw ≈ 100vw)
                         }
                     }
-
-
-
-
 
                 }
 

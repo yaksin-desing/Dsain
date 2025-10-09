@@ -1,3 +1,58 @@
+import {
+  gsap
+} from "https://cdn.skypack.dev/gsap";
+import {
+  SplitText
+} from "https://cdn.skypack.dev/gsap/SplitText";
+
+gsap.registerPlugin(SplitText);
+
+window.addEventListener("load", () => {
+  const elementos = document.querySelectorAll(".animar-texto");
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return; // esperar a que entre al viewport
+
+        const el = entry.target;
+        animarTexto(el); // animar elemento
+        obs.unobserve(el); // ejecutar solo una vez
+      });
+    }, {
+      threshold: 0, // apenas entra al viewport
+      rootMargin: "0px 0px -10% 0px", // se activa un poquito antes
+    }
+  );
+
+  elementos.forEach((el) => observer.observe(el));
+
+  function animarTexto(el) {
+    const tipo = (el.getAttribute("data-tipo") || "letras").toLowerCase(); // letras o palabras
+    const velocidad = parseFloat(el.getAttribute("data-velocidad")) || 0.3;
+
+    // revertir si ya estaba dividido
+    if (el.splitText) el.splitText.revert();
+
+    const splitType = tipo === "palabras" ? "words" : "chars";
+    const split = new SplitText(el, {
+      type: splitType,
+      charsClass: "char"
+    });
+    el.splitText = split;
+
+    const objetivo = tipo === "palabras" ? split.words : split.chars;
+
+    gsap.from(objetivo, {
+      y: 30,
+      opacity: 0,
+      stagger: 0.05,
+      duration: velocidad,
+      ease: "back.out(1.7)",
+    });
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll(".contenedorproyectos > section");
   let current = 0;
@@ -124,3 +179,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
