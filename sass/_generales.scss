@@ -9,6 +9,11 @@ $fondoboto:#eff3ff;
     cursor: url("../src/img/cursor.svg") 10 10, auto;
 }
 
+.animar-texto {
+  visibility: hidden; /* más fiable que opacity para evitar el flash */
+  display: inline-block;
+}
+
 html,
 body {
     width: 100%;

@@ -1,57 +1,61 @@
-import {
-  gsap
-} from "https://cdn.skypack.dev/gsap";
-import {
-  SplitText
-} from "https://cdn.skypack.dev/gsap/SplitText";
+import { gsap } from "https://cdn.skypack.dev/gsap";
+import { SplitText } from "https://cdn.skypack.dev/gsap/SplitText";
 
 gsap.registerPlugin(SplitText);
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
   const elementos = document.querySelectorAll(".animar-texto");
 
   const observer = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return; // esperar a que entre al viewport
+        if (!entry.isIntersecting) return;
 
         const el = entry.target;
-        animarTexto(el); // animar elemento
-        obs.unobserve(el); // ejecutar solo una vez
+        animarTexto(el);
+        obs.unobserve(el);
       });
-    }, {
-      threshold: 0, // apenas entra al viewport
-      rootMargin: "0px 0px -10% 0px", // se activa un poquito antes
+    },
+    {
+      threshold: 0.1,
+      rootMargin: "0px 0px -10% 0px",
     }
   );
 
   elementos.forEach((el) => observer.observe(el));
 
   function animarTexto(el) {
-    const tipo = (el.getAttribute("data-tipo") || "letras").toLowerCase(); // letras o palabras
+    const tipo = (el.getAttribute("data-tipo") || "letras").toLowerCase();
     const velocidad = parseFloat(el.getAttribute("data-velocidad")) || 0.3;
 
-    // revertir si ya estaba dividido
+    // Si ya estaba dividido, revertirlo
     if (el.splitText) el.splitText.revert();
 
+    // Crear el SplitText
     const splitType = tipo === "palabras" ? "words" : "chars";
-    const split = new SplitText(el, {
-      type: splitType,
-      charsClass: "char"
-    });
+    const split = new SplitText(el, { type: splitType, charsClass: "char" });
     el.splitText = split;
 
     const objetivo = tipo === "palabras" ? split.words : split.chars;
 
-    gsap.from(objetivo, {
-      y: 30,
-      opacity: 0,
-      stagger: 0.05,
-      duration: velocidad,
-      ease: "back.out(1.7)",
-    });
+    // 🔥 Hacer visible el elemento principal antes de animar
+    el.style.visibility = "visible";
+
+    // Animar desde oculto hasta visible
+    gsap.fromTo(
+      objetivo,
+      { y: 30, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        stagger: 0.05,
+        duration: velocidad,
+        ease: "back.out(1.7)",
+      }
+    );
   }
 });
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const sections = document.querySelectorAll(".contenedorproyectos > section");

@@ -7,6 +7,11 @@
   cursor: url("../src/img/cursor.svg") 10 10, auto;
 }
 
+.animar-texto {
+  visibility: hidden; /* más fiable que opacity para evitar el flash */
+  display: inline-block;
+}
+
 html,
 body {
   width: 100%;
@@ -2744,7 +2749,7 @@ body .contenedorproyectos #section_uno .cont_titulo .data {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0048ff;
+  color: #0048FF;
 }
 body .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
   padding-bottom: 4vh;
@@ -2756,7 +2761,7 @@ body .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
   line-height: 0.67;
   letter-spacing: -0.25px;
   text-align: center;
-  color: #0048ff;
+  color: #0048FF;
 }
 body .contenedorproyectos #section_uno .parrafo {
   bottom: 7vw;
@@ -2770,7 +2775,7 @@ body .contenedorproyectos #section_uno .parrafo {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0048ff;
+  color: #0048FF;
 }
 body .contenedorproyectos #section_uno .cont_imagen_proyecto img {
   width: 15vw;
@@ -3287,7 +3292,8 @@ body .contenedorproyectos #section_once footer .cont_pie {
   gap: 1vw;
 }
 body .contenedorproyectos #section_once footer .cont_pie .titulo_pie {
-  mix-blend-mode: exclusion; /* o difference */
+  mix-blend-mode: exclusion;
+  /* o difference */
   padding-left: 20vw;
   padding-right: 20vw;
   font-family: "bold";
@@ -3297,7 +3303,8 @@ body .contenedorproyectos #section_once footer .cont_pie .titulo_pie {
   line-height: 1.33;
   letter-spacing: -0.25px;
   text-align: center;
-  color: #ffffff; /* Color base del texto */
+  color: #ffffff;
+  /* Color base del texto */
   text-shadow: 0 0 7px rgb(16, 0, 156);
 }
 body .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto {

@@ -1,15 +1,18 @@
 $colorp: #0048FF;
 $fondoboto: #eff3ff;
 
+
 body {
     overflow: hidden;
 
     .word {
+
         display: inline-block;
         /* necesario para que GSAP anime cada palabra */
     }
 
     .char {
+
         display: inline-block;
         /* necesario para que GSAP pueda animar cada letra */
     }
@@ -423,7 +426,6 @@ body {
                 gap: 15px;
 
                 .data {
-
                     font-family: "Regular";
                     font-size: 12px;
                     font-weight: normal;
@@ -432,10 +434,11 @@ body {
                     line-height: normal;
                     letter-spacing: normal;
                     text-align: center;
-                    color: #0048ff;
+                    color: $colorp;
                 }
 
                 .tituloproyecto {
+
                     padding-bottom: 4vh;
                     font-family: "Extrabold";
                     font-size: 7vw;
@@ -445,8 +448,9 @@ body {
                     line-height: 0.67;
                     letter-spacing: -0.25px;
                     text-align: center;
-                    color: #0048ff;
+                    color: $colorp;
                 }
+     
             }
 
             .parrafo {
@@ -461,7 +465,8 @@ body {
                 line-height: normal;
                 letter-spacing: normal;
                 text-align: center;
-                color: #0048ff;
+                color: $colorp;
+
             }
 
             .cont_imagen_proyecto {
@@ -1062,7 +1067,8 @@ body {
                     gap: 1vw;
 
                     .titulo_pie {
-                        mix-blend-mode: exclusion; /* o difference */
+                        mix-blend-mode: exclusion;
+                        /* o difference */
                         padding-left: 20vw;
                         padding-right: 20vw;
                         font-family: "bold";
@@ -1072,7 +1078,8 @@ body {
                         line-height: 1.33;
                         letter-spacing: -0.25px;
                         text-align: center;
-                        color: #ffffff; /* Color base del texto */
+                        color: #ffffff;
+                        /* Color base del texto */
                         text-shadow: 0 0 7px rgb(16, 0, 156);
                     }
 
