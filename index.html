@@ -10,10 +10,21 @@
     <title>Dsain</title>
 </head>
 
-<body id="barba-wrapper" class="scroll-contents">
+<body class="scroll-contents">
+
+    <div id="transition">
+        <svg viewBox="0 0 1920 700" preserveAspectRatio="none">
+            <path id="wave" fill="#0004ee" d="M0,1080 L0,800 Q960,750 1920,800 L1920,1080 Z" />
+        </svg>
+        <div id="gif-overlay">
+            <img src="./src/img/loadinglogo.gif" alt="Cargando...">
+        </div>
+    </div>
 
     <div id="scroll-content">
         <div id="contenedor">
+
+
             <div class="cursor"></div>
             <div class="loading" id="cont_loading">
                 <div id="cortina"></div>
@@ -195,9 +206,13 @@
         <footer class="piedepagina"></footer>
     </div>
 
-    <header></header>
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/smooth-scrollbar@8.8.1/dist/smooth-scrollbar.js"></script>
     <script type="module" src="./js/three.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@barba/core"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
@@ -205,6 +220,8 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="./js/magenitboton.js"></script>
     <script src="./js/script.js"></script>
+    <script src="./js/barva.js"></script>
+
 
 </body>
 

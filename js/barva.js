@@ -1,81 +1,67 @@
-// use a script tag or an external JS file
-document.addEventListener("DOMContentLoaded", (event) => {
-  gsap.registerPlugin(MorphSVGPlugin)
+document.addEventListener("DOMContentLoaded", () => {
+  gsap.registerPlugin(MorphSVGPlugin);
 
   const wavePathStart = "M0,1080 L0,800 Q960,900 1920,800 L1920,1080 Z";
+  const wavePathMed   = "M0,1080 L0,100 Q960,0 1920,100 L1920,1080 Z";
+  const wavePathEnd   = "M0,1080 L0,-500 Q960,-300 1920,-500 L1920,1080 Z";
 
-  const wavePathmed = "M0,1080 L0,100 Q960,0 1920,100 L1920,1080 Z";
-
-  const wavePathEnd = "M0,1080 L0,-500 Q960,-300 1920,-500 L1920,1080 Z"; // fuera de pantalla
-
-  barba.init({
-    transitions: [{
-      async leave(data) {
-        const done = this.async();
-
-        gsap.set("#transition", {
-          pointerEvents: "auto"
-        });
-
-        await gsap.timeline()
-          .to("#wave", {
-            duration: 0.5,
-            morphSVG: wavePathStart,
-            ease: "none"
-          })
-          .to("#wave", {
-            duration: 0.5,
-            morphSVG: wavePathmed,
-            ease: "none"
-          })
-          .to("#wave", {
-            duration: 0.4,
-            morphSVG: wavePathEnd,
-            ease: "power1.in"
-          })
-          // 👉 Aquí mostramos el GIF justo al final de la ola
-          .set("#gif-overlay", {
-            display: "block",
-            opacity: 0
-          })
-          .to("#gif-overlay", {
-            opacity: 1,
-            duration: 0.5
-          }) // fade in rápido
-          .to("#gif-overlay", {
-            delay: 1.5,
-            opacity: 0,
-            duration: 0.5
-          }) // lo dejamos 3s y fade out
-          .set("#gif-overlay", {
-            display: "none"
-          });
-
-        done();
-      },
-      async enter(data) {
-        const done = this.async();
-
-        // Ola baja (entrada)
-        await gsap.timeline()
-          .set("#wave", {
-            morphSVG: wavePathEnd
-          })
-          .to("#wave", {
-            delay: 0,
-            duration: 1,
-            morphSVG: wavePathStart,
-            ease: "power4.out"
-          });
-
-        gsap.set("#transition", {
-          pointerEvents: "none"
-        });
-        done();
+  // ⚡️ Animación de entrada (ola baja)
+  const wave = document.querySelector("#wave");
+  if (wave) {
+    gsap.fromTo(
+      "#wave",
+      { morphSVG: wavePathEnd },
+      {
+        duration: 3,
+        morphSVG: wavePathStart,
+        ease: "power4.out"
       }
-    }]
+    );
+  }
+
+  // ⚡️ Detectar clics en enlaces
+  document.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      if (link.target === "_blank" || link.hasAttribute("download")) return;
+
+      const url = link.href;
+      if (url === window.location.href) return;
+
+      e.preventDefault();
+
+      // Desactiva interacción mientras anima
+      gsap.set("#transition", { pointerEvents: "auto" });
+
+      // 🌊 Animación de salida (ola sube + gif)
+      const tl = gsap.timeline({
+        onComplete: () => {
+          window.location.href = url; // 🔁 cambio real de página
+        }
+      });
+
+      tl.to("#wave", {
+        duration: 0.5,
+        morphSVG: wavePathStart,
+        ease: "none"
+      })
+        .to("#wave", {
+          duration: 0.5,
+          morphSVG: wavePathMed,
+          ease: "none"
+        })
+        .to("#wave", {
+          duration: 0.4,
+          morphSVG: wavePathEnd,
+          ease: "power1.in"
+        })
+        .set("#gif-overlay", { display: "block", opacity: 0 })
+        .to("#gif-overlay", { opacity: 1, duration: 0.5 })
+        .to("#gif-overlay", { delay: 1.2, opacity: 0, duration: 0.5 })
+        .set("#gif-overlay", { display: "none" });
+    });
   });
 });
+
 
 
 let screenWidth = window.innerWidth; // Obtiene el ancho de la ventana del navegador

@@ -10,9 +10,45 @@ $fondoboto:#eff3ff;
 }
 
 .animar-texto {
-  visibility: hidden; /* más fiable que opacity para evitar el flash */
-  display: inline-block;
+    visibility: hidden;
+    /* más fiable que opacity para evitar el flash */
+    display: inline-block;
 }
+
+/* CONTENEDOR DE TRANSICION */
+#transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+
+    /* No bloquear interacción */
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    #gif-overlay {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        display: none;
+
+        /* oculto hasta que aparezca */
+        img {
+            max-width: 40px;
+            /* ajusta tamaño */
+            max-height: 40px;
+        }
+    }
+}
+
+
 
 html,
 body {
@@ -70,7 +106,7 @@ html::-webkit-scrollbar {
     transform-origin: center center;
     pointer-events: none;
     z-index: 9999;
-    
+
 }
 
 @media (max-width: 1000px) {
