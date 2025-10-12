@@ -1,5 +1,9 @@
-import { gsap } from "https://cdn.skypack.dev/gsap";
-import { SplitText } from "https://cdn.skypack.dev/gsap/SplitText";
+import {
+  gsap
+} from "https://cdn.skypack.dev/gsap";
+import {
+  SplitText
+} from "https://cdn.skypack.dev/gsap/SplitText";
 
 gsap.registerPlugin(SplitText);
 
@@ -15,8 +19,7 @@ window.addEventListener("DOMContentLoaded", () => {
         animarTexto(el);
         obs.unobserve(el);
       });
-    },
-    {
+    }, {
       threshold: 0.1,
       rootMargin: "0px 0px -10% 0px",
     }
@@ -33,7 +36,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Crear el SplitText
     const splitType = tipo === "palabras" ? "words" : "chars";
-    const split = new SplitText(el, { type: splitType, charsClass: "char" });
+    const split = new SplitText(el, {
+      type: splitType,
+      charsClass: "char"
+    });
     el.splitText = split;
 
     const objetivo = tipo === "palabras" ? split.words : split.chars;
@@ -43,9 +49,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Animar desde oculto hasta visible
     gsap.fromTo(
-      objetivo,
-      { y: 30, opacity: 0 },
-      {
+      objetivo, {
+        y: 30,
+        opacity: 0
+      }, {
         y: 0,
         opacity: 1,
         stagger: 0.05,
@@ -72,30 +79,128 @@ document.addEventListener("DOMContentLoaded", () => {
       behavior: "smooth"
     });
 
-    // --- Animaciones existentes ---
-    if (sections[current].id === "section_screen_uno") {
-      gsap.to(".imagen_proyecto", {
-        width: "85vw",
-        duration: 1,
-        ease: "power2.out"
-      });
-      gsap.to(".imagen_proyecto", {
-        y: "38vw",
-        duration: 1,
-        ease: "power2.out"
-      });
-    } else {
-      gsap.to(".imagen_proyecto", {
-        width: "15vw",
-        duration: 1,
-        ease: "power2.out"
-      });
-      gsap.to(".imagen_proyecto", {
-        y: "0vw",
-        duration: 1,
-        ease: "power2.out"
-      });
+    
+
+    // Definir los media queries
+    const mqSmall = window.matchMedia("(max-width: 480px)");
+    const mqMedium = window.matchMedia("(min-width: 481px) and (max-width: 768px)");
+    const mqLarge = window.matchMedia("(min-width: 769px) and (max-width: 1024px)");
+    // Si no entra en ninguno, asumimos que es > 1024px
+
+    function aplicarAnimacion() {
+      const idActual = sections[current].id;
+
+      if (mqSmall.matches) {
+        // --- MÓVIL PEQUEÑO (hasta 480px) ---
+        if (idActual === "section_screen_uno") {
+          gsap.to(".imagen_proyecto", {
+            width: "100%",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "370%",
+            duration: 1,
+            ease: "power2.out"
+          });
+        } else {
+          gsap.to(".imagen_proyecto", {
+            width: "70%",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "0vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+        }
+
+      } else if (mqMedium.matches) {
+        // --- TABLET PEQUEÑA (481px a 768px) ---
+        if (idActual === "section_screen_uno") {
+          gsap.to(".imagen_proyecto", {
+            width: "85vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "38vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+        } else {
+          gsap.to(".imagen_proyecto", {
+            width: "15vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "0vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+        }
+
+      } else if (mqLarge.matches) {
+        // --- TABLET GRANDE / LAPTOP (769px a 1024px) ---
+        if (idActual === "section_screen_uno") {
+          gsap.to(".imagen_proyecto", {
+            width: "85vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "38vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+        } else {
+          gsap.to(".imagen_proyecto", {
+            width: "15vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "0vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+        }
+
+      } else {
+        // --- PANTALLAS GRANDES (> 1024px) ---
+        if (idActual === "section_screen_uno") {
+          gsap.to(".imagen_proyecto", {
+            width: "85vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "38vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+        } else {
+          gsap.to(".imagen_proyecto", {
+            width: "15vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+          gsap.to(".imagen_proyecto", {
+            y: "0vw",
+            duration: 1,
+            ease: "power2.out"
+          });
+        }
+      }
     }
+
+    // Ejecutar al cargar y cuando cambie el tamaño de pantalla
+    aplicarAnimacion();
+    mqSmall.addEventListener("change", aplicarAnimacion);
+    mqMedium.addEventListener("change", aplicarAnimacion);
+    mqLarge.addEventListener("change", aplicarAnimacion);
 
     if (sections[current].id === "section_once") {
       gsap.to(".barra_nav", {
@@ -183,5 +288,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-
