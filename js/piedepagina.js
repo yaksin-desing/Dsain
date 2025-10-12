@@ -19,10 +19,12 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0, 7);
 
 // Renderizador
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true,  }); // 👈 activa alpha
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.setClearColor(0x000000, 0); // 👈 color negro pero totalmente transparente
+renderer.setClearColor(0x000000, 0); // Fondo transparente
 renderer.shadowMap.enabled = true;
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
 container.appendChild(renderer.domElement);
 
@@ -32,12 +34,16 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // --- Luz ---
 const light = new THREE.DirectionalLight(0xffffff, 1);
 light.position.set(0, 10, 10);
+light.castShadow = true;
+light.shadow.mapSize.set(1024, 1024);
+light.shadow.bias = -0.001;
 scene.add(light);
 scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
 // --- Raycaster y mouse ---
 const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+const mouse = new THREE.Vector2(10, 10); // fuera del rango para evitar intersecciones iniciales
+let mouseMoved = false; // flag para activar detección solo después del primer movimiento
 
 // Guardar referencias de clones para animaciones
 let hitboxes = [];
@@ -61,31 +67,31 @@ loader.load(
 
     const muro = new THREE.Group();
 
+    // Material base compartido (mejor rendimiento)
+    const baseMaterial = new THREE.MeshStandardMaterial({
+      metalness: 0.3,
+      roughness: 0.6,
+    });
+
     for (let y = 0; y < filas; y++) {
       for (let x = 0; x < columnas; x++) {
         const clone = model.clone(true);
         clone.rotation.x = Math.PI / 2;
 
-        // 👉 Buscar "carasimbolo" en cada clon
+        // Buscar "carasimbolo"
         const caraSimbolo = clone.getObjectByName("carasimbolo");
         if (caraSimbolo) {
           caraSimbolo.traverse((child) => {
             if (child.isMesh) {
-              // Color aleatorio entre blanco (#ffffff) y gris claro (#cccccc)
-              const value = Math.random() * 0.8 + 0.5; 
-              // genera un número entre 0.8 y 1.0
+              const value = Math.random() * 0.8 + 0.5; // gris azulado aleatorio
               const color = new THREE.Color(0, 0, value);
-
-              child.material = new THREE.MeshStandardMaterial({
-                color: color,
-                metalness: 0.3,
-                roughness: 0.6,
-              });
+              child.material = baseMaterial.clone();
+              child.material.color = color;
             }
           });
         }
 
-        // 👉 Hitbox invisible
+        // Hitbox invisible
         const boxGeo = new THREE.BoxGeometry(0.8, 0.8, 0.2);
         const boxMat = new THREE.MeshBasicMaterial({ visible: false });
         const hitbox = new THREE.Mesh(boxGeo, boxMat);
@@ -95,6 +101,9 @@ loader.load(
           -(y * separacionY - altoTotal / 2),
           0
         );
+
+        // evitar z-fighting leve
+        clone.position.z = 0.01;
 
         hitbox.add(clone);
         muro.add(hitbox);
@@ -111,26 +120,35 @@ loader.load(
   }
 );
 
-
 // --- Eventos de mouse ---
 container.addEventListener("mousemove", (event) => {
+  mouseMoved = true; // ahora sí permitir intersección
   const rect = container.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+});
+
+container.addEventListener("mouseleave", () => {
+  // cuando sale el mouse del contenedor, lo ponemos fuera del rango
+  mouseMoved = false;
+  mouse.set(10, 10);
 });
 
 // --- Animación ---
 function animate() {
   requestAnimationFrame(animate);
 
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(hitboxes.map(h => h.hitbox));
+  let intersects = [];
+  if (mouseMoved) {
+    raycaster.setFromCamera(mouse, camera);
+    intersects = raycaster.intersectObjects(hitboxes.map(h => h.hitbox));
+  }
 
   // Resetear todos
   hitboxes.forEach((h) => {
     if (!intersects.find((i) => i.object === h.hitbox)) {
       if (h.flipped) {
-        gsap.to(h.model.rotation, { z: 0, duration: 3, ease: "power2.out" });
+        gsap.to(h.model.rotation, { z: 0, duration: 2, ease: "power2.out" });
         h.flipped = false;
       }
     }
@@ -156,4 +174,3 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
 });
-

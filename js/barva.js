@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "#wave",
       { morphSVG: wavePathEnd },
       {
-        duration: 3,
+        duration: 1,
         morphSVG: wavePathStart,
         ease: "power4.out"
       }
