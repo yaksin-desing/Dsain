@@ -3419,8 +3419,8 @@ h5 {
     position: fixed;
     top: 50%;
     right: 2vw;
-    width: 0.2vw;
-    height: 30vh;
+    width: 3px;
+    height: 25vh;
     background: #eff3ff;
     transform: translateY(-50%);
     border-radius: 100px;
@@ -3437,7 +3437,7 @@ h5 {
   }
   .proyecto .contenedorproyectos .text_guia {
     position: fixed;
-    bottom: 3vw;
+    bottom: 4vw;
     left: 4vw;
     display: flex;
     flex-direction: column;

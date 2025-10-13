@@ -94,12 +94,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- MÓVIL PEQUEÑO (hasta 480px) ---
         if (idActual === "section_screen_uno") {
           gsap.to(".imagen_proyecto", {
-            width: "100%",
+            width: "150vh",
             duration: 1,
             ease: "power2.out"
           });
           gsap.to(".imagen_proyecto", {
-            y: "370%",
+            y: "90vh",
             duration: 1,
             ease: "power2.out"
           });
