@@ -1633,20 +1633,20 @@ $fondoboto: #eff3ff;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                padding: 5vw 4vw 5vw 4vw;
-                gap: 2vw;
+                padding: 17vw 7vw 5vw 7vw;
+                gap: 0vw;
 
 
                 .column_uno {
-                    width: 50%;
+                    width: 100%;
                     height: 100%;
 
                     .titulo {
                         font-family: "bold";
-                        font-size: 3vw;
+                        font-size: 7vw;
                         font-weight: bold;
                         font-stretch: normal;
                         font-style: normal;
@@ -1659,8 +1659,8 @@ $fondoboto: #eff3ff;
                     }
 
                     .parrafo {
-                        font-family: "Regular";
-                        font-size: 1vw;
+                        font-family: "Medium";
+                        font-size: 3vw;
                         font-weight: normal;
                         font-stretch: normal;
                         font-style: normal;
@@ -1676,7 +1676,7 @@ $fondoboto: #eff3ff;
                         display: grid;
                         grid-template-columns: repeat(2, 1fr);
                         /* 2 columnas */
-                        grid-template-rows: repeat(2, 1fr);
+                        grid-template-rows: repeat(2, 0.8fr);
                         /* 2 filas */
 
                         place-items: start;
@@ -1684,23 +1684,23 @@ $fondoboto: #eff3ff;
                         .info_proyecto {
                             display: flex;
                             flex-direction: column;
-                            gap: 0.5rem;
+                            gap: 0rem;
 
                             .subtitulo {
                                 font-family: "regular";
-                                font-size: 1vw;
+                                font-size: 3vw;
                                 font-weight: 500;
                                 font-stretch: normal;
                                 font-style: normal;
                                 line-height: normal;
                                 letter-spacing: normal;
                                 text-align: left;
-                                color: rgba(143, 143, 143, 0.5)
+                                color: #585858
                             }
 
                             .detalle {
-                                font-family: "Regular";
-                                font-size: 1vw;
+                                font-family: "Medium";
+                                font-size: 3vw;
                                 font-weight: normal;
                                 font-stretch: normal;
                                 font-style: normal;
@@ -1716,27 +1716,29 @@ $fondoboto: #eff3ff;
                 }
 
                 .column_dos {
-                    padding: 0vw 2vw 5vw 2vw;
-                    border-left: 1px solid $colorp;
-                    width: 50%;
+                    padding: 0vw 0vw 0vw 0vw;
+                    border-left: 0px solid $colorp;
+                    width: 100%;
                     height: 100%;
-                    justify-content: space-between;
+                    justify-content: center;
                     display: flex;
-                    flex-direction: column;
+                    flex-direction: column-reverse;
+                    gap: 10px;
 
                     .cont_cabecera {
-                        padding-top: 6vw;
+                        padding-top: 0vw;
                         padding-right: 5vw;
                         display: flex;
                         flex-direction: row;
                         align-items: center;
                         justify-content: space-between;
                         width: 100%;
+                    
 
                         .-Usd {
                             flex-grow: 0;
                             font-family: "Regular";
-                            font-size: 1vw;
+                            font-size: 3.7vw;
                             font-weight: normal;
                             font-stretch: normal;
                             font-style: normal;
@@ -1748,7 +1750,7 @@ $fondoboto: #eff3ff;
 
                         .text-style-1 {
                             font-family: "medium";
-                            font-size: 3vw;
+                            font-size: 7vw;
                             line-height: 0.8;
                         }
                     }
@@ -1758,28 +1760,29 @@ $fondoboto: #eff3ff;
                         flex-direction: row;
                         width: 100%;
                         align-items: start;
-                        justify-content: space-between;
+                        justify-content: space-around;
 
                         .info_proyecto {
                             display: flex;
                             flex-direction: column;
-                            gap: 0.5rem;
+                            gap: 0.2rem;
+                            width: 50%;
 
                             .subtitulo {
                                 font-family: "regular";
-                                font-size: 1vw;
+                                font-size: 3vw;
                                 font-weight: 500;
                                 font-stretch: normal;
                                 font-style: normal;
                                 line-height: normal;
                                 letter-spacing: normal;
                                 text-align: left;
-                                color: rgba(143, 143, 143, 0.5)
+                                color: #585858
                             }
 
                             .detalle {
-                                font-family: "Regular";
-                                font-size: 1vw;
+                                font-family: "Medium";
+                                font-size: 3.3vw;
                                 font-weight: normal;
                                 font-stretch: normal;
                                 font-style: normal;
