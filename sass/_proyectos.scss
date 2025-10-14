@@ -1799,7 +1799,7 @@ $fondoboto: #eff3ff;
             }
 
             #section_tres {
-                padding: 5vw 4vw 0vw 4vw;
+                padding: 17vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -1810,7 +1810,7 @@ $fondoboto: #eff3ff;
 
                 .titulo_seccion {
                     font-family: "medium";
-                    font-size: 0.7vw;
+                    font-size: 3.5vw;
                     text-transform: uppercase;
                     text-align: start;
                     color: $colorp;
@@ -1821,18 +1821,22 @@ $fondoboto: #eff3ff;
 
                 .cont_color {
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
                     gap: 5vw;
                     margin: 3vw;
+                    width: 100%;
+                    height: 100%;
 
                     .coloruno {
-                        width: 20vw;
-                        height: 30vw;
+                        width: 70%;
+                        height: 50%;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
-                        padding: 20px 27px;
+                        padding: 20px 20px;
                         border-radius: 5px;
                         background-color: #0048ff;
 
@@ -1851,7 +1855,7 @@ $fondoboto: #eff3ff;
 
                         .titulo {
                             font-family: "light";
-                            font-size: 0.7vw;
+                            font-size:3.5vw;
                             font-stretch: normal;
                             font-style: normal;
                             line-height: 1;
@@ -1874,13 +1878,13 @@ $fondoboto: #eff3ff;
                     }
 
                     .colordos {
-                        width: 20vw;
-                        height: 30vw;
+                        width: 70%;
+                        height: 50%;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
-                        padding: 20px 27px;
+                        padding: 20px 20px;
                         border-radius: 5px;
                         background-color: #F4F6FF;
 
@@ -1899,7 +1903,7 @@ $fondoboto: #eff3ff;
 
                         .titulo {
                             font-family: "light";
-                            font-size: 0.7vw;
+                            font-size: 3.7vw;
                             font-stretch: normal;
                             font-style: normal;
                             line-height: 1;
@@ -1928,7 +1932,7 @@ $fondoboto: #eff3ff;
 
             #section_cuatro {
 
-                padding: 5vw 4vw 0vw 4vw;
+                padding: 17vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -1939,7 +1943,7 @@ $fondoboto: #eff3ff;
 
                 .titulo_seccion {
                     font-family: "medium";
-                    font-size: 0.7vw;
+                    font-size: 3.5vw;
                     text-transform: uppercase;
                     text-align: start;
                     color: $colorp;
@@ -1953,19 +1957,17 @@ $fondoboto: #eff3ff;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 2vw;
+                    gap: 3vw;
                     margin: 3vw;
                     width: 100%;
 
                     .titulo_fuente {
                         font-family: "bold";
-                        font-size: 3vw;
+                        font-size: 6.7vw;
                         font-weight: bold;
                         font-stretch: normal;
                         font-style: normal;
-                        line-height: 1.33;
-                        letter-spacing: -0.25px;
-                        text-align: left;
+                        text-align: center;
                         color: $colorp;
 
                     }
@@ -1974,7 +1976,7 @@ $fondoboto: #eff3ff;
                         margin-left: 3vw;
                         margin-right: 3vw;
                         font-family: "Regular";
-                        font-size: 1vw;
+                        font-size: 3.7vw;
                         font-weight: normal;
                         font-stretch: normal;
                         font-style: normal;
@@ -1991,7 +1993,7 @@ $fondoboto: #eff3ff;
                         flex-direction: row;
 
                         img {
-                            width: 10vw;
+                            width: 23vw;
                             height: auto;
                         }
                     }
@@ -2001,7 +2003,7 @@ $fondoboto: #eff3ff;
             }
 
             #section_cinco {
-                padding: 5vw 4vw 0vw 4vw;
+                padding: 17vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -2012,7 +2014,7 @@ $fondoboto: #eff3ff;
 
                 .titulo_seccion {
                     font-family: "medium";
-                    font-size: 0.7vw;
+                    font-size: 3.7vw;
                     text-transform: uppercase;
                     text-align: start;
                     color: $colorp;
@@ -2023,15 +2025,17 @@ $fondoboto: #eff3ff;
 
                 .cont_moodboard {
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
                     width: 100%;
                     justify-content: space-between;
                     padding-left: 1vw;
                     padding-right: 1vw;
+                    justify-content: center;
+                    align-items: center;
 
                     .lottie {
-                        width: 40%;
-                        height: auto;
+                        width: 80%;
+                        height: 100%;
                         margin-top: 1vw;
                     }
                 }
