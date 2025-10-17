@@ -3161,10 +3161,112 @@ h5 {
   border-bottom: #0048FF 1px solid;
   padding-bottom: 5px;
 }
-.proyecto .contenedorproyectos #section_seis .img_titemap {
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis {
+  padding: 1vw;
+  display: flex;
   width: 100%;
-  height: auto;
-  margin-top: 2vw;
+  height: 97%;
+  flex-direction: row;
+  gap: 1vw;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno {
+  width: 50%;
+  height: 100%;
+  gap: 1vw;
+  display: flex;
+  flex-direction: column;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_uno {
+  width: 100%;
+  height: 40%;
+  overflow: hidden;
+  border-radius: 30px;
+  background: #eff3ff;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_uno img {
+  width: 100%;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  flex-direction: row;
+  gap: 1vw;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_uno {
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 30px;
+  background: #0048FF;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_uno img {
+  height: 100%;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+  gap: 1vw;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_uno {
+  overflow: hidden;
+  border-radius: 30px;
+  height: 60%;
+  background: #0048FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_uno img {
+  height: 80%;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_dos {
+  overflow: hidden;
+  border-radius: 30px;
+  height: 40%;
+  background: #0048FF;
+  position: relative;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_dos img {
+  position: absolute;
+  bottom: 0;
+  right: -2px;
+  width: 90%;
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_dos {
+  width: 50%;
+  height: 100%;
+  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  /* necesario si el video va absolute */
+}
+.proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_dos .videodsain {
+  position: absolute;
+  /* cubre el contenedor por completo */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  display: block;
+  transform: translateY(-0.5px);
+  /* elimina línea negra inferior */
+  backface-visibility: hidden;
+  /* mejora renderizado */
+  clip-path: inset(0.7px);
 }
 .proyecto .contenedorproyectos #section_siete {
   width: 100%;
@@ -4162,10 +4264,12 @@ h5 {
     border-bottom: #0048FF 1px solid;
     padding-bottom: 5px;
   }
-  .proyecto .contenedorproyectos #section_seis .img_titemap {
+  .proyecto .contenedorproyectos #section_seis .cont_img_section_seis {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: auto;
-    margin-top: 2vw;
+    flex-direction: row;
   }
   .proyecto .contenedorproyectos #section_siete {
     width: 100%;

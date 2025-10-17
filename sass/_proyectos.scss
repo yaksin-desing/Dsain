@@ -881,10 +881,127 @@ $fondoboto: #eff3ff;
                 padding-bottom: 5px;
             }
 
-            .img_titemap {
+            .cont_img_section_seis {
+                padding: 1vw;
+                display: flex;
                 width: 100%;
-                height: auto;
-                margin-top: 2vw;
+                height: 97%;
+                flex-direction: row;
+                gap: 1vw;
+
+                .cont_uno {
+                    width: 50%;
+                    height: 100%;
+                    gap: 1vw;
+                    display: flex;
+                    flex-direction: column;
+
+                    .sect_uno {
+                        width: 100%;
+                        height: 40%;
+                        overflow: hidden;
+                        border-radius: 30px;
+                        background: $fondoboto;
+                        justify-content: center;
+                        align-items: center;
+                        display: flex;
+
+                        img {
+                            width: 100%;
+                        }
+                    }
+
+
+                    .sect_dos {
+                        width: 100%;
+                        height: 60%;
+                        display: flex;
+                        flex-direction: row;
+                        gap: 1vw;
+
+                        .sect_dos_uno {
+                            width: 50%;
+                            height: 100%;
+                            overflow: hidden;
+                            border-radius: 30px;
+                            background: $colorp;
+                            justify-content: center;
+                            align-items: center;
+                            display: flex;
+
+                            img {
+                                height: 100%;
+                            }
+                        }
+
+                        .sect_dos_dos {
+
+                            display: flex;
+                            flex-direction: column;
+                            width: 50%;
+                            height: 100%;
+                            gap: 1vw;
+
+                            .img_uno {
+                                overflow: hidden;
+                                border-radius: 30px;
+                                height: 60%;
+                                background: $colorp;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+
+                                img {
+                                    height: 80%;
+                                }
+                            }
+
+                            .img_dos {
+                                overflow: hidden;
+                                border-radius: 30px;
+                                height: 40%;
+                                background: $colorp;
+                                position: relative;
+
+                                img {
+                                    position: absolute;
+                                    bottom: 0;
+                                    right: -2px;
+                                    width: 90%;
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                .cont_dos {
+                    width: 50%;
+                    height: 100%;
+                    border-radius: 30px;
+                    justify-content: center;
+                    align-items: center;
+                    display: flex;
+                    overflow: hidden;
+                    position: relative;
+                    /* necesario si el video va absolute */
+
+                    .videodsain {
+                        position: absolute;
+                        /* cubre el contenedor por completo */
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        display: block;
+                        transform: translateY(-0.5px);
+                        /* elimina línea negra inferior */
+                        backface-visibility: hidden;
+                        /* mejora renderizado */
+                        clip-path: inset(0.7px);
+                    }
+                }
             }
         }
 
@@ -1238,7 +1355,7 @@ $fondoboto: #eff3ff;
                 display: none;
             }
 
-            .barra_nav { 
+            .barra_nav {
                 z-index: 1000;
                 position: fixed;
                 display: flex;
@@ -1246,6 +1363,7 @@ $fondoboto: #eff3ff;
                 width: 100%;
                 padding: 5vw 4vw 1vw 4.3vw;
                 justify-content: space-between;
+
                 a {
                     display: flex;
                     align-items: center;
@@ -1613,6 +1731,7 @@ $fondoboto: #eff3ff;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+
                     .imagen_proyecto {
                         width: 70%;
                         height: auto;
@@ -1733,7 +1852,7 @@ $fondoboto: #eff3ff;
                         align-items: center;
                         justify-content: space-between;
                         width: 100%;
-                    
+
 
                         .-Usd {
                             flex-grow: 0;
@@ -1855,7 +1974,7 @@ $fondoboto: #eff3ff;
 
                         .titulo {
                             font-family: "light";
-                            font-size:3.5vw;
+                            font-size: 3.5vw;
                             font-stretch: normal;
                             font-style: normal;
                             line-height: 1;
@@ -2062,10 +2181,12 @@ $fondoboto: #eff3ff;
                     padding-bottom: 5px;
                 }
 
-                .img_titemap {
+                .cont_img_section_seis {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     width: 100%;
-                    height: auto;
-                    margin-top: 2vw;
+                    flex-direction: row;
                 }
             }
 
@@ -2079,8 +2200,6 @@ $fondoboto: #eff3ff;
                 position: relative;
                 z-index: 1;
             }
-
-
 
             #section_ocho {
                 width: 100%;
