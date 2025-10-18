@@ -119,13 +119,13 @@ $fondoboto: #eff3ff;
                         gap: 20px;
                     }
 
-                    .texto_boton{
+                    .texto_boton {
                         text-decoration: none;
                         color: $fondoboto;
-                        
+
                     }
 
-                    img{
+                    img {
                         width: 17px;
                     }
 
@@ -2172,7 +2172,8 @@ $fondoboto: #eff3ff;
             }
 
             #section_seis {
-                padding: 5vw 4vw 0vw 4vw;
+                
+                padding: 17vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -2183,7 +2184,7 @@ $fondoboto: #eff3ff;
 
                 .titulo_seccion {
                     font-family: "medium";
-                    font-size: 0.7vw;
+                    font-size: 3.7vw;
                     text-transform: uppercase;
                     text-align: start;
                     color: $colorp;
@@ -2193,11 +2194,129 @@ $fondoboto: #eff3ff;
                 }
 
                 .cont_img_section_seis {
+                    padding: 2vh;
                     display: flex;
-                    justify-content: center;
-                    align-items: center;
                     width: 100%;
-                    flex-direction: row;
+                    height: 97%;
+                    flex-direction: column;
+                    gap: 1.5vh;
+
+                    .cont_uno {
+                        width: 100%;
+                        height: 60%;
+                        gap: 1.5vh;
+                        display: flex;
+                        flex-direction: column;
+
+                        .sect_uno {
+                            width: 100%;
+                            height: 40%;
+                            overflow: hidden;
+                            border-radius: 10px;
+                            background: $colorp;
+                            justify-content: center;
+                            align-items: center;
+                            display: flex;
+                            position: relative;
+
+                            img {
+                                position: absolute;
+                                top: -47%;
+                                width: 100%;
+                            }
+                        }
+
+
+                        .sect_dos {
+                            width: 100%;
+                            height: 70%;
+                            display: flex;
+                            flex-direction: row;
+                            gap: 1.5vh;
+
+                            .sect_dos_uno {
+                                width: 50%;
+                                height: 100%;
+                                overflow: hidden;
+                                border-radius: 10px;
+                                background: $colorp;
+                                justify-content: center;
+                                align-items: center;
+                                display: flex;
+
+                                img {
+                                    height: 100%;
+                                }
+                            }
+
+                            .sect_dos_dos {
+
+                                display: flex;
+                                flex-direction: column;
+                                width: 50%;
+                                height: 100%;
+                                gap: 1.5vh;
+
+                                .img_uno {
+                                    overflow: hidden;
+                                    border-radius: 10px;
+                                    height: 60%;
+                                    background: $colorp;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    img {
+                                        height: 70%;
+                                    }
+                                }
+
+                                .img_dos {
+                                    overflow: hidden;
+                                    border-radius: 10px;
+                                    height: 40%;
+                                    background: $colorp;
+                                    position: relative;
+
+                                    img {
+                                        position: absolute;
+                                        bottom: -1px;
+                                        right: -10px;
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                    .cont_dos {
+                        width: 100%;
+                        height: 40%;
+                        border-radius: 10px;
+                        justify-content: center;
+                        align-items: center;
+                        display: flex;
+                        overflow: hidden;
+                        position: relative;
+                        /* necesario si el video va absolute */
+
+                        .videodsain {
+                            position: absolute;
+                            /* cubre el contenedor por completo */
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            display: block;
+                            transform: translateY(-0.5px);
+                            /* elimina línea negra inferior */
+                            backface-visibility: hidden;
+                            /* mejora renderizado */
+                            clip-path: inset(1px);
+                        }
+                    }
                 }
             }
 
