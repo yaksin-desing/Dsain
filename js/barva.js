@@ -305,9 +305,9 @@ const textos = {
   section_cinco: "Branding",
   section_seis: "Mapa del sitio",
   section_siete: "Versión móvil",
-  section_ocho: "ocho",
-  section_nueve: "nueve",
-  section_diez: "diez",
+  section_ocho: "Ideación",
+  section_nueve: "Modelado",
+  section_diez: "Desarrollo",
 };
 
 const textoGuia = document.getElementById("texto-guia");

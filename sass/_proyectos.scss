@@ -99,7 +99,7 @@ $fondoboto: #eff3ff;
                     justify-content: center;
                     gap: 10px;
                     padding: 10px 20px 10px 20px;
-                    background-color: $fondoboto;
+                    background-color: $colorp;
                     border-radius: 30px;
                     font-family: "Medium";
                     font-size: 12px;
@@ -109,52 +109,65 @@ $fondoboto: #eff3ff;
                     line-height: normal;
                     letter-spacing: normal;
                     text-align: center;
-                    color: $colorp;
+                    color: $fondoboto;
                     cursor: pointer;
                     transition: all 0.3s ease;
 
                     &:hover {
-                        background-color: $fondoboto;
+                        background-color: #003bd1;
                         transform: scale(1.05);
+                        gap: 20px;
                     }
+
+                    .texto_boton{
+                        text-decoration: none;
+                        color: $fondoboto;
+                        
+                    }
+
+                    img{
+                        width: 17px;
+                    }
+
                 }
-            }
 
-            .contd_menu {
-                display: flex;
-                height: 100%;
-                justify-content: center;
-                align-items: center;
-
-                .cont_boton_menu {
+                .contd_menu {
                     display: flex;
-                    border-radius: 100%;
-                    border: 4px solid #eff3ff;
-                    overflow: hidden;
-                    width: 100%;
-                    background: $fondoboto;
+                    height: 100%;
                     justify-content: center;
                     align-items: center;
 
-
-                    #menu-button {
-                        padding: 2px;
-                        width: 2vw;
-                        height: 2vw;
-                        z-index: 1000;
-                        cursor: pointer;
+                    .cont_boton_menu {
+                        display: flex;
                         border-radius: 100%;
+                        border: 4px solid #eff3ff;
+                        overflow: hidden;
+                        width: 100%;
                         background: $fondoboto;
+                        justify-content: center;
+                        align-items: center;
+
+
+                        #menu-button {
+                            padding: 2px;
+                            width: 2vw;
+                            height: 2vw;
+                            z-index: 1000;
+                            cursor: pointer;
+                            border-radius: 100%;
+                            background: $fondoboto;
+                        }
                     }
-                }
 
-                .cont_boton_menu:hover {
-                    box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.247);
-                }
+                    .cont_boton_menu:hover {
+                        box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.247);
+                    }
 
+                }
             }
 
-            eff3ff .magnetic-button {
+
+            .magnetic-button {
                 transition: transform 0.2s ease;
                 will-change: transform;
             }
@@ -173,8 +186,6 @@ $fondoboto: #eff3ff;
                 transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
                 border-radius: 0%;
                 overflow: hidden;
-
-
 
                 .contlistmenu {
                     position: absolute;
@@ -901,12 +912,15 @@ $fondoboto: #eff3ff;
                         height: 40%;
                         overflow: hidden;
                         border-radius: 30px;
-                        background: $fondoboto;
+                        background: $colorp;
                         justify-content: center;
                         align-items: center;
                         display: flex;
+                        position: relative;
 
                         img {
+                            position: absolute;
+                            top: -47%;
                             width: 100%;
                         }
                     }
@@ -952,7 +966,7 @@ $fondoboto: #eff3ff;
                                 justify-content: center;
 
                                 img {
-                                    height: 80%;
+                                    height: 70%;
                                 }
                             }
 
@@ -1015,8 +1029,6 @@ $fondoboto: #eff3ff;
             position: relative;
             z-index: 1;
         }
-
-
 
         #section_ocho {
             width: 100%;
@@ -1093,7 +1105,6 @@ $fondoboto: #eff3ff;
 
             }
         }
-
 
         #section_nueve {
             width: 100%;

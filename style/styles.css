@@ -2503,7 +2503,7 @@ h5 {
   justify-content: center;
   gap: 10px;
   padding: 10px 20px 10px 20px;
-  background-color: #eff3ff;
+  background-color: #0048FF;
   border-radius: 30px;
   font-family: "Medium";
   font-size: 12px;
@@ -2513,21 +2513,29 @@ h5 {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0048FF;
+  color: #eff3ff;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 .proyecto .contenedorproyectos .barra_nav .cont_menu .boton_contact:hover {
-  background-color: #eff3ff;
+  background-color: #003bd1;
   transform: scale(1.05);
+  gap: 20px;
 }
-.proyecto .contenedorproyectos .barra_nav .contd_menu {
+.proyecto .contenedorproyectos .barra_nav .cont_menu .boton_contact .texto_boton {
+  text-decoration: none;
+  color: #eff3ff;
+}
+.proyecto .contenedorproyectos .barra_nav .cont_menu .boton_contact img {
+  width: 17px;
+}
+.proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu {
   display: flex;
   height: 100%;
   justify-content: center;
   align-items: center;
 }
-.proyecto .contenedorproyectos .barra_nav .contd_menu .cont_boton_menu {
+.proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu {
   display: flex;
   border-radius: 100%;
   border: 4px solid #eff3ff;
@@ -2537,7 +2545,7 @@ h5 {
   justify-content: center;
   align-items: center;
 }
-.proyecto .contenedorproyectos .barra_nav .contd_menu .cont_boton_menu #menu-button {
+.proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu #menu-button {
   padding: 2px;
   width: 2vw;
   height: 2vw;
@@ -2546,10 +2554,10 @@ h5 {
   border-radius: 100%;
   background: #eff3ff;
 }
-.proyecto .contenedorproyectos .barra_nav .contd_menu .cont_boton_menu:hover {
+.proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu:hover {
   box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.247);
 }
-.proyecto .contenedorproyectos .barra_nav eff3ff .magnetic-button {
+.proyecto .contenedorproyectos .barra_nav .magnetic-button {
   transition: transform 0.2s ease;
   will-change: transform;
 }
@@ -3181,12 +3189,15 @@ h5 {
   height: 40%;
   overflow: hidden;
   border-radius: 30px;
-  background: #eff3ff;
+  background: #0048FF;
   justify-content: center;
   align-items: center;
   display: flex;
+  position: relative;
 }
 .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_uno img {
+  position: absolute;
+  top: -47%;
   width: 100%;
 }
 .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos {
@@ -3226,7 +3237,7 @@ h5 {
   justify-content: center;
 }
 .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_uno img {
-  height: 80%;
+  height: 70%;
 }
 .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_dos {
   overflow: hidden;
