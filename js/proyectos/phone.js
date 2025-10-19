@@ -1,17 +1,17 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
-import { gsap } from "https://cdn.skypack.dev/gsap";
+import {
+  GLTFLoader
+} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+import {
+  gsap
+} from "https://cdn.skypack.dev/gsap";
 
 // Contenedor
 const container = document.getElementById("section_siete");
 
-// Escena
+// Escena y cámara
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
-const loader = new GLTFLoader();
-const textureLoader = new THREE.TextureLoader();
-
-// Cámara fija
 const camera = new THREE.PerspectiveCamera(
   60,
   container.clientWidth / container.clientHeight,
@@ -20,19 +20,11 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1, 2);
 
-// ✅ Detectar si es móvil/tablet
-const isMobileOrTablet = /Mobi|Android|iPad|iPod/i.test(navigator.userAgent);
-
 // Renderizador
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-
-// 🔹 Ajuste de resolución según dispositivo
-if (isMobileOrTablet) {
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-} else {
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-}
-
+const renderer = new THREE.WebGLRenderer({
+  antialias: true
+});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.shadowMap.enabled = true;
 container.appendChild(renderer.domElement);
@@ -42,47 +34,23 @@ scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 const dirLight = new THREE.DirectionalLight(0xffffff, 1);
 dirLight.position.set(3, 5, 7);
 dirLight.castShadow = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 scene.add(dirLight);
 
-// 🔹 Quitar sombras en móvil
-if (isMobileOrTablet) {
-  renderer.shadowMap.enabled = false;
-  dirLight.castShadow = false;
-}
+// Cargadores
+const loader = new GLTFLoader();
+const textureLoader = new THREE.TextureLoader();
 
-// 🔹 Guardamos los modelos y sus offsets
+// Datos globales
 const modelos = [];
-
-// Map para controlar los tweens que generan la rotación por mouse
 const mouseTweens = new Map();
-
-// Estado del efecto mouse / click
 let efectoMouseActivo = false;
 let mouseEffectPaused = false;
 let clickInProgress = false;
 let lastMouseX = 0;
 let lastMouseY = 0;
 
-// Función para actualizar (crear) los tweens de rotación que siguen al mouse
-function updateMouseTweens(mx, my) {
-  modelos.forEach(({ model, baseRotX, baseRotY }) => {
-    const prev = mouseTweens.get(model);
-    if (prev) prev.kill();
-
-    const t = gsap.to(model.rotation, {
-      x: baseRotX + my * 0.1,
-      y: baseRotY + mx * 0.3,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-
-    mouseTweens.set(model, t);
-  });
-}
-
 // Función para cargar modelos
-function cargarModelo(rutaModelo, texturaRuta, posicionX, offset, rotY = Math.PI, rotX = 0) {
+function cargarModelo(rutaModelo, texturaRuta, posX, offset, rotY = Math.PI, rotX = 0) {
   const texture = textureLoader.load(texturaRuta);
 
   loader.load(
@@ -91,10 +59,6 @@ function cargarModelo(rutaModelo, texturaRuta, posicionX, offset, rotY = Math.PI
       const model = gltf.scene;
 
       model.traverse((node) => {
-        if (node.isMesh) {
-          node.receiveShadow = true;
-        }
-
         if (node.isMesh && node.name === "pantalla") {
           const bbox = new THREE.Box3().setFromObject(node);
           const size = new THREE.Vector3();
@@ -106,10 +70,8 @@ function cargarModelo(rutaModelo, texturaRuta, posicionX, offset, rotY = Math.PI
             transparent: true,
             side: THREE.FrontSide,
           });
-
           const screenPlane = new THREE.Mesh(planeGeometry, planeMaterial);
           node.add(screenPlane);
-
           screenPlane.position.set(0, 0.01099, 0);
           screenPlane.rotation.x = Math.PI / -2;
           screenPlane.rotation.z = Math.PI / 1;
@@ -118,125 +80,219 @@ function cargarModelo(rutaModelo, texturaRuta, posicionX, offset, rotY = Math.PI
         }
       });
 
-      model.position.x = posicionX < 0 ? -5 : 5;
-      model.position.y = 0;
+      // 🔹 Coloca el modelo fuera de escena dependiendo de su lado
+      const startX = posX < 0 ? -3 : 3;
+      model.position.set(startX, 0, 0);
       model.rotation.set(rotX, rotY, 0);
 
       scene.add(model);
-
       modelos.push({
         model,
         offset,
         baseY: model.position.y,
-        targetX: posicionX,
+        targetX: posX,
         baseRotX: model.rotation.x,
         baseRotY: model.rotation.y,
       });
     },
     undefined,
-    (error) => console.error("Error al cargar el modelo", error)
+    (error) => console.error("Error al cargar modelo:", error)
   );
 }
 
-// 🔹 Cargar modelos
-const texturaRuta1 = document.body.dataset.textura1;
-const texturaRuta2 = document.body.dataset.textura2;
+// Animación hover mouse
+function updateMouseTweens(mx, my) {
+  modelos.forEach(({
+    model,
+    baseRotX,
+    baseRotY
+  }) => {
+    const prev = mouseTweens.get(model);
+    if (prev) prev.kill();
+    const t = gsap.to(model.rotation, {
+      x: baseRotX + my * 0.1,
+      y: baseRotY + mx * 0.3,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    mouseTweens.set(model, t);
+  });
+}
 
-cargarModelo("../src/objt/phone/iphone.glb", texturaRuta1, -0.4, 0, Math.PI, 0);
-cargarModelo("../src/objt/phone/iphone.glb", texturaRuta2, 0.5, Math.PI / 2, Math.PI, -0.05);
-
-// 🔹 Controlar si el canvas está visible
+// 🔹 Optimiza rendimiento: pausa render fuera de viewport
 let isInViewport = true;
-
-const observerVisibility = new IntersectionObserver(
+const observerVisibilidad = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       isInViewport = entry.isIntersecting;
     });
-  },
-  { threshold: 0.2 }
+  }, {
+    threshold: 0.2
+  }
 );
-observerVisibility.observe(container);
+observerVisibilidad.observe(container);
 
 // Animación flotante
 function animate() {
   requestAnimationFrame(animate);
-
-  // 🚀 Pausar render si no está en viewport
   if (!isInViewport) return;
-
   const time = Date.now() * 0.002;
-
-  modelos.forEach(({ model, offset, baseY }) => {
+  modelos.forEach(({
+    model,
+    offset,
+    baseY
+  }) => {
     model.position.y = baseY + Math.sin(time + offset) * 0.03;
   });
-
   renderer.render(scene, camera);
 }
 animate();
 
-// ✅ IntersectionObserver para animación de entrada
-let animacionEjecutada = false;
+// =====================
+// 🔹 CONFIGURACIÓN SEGÚN MEDIAQUERY
+// =====================
+const texturaRuta1 = document.body.dataset.textura1;
+const texturaRuta2 = document.body.dataset.textura2;
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && !animacionEjecutada) {
-        animacionEjecutada = true;
+// Desktop
+function escenaDesktop() {
+  cargarModelo("../src/objt/phone/iphone.glb", texturaRuta1, -0.5, 0, Math.PI, 0);
+  cargarModelo("../src/objt/phone/iphone.glb", texturaRuta2, 0.5, Math.PI / 2, Math.PI, -0.05);
 
-        const timeline = gsap.timeline({
-          onComplete: () => {
-            modelos.forEach((m) => {
-              m.baseRotX = m.model.rotation.x;
-              m.baseRotY = m.model.rotation.y;
-            });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const timeline = gsap.timeline({
+            onComplete: () => {
+              modelos.forEach((m) => {
+                m.baseRotX = m.model.rotation.x;
+                m.baseRotY = m.model.rotation.y;
+              });
+              efectoMouseActivo = true;
+              updateMouseTweens(lastMouseX, lastMouseY);
+            },
+          });
 
-            efectoMouseActivo = true;
-            updateMouseTweens(lastMouseX, lastMouseY);
-          },
-        });
+          modelos.forEach(({
+            model,
+            targetX
+          }, i) => {
+            timeline.fromTo(
+              model.position, {
+                x: targetX < 0 ? -3 : 3,
+                y: -1
+              }, {
+                x: targetX,
+                y: 0,
+                duration: 2.5,
+                ease: "power4.out",
+                delay: i * 0.3
+              },
+              0
+            );
 
-        modelos.forEach(({ model, targetX }) => {
-          timeline.to(model.position, {
-            x: targetX,
-            duration: 2,
-            ease: "power2.out",
-          }, 0);
+            timeline.fromTo(
+              model.rotation, {
+                y: 0
+              }, {
+                y: "+=" + Math.PI * 1,
+                duration: 2.5,
+                ease: "power4.out",
+                delay: i * 0.2
+              },
+              0
+            );
+          });
 
-          timeline.to(model.rotation, {
-            y: "+=" + Math.PI * 2,
-            duration: 2,
-            ease: "power2.out",
-          }, 0);
-        });
+          observer.disconnect();
+        }
+      });
+    }, {
+      threshold: 0.5
+    }
+  );
+  observer.observe(container);
+}
 
-        observer.disconnect();
-      }
-    });
-  },
-  { threshold: 0.5 }
-);
+// Mobile
+function escenaMobile() {
+  cargarModelo("../src/objt/phone/iphone.glb", texturaRuta1, 0.5, Math.PI / 2, Math.PI, -0.05);
 
-observer.observe(container);
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const timeline = gsap.timeline({
+            onComplete: () => {
+              modelos.forEach((m) => {
+                m.baseRotX = m.model.rotation.x;
+                m.baseRotY = m.model.rotation.y;
+              });
+              efectoMouseActivo = true;
+              updateMouseTweens(lastMouseX, lastMouseY);
+            },
+          });
 
-// ✅ Solo activar el hover de mouse en desktop
-if (!isMobileOrTablet) {
+          modelos.forEach(({
+            model
+          }) => {
+            timeline.fromTo(
+              model.position, {
+                y: -1
+              }, {
+                x: 0,
+                y: 0,
+                duration: 1.8,
+                ease: "power4.out"
+              },
+              0
+            );
+            timeline.fromTo(
+              model.rotation, {
+                y: 0
+              }, {
+                y: "+=" + Math.PI * 1,
+                duration: 1.5,
+                ease: "power2.out"
+              },
+              0
+            );
+          });
+
+          observer.disconnect();
+        }
+      });
+    }, {
+      threshold: 0.5
+    }
+  );
+  observer.observe(container);
+}
+
+// Detectar ancho actual
+if (window.innerWidth > 480) {
+  escenaDesktop();
+} else {
+  escenaMobile();
+}
+
+// ✅ Efecto mouse solo en desktop
+if (window.innerWidth > 480) {
   window.addEventListener("mousemove", (event) => {
     lastMouseX = (event.clientX / window.innerWidth - 0.5) * 2;
     lastMouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-
     if (!efectoMouseActivo || mouseEffectPaused) return;
     updateMouseTweens(lastMouseX, lastMouseY);
   });
 }
 
-// ✅ Raycaster para detectar clicks
+// ✅ Click para girar el modelo
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 container.addEventListener("click", (event) => {
-  if (!efectoMouseActivo) return;
-  if (clickInProgress) return;
+  if (!efectoMouseActivo || clickInProgress) return;
 
   const rect = container.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -244,7 +300,6 @@ container.addEventListener("click", (event) => {
 
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(scene.children, true);
-
   if (intersects.length === 0) return;
 
   let clicked = intersects[0].object;
@@ -252,22 +307,20 @@ container.addEventListener("click", (event) => {
     clicked = clicked.parent;
   }
 
-  const modeloData = modelos.find((m) => m.model === clicked);
-  if (!modeloData) return;
+  const data = modelos.find((m) => m.model === clicked);
+  if (!data) return;
 
   mouseEffectPaused = true;
   clickInProgress = true;
-
   mouseTweens.forEach((t) => t.kill());
   mouseTweens.clear();
 
-  gsap.to(modeloData.model.rotation, {
-    y: modeloData.model.rotation.y + Math.PI * 2,
-    duration: 3,
+  gsap.to(data.model.rotation, {
+    y: data.model.rotation.y + Math.PI * 2,
+    duration: 2.5,
     ease: "power2.inOut",
     onComplete: () => {
-      modeloData.baseRotX = modeloData.model.rotation.x;
-      modeloData.baseRotY = modeloData.model.rotation.y;
+      data.baseRotY = data.model.rotation.y;
       mouseEffectPaused = false;
       clickInProgress = false;
       updateMouseTweens(lastMouseX, lastMouseY);
