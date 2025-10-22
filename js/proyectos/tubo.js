@@ -38,7 +38,7 @@ window.addEventListener("load", () => {
     video.muted = true;
     video.playsInline = true;
     video.autoplay = true;
-    video.addEventListener("loadeddata", () => video.play());
+    video.addEventListener("canplay", () => video.play().catch(() => {})); // ✅ mejora reproducción
 
     const texture = new THREE.VideoTexture(video);
     texture.minFilter = THREE.LinearFilter;
@@ -100,22 +100,47 @@ window.addEventListener("load", () => {
     renderer.setSize(container.clientWidth, container.clientHeight);
   });
 
-  // 🧭 Rotación del tubo según la sección visible
+  // 🧭 Rotación y posición del tubo (responsiva)
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        if (id === "section_ocho") {
-          gsap.to(grupoTubo.rotation, { y: 1.57, duration: 1, ease: "power2.out" });
-          gsap.to(grupoTubo.position, { y: -0.13, duration: 1, ease: "power2.out" });
-        } else if (id === "section_nueve") {
-          gsap.to(grupoTubo.rotation, { y: 3.65, duration: 1, ease: "power2.out" });
-          gsap.to(grupoTubo.position, { y: 0.87, duration: 1, ease: "power2.out" });
-        } else if (id === "section_diez") {
-          gsap.to(grupoTubo.rotation, { y: 5.75, duration: 1, ease: "power2.out" });
-          gsap.to(grupoTubo.position, { y: 1.87, duration: 1, ease: "power2.out" });
-        }
+      if (!entry.isIntersecting) return;
+
+      const id = entry.target.id;
+      const isMobile = window.innerWidth <= 480;
+
+      // 📐 Valores base (desktop)
+      let rotY = 0;
+      let posY = 0;
+      let posZ = 0;
+      let scale = 1;
+      let camZ = 3.4;
+
+      // 🌀 Ajustes según sección
+      if (id === "section_ocho") {
+        rotY = isMobile ? 1.57 : 1.57;
+        posY = isMobile ? 0.3 : -0.13;
+        posZ = isMobile ? 0.7 : 0;
+        scale = isMobile ? 0.8 : 1;
+        camZ = isMobile ? 4.2 : 3.4;
+      } else if (id === "section_nueve") {
+        rotY = isMobile ? 3.65 : 3.65;
+        posY = isMobile ? 1.1 : 0.87;
+        posZ = isMobile ? 0.7 : 0;
+        scale = isMobile ? 0.8 : 1;
+        camZ = isMobile ? 4.2 : 3.4;
+      } else if (id === "section_diez") {
+        rotY = isMobile ? 5.75 : 5.75;
+        posY = isMobile ? 1.897 : 1.87;
+        posZ = isMobile ? 0.7 : 0;
+        scale = isMobile ? 0.8 : 1;
+        camZ = isMobile ? 4.2 : 3.4;
       }
+
+      // 🌀 Animaciones
+      gsap.to(grupoTubo.rotation, { y: rotY, duration: 1, ease: "power2.out" });
+      gsap.to(grupoTubo.position, { y: posY, z: posZ, duration: 1, ease: "power2.out" });
+      gsap.to(grupoTubo.scale, { x: scale, y: scale, z: scale, duration: 1 });
+      gsap.to(camera.position, { z: camZ, duration: 1, ease: "power2.out" });
     });
   }, { threshold: 0.5 });
 
@@ -125,7 +150,7 @@ window.addEventListener("load", () => {
   });
 
   // ----------------------------
-  // ✨ SplitText para títulos y párrafos (ajustado)
+  // ✨ SplitText para títulos y párrafos
   // ----------------------------
   gsap.registerPlugin(SplitText);
 
@@ -138,11 +163,7 @@ window.addEventListener("load", () => {
 
     elemento.textContent = texto || "";
 
-    // 🔠 Siempre dividir por letras
-    const split = new SplitText(elemento, {
-      type: "chars",
-      charsClass: "char",
-    });
+    const split = new SplitText(elemento, { type: "chars", charsClass: "char" });
     elemento.splitText = split;
 
     gsap.from(split.chars, {
@@ -159,7 +180,6 @@ window.addEventListener("load", () => {
 
     if (elemento.splitText) {
       const objetivo = elemento.splitText.chars;
-
       gsap.to(objetivo, {
         y: -30,
         opacity: 0,
