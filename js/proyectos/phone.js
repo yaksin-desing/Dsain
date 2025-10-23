@@ -1,10 +1,6 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import {
-  GLTFLoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
-import {
-  gsap
-} from "https://cdn.skypack.dev/gsap";
+import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+import { gsap } from "https://cdn.skypack.dev/gsap";
 
 // Contenedor
 const container = document.getElementById("section_siete");
@@ -12,6 +8,7 @@ const container = document.getElementById("section_siete");
 // Escena y cámara
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
+
 const camera = new THREE.PerspectiveCamera(
   60,
   container.clientWidth / container.clientHeight,
@@ -20,27 +17,41 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 1, 2);
 
-// Renderizador
+// ======================================================
+// 🔹 OPTIMIZACIÓN DE RENDER Y GPU
+// ======================================================
+const isMobile = window.innerWidth <= 480;
+const isTablet = window.innerWidth > 480 && window.innerWidth <= 1024;
+
 const renderer = new THREE.WebGLRenderer({
-  antialias: true
+  antialias: !isMobile, // desactivar antialias en móvil
+  powerPreference: isMobile ? "low-power" : "high-performance" // prioriza eficiencia en móvil
 });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
 renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.shadowMap.enabled = true;
+
+// desactivar sombras en móvil o tablet
+renderer.shadowMap.enabled = !isMobile && !isTablet;
+
 container.appendChild(renderer.domElement);
 
-// Luces
-scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+// ======================================================
+// 🔹 OPTIMIZACIÓN DE LUCES
+// ======================================================
+scene.add(new THREE.AmbientLight(0xffffff, isMobile ? 0.5 : isTablet ? 0.6 : 0.7));
+
+const dirLight = new THREE.DirectionalLight(0xffffff, isMobile ? 0.6 : isTablet ? 0.8 : 1);
 dirLight.position.set(3, 5, 7);
-dirLight.castShadow = true;
+dirLight.castShadow = !isMobile && !isTablet;
 scene.add(dirLight);
 
-// Cargadores
+// ======================================================
+// 🔹 CARGADORES Y VARIABLES
+// ======================================================
 const loader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
-// Datos globales
 const modelos = [];
 const mouseTweens = new Map();
 let efectoMouseActivo = false;
@@ -49,7 +60,9 @@ let clickInProgress = false;
 let lastMouseX = 0;
 let lastMouseY = 0;
 
-// Función para cargar modelos
+// ======================================================
+// 🔹 FUNCIÓN PARA CARGAR MODELOS
+// ======================================================
 function cargarModelo(rutaModelo, texturaRuta, posX, offset, rotY = Math.PI, rotX = 0) {
   const texture = textureLoader.load(texturaRuta);
 
@@ -80,7 +93,6 @@ function cargarModelo(rutaModelo, texturaRuta, posX, offset, rotY = Math.PI, rot
         }
       });
 
-      // 🔹 Coloca el modelo fuera de escena dependiendo de su lado
       const startX = posX < 0 ? -3 : 3;
       model.position.set(startX, 0, 0);
       model.rotation.set(rotX, rotY, 0);
@@ -100,13 +112,11 @@ function cargarModelo(rutaModelo, texturaRuta, posX, offset, rotY = Math.PI, rot
   );
 }
 
-// Animación hover mouse
+// ======================================================
+// 🔹 EFECTO MOUSE (sin cambios)
+// ======================================================
 function updateMouseTweens(mx, my) {
-  modelos.forEach(({
-    model,
-    baseRotX,
-    baseRotY
-  }) => {
+  modelos.forEach(({ model, baseRotX, baseRotY }) => {
     const prev = mouseTweens.get(model);
     if (prev) prev.kill();
     const t = gsap.to(model.rotation, {
@@ -119,38 +129,38 @@ function updateMouseTweens(mx, my) {
   });
 }
 
-// 🔹 Optimiza rendimiento: pausa render fuera de viewport
+// ======================================================
+// 🔹 PAUSA AUTOMÁTICA FUERA DE VIEWPORT
+// ======================================================
 let isInViewport = true;
 const observerVisibilidad = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       isInViewport = entry.isIntersecting;
     });
-  }, {
-    threshold: 0.2
-  }
+  },
+  { threshold: 0.2 }
 );
 observerVisibilidad.observe(container);
 
-// Animación flotante
+// ======================================================
+// 🔹 ANIMACIÓN PRINCIPAL (sin cambios)
+// ======================================================
 function animate() {
   requestAnimationFrame(animate);
-  if (!isInViewport) return;
+  if (!isInViewport) return; // pausa render si no está visible
+
   const time = Date.now() * 0.002;
-  modelos.forEach(({
-    model,
-    offset,
-    baseY
-  }) => {
+  modelos.forEach(({ model, offset, baseY }) => {
     model.position.y = baseY + Math.sin(time + offset) * 0.03;
   });
   renderer.render(scene, camera);
 }
 animate();
 
-// =====================
-// 🔹 CONFIGURACIÓN SEGÚN MEDIAQUERY
-// =====================
+// ======================================================
+// 🔹 CONFIGURACIÓN MEDIAQUERY (sin cambios)
+// ======================================================
 const texturaRuta1 = document.body.dataset.textura1;
 const texturaRuta2 = document.body.dataset.textura2;
 
@@ -174,32 +184,28 @@ function escenaDesktop() {
             },
           });
 
-          modelos.forEach(({
-            model,
-            targetX
-          }, i) => {
+          modelos.forEach(({ model, targetX }, i) => {
             timeline.fromTo(
-              model.position, {
-                x: targetX < 0 ? -3 : 3,
-                y: -1
-              }, {
+              model.position,
+              { x: targetX < 0 ? -3 : 3, y: -1 },
+              {
                 x: targetX,
                 y: 0,
                 duration: 2.5,
                 ease: "power4.out",
-                delay: i * 0.3
+                delay: i * 0.3,
               },
               0
             );
 
             timeline.fromTo(
-              model.rotation, {
-                y: 0
-              }, {
+              model.rotation,
+              { y: 0 },
+              {
                 y: "+=" + Math.PI * 1,
                 duration: 2.5,
                 ease: "power4.out",
-                delay: i * 0.2
+                delay: i * 0.2,
               },
               0
             );
@@ -208,9 +214,8 @@ function escenaDesktop() {
           observer.disconnect();
         }
       });
-    }, {
-      threshold: 0.5
-    }
+    },
+    { threshold: 0.5 }
   );
   observer.observe(container);
 }
@@ -234,28 +239,17 @@ function escenaMobile() {
             },
           });
 
-          modelos.forEach(({
-            model
-          }) => {
+          modelos.forEach(({ model }) => {
             timeline.fromTo(
-              model.position, {
-                y: -1
-              }, {
-                x: 0,
-                y: 0,
-                duration: 1.8,
-                ease: "power4.out"
-              },
+              model.position,
+              { y: -1 },
+              { x: 0, y: 0, duration: 1.8, ease: "power4.out" },
               0
             );
             timeline.fromTo(
-              model.rotation, {
-                y: 0
-              }, {
-                y: "+=" + Math.PI * 1,
-                duration: 1.5,
-                ease: "power2.out"
-              },
+              model.rotation,
+              { y: 0 },
+              { y: "+=" + Math.PI * 1, duration: 1.5, ease: "power2.out" },
               0
             );
           });
@@ -263,9 +257,8 @@ function escenaMobile() {
           observer.disconnect();
         }
       });
-    }, {
-      threshold: 0.5
-    }
+    },
+    { threshold: 0.5 }
   );
   observer.observe(container);
 }
@@ -278,7 +271,7 @@ if (window.innerWidth > 480) {
 }
 
 // ✅ Efecto mouse solo en desktop
-if (window.innerWidth > 480) {
+if (window.innerWidth > 780) {
   window.addEventListener("mousemove", (event) => {
     lastMouseX = (event.clientX / window.innerWidth - 0.5) * 2;
     lastMouseY = (event.clientY / window.innerHeight - 0.5) * 2;
@@ -287,7 +280,7 @@ if (window.innerWidth > 480) {
   });
 }
 
-// ✅ Click para girar el modelo
+// ✅ Click para girar el modelo (sin cambios)
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
