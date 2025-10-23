@@ -124,13 +124,13 @@ window.addEventListener("load", () => {
         camZ = isMobile ? 4.2 : 3.4;
       } else if (id === "section_nueve") {
         rotY = isMobile ? 3.65 : 3.65;
-        posY = isMobile ? 1.17 : 0.87;
+        posY = isMobile ? 1.19 : 0.87;
         posZ = isMobile ? 0.7 : 0;
         scale = isMobile ? 0.8 : 1;
         camZ = isMobile ? 4.2 : 3.4;
       } else if (id === "section_diez") {
         rotY = isMobile ? 5.75 : 5.75;
-        posY = isMobile ? 2.2 : 1.87;
+        posY = isMobile ? 2.1 : 1.87;
         posZ = isMobile ? 0.7 : 0;
         scale = isMobile ? 0.8 : 1;
         camZ = isMobile ? 4.2 : 3.4;
