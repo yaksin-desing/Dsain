@@ -7,8 +7,9 @@ import Stats from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/libs/stats
 // 🟢 Contenedor
 const container = document.getElementById("section_once");
 
-// 🟢 Detección de dispositivo
+// 🟢 Detección de dispositivo y ancho
 const isMobileOrTablet = /Mobi|Android|iPad|iPod/i.test(navigator.userAgent);
+const disableInteractions = window.innerWidth <= 770;
 
 // 🟢 Escena y cámara
 const scene = new THREE.Scene();
@@ -40,7 +41,7 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.shadowMap.enabled = !isMobileOrTablet;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 2 : 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 1.2 : 2));
 container.appendChild(renderer.domElement);
 
 // 🟢 Controles
@@ -52,7 +53,7 @@ light.position.set(0, 10, 10);
 light.castShadow = !isMobileOrTablet;
 scene.add(light, new THREE.AmbientLight(0xffffff, isMobileOrTablet ? 0.6 : 0.5));
 
-// 🟢 Raycaster y mouse
+// 🟢 Raycaster y mouse (solo si interacciones habilitadas)
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2(10, 10);
 let mouseMoved = false;
@@ -114,14 +115,13 @@ loader.load(
   (err) => console.error("Error al cargar modelo:", err)
 );
 
-// 🟢 Control de eventos de mouse
+// 🟢 Eventos de mouse (solo si interacciones activas)
 function enableMouse() {
-  if (isMobileOrTablet) return;
+  if (disableInteractions) return;
   container.addEventListener("mousemove", onMouseMove);
   container.addEventListener("mouseleave", onMouseLeave);
 }
 function disableMouse() {
-  if (isMobileOrTablet) return;
   container.removeEventListener("mousemove", onMouseMove);
   container.removeEventListener("mouseleave", onMouseLeave);
 }
@@ -146,14 +146,12 @@ const observer = new IntersectionObserver(
       const visible = entry.isIntersecting;
 
       if (visible && !isInViewport) {
-        // 🔄 Reanudar
         isInViewport = true;
-        enableMouse();
+        if (!disableInteractions) enableMouse();
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 1.2 : 2));
         renderer.shadowMap.enabled = !isMobileOrTablet;
         gsap.globalTimeline.resume();
       } else if (!visible && isInViewport) {
-        // ⏸️ Pausar
         isInViewport = false;
         disableMouse();
         renderer.setPixelRatio(0.5);
@@ -168,10 +166,10 @@ observer.observe(container);
 
 // 🟢 Stats.js (monitor de FPS)
 const stats = new Stats();
-stats.showPanel(0); // 0 = FPS
+stats.showPanel(0);
 stats.dom.style.position = "fixed";
-stats.dom.style.left = "200px";
-stats.dom.style.top = "10px";
+stats.dom.style.left = "10px";
+stats.dom.style.top = "200px";
 stats.dom.style.zIndex = "9999";
 document.body.appendChild(stats.dom);
 
@@ -182,30 +180,32 @@ function animate() {
 
   if (!isInViewport) return;
 
-  let intersects = [];
-  if (mouseMoved && hitboxes.length > 0) {
-    raycaster.setFromCamera(mouse, camera);
-    intersects = raycaster.intersectObjects(hitboxes.map((h) => h.hitbox));
+  // 🔸 Desactiva detección de raycaster y animaciones de hover en pantallas pequeñas
+  if (!disableInteractions && hitboxes.length > 0) {
+    let intersects = [];
+    if (mouseMoved) {
+      raycaster.setFromCamera(mouse, camera);
+      intersects = raycaster.intersectObjects(hitboxes.map((h) => h.hitbox));
+    }
+
+    hitboxes.forEach((h) => {
+      if (!intersects.find((i) => i.object === h.hitbox) && h.flipped) {
+        gsap.to(h.model.rotation, { z: 0, duration: 2, ease: "power2.out" });
+        h.flipped = false;
+      }
+    });
+
+    intersects.forEach((intersect) => {
+      const h = hitboxes.find((h) => h.hitbox === intersect.object);
+      if (h && !h.flipped) {
+        gsap.to(h.model.rotation, { z: Math.PI, duration: 0.5, ease: "power2.out" });
+        h.flipped = true;
+      }
+    });
   }
-
-  hitboxes.forEach((h) => {
-    if (!intersects.find((i) => i.object === h.hitbox) && h.flipped) {
-      gsap.to(h.model.rotation, { z: 0, duration: 2, ease: "power2.out" });
-      h.flipped = false;
-    }
-  });
-
-  intersects.forEach((intersect) => {
-    const h = hitboxes.find((h) => h.hitbox === intersect.object);
-    if (h && !h.flipped) {
-      gsap.to(h.model.rotation, { z: Math.PI, duration: 0.5, ease: "power2.out" });
-      h.flipped = true;
-    }
-  });
 
   controls.update();
   renderer.render(scene, camera);
-
   stats.end();
 }
 animate();
