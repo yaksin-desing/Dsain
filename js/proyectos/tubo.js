@@ -6,13 +6,7 @@ import Stats from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/libs/stats
 window.addEventListener("load", () => {
   const container = document.getElementById("cont_escena_tubo");
 
-  // ⚙️ Detección de dispositivo
-  const isTablet =
-    /iPad|Tablet|PlayBook|Silk|Kindle|Android(?!.*Mobile)/i.test(
-      navigator.userAgent
-    );
-
-  // 🎬 Escena
+  // 📦 Escena
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);
 
@@ -25,19 +19,10 @@ window.addEventListener("load", () => {
   );
   camera.position.set(0, 1.52, 3.4);
 
-  // 🧠 Renderizador optimizado
-  const renderer = new THREE.WebGLRenderer({
-    antialias: !isTablet, // 🔹 desactiva AA en tablets débiles
-    powerPreference: "high-performance",
-    alpha: false,
-  });
-
-  // 🔹 Pixel ratio limitado en tablets
-  renderer.setPixelRatio(
-    isTablet ? Math.min(window.devicePixelRatio, 1.0) : window.devicePixelRatio
-  );
-
+  // 🖥️ Renderizador
+  const renderer = new THREE.WebGLRenderer({ antialias: false });
   renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
 
   // 💡 Luces
@@ -46,7 +31,9 @@ window.addEventListener("load", () => {
   dirLight.position.set(3, 5, 7);
   scene.add(dirLight);
 
-  // 🎛️ Stats
+  // ======================================================
+  // 🔹 MONITOR DE FPS (Stats.js)
+  // ======================================================
   const stats = new Stats();
   stats.showPanel(0);
   stats.dom.style.position = "absolute";
@@ -56,7 +43,9 @@ window.addEventListener("load", () => {
   stats.dom.style.transform = "scale(0.9)";
   container.appendChild(stats.dom);
 
-  // 🎞️ Materiales de video
+  // ======================================================
+  // 🎞️ Crear materiales de video
+  // ======================================================
   const videos = [];
   function crearMaterialVideo(ruta) {
     const video = document.createElement("video");
@@ -65,23 +54,13 @@ window.addEventListener("load", () => {
     video.muted = true;
     video.playsInline = true;
     video.autoplay = true;
-    video.preload = "metadata";
-    video.crossOrigin = "anonymous";
-
-    // 🔹 En tablets, bajar resolución del video a la mitad si soporta
-    if (isTablet) {
-      video.style.width = "50%";
-      video.style.height = "50%";
-    }
-
     video.addEventListener("canplay", () => video.play().catch(() => {}));
-    videos.push(video);
+    videos.push(video); // guardamos referencia
 
     const texture = new THREE.VideoTexture(video);
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
     texture.format = THREE.RGBAFormat;
-    texture.generateMipmaps = false; // ✅ evita sobrecarga GPU
 
     return new THREE.MeshBasicMaterial({
       map: texture,
@@ -90,19 +69,20 @@ window.addEventListener("load", () => {
     });
   }
 
-  // URLs
+  // 🧠 URLs de videos
   const videoURLs = [
     container.dataset.video1,
     container.dataset.video2,
     container.dataset.video3,
   ];
+
   const materiales = videoURLs.map((url) => crearMaterialVideo(url));
 
-  // 🌀 Tubo
+  // 🌀 Crear tubo
   const grupoTubo = new THREE.Group();
   const radio = 1.7;
   const altura = 0.7;
-  const segmentos = isTablet ? 32 : 64; // 🔹 menos polígonos en tablet
+  const segmentos = 64;
 
   for (let i = 0; i < materiales.length; i++) {
     const inicio = i * ((2 * Math.PI) / 3);
@@ -123,28 +103,32 @@ window.addEventListener("load", () => {
 
   scene.add(grupoTubo);
 
-  // 💤 Render controlado por visibilidad
+  // ======================================================
+  // ⚙️ Control de render activo/inactivo
+  // ======================================================
   let isVisible = false;
   let animationId = null;
 
   function animate() {
-    if (!isVisible) return;
+    if (!isVisible) return; // si no está visible, no renderiza
     stats.begin();
     renderer.render(scene, camera);
     stats.end();
     animationId = requestAnimationFrame(animate);
   }
 
-  // 👁️ Observer principal
+  // 🎯 Observer para detectar visibilidad
   const sceneObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          // 🟢 Entra en pantalla
           isVisible = true;
-          videos.forEach((v) => v.play().catch(() => {}));
+          videos.forEach((v) => v.play().catch(() => {})); // reanuda videos
           if (!animationId) animate();
           stats.dom.style.display = "block";
         } else {
+          // 🔴 Sale de pantalla
           isVisible = false;
           cancelAnimationFrame(animationId);
           animationId = null;
@@ -155,16 +139,21 @@ window.addEventListener("load", () => {
     },
     { threshold: 0.1 }
   );
+
   sceneObserver.observe(container);
 
-  // 🔄 Resize
+  // ======================================================
+  // 📏 Resize
+  // ======================================================
   window.addEventListener("resize", () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
   });
 
-  // 🎯 Movimiento tubo (sin cambios funcionales)
+  // ======================================================
+  // 🧭 Rotación y posición del tubo (responsiva)
+  // ======================================================
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -212,7 +201,9 @@ window.addEventListener("load", () => {
     if (section) observer.observe(section);
   });
 
-  // 🧩 SplitText
+  // ======================================================
+  // ✨ SplitText para títulos y párrafos
+  // ======================================================
   gsap.registerPlugin(SplitText);
 
   const tituloParrafo = container.querySelector(".titulo_parrafo_escena");
@@ -260,8 +251,7 @@ window.addEventListener("load", () => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         const sec = entry.target;
-        if (!["section_ocho", "section_nueve", "section_diez"].includes(sec.id))
-          return;
+        if (!["section_ocho", "section_nueve", "section_diez"].includes(sec.id)) return;
 
         const nuevoTitulo = sec.dataset.titulo || tituloParrafo?.textContent;
         const nuevoParrafo = sec.dataset.parrafo || parrafoEscena?.textContent;

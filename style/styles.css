@@ -3498,7 +3498,9 @@ h5 {
   }
 }
 .proyecto .contenedorproyectos #section_once footer .nombre_logo {
+  width: 100%;
   position: absolute;
+  transform: translateX(-0.4vw);
   bottom: -12vw;
   font-family: Extrabold;
   font-size: 21vw;

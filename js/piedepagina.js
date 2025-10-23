@@ -2,6 +2,7 @@ import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
 import { gsap } from "https://cdn.skypack.dev/gsap@3.12.2";
+import Stats from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/libs/stats.module.js";
 
 // 🟢 Contenedor
 const container = document.getElementById("section_once");
@@ -9,43 +10,28 @@ const container = document.getElementById("section_once");
 // 🟢 Detección de dispositivo
 const isMobileOrTablet = /Mobi|Android|iPad|iPod/i.test(navigator.userAgent);
 
-// 🟢 Escena
+// 🟢 Escena y cámara
 const scene = new THREE.Scene();
-
-// 🟢 Cámara
 const camera = new THREE.PerspectiveCamera(
   isMobileOrTablet ? 55 : 45,
   container.clientWidth / container.clientHeight,
   0.1,
   1000
 );
-
-// 🔹 Posición inicial (por defecto para pantallas grandes)
 camera.position.set(0, 0, 7);
 
-// 🔹 Función para actualizar posición según tamaño de pantalla
 function updateCameraPosition() {
   const width = window.innerWidth;
-
-  if (width <= 480) {
-    // 📱 Configuración para móviles pequeños
-    camera.position.set(0, 0.25, 4); // ← Cambia estos valores como quieras
-  } else if (width <= 768) {
-    // 📲 Configuración para tablets
-    camera.position.set(0, 0.1, 4);
-  } else {
-    // 💻 Configuración para escritorio
-    camera.position.set(0, 0, 7);
-  }
+  if (width <= 480) camera.position.set(0, 0.25, 4);
+  else if (width <= 768) camera.position.set(0, 0.1, 4);
+  else camera.position.set(0, 0, 7);
   camera.updateProjectionMatrix();
 }
-
-// Llamar al inicio
 updateCameraPosition();
 
 // 🟢 Renderizador
 const renderer = new THREE.WebGLRenderer({
-  antialias: !isMobileOrTablet,
+  antialias: false,
   alpha: true,
 });
 renderer.setSize(container.clientWidth, container.clientHeight);
@@ -54,23 +40,17 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.shadowMap.enabled = !isMobileOrTablet;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 1.2 : 2));
-
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 2 : 2));
 container.appendChild(renderer.domElement);
 
-// 🟢 Controles Orbit
-const controls = !isMobileOrTablet
-  ? new OrbitControls(camera, renderer.domElement)
-  : { update() {} };
+// 🟢 Controles
+const controls = !isMobileOrTablet ? new OrbitControls(camera, renderer.domElement) : { update() {} };
 
 // 🟢 Luces
 const light = new THREE.DirectionalLight(0xffffff, isMobileOrTablet ? 0.8 : 1);
 light.position.set(0, 10, 10);
 light.castShadow = !isMobileOrTablet;
-light.shadow.mapSize.set(512, 512);
-light.shadow.bias = -0.001;
-scene.add(light);
-scene.add(new THREE.AmbientLight(0xffffff, isMobileOrTablet ? 0.6 : 0.5));
+scene.add(light, new THREE.AmbientLight(0xffffff, isMobileOrTablet ? 0.6 : 0.5));
 
 // 🟢 Raycaster y mouse
 const raycaster = new THREE.Raycaster();
@@ -79,6 +59,7 @@ let mouseMoved = false;
 
 // 🟢 Datos de clones
 let hitboxes = [];
+let muro;
 
 // 🟢 Carga del modelo
 const loader = new GLTFLoader();
@@ -90,19 +71,13 @@ loader.load(
 
     const filas = isMobileOrTablet ? 6 : 10;
     const columnas = isMobileOrTablet ? 10 : 17;
-    const separacionX = 0.8;
-    const separacionY = 0.8;
+    const separacionX = 0.8, separacionY = 0.8;
 
     const anchoTotal = (columnas - 1) * separacionX;
     const altoTotal = (filas - 1) * separacionY;
+    muro = new THREE.Group();
 
-    const muro = new THREE.Group();
-
-    const baseMaterial = new THREE.MeshStandardMaterial({
-      metalness: 0.3,
-      roughness: 0.6,
-    });
-
+    const baseMaterial = new THREE.MeshStandardMaterial({ metalness: 0.3, roughness: 0.6 });
     const boxGeo = new THREE.BoxGeometry(0.8, 0.8, 0.2);
     const boxMat = new THREE.MeshBasicMaterial({ visible: false });
 
@@ -124,16 +99,10 @@ loader.load(
         }
 
         const hitbox = new THREE.Mesh(boxGeo, boxMat);
-        hitbox.position.set(
-          x * separacionX - anchoTotal / 2,
-          -(y * separacionY - altoTotal / 2),
-          0
-        );
-
+        hitbox.position.set(x * separacionX - anchoTotal / 2, -(y * separacionY - altoTotal / 2), 0);
         clone.position.z = 0.01;
         hitbox.add(clone);
         muro.add(hitbox);
-
         hitboxes.push({ hitbox, model: clone, flipped: false });
       }
     }
@@ -142,39 +111,75 @@ loader.load(
     scene.add(muro);
   },
   undefined,
-  (error) => console.error("Error al cargar el modelo:", error)
+  (err) => console.error("Error al cargar modelo:", err)
 );
 
-// 🟢 Eventos de mouse (solo desktop)
-if (!isMobileOrTablet) {
-  container.addEventListener("mousemove", (event) => {
-    mouseMoved = true;
-    const rect = container.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-  });
-
-  container.addEventListener("mouseleave", () => {
-    mouseMoved = false;
-    mouse.set(10, 10);
-  });
+// 🟢 Control de eventos de mouse
+function enableMouse() {
+  if (isMobileOrTablet) return;
+  container.addEventListener("mousemove", onMouseMove);
+  container.addEventListener("mouseleave", onMouseLeave);
+}
+function disableMouse() {
+  if (isMobileOrTablet) return;
+  container.removeEventListener("mousemove", onMouseMove);
+  container.removeEventListener("mouseleave", onMouseLeave);
 }
 
-// 🟢 IntersectionObserver
+function onMouseMove(event) {
+  mouseMoved = true;
+  const rect = container.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+}
+function onMouseLeave() {
+  mouseMoved = false;
+  mouse.set(10, 10);
+}
+enableMouse();
+
+// 🟢 IntersectionObserver (pausa inteligente)
 let isInViewport = true;
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      isInViewport = entry.isIntersecting;
+      const visible = entry.isIntersecting;
+
+      if (visible && !isInViewport) {
+        // 🔄 Reanudar
+        isInViewport = true;
+        enableMouse();
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 1.2 : 2));
+        renderer.shadowMap.enabled = !isMobileOrTablet;
+        gsap.globalTimeline.resume();
+      } else if (!visible && isInViewport) {
+        // ⏸️ Pausar
+        isInViewport = false;
+        disableMouse();
+        renderer.setPixelRatio(0.5);
+        renderer.shadowMap.enabled = false;
+        gsap.globalTimeline.pause();
+      }
     });
   },
   { threshold: 0.1 }
 );
 observer.observe(container);
 
-// 🟢 Animación
+// 🟢 Stats.js (monitor de FPS)
+const stats = new Stats();
+stats.showPanel(0); // 0 = FPS
+stats.dom.style.position = "fixed";
+stats.dom.style.left = "200px";
+stats.dom.style.top = "10px";
+stats.dom.style.zIndex = "9999";
+document.body.appendChild(stats.dom);
+
+// 🟢 Loop de render
 function animate() {
   requestAnimationFrame(animate);
+  stats.begin();
+
   if (!isInViewport) return;
 
   let intersects = [];
@@ -193,23 +198,21 @@ function animate() {
   intersects.forEach((intersect) => {
     const h = hitboxes.find((h) => h.hitbox === intersect.object);
     if (h && !h.flipped) {
-      gsap.to(h.model.rotation, {
-        z: Math.PI,
-        duration: 0.5,
-        ease: "power2.out",
-      });
+      gsap.to(h.model.rotation, { z: Math.PI, duration: 0.5, ease: "power2.out" });
       h.flipped = true;
     }
   });
 
   controls.update();
   renderer.render(scene, camera);
+
+  stats.end();
 }
 animate();
 
-// 🟢 Resize + media query listener
+// 🟢 Resize
 window.addEventListener("resize", () => {
   camera.aspect = container.clientWidth / container.clientHeight;
   renderer.setSize(container.clientWidth, container.clientHeight);
-  updateCameraPosition(); // ⬅️ Actualiza también la posición
+  updateCameraPosition();
 });
