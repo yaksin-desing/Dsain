@@ -14,16 +14,38 @@ const scene = new THREE.Scene();
 
 // 🟢 Cámara
 const camera = new THREE.PerspectiveCamera(
-  isMobileOrTablet ? 55 : 45, // apertura un poco mayor en móvil
+  isMobileOrTablet ? 55 : 45,
   container.clientWidth / container.clientHeight,
   0.1,
   1000
 );
+
+// 🔹 Posición inicial (por defecto para pantallas grandes)
 camera.position.set(0, 0, 7);
+
+// 🔹 Función para actualizar posición según tamaño de pantalla
+function updateCameraPosition() {
+  const width = window.innerWidth;
+
+  if (width <= 480) {
+    // 📱 Configuración para móviles pequeños
+    camera.position.set(0, 0.25, 4); // ← Cambia estos valores como quieras
+  } else if (width <= 768) {
+    // 📲 Configuración para tablets
+    camera.position.set(0, 0.1, 4);
+  } else {
+    // 💻 Configuración para escritorio
+    camera.position.set(0, 0, 7);
+  }
+  camera.updateProjectionMatrix();
+}
+
+// Llamar al inicio
+updateCameraPosition();
 
 // 🟢 Renderizador
 const renderer = new THREE.WebGLRenderer({
-  antialias: !isMobileOrTablet, // desactiva AA en móviles
+  antialias: !isMobileOrTablet,
   alpha: true,
   powerPreference: "high-performance",
 });
@@ -31,15 +53,13 @@ renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setClearColor(0x000000, 0);
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.shadowMap.enabled = !isMobileOrTablet; // sin sombras en móviles
+renderer.shadowMap.enabled = !isMobileOrTablet;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-// 🔹 Ajuste de resolución dinámica
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 1.2 : 2));
 
 container.appendChild(renderer.domElement);
 
-// 🟢 Controles Orbit (solo desktop)
+// 🟢 Controles Orbit
 const controls = !isMobileOrTablet
   ? new OrbitControls(camera, renderer.domElement)
   : { update() {} };
@@ -69,7 +89,6 @@ loader.load(
     const model = gltf.scene;
     model.scale.set(0.4, 0.4, 0.4);
 
-    // Menos densidad de clones en móviles
     const filas = isMobileOrTablet ? 6 : 10;
     const columnas = isMobileOrTablet ? 10 : 17;
     const separacionX = 0.8;
@@ -80,13 +99,11 @@ loader.load(
 
     const muro = new THREE.Group();
 
-    // Material base compartido
     const baseMaterial = new THREE.MeshStandardMaterial({
       metalness: 0.3,
       roughness: 0.6,
     });
 
-    // Reutilizar geometría del hitbox
     const boxGeo = new THREE.BoxGeometry(0.8, 0.8, 0.2);
     const boxMat = new THREE.MeshBasicMaterial({ visible: false });
 
@@ -122,7 +139,7 @@ loader.load(
       }
     }
 
-    muro.frustumCulled = false; // evitar desapariciones erróneas
+    muro.frustumCulled = false;
     scene.add(muro);
   },
   undefined,
@@ -144,7 +161,7 @@ if (!isMobileOrTablet) {
   });
 }
 
-// 🟢 IntersectionObserver (pausa render si no visible)
+// 🟢 IntersectionObserver
 let isInViewport = true;
 const observer = new IntersectionObserver(
   (entries) => {
@@ -156,11 +173,10 @@ const observer = new IntersectionObserver(
 );
 observer.observe(container);
 
-// 🟢 Animación principal
+// 🟢 Animación
 function animate() {
   requestAnimationFrame(animate);
-
-  if (!isInViewport) return; // ahorro energético
+  if (!isInViewport) return;
 
   let intersects = [];
   if (mouseMoved && hitboxes.length > 0) {
@@ -168,7 +184,6 @@ function animate() {
     intersects = raycaster.intersectObjects(hitboxes.map((h) => h.hitbox));
   }
 
-  // Reset de rotación
   hitboxes.forEach((h) => {
     if (!intersects.find((i) => i.object === h.hitbox) && h.flipped) {
       gsap.to(h.model.rotation, { z: 0, duration: 2, ease: "power2.out" });
@@ -176,7 +191,6 @@ function animate() {
     }
   });
 
-  // Hover
   intersects.forEach((intersect) => {
     const h = hitboxes.find((h) => h.hitbox === intersect.object);
     if (h && !h.flipped) {
@@ -194,9 +208,9 @@ function animate() {
 }
 animate();
 
-// 🟢 Resize
+// 🟢 Resize + media query listener
 window.addEventListener("resize", () => {
   camera.aspect = container.clientWidth / container.clientHeight;
-  camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
+  updateCameraPosition(); // ⬅️ Actualiza también la posición
 });
