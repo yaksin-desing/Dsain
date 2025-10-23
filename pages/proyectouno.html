@@ -1,445 +1,757 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style/styles.css" />
+    <link rel="icon" type="image/svg" href="../src/img/logo.svg" />
+    <title>Proyecto Dsains</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../style/styles.css" />
-  <link rel="icon" type="image/svg" href="../src/img/logo.svg" />
-  <title>Proyecto Dsains</title>
-</head>
+  <body
+    class="proyecto"
+    style="background: #fff"
+    data-textura1="../src/img/assetproyectos/proyectodsains/movilraight.png"
+    data-textura2="../src/img/assetproyectos/proyectodsains/movilleft.png"
+  >
+    <!-- Transición -->
 
-<body class="proyecto" style="background: #fff" data-textura1="../src/img/assetproyectos/proyectodsains/movilraight.png"
-  data-textura2="../src/img/assetproyectos/proyectodsains/movilleft.png">
-  <!-- Transición -->
+    <div id="transition">
+      <svg viewBox="0 0 1920 700" preserveAspectRatio="none">
+        <path
+          id="wave"
+          fill="#0004ee"
+          d="M0,1080 L0,-500 Q960,-300 1920,-500 L1920,1080 Z"
+        />
+      </svg>
+      <div id="gif-overlay">
+        <img src="../src/img/loadinglogo.gif" alt="Cargando..." />
+      </div>
+    </div>
+    <div class="contenedorproyectos">
+      <!-- INICIO DE PAGINA -->
 
-        <div id="transition">
-            <svg viewBox="0 0 1920 700" preserveAspectRatio="none">
-                <path id="wave" fill="#0004ee" d="M0,1080 L0,-500 Q960,-300 1920,-500 L1920,1080 Z" />
-            </svg>
-            <div id="gif-overlay">
-                <img src="../src/img/loadinglogo.gif" alt="Cargando...">
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+
+      <div
+        id="screenSize"
+        style="
+          position: fixed;
+          bottom: 10px;
+          right: 10px;
+          background: rgba(0, 0, 0, 0.6);
+          color: #fff;
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-family: monospace;
+          z-index: 9999;
+        "
+      ></div>
+
+      <div class="text_guia">
+        <p id="texto-guia">Texto guia</p>
+        <img src="../src/img/star.svg" alt="" />
+      </div>
+      <div class="cursorp"></div>
+      <div class="barra_nav">
+        <a href="../index.html">
+          <img class="logo" src="../src/img/logoazul.svg" alt="logo dsains" />
+        </a>
+
+        <div class="cont_menu">
+          <div
+            class="boton_contact cursor-scale magnetic-button"
+            data-strength="0.7"
+            data-text-strength="0.2"
+          >
+            <a class="texto_boton" href="./proyectodos.html">
+              <p class="magnetic-text">Talk me</p>
+            </a>
+            <img src="../src/img/flechabotoncontact.svg" alt="" />
+          </div>
+
+          <div class="contd_menu cursor-scale">
+            <div class="cont_boton_menu">
+              <div id="menu-button"></div>
             </div>
-        </div>
-  <div class="contenedorproyectos">
-    <!-- INICIO DE PAGINA -->
-
-    <div id="progress-container">
-      <div id="progress-bar"></div>
-    </div>
-
-    <div class="text_guia">
-      <p id="texto-guia">Texto guia</p>
-      <img src="../src/img/star.svg" alt="" />
-    </div>
-    <div class="cursorp"></div>
-    <div class="barra_nav">
-      <a href="../index.html">
-        <img class="logo" src="../src/img/logoazul.svg" alt="logo dsains" />
-      </a>
-
-      <div class="cont_menu">
-        <div class="boton_contact cursor-scale magnetic-button" data-strength="0.7" data-text-strength="0.2">
-          <a class="texto_boton" href="./proyectodos.html">
-            <p class="magnetic-text">Talk me</p>
-          </a>
-          <img src="../src/img/flechabotoncontact.svg" alt="" />
-        </div>
-
-        <div class="contd_menu cursor-scale">
-          <div class="cont_boton_menu">
-            <div id="menu-button"></div>
           </div>
-        </div>
 
-        <nav id="nav-menu" class="hidden">
-          <ul class="contlistmenu">
-            <p id="menuTitle">Menu</p>
-            <li>
-              <a class="animated-text" href="../index.html" data-delay="0.1">Home</a>
-            </li>
-            <li>
-              <a class="cursor-scale animated-text" href="#about" data-delay="0.1">Blogs</a>
-            </li>
-            <li>
-              <a class="cursor-scale animated-text" href="#services" data-delay="0.1">Works</a>
-            </li>
-            <li>
-              <a class="cursor-scale animated-text" href="#contact" data-delay="0.1">About me</a>
-            </li>
-          </ul>
-          <ul class="contsocial">
-            <p>Social</p>
-            <div class="list_social">
+          <nav id="nav-menu" class="hidden">
+            <ul class="contlistmenu">
+              <p id="menuTitle">Menu</p>
               <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#home">Whatsapp</a>
+                <a class="animated-text" href="../index.html" data-delay="0.1"
+                  >Home</a
+                >
               </li>
               <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#about">Gmail</a>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#about"
+                  data-delay="0.1"
+                  >Blogs</a
+                >
               </li>
               <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#services">Instagram</a>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#services"
+                  data-delay="0.1"
+                  >Works</a
+                >
               </li>
               <li>
-                <a class="cursor-scale animated-text" data-delay="0.1" href="#contact">Facebook</a>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#contact"
+                  data-delay="0.1"
+                  >About me</a
+                >
               </li>
-            </div>
-          </ul>
-        </nav>
-      </div>
-    </div>
-    <!-- SECCION UNO -->
-    <section id="section_uno">
-      <div class="cont_titulo">
-        <p class="data animar-texto" data-tipo="letras" data-velocidad="0.4">
-          finished project - Aug 8 2025
-        </p>
-        <h1 class="tituloproyecto animar-texto" data-tipo="letras" data-velocidad="0.4">
-          DSAINS
-        </h1>
-      </div>
-      <p class="parrafo animar-texto" data-tipo="palabras" data-velocidad="0.05">
-        Hello, I am the ux ui designer you are looking for, I am very happy to
-        have you here, I welcome you to my portfolio.
-      </p>
-      <div class="cont_imagen_proyecto">
-        <img class="imagen_proyecto" src="../src/img/proydsains.png" alt="imagen proyecto uno" />
-      </div>
-    </section>
-
-    <section id="section_screen_uno"></section>
-
-    <!-- SECCION DOS -->
-    <section id="section_dos">
-      <div class="column_uno">
-        <h3 class="titulo animar-texto" data-tipo="letras" data-velocidad="0.6">
-          Proyect details
-        </h3>
-        <p class="parrafo aanimar-texto" data-tipo="palabras" data-velocidad="0.2">
-          Lorem ipsum dolor sit amet consectetur. Tortor nibh in quis diam at
-          scelerisque posuere urna. Fringilla id amet sodales augue egestas
-          amet nibh. Lorem elit tristique quis non et. Lorem ut id mauris
-          commodo magna elementum commodo tincidunt.
-        </p>
-        <div class="cont_info_proyecto">
-          <div class="info_proyecto">
-            <h4 class="subtitulo aanimar-texto" data-tipo="letras" data-velocidad="0.6">
-              Client
-            </h4>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Yaksin sains
-            </p>
-          </div>
-          <div class="info_proyecto">
-            <h4 class="subtitulo aanimar-texto" data-tipo="letras" data-velocidad="0.6">
-              Location
-            </h4>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Colombia
-            </p>
-          </div>
-          <div class="info_proyecto">
-            <h4 class="subtitulo aanimar-texto" data-tipo="letras" data-velocidad="0.6">
-              Industry
-            </h4>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Design
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Ti
-            </p>
-          </div>
-          <div class="info_proyecto">
-            <h4 class="subtitulo aanimar-texto" data-tipo="letras" data-velocidad="0.6">
-              Services
-            </h4>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Front and Development
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Brand Identity Design
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Ux-Ui Design
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Web Design
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="column_dos">
-        <div class="cont_cabecera">
-          <span class="-Usd aanimar-texto" data-tipo="letras" data-velocidad="0.7">
-            <span class="text-style-1 aanimar-texto" data-tipo="letras" data-velocidad="1.5">7</span>Meses
-          </span>
-          <span class="-Usd aanimar-texto" data-tipo="letras" data-velocidad="0.7">
-            <span class="text-style-1 aanimar-texto" data-tipo="letras" data-velocidad="1.5">400</span>$ Usd
-          </span>
-        </div>
-        <div class="cont_data">
-          <div class="info_proyecto">
-            <h4 class="subtitulo aanimar-texto" data-tipo="letras" data-velocidad="0.6">
-              Tools
-            </h4>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Js vanilla
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Barba.js
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Three.js
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Gsap.js
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Blender
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Lottie
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              Figma
-            </p>
-          </div>
-
-          <div class="info_proyecto">
-            <h4 class="subtitulo aanimar-texto" data-tipo="letras" data-velocidad="0.6">
-              Project team and roles
-            </h4>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              ( Ux - Ui ) Yaksin sains
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              ( Frontend ) Yaksin sains
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              ( 3D modeler ) Yaksin sains
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              ( Illustrator ) Yaksin sains
-            </p>
-            <p class="detalle animar-texto" data-tipo="letras" data-velocidad="0.6">
-              ( Creative Dev ) Yaksin sains
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCION TRES -->
-    <section id="section_tres">
-      <p class="titulo_seccion animar-texto" data-tipo="letras" data-velocidad="0.7">
-        COLORS
-      </p>
-      <div class="cont_color">
-        <div class="coloruno">
-          <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7">
-            Hex - #0048ff
-          </p>
-          <p class="titulo animar-texto" data-tipo="letras" data-velocidad="0.7">
-            Primary color
-          </p>
-          <p class="texto animar-texto" data-tipo="letras" data-velocidad="0.7">
-            Aa
-          </p>
-        </div>
-
-        <div class="colordos">
-          <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7">
-            Hex - #F4F6FF
-          </p>
-          <p class="titulo animar-texto" data-tipo="letras" data-velocidad="0.7">
-            Secondary color
-          </p>
-          <p class="texto animar-texto" data-tipo="letras" data-velocidad="0.7">
-            Aa
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCION CUATRO -->
-    <section id="section_cuatro">
-      <p class="titulo_seccion animar-texto" data-tipo="letras" data-velocidad="0.7">
-        MAIN TYPE
-      </p>
-      <div class="cont_fuente">
-        <h3 class="titulo_fuente animar-texto" data-tipo="letras" data-velocidad="0.7">
-          Panchang Variable
-        </h3>
-
-        <p class="parrafo_fuente aanimar-texto" data-tipo="palabras">
-          Ranging in weight from Light through ExtraBold, the Panchang family
-          has six wide sans serif fonts on offer. The typeface features
-          letters so wide that they are almost panoramic. The family supports
-          all European languages written with the Latin script. Panchang’s
-          lowercase letters have a tall x-height, and their ascenders are
-          visibly taller than the capitals. The design’s broad letterforms
-          look very industrial on the whole.
-        </p>
-        <div class="cont_tipe_texto">
-          <img src="../src/img/assetproyectos/proyectodsains/textsemibold.svg" alt="" />
-          <img src="../src/img/assetproyectos/proyectodsains/textmedio.svg" alt="" />
-          <img src="../src/img/assetproyectos/proyectodsains/textregular.svg" alt="" />
-          <img src="../src/img/assetproyectos/proyectodsains/textlight.svg" alt="" />
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCION CINCO -->
-    <section id="section_cinco">
-      <p class="titulo_seccion animar-texto" data-tipo="letras" data-velocidad="0.7">
-        BRANDING
-      </p>
-      <div class="cont_moodboard">
-        <lottie-player class="lottie" src="../src/img/assetproyectos/proyectodsains/brandingdsainsizq.json"
-          background="transparent" speed="1.5"></lottie-player>
-
-        <lottie-player class="lottie" src="../src/img/assetproyectos/proyectodsains/brandingdsainsderch.json"
-          background="transparent" speed="1"></lottie-player>
-      </div>
-    </section>
-
-    <!-- SECCION SEIS -->
-    <section id="section_seis">
-      <p class="titulo_seccion animar-texto" data-tipo="letras" data-velocidad="0.7">
-        SITE MAP
-      </p>
-
-      <div class="cont_img_section_seis">
-        <div class="cont_uno">
-          <div class="sect_uno"><img src="../src/img/assetproyectos/proyectodsains/banneruno.png" alt=""></div>
-          <div class="sect_dos">
-            <div class="sect_dos_uno"> <img src="../src/img/assetproyectos/proyectodsains/imgcelular.png" alt=""></div>
-            <div class="sect_dos_dos">
-              <div  class="img_uno">
-                <img src="../src/img/loadinglogo.gif" alt="">
+            </ul>
+            <ul class="contsocial">
+              <p>Social</p>
+              <div class="list_social">
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#home"
+                    >Whatsapp</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#about"
+                    >Gmail</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#services"
+                    >Instagram</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#contact"
+                    >Facebook</a
+                  >
+                </li>
               </div>
-              
-              <div  class="img_dos">
-                <img src="../src/img/assetproyectos/proyectodsains/iconweb.svg" alt="">
-              </div>
-              
-            </div>
-          </div>
-        </div>
-        <div class="cont_dos">
-          <video class="videodsain" autoplay loop muted  playsinline  src="../src/img/assetproyectos/proyectodsains/videodsain.webm"></video>
+            </ul>
+          </nav>
         </div>
       </div>
-
-      
-    </section>
-
-    <!-- SECCION SIETE -->
-    <section id="section_siete"></section>
-
-    <!-- SECCION OCHO -->
-    <section id="section_ocho" data-titulo="Ideación de escenas" data-parrafo="Lorem ipsum dolor sit amet consectetur.">
-      <!-- SECCION TUBO -->
-      <section id="cont_escena_tubo" data-video1="../src/img/assetproyectos/proyectodsains/videodsain.mp4"
-        data-video2="../src/img/assetproyectos/proyectodsains/videodsain.mp4"
-        data-video3="../src/img/assetproyectos/proyectodsains/videodsain.mp4">
-        <div class="texto_escena">
-          <h3 class="titulo_parrafo_escena"></h3>
-          <p class="parrafo_escena"></p>
+      <!-- SECCION UNO -->
+      <section id="section_uno">
+        <div class="cont_titulo">
+          <p class="data animar-texto" data-tipo="letras" data-velocidad="0.4">
+            finished project - Aug 8 2025
+          </p>
+          <h1
+            class="tituloproyecto animar-texto"
+            data-tipo="letras"
+            data-velocidad="0.4"
+          >
+            DSAINS
+          </h1>
+        </div>
+        <p
+          class="parrafo animar-texto"
+          data-tipo="palabras"
+          data-velocidad="0.05"
+        >
+          Hello, I am the ux ui designer you are looking for, I am very happy to
+          have you here, I welcome you to my portfolio.
+        </p>
+        <div class="cont_imagen_proyecto">
+          <img
+            class="imagen_proyecto"
+            src="../src/img/proydsains.png"
+            alt="imagen proyecto uno"
+          />
         </div>
       </section>
-    </section>
 
-    <!-- SECCION NUEVE -->
-    <section id="section_nueve" data-titulo="Modelado 3D" data-parrafo="Lorem ipsum dolor sit amet consectetur. ">
-    </section>
+      <section id="section_screen_uno"></section>
 
-    <!-- SECCION DIEZ -->
-    <section id="section_diez" data-titulo="Desarrollo de escenas"
-      data-parrafo="Lorem ipsum dolor sit amet consectetur. "></section>
-
-    <!-- SECCION ONCE -->
-    <section id="section_once">
-      <footer>
-        <div class="cont_pie">
-          <h3 class="titulo_pie animar-texto" data-tipo="palabras" data-velocidad="0.2">
-            Let’s design positive experiences that boost your product.
+      <!-- SECCION DOS -->
+      <section id="section_dos">
+        <div class="column_uno">
+          <h3
+            class="titulo animar-texto"
+            data-tipo="letras"
+            data-velocidad="0.6"
+          >
+            Proyect details
           </h3>
-          <div class="cont_boton_contacto">
-            <div class="boton_contact cursor-scale magnetic-button" data-strength="0.7" data-text-strength="0.3">
-              <p class="magnetic-text animar-texto" data-tipo="letras" data-velocidad="0.7">
-                Let’s Talk
+          <p
+            class="parrafo aanimar-texto"
+            data-tipo="palabras"
+            data-velocidad="0.2"
+          >
+            Lorem ipsum dolor sit amet consectetur. Tortor nibh in quis diam at
+            scelerisque posuere urna. Fringilla id amet sodales augue egestas
+            amet nibh. Lorem elit tristique quis non et. Lorem ut id mauris
+            commodo magna elementum commodo tincidunt.
+          </p>
+          <div class="cont_info_proyecto">
+            <div class="info_proyecto">
+              <h4
+                class="subtitulo aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Client
+              </h4>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Yaksin sains
+              </p>
+            </div>
+            <div class="info_proyecto">
+              <h4
+                class="subtitulo aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Location
+              </h4>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Colombia
+              </p>
+            </div>
+            <div class="info_proyecto">
+              <h4
+                class="subtitulo aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Industry
+              </h4>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Design
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Ti
+              </p>
+            </div>
+            <div class="info_proyecto">
+              <h4
+                class="subtitulo aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Services
+              </h4>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Front and Development
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Brand Identity Design
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Ux-Ui Design
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Web Design
               </p>
             </div>
           </div>
+        </div>
 
-          <div class="cont_riel_pie">
-            <div class="espacio_riel">
-              <!-- Originales -->
+        <div class="column_dos">
+          <div class="cont_cabecera">
+            <span
+              class="-Usd aanimar-texto"
+              data-tipo="letras"
+              data-velocidad="0.7"
+            >
+              <span
+                class="text-style-1 aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="1.5"
+                >7</span
+              >Meses
+            </span>
+            <span
+              class="-Usd aanimar-texto"
+              data-tipo="letras"
+              data-velocidad="0.7"
+            >
+              <span
+                class="text-style-1 aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="1.5"
+                >400</span
+              >$ Usd
+            </span>
+          </div>
+          <div class="cont_data">
+            <div class="info_proyecto">
+              <h4
+                class="subtitulo aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Tools
+              </h4>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Js vanilla
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Barba.js
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Three.js
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Gsap.js
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Blender
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Lottie
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Figma
+              </p>
+            </div>
 
-              <div class="riel_pie">
-                <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                <p>DEVELOPMENT CREATIVE</p>
-              </div>
-
-              <div class="riel_pie">
-                <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                <p>POSITIVE EXPERIENCES</p>
-              </div>
-
-              <div class="riel_pie">
-                <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                <p>OUT OF THE ORDINARY</p>
-              </div>
-
-              <!-- Copias -->
-              <div class="riel_pie">
-                <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                <p>DEVELOPMENT CREATIVE</p>
-              </div>
-              <div class="riel_pie">
-                <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                <p>POSITIVE EXPERIENCES</p>
-              </div>
-              <div class="riel_pie">
-                <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                <p>OUT OF THE ORDINARY</p>
-              </div>
+            <div class="info_proyecto">
+              <h4
+                class="subtitulo aanimar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                Project team and roles
+              </h4>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                ( Ux - Ui ) Yaksin sains
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                ( Frontend ) Yaksin sains
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                ( 3D modeler ) Yaksin sains
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                ( Illustrator ) Yaksin sains
+              </p>
+              <p
+                class="detalle animar-texto"
+                data-tipo="letras"
+                data-velocidad="0.6"
+              >
+                ( Creative Dev ) Yaksin sains
+              </p>
             </div>
           </div>
         </div>
+      </section>
 
-        <h3 class="nombre_logo">DSAIN</h3>
-
-        <p class="copy animar-texto" data-tipo="letras" data-velocidad="0.7">
-          © 2024 Yaksin Sains. All rights reserved.
+      <!-- SECCION TRES -->
+      <section id="section_tres">
+        <p
+          class="titulo_seccion animar-texto"
+          data-tipo="letras"
+          data-velocidad="0.7"
+        >
+          COLORS
         </p>
-      </footer>
-    </section>
-  </div>
-  
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MorphSVGPlugin.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-  <script>
-    // use a script tag or an external JS file
-    document.addEventListener("DOMContentLoaded", (event) => {
-      gsap.registerPlugin(MorphSVGPlugin);
-      // gsap code here!
-    });
-  </script>
-  <script src="../js/barva.js"></script>
-  <script type="module" src="../js/proyectos/tubo.js"></script>
-  <script type="module" src="../js/piedepagina.js"></script>
-  <script src="../js/magenitboton.js"></script>
-  <script type="module" src="../js/proyectos/phone.js"></script>
-  <script type="module" src="../js/proyectos/scroll.js"></script>
-  
-</body>
+        <div class="cont_color">
+          <div class="coloruno">
+            <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7">
+              Hex - #0048ff
+            </p>
+            <p
+              class="titulo animar-texto"
+              data-tipo="letras"
+              data-velocidad="0.7"
+            >
+              Primary color
+            </p>
+            <p
+              class="texto animar-texto"
+              data-tipo="letras"
+              data-velocidad="0.7"
+            >
+              Aa
+            </p>
+          </div>
 
+          <div class="colordos">
+            <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7">
+              Hex - #F4F6FF
+            </p>
+            <p
+              class="titulo animar-texto"
+              data-tipo="letras"
+              data-velocidad="0.7"
+            >
+              Secondary color
+            </p>
+            <p
+              class="texto animar-texto"
+              data-tipo="letras"
+              data-velocidad="0.7"
+            >
+              Aa
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION CUATRO -->
+      <section id="section_cuatro">
+        <p
+          class="titulo_seccion animar-texto"
+          data-tipo="letras"
+          data-velocidad="0.7"
+        >
+          MAIN TYPE
+        </p>
+        <div class="cont_fuente">
+          <h3
+            class="titulo_fuente animar-texto"
+            data-tipo="letras"
+            data-velocidad="0.7"
+          >
+            Panchang Variable
+          </h3>
+
+          <p class="parrafo_fuente aanimar-texto" data-tipo="palabras">
+            Ranging in weight from Light through ExtraBold, the Panchang family
+            has six wide sans serif fonts on offer. The typeface features
+            letters so wide that they are almost panoramic. The family supports
+            all European languages written with the Latin script. Panchang’s
+            lowercase letters have a tall x-height, and their ascenders are
+            visibly taller than the capitals. The design’s broad letterforms
+            look very industrial on the whole.
+          </p>
+          <div class="cont_tipe_texto">
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textsemibold.svg"
+              alt=""
+            />
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textmedio.svg"
+              alt=""
+            />
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textregular.svg"
+              alt=""
+            />
+            <img
+              src="../src/img/assetproyectos/proyectodsains/textlight.svg"
+              alt=""
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION CINCO -->
+      <section id="section_cinco">
+        <p
+          class="titulo_seccion animar-texto"
+          data-tipo="letras"
+          data-velocidad="0.7"
+        >
+          BRANDING
+        </p>
+        <div class="cont_moodboard">
+          <lottie-player
+            class="lottie"
+            src="../src/img/assetproyectos/proyectodsains/brandingdsainsizq.json"
+            background="transparent"
+            speed="1.5"
+          ></lottie-player>
+
+          <lottie-player
+            class="lottie"
+            src="../src/img/assetproyectos/proyectodsains/brandingdsainsderch.json"
+            background="transparent"
+            speed="1"
+          ></lottie-player>
+        </div>
+      </section>
+
+      <!-- SECCION SEIS -->
+      <section id="section_seis">
+        <p
+          class="titulo_seccion animar-texto"
+          data-tipo="letras"
+          data-velocidad="0.7"
+        >
+          SITE MAP
+        </p>
+
+        <div class="cont_img_section_seis">
+          <div class="cont_uno">
+            <div class="sect_uno">
+              <img
+                src="../src/img/assetproyectos/proyectodsains/banneruno.png"
+                alt=""
+              />
+            </div>
+            <div class="sect_dos">
+              <div class="sect_dos_uno">
+                <img
+                  src="../src/img/assetproyectos/proyectodsains/imgcelular.png"
+                  alt=""
+                />
+              </div>
+              <div class="sect_dos_dos">
+                <div class="img_uno">
+                  <img src="../src/img/loadinglogo.gif" alt="" />
+                </div>
+
+                <div class="img_dos">
+                  <img
+                    src="../src/img/assetproyectos/proyectodsains/iconweb.svg"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cont_dos">
+            <video
+              class="videodsain"
+              autoplay
+              loop
+              muted
+              playsinline
+              src="../src/img/assetproyectos/proyectodsains/videodsain.webm"
+            ></video>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION SIETE -->
+      <section id="section_siete"></section>
+
+      <!-- SECCION OCHO -->
+      <section
+        id="section_ocho"
+        data-titulo="Ideación de escenas"
+        data-parrafo="Lorem ipsum dolor sit amet consectetur."
+      >
+        <!-- SECCION TUBO -->
+        <section
+          id="cont_escena_tubo"
+          data-video1="../src/img/assetproyectos/proyectodsains/videodsain.mp4"
+          data-video2="../src/img/assetproyectos/proyectodsains/videodsain.mp4"
+          data-video3="../src/img/assetproyectos/proyectodsains/videodsain.mp4"
+        >
+          <div class="texto_escena">
+            <h3 class="titulo_parrafo_escena"></h3>
+            <p class="parrafo_escena"></p>
+          </div>
+        </section>
+      </section>
+
+      <!-- SECCION NUEVE -->
+      <section
+        id="section_nueve"
+        data-titulo="Modelado 3D"
+        data-parrafo="Lorem ipsum dolor sit amet consectetur. "
+      ></section>
+
+      <!-- SECCION DIEZ -->
+      <section
+        id="section_diez"
+        data-titulo="Desarrollo de escenas"
+        data-parrafo="Lorem ipsum dolor sit amet consectetur. "
+      ></section>
+
+      <!-- SECCION ONCE -->
+      <section id="section_once">
+        <footer>
+          <div class="cont_pie">
+            <h3
+              class="titulo_pie animar-texto"
+              data-tipo="palabras"
+              data-velocidad="0.2"
+            >
+              Let’s design positive experiences that boost your product.
+            </h3>
+            <div class="cont_boton_contacto">
+              <div
+                class="boton_contact cursor-scale magnetic-button"
+                data-strength="0.7"
+                data-text-strength="0.3"
+              >
+                <p
+                  class="magnetic-text animar-texto"
+                  data-tipo="letras"
+                  data-velocidad="0.7"
+                >
+                  Let’s Talk
+                </p>
+              </div>
+            </div>
+
+            <div class="cont_riel_pie">
+              <div class="espacio_riel">
+                <!-- Originales -->
+
+                <div class="riel_pie">
+                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
+                  <p>DEVELOPMENT CREATIVE</p>
+                </div>
+
+                <div class="riel_pie">
+                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
+                  <p>POSITIVE EXPERIENCES</p>
+                </div>
+
+                <div class="riel_pie">
+                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
+                  <p>OUT OF THE ORDINARY</p>
+                </div>
+
+                <!-- Copias -->
+                <div class="riel_pie">
+                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
+                  <p>DEVELOPMENT CREATIVE</p>
+                </div>
+                <div class="riel_pie">
+                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
+                  <p>POSITIVE EXPERIENCES</p>
+                </div>
+                <div class="riel_pie">
+                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
+                  <p>OUT OF THE ORDINARY</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="nombre_logo">DSAIN</h3>
+
+          <p class="copy animar-texto" data-tipo="letras" data-velocidad="0.7">
+            © 2024 Yaksin Sains. All rights reserved.
+          </p>
+        </footer>
+      </section>
+    </div>
+
+    <script>
+      function showSize() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        document.getElementById(
+          "screenSize"
+        ).textContent = `Ancho: ${width}px | Alto: ${height}px`;
+      }
+      window.addEventListener("resize", showSize);
+      showSize(); // mostrar al cargar
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MorphSVGPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script>
+      // use a script tag or an external JS file
+      document.addEventListener("DOMContentLoaded", (event) => {
+        gsap.registerPlugin(MorphSVGPlugin);
+        // gsap code here!
+      });
+    </script>
+    <script src="../js/barva.js"></script>
+    <script type="module" src="../js/proyectos/tubo.js"></script>
+    <script type="module" src="../js/piedepagina.js"></script>
+    <script src="../js/magenitboton.js"></script>
+    <script type="module" src="../js/proyectos/phone.js"></script>
+    <script type="module" src="../js/proyectos/scroll.js"></script>
+  </body>
 </html>
