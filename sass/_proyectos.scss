@@ -2465,19 +2465,20 @@ $fondoboto: #eff3ff;
                         flex-direction: column;
                         justify-content: center;
                         align-items: start;
-                        gap: 1vw;
+                        gap: 4vw;
+                        position: relative;
 
                         .titulo_pie {
                             mix-blend-mode: exclusion;
                             /* o difference */
-                            padding-left: 20vw;
-                            padding-right: 20vw;
-                            font-family: "bold";
-                            font-size: 3vw;
-                            font-weight: 700;
+                            padding-left: 7vw;
+                            padding-right: 7vw;
+                            font-family: "Medium";
+                            font-size: 7vw;
+                            font-weight: 500;
                             font-stretch: normal;
                             line-height: 1.33;
-                            letter-spacing: -0.25px;
+                            letter-spacing: 1.25px;
                             text-align: center;
                             color: #ffffff;
                             /* Color base del texto */
@@ -2497,11 +2498,11 @@ $fondoboto: #eff3ff;
                                 align-items: center;
                                 justify-content: center;
                                 gap: 10px;
-                                padding: 10px 20px 10px 20px;
+                                padding: 10px 25px 10px 25px;
                                 background-color: $fondoboto;
                                 border-radius: 30px;
                                 font-family: "Medium";
-                                font-size: 12px;
+                                font-size: 5.5vw;
                                 font-weight: 500;
                                 font-stretch: normal;
                                 font-style: normal;
@@ -2521,7 +2522,9 @@ $fondoboto: #eff3ff;
                         }
 
                         .cont_riel_pie {
-                            height: 7vw;
+                            position:absolute;
+                            bottom: 12vw;
+                            height: 17vw;
                             overflow: hidden;
                             display: flex;
                             background-color: rgba(0, 0, 0, 0.2);
@@ -2573,7 +2576,7 @@ $fondoboto: #eff3ff;
 
                     .nombre_logo {
                         position: absolute;
-                        bottom: -12vw;
+                        bottom: -11vw;
                         font-family: Extrabold;
                         font-size: 21vw;
                         font-weight: normal;
