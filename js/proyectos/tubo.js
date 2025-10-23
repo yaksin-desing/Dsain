@@ -118,7 +118,7 @@ window.addEventListener("load", () => {
       // 🌀 Ajustes según sección
       if (id === "section_ocho") {
         rotY = isMobile ? 1.57 : 1.57;
-        posY = isMobile ? 0.3 : -0.13;
+        posY = isMobile ? 0.27 : -0.13;
         posZ = isMobile ? 0.7 : 0;
         scale = isMobile ? 0.8 : 1;
         camZ = isMobile ? 4.2 : 3.4;
