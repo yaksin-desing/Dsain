@@ -47,7 +47,6 @@ updateCameraPosition();
 const renderer = new THREE.WebGLRenderer({
   antialias: !isMobileOrTablet,
   alpha: true,
-  powerPreference: "high-performance",
 });
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setClearColor(0x000000, 0);

@@ -1,6 +1,7 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 import { gsap } from "https://cdn.skypack.dev/gsap";
 import { SplitText } from "https://cdn.skypack.dev/gsap/SplitText";
+import Stats from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/libs/stats.module.js";
 
 window.addEventListener("load", () => {
   const container = document.getElementById("cont_escena_tubo");
@@ -19,7 +20,7 @@ window.addEventListener("load", () => {
   camera.position.set(0, 1.52, 3.4);
 
   // 🖥️ Renderizador
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: false });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
@@ -30,7 +31,22 @@ window.addEventListener("load", () => {
   dirLight.position.set(3, 5, 7);
   scene.add(dirLight);
 
-  // 🎞️ Crear material desde video
+  // ======================================================
+  // 🔹 MONITOR DE FPS (Stats.js)
+  // ======================================================
+  const stats = new Stats();
+  stats.showPanel(0);
+  stats.dom.style.position = "absolute";
+  stats.dom.style.top = "150px";
+  stats.dom.style.left = "10px";
+  stats.dom.style.zIndex = "9999";
+  stats.dom.style.transform = "scale(0.9)";
+  container.appendChild(stats.dom);
+
+  // ======================================================
+  // 🎞️ Crear materiales de video
+  // ======================================================
+  const videos = [];
   function crearMaterialVideo(ruta) {
     const video = document.createElement("video");
     video.src = ruta;
@@ -38,7 +54,8 @@ window.addEventListener("load", () => {
     video.muted = true;
     video.playsInline = true;
     video.autoplay = true;
-    video.addEventListener("canplay", () => video.play().catch(() => {})); // ✅ mejora reproducción
+    video.addEventListener("canplay", () => video.play().catch(() => {}));
+    videos.push(video); // guardamos referencia
 
     const texture = new THREE.VideoTexture(video);
     texture.minFilter = THREE.LinearFilter;
@@ -52,7 +69,7 @@ window.addEventListener("load", () => {
     });
   }
 
-  // 🧠 Leer URLs de videos desde el HTML
+  // 🧠 URLs de videos
   const videoURLs = [
     container.dataset.video1,
     container.dataset.video2,
@@ -61,7 +78,7 @@ window.addEventListener("load", () => {
 
   const materiales = videoURLs.map((url) => crearMaterialVideo(url));
 
-  // 🌀 Crear tubo dividido en 3 secciones
+  // 🌀 Crear tubo
   const grupoTubo = new THREE.Group();
   const radio = 1.7;
   const altura = 0.7;
@@ -86,72 +103,107 @@ window.addEventListener("load", () => {
 
   scene.add(grupoTubo);
 
-  // 🎬 Animación render
-  function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-  }
-  animate();
+  // ======================================================
+  // ⚙️ Control de render activo/inactivo
+  // ======================================================
+  let isVisible = false;
+  let animationId = null;
 
+  function animate() {
+    if (!isVisible) return; // si no está visible, no renderiza
+    stats.begin();
+    renderer.render(scene, camera);
+    stats.end();
+    animationId = requestAnimationFrame(animate);
+  }
+
+  // 🎯 Observer para detectar visibilidad
+  const sceneObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // 🟢 Entra en pantalla
+          isVisible = true;
+          videos.forEach((v) => v.play().catch(() => {})); // reanuda videos
+          if (!animationId) animate();
+          stats.dom.style.display = "block";
+        } else {
+          // 🔴 Sale de pantalla
+          isVisible = false;
+          cancelAnimationFrame(animationId);
+          animationId = null;
+          videos.forEach((v) => v.pause());
+          stats.dom.style.display = "none";
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  sceneObserver.observe(container);
+
+  // ======================================================
   // 📏 Resize
+  // ======================================================
   window.addEventListener("resize", () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
   });
 
+  // ======================================================
   // 🧭 Rotación y posición del tubo (responsiva)
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
+  // ======================================================
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        const isMobile = window.innerWidth <= 480;
 
-      const id = entry.target.id;
-      const isMobile = window.innerWidth <= 480;
+        let rotY = 0,
+          posY = 0,
+          posZ = 0,
+          scale = 1,
+          camZ = 3.4;
 
-      // 📐 Valores base (desktop)
-      let rotY = 0;
-      let posY = 0;
-      let posZ = 0;
-      let scale = 1;
-      let camZ = 3.4;
+        if (id === "section_ocho") {
+          rotY = 1.57;
+          posY = isMobile ? 0.27 : -0.13;
+          posZ = isMobile ? 0.7 : 0;
+          scale = isMobile ? 0.8 : 1;
+          camZ = isMobile ? 4.2 : 3.4;
+        } else if (id === "section_nueve") {
+          rotY = 3.65;
+          posY = isMobile ? 1.19 : 0.87;
+          posZ = isMobile ? 0.7 : 0;
+          scale = isMobile ? 0.8 : 1;
+          camZ = isMobile ? 4.2 : 3.4;
+        } else if (id === "section_diez") {
+          rotY = 5.75;
+          posY = isMobile ? 2.1 : 1.87;
+          posZ = isMobile ? 0.7 : 0;
+          scale = isMobile ? 0.8 : 1;
+          camZ = isMobile ? 4.2 : 3.4;
+        }
 
-      // 🌀 Ajustes según sección
-      if (id === "section_ocho") {
-        rotY = isMobile ? 1.57 : 1.57;
-        posY = isMobile ? 0.27 : -0.13;
-        posZ = isMobile ? 0.7 : 0;
-        scale = isMobile ? 0.8 : 1;
-        camZ = isMobile ? 4.2 : 3.4;
-      } else if (id === "section_nueve") {
-        rotY = isMobile ? 3.65 : 3.65;
-        posY = isMobile ? 1.19 : 0.87;
-        posZ = isMobile ? 0.7 : 0;
-        scale = isMobile ? 0.8 : 1;
-        camZ = isMobile ? 4.2 : 3.4;
-      } else if (id === "section_diez") {
-        rotY = isMobile ? 5.75 : 5.75;
-        posY = isMobile ? 2.1 : 1.87;
-        posZ = isMobile ? 0.7 : 0;
-        scale = isMobile ? 0.8 : 1;
-        camZ = isMobile ? 4.2 : 3.4;
-      }
-
-      // 🌀 Animaciones
-      gsap.to(grupoTubo.rotation, { y: rotY, duration: 1, ease: "power2.out" });
-      gsap.to(grupoTubo.position, { y: posY, z: posZ, duration: 1, ease: "power2.out" });
-      gsap.to(grupoTubo.scale, { x: scale, y: scale, z: scale, duration: 1 });
-      gsap.to(camera.position, { z: camZ, duration: 1, ease: "power2.out" });
-    });
-  }, { threshold: 0.5 });
+        gsap.to(grupoTubo.rotation, { y: rotY, duration: 1, ease: "power2.out" });
+        gsap.to(grupoTubo.position, { y: posY, z: posZ, duration: 1, ease: "power2.out" });
+        gsap.to(grupoTubo.scale, { x: scale, y: scale, z: scale, duration: 1 });
+        gsap.to(camera.position, { z: camZ, duration: 1, ease: "power2.out" });
+      });
+    },
+    { threshold: 0.5 }
+  );
 
   ["section_ocho", "section_nueve", "section_diez"].forEach((id) => {
     const section = document.getElementById(id);
     if (section) observer.observe(section);
   });
 
-  // ----------------------------
+  // ======================================================
   // ✨ SplitText para títulos y párrafos
-  // ----------------------------
+  // ======================================================
   gsap.registerPlugin(SplitText);
 
   const tituloParrafo = container.querySelector(".titulo_parrafo_escena");
@@ -162,7 +214,6 @@ window.addEventListener("load", () => {
     if (elemento.splitText) elemento.splitText.revert();
 
     elemento.textContent = texto || "";
-
     const split = new SplitText(elemento, { type: "chars", charsClass: "char" });
     elemento.splitText = split;
 
@@ -177,7 +228,6 @@ window.addEventListener("load", () => {
 
   function animarTextoSplit(elemento, nuevoTexto) {
     if (!elemento) return;
-
     if (elemento.splitText) {
       const objetivo = elemento.splitText.chars;
       gsap.to(objetivo, {
@@ -196,20 +246,23 @@ window.addEventListener("load", () => {
     }
   }
 
-  // 👀 Observer para cambiar el texto según la sección
-  const textoObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const sec = entry.target;
-      if (!["section_ocho", "section_nueve", "section_diez"].includes(sec.id)) return;
+  const textoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const sec = entry.target;
+        if (!["section_ocho", "section_nueve", "section_diez"].includes(sec.id)) return;
 
-      const nuevoTitulo = sec.dataset.titulo || (tituloParrafo ? tituloParrafo.textContent : "");
-      const nuevoParrafo = sec.dataset.parrafo || (parrafoEscena ? parrafoEscena.textContent : "");
+        const nuevoTitulo = sec.dataset.titulo || tituloParrafo?.textContent;
+        const nuevoParrafo = sec.dataset.parrafo || parrafoEscena?.textContent;
 
-      if (tituloParrafo) animarTextoSplit(tituloParrafo, nuevoTitulo);
-      if (parrafoEscena) gsap.delayedCall(0.15, () => animarTextoSplit(parrafoEscena, nuevoParrafo));
-    });
-  }, { threshold: 0.5 });
+        if (tituloParrafo) animarTextoSplit(tituloParrafo, nuevoTitulo);
+        if (parrafoEscena)
+          gsap.delayedCall(0.15, () => animarTextoSplit(parrafoEscena, nuevoParrafo));
+      });
+    },
+    { threshold: 0.5 }
+  );
 
   ["section_ocho", "section_nueve", "section_diez"].forEach((id) => {
     const sec = document.getElementById(id);
