@@ -5544,7 +5544,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena .titulo_parrafo_escena {
     font-family: "Semibold";
-    font-size: 1.5vw;
+    font-size: 3.5vw;
     font-weight: 700;
     text-align: left;
     color: #0048FF;
@@ -5560,12 +5560,12 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena .parrafo_escena {
     font-family: "Regular";
-    font-size: 0.8vw;
+    font-size: 2.5vw;
     font-weight: normal;
     letter-spacing: normal;
     color: #0048FF;
     padding-top: 0.8vw;
-    text-align: left;
+    text-align: center;
     line-height: 1.5;
     max-width: 60vw;
     display: inline-block;
@@ -5663,9 +5663,9 @@ h5 {
     gap: 10px;
     padding: 10px 25px 10px 25px;
     background-color: #eff3ff;
-    border-radius: 30px;
+    border-radius: 45px;
     font-family: "Medium";
-    font-size: 5.5vw;
+    font-size: 4vw;
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
@@ -5711,7 +5711,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel .riel_pie p {
     font-family: "Medium", sans-serif;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 500;
     color: #fff;
     white-space: nowrap;
