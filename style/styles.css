@@ -5018,7 +5018,7 @@ h5 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 17vw 7vw 5vw 7vw;
+    padding: 15vw 7vw 5vw 7vw;
     gap: 0vw;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno {
@@ -5027,7 +5027,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .titulo {
     font-family: "bold";
-    font-size: 7vw;
+    font-size: 6.5vw;
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
@@ -5039,7 +5039,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .parrafo {
     font-family: "Medium";
-    font-size: 3vw;
+    font-size: 2.7vw;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -5053,7 +5053,7 @@ h5 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     /* 2 columnas */
-    grid-template-rows: repeat(2, 0.8fr);
+    grid-template-rows: repeat(2, 0.9fr);
     /* 2 filas */
     place-items: start;
   }
@@ -5064,7 +5064,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .cont_info_proyecto .info_proyecto .subtitulo {
     font-family: "regular";
-    font-size: 3vw;
+    font-size: 2.5vw;
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
@@ -5072,10 +5072,11 @@ h5 {
     letter-spacing: normal;
     text-align: left;
     color: #585858;
+    white-space: nowrap;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .cont_info_proyecto .info_proyecto .detalle {
     font-family: "Medium";
-    font-size: 3vw;
+    font-size: 2.5vw;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -5083,6 +5084,7 @@ h5 {
     letter-spacing: normal;
     text-align: left;
     color: #0048FF;
+    white-space: nowrap;
   }
   .proyecto .contenedorproyectos #section_dos .column_dos {
     padding: 0vw 0vw 0vw 0vw;
@@ -5095,8 +5097,8 @@ h5 {
     gap: 10px;
   }
   .proyecto .contenedorproyectos #section_dos .column_dos .cont_cabecera {
-    padding-top: 0vw;
-    padding-right: 5vw;
+    padding-top: 2vw;
+    padding-right: 2vw;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -5135,7 +5137,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_dos .column_dos .cont_data .info_proyecto .subtitulo {
     font-family: "regular";
-    font-size: 3vw;
+    font-size: 2.5vw;
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
@@ -5143,10 +5145,11 @@ h5 {
     letter-spacing: normal;
     text-align: left;
     color: #585858;
+    white-space: nowrap;
   }
   .proyecto .contenedorproyectos #section_dos .column_dos .cont_data .info_proyecto .detalle {
     font-family: "Medium";
-    font-size: 3.3vw;
+    font-size: 2.5vw;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -5156,7 +5159,7 @@ h5 {
     color: #0048FF;
   }
   .proyecto .contenedorproyectos #section_tres {
-    padding: 17vw 4vw 0vw 4vw;
+    padding: 14vw 4vw 0vw 4vw;
     width: 100%;
     height: 100dvh;
     display: flex;
@@ -5186,20 +5189,20 @@ h5 {
     height: 100%;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color .coloruno {
-    width: 70%;
+    width: 50%;
     height: 50%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding: 20px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color .coloruno .hex {
     width: 100%;
     font-family: "Regular";
-    font-size: 12px;
+    font-size: 17px;
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
@@ -5210,7 +5213,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_tres .cont_color .coloruno .titulo {
     font-family: "light";
-    font-size: 3.5vw;
+    font-size: 3vw;
     font-stretch: normal;
     font-style: normal;
     line-height: 1;
@@ -5220,7 +5223,7 @@ h5 {
   .proyecto .contenedorproyectos #section_tres .cont_color .coloruno .texto {
     width: 100%;
     font-family: "Regular";
-    font-size: 70px;
+    font-size: 75px;
     font-weight: 600;
     font-stretch: normal;
     font-style: normal;
@@ -5230,20 +5233,20 @@ h5 {
     color: #fff;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color .colordos {
-    width: 70%;
+    width: 50%;
     height: 50%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding: 20px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #F4F6FF;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color .colordos .hex {
     width: 100%;
     font-family: "Regular";
-    font-size: 12px;
+    font-size: 17px;
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
@@ -5254,7 +5257,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_tres .cont_color .colordos .titulo {
     font-family: "light";
-    font-size: 3.7vw;
+    font-size: 3vw;
     font-stretch: normal;
     font-style: normal;
     line-height: 1;
@@ -5264,7 +5267,7 @@ h5 {
   .proyecto .contenedorproyectos #section_tres .cont_color .colordos .texto {
     width: 100%;
     font-family: "Regular";
-    font-size: 70px;
+    font-size: 75px;
     font-weight: 600;
     font-stretch: normal;
     font-style: normal;
@@ -5274,7 +5277,7 @@ h5 {
     color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_cuatro {
-    padding: 17vw 4vw 0vw 4vw;
+    padding: 14vw 4vw 0vw 4vw;
     width: 100%;
     height: 100dvh;
     display: flex;
@@ -5304,7 +5307,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente .titulo_fuente {
     font-family: "bold";
-    font-size: 6.7vw;
+    font-size: 6.5vw;
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
@@ -5315,7 +5318,7 @@ h5 {
     margin-left: 3vw;
     margin-right: 3vw;
     font-family: "Regular";
-    font-size: 3.7vw;
+    font-size: 3vw;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -5334,7 +5337,7 @@ h5 {
     height: auto;
   }
   .proyecto .contenedorproyectos #section_cinco {
-    padding: 17vw 4vw 0vw 4vw;
+    padding: 14vw 4vw 0vw 4vw;
     width: 100%;
     height: 100dvh;
     display: flex;
@@ -5366,12 +5369,12 @@ h5 {
     align-items: center;
   }
   .proyecto .contenedorproyectos #section_cinco .cont_moodboard .lottie {
-    width: 100%;
+    width: 67%;
     height: 100%;
     margin-top: 1vw;
   }
   .proyecto .contenedorproyectos #section_seis {
-    padding: 17vw 4vw 0vw 4vw;
+    padding: 14vw 4vw 0vw 4vw;
     width: 100%;
     height: 100dvh;
     display: flex;
@@ -5400,14 +5403,14 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno {
     width: 100%;
-    height: 60%;
+    height: 65%;
     gap: 1.5vh;
     display: flex;
     flex-direction: column;
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_uno {
     width: 100%;
-    height: 40%;
+    height: 50%;
     overflow: hidden;
     border-radius: 10px;
     background: #0048FF;
@@ -5423,7 +5426,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos {
     width: 100%;
-    height: 70%;
+    height: 60%;
     display: flex;
     flex-direction: row;
     gap: 1.5vh;
@@ -5475,7 +5478,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_dos {
     width: 100%;
-    height: 40%;
+    height: 35%;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
@@ -5498,7 +5501,7 @@ h5 {
     /* elimina línea negra inferior */
     backface-visibility: hidden;
     /* mejora renderizado */
-    clip-path: inset(1px);
+    clip-path: inset(2px);
   }
   .proyecto .contenedorproyectos #section_siete {
     width: 100%;

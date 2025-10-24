@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ease: "power2.out"
           });
           gsap.to(".imagen_proyecto", {
-            y: "100vh",
+            y: "90vh",
             duration: 1,
             ease: "power2.out"
           });

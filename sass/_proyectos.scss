@@ -3076,7 +3076,7 @@ $fondoboto: #eff3ff;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                padding: 17vw 7vw 5vw 7vw;
+                padding: 15vw 7vw 5vw 7vw;
                 gap: 0vw;
 
 
@@ -3086,7 +3086,7 @@ $fondoboto: #eff3ff;
 
                     .titulo {
                         font-family: "bold";
-                        font-size: 7vw;
+                        font-size: 6.5vw;
                         font-weight: bold;
                         font-stretch: normal;
                         font-style: normal;
@@ -3100,7 +3100,7 @@ $fondoboto: #eff3ff;
 
                     .parrafo {
                         font-family: "Medium";
-                        font-size: 3vw;
+                        font-size: 2.7vw;
                         font-weight: normal;
                         font-stretch: normal;
                         font-style: normal;
@@ -3116,9 +3116,8 @@ $fondoboto: #eff3ff;
                         display: grid;
                         grid-template-columns: repeat(2, 1fr);
                         /* 2 columnas */
-                        grid-template-rows: repeat(2, 0.8fr);
+                        grid-template-rows: repeat(2, 0.9fr);
                         /* 2 filas */
-
                         place-items: start;
 
                         .info_proyecto {
@@ -3128,19 +3127,20 @@ $fondoboto: #eff3ff;
 
                             .subtitulo {
                                 font-family: "regular";
-                                font-size: 3vw;
+                                font-size: 2.5vw;
                                 font-weight: 500;
                                 font-stretch: normal;
                                 font-style: normal;
                                 line-height: normal;
                                 letter-spacing: normal;
                                 text-align: left;
-                                color: #585858
+                                color: #585858;
+                                white-space: nowrap;
                             }
 
                             .detalle {
                                 font-family: "Medium";
-                                font-size: 3vw;
+                                font-size: 2.5vw;
                                 font-weight: normal;
                                 font-stretch: normal;
                                 font-style: normal;
@@ -3148,6 +3148,7 @@ $fondoboto: #eff3ff;
                                 letter-spacing: normal;
                                 text-align: left;
                                 color: $colorp;
+                                white-space: nowrap;
                             }
                         }
                     }
@@ -3166,8 +3167,8 @@ $fondoboto: #eff3ff;
                     gap: 10px;
 
                     .cont_cabecera {
-                        padding-top: 0vw;
-                        padding-right: 5vw;
+                        padding-top: 2vw;
+                        padding-right: 2vw;
                         display: flex;
                         flex-direction: row;
                         align-items: center;
@@ -3210,19 +3211,20 @@ $fondoboto: #eff3ff;
 
                             .subtitulo {
                                 font-family: "regular";
-                                font-size: 3vw;
+                                font-size: 2.5vw;
                                 font-weight: 500;
                                 font-stretch: normal;
                                 font-style: normal;
                                 line-height: normal;
                                 letter-spacing: normal;
                                 text-align: left;
-                                color: #585858
+                                color: #585858;
+                                white-space: nowrap;
                             }
 
                             .detalle {
                                 font-family: "Medium";
-                                font-size: 3.3vw;
+                                font-size: 2.5vw;
                                 font-weight: normal;
                                 font-stretch: normal;
                                 font-style: normal;
@@ -3239,7 +3241,7 @@ $fondoboto: #eff3ff;
             }
 
             #section_tres {
-                padding: 17vw 4vw 0vw 4vw;
+                padding: 14vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -3270,20 +3272,20 @@ $fondoboto: #eff3ff;
                     height: 100%;
 
                     .coloruno {
-                        width: 70%;
+                        width: 50%;
                         height: 50%;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
                         padding: 20px 20px;
-                        border-radius: 5px;
+                        border-radius: 10px;
                         background-color: #0048ff;
 
                         .hex {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 12px;
+                            font-size: 17px;
                             font-weight: 500;
                             font-stretch: normal;
                             font-style: normal;
@@ -3295,7 +3297,7 @@ $fondoboto: #eff3ff;
 
                         .titulo {
                             font-family: "light";
-                            font-size: 3.5vw;
+                            font-size: 3vw;
                             font-stretch: normal;
                             font-style: normal;
                             line-height: 1;
@@ -3306,7 +3308,7 @@ $fondoboto: #eff3ff;
                         .texto {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 70px;
+                            font-size: 75px;
                             font-weight: 600;
                             font-stretch: normal;
                             font-style: normal;
@@ -3318,20 +3320,20 @@ $fondoboto: #eff3ff;
                     }
 
                     .colordos {
-                        width: 70%;
+                        width: 50%;
                         height: 50%;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
                         padding: 20px 20px;
-                        border-radius: 5px;
+                        border-radius: 10px;
                         background-color: #F4F6FF;
 
                         .hex {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 12px;
+                            font-size: 17px;
                             font-weight: 500;
                             font-stretch: normal;
                             font-style: normal;
@@ -3343,7 +3345,7 @@ $fondoboto: #eff3ff;
 
                         .titulo {
                             font-family: "light";
-                            font-size: 3.7vw;
+                            font-size: 3vw;
                             font-stretch: normal;
                             font-style: normal;
                             line-height: 1;
@@ -3354,7 +3356,7 @@ $fondoboto: #eff3ff;
                         .texto {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 70px;
+                            font-size: 75px;
                             font-weight: 600;
                             font-stretch: normal;
                             font-style: normal;
@@ -3372,7 +3374,7 @@ $fondoboto: #eff3ff;
 
             #section_cuatro {
 
-                padding: 17vw 4vw 0vw 4vw;
+                padding: 14vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -3403,7 +3405,7 @@ $fondoboto: #eff3ff;
 
                     .titulo_fuente {
                         font-family: "bold";
-                        font-size: 6.7vw;
+                        font-size: 6.5vw;
                         font-weight: bold;
                         font-stretch: normal;
                         font-style: normal;
@@ -3416,7 +3418,7 @@ $fondoboto: #eff3ff;
                         margin-left: 3vw;
                         margin-right: 3vw;
                         font-family: "Regular";
-                        font-size: 3.7vw;
+                        font-size: 3vw;
                         font-weight: normal;
                         font-stretch: normal;
                         font-style: normal;
@@ -3443,7 +3445,7 @@ $fondoboto: #eff3ff;
             }
 
             #section_cinco {
-                padding: 17vw 4vw 0vw 4vw;
+                padding: 14vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -3476,7 +3478,7 @@ $fondoboto: #eff3ff;
                     align-items: center;
 
                     .lottie {
-                        width: 100%;
+                        width: 67%;
                         height: 100%;
                         margin-top: 1vw;
                     }
@@ -3485,7 +3487,7 @@ $fondoboto: #eff3ff;
 
             #section_seis {
 
-                padding: 17vw 4vw 0vw 4vw;
+                padding: 14vw 4vw 0vw 4vw;
                 width: 100%;
                 height: 100dvh;
                 display: flex;
@@ -3515,14 +3517,14 @@ $fondoboto: #eff3ff;
 
                     .cont_uno {
                         width: 100%;
-                        height: 60%;
+                        height: 65%;
                         gap: 1.5vh;
                         display: flex;
                         flex-direction: column;
 
                         .sect_uno {
                             width: 100%;
-                            height: 40%;
+                            height: 50%;
                             overflow: hidden;
                             border-radius: 10px;
                             background: $colorp;
@@ -3541,7 +3543,7 @@ $fondoboto: #eff3ff;
 
                         .sect_dos {
                             width: 100%;
-                            height: 70%;
+                            height: 60%;
                             display: flex;
                             flex-direction: row;
                             gap: 1.5vh;
@@ -3604,7 +3606,7 @@ $fondoboto: #eff3ff;
 
                     .cont_dos {
                         width: 100%;
-                        height: 40%;
+                        height: 35%;
                         border-radius: 10px;
                         justify-content: center;
                         align-items: center;
@@ -3626,7 +3628,7 @@ $fondoboto: #eff3ff;
                             /* elimina línea negra inferior */
                             backface-visibility: hidden;
                             /* mejora renderizado */
-                            clip-path: inset(1px);
+                            clip-path: inset(2px);
                         }
                     }
                 }
