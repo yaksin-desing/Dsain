@@ -120,18 +120,18 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- TABLET PEQUEÑA (481px a 768px) ---
         if (idActual === "section_screen_uno") {
           gsap.to(".imagen_proyecto", {
-            width: "85vw",
+            width: "100vw",
             duration: 1,
             ease: "power2.out"
           });
           gsap.to(".imagen_proyecto", {
-            y: "38vw",
+            y: "100vh",
             duration: 1,
             ease: "power2.out"
           });
         } else {
           gsap.to(".imagen_proyecto", {
-            width: "15vw",
+            width: "70%",
             duration: 1,
             ease: "power2.out"
           });
