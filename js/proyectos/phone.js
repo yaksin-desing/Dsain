@@ -6,8 +6,6 @@ import {
   gsap
 } from "https://cdn.skypack.dev/gsap";
 
-import Stats from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/libs/stats.module.js";
-
 // Contenedor
 const container = document.getElementById("section_siete");
 
@@ -32,17 +30,7 @@ renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.shadowMap.enabled = true;
 container.appendChild(renderer.domElement);
 
-// ======================================================
-// 🔹 MONITOR DE RENDIMIENTO (Stats.js)
-// ======================================================
-const stats = new Stats();
-stats.showPanel(0); // 0: FPS, 1: ms/frame, 2: memory
-stats.dom.style.position = "absolute";
-stats.dom.style.top = "10px";
-stats.dom.style.left = "10px";
-stats.dom.style.zIndex = "9999";
-stats.dom.style.transform = "scale(0.9)";
-container.appendChild(stats.dom);
+
 
 // Luces
 scene.add(new THREE.AmbientLight(0xffffff, 0.7));
@@ -150,8 +138,6 @@ observerVisibilidad.observe(container);
 // Animación flotante
 function animate() {
   requestAnimationFrame(animate);
-  stats.begin(); // 🔹 inicia medición
-
 
   if (!isInViewport) return;
   const time = Date.now() * 0.002;
@@ -164,7 +150,6 @@ function animate() {
   });
   renderer.render(scene, camera);
 
-  stats.end(); // 🔹 finaliza medición
 
 }
 animate();

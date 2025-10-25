@@ -1,7 +1,6 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 import { gsap } from "https://cdn.skypack.dev/gsap";
 import { SplitText } from "https://cdn.skypack.dev/gsap/SplitText";
-import Stats from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/libs/stats.module.js";
 
 window.addEventListener("load", () => {
   const container = document.getElementById("cont_escena_tubo");
@@ -31,17 +30,6 @@ window.addEventListener("load", () => {
   dirLight.position.set(3, 5, 7);
   scene.add(dirLight);
 
-  // ======================================================
-  // 🔹 MONITOR DE FPS (Stats.js)
-  // ======================================================
-  const stats = new Stats();
-  stats.showPanel(0);
-  stats.dom.style.position = "absolute";
-  stats.dom.style.top = "150px";
-  stats.dom.style.left = "10px";
-  stats.dom.style.zIndex = "9999";
-  stats.dom.style.transform = "scale(0.9)";
-  container.appendChild(stats.dom);
 
   // ======================================================
   // 🎞️ Crear materiales de video
@@ -65,7 +53,7 @@ window.addEventListener("load", () => {
     return new THREE.MeshBasicMaterial({
       map: texture,
       side: THREE.DoubleSide,
-      transparent: true,
+      transparent: false,
     });
   }
 
@@ -111,9 +99,7 @@ window.addEventListener("load", () => {
 
   function animate() {
     if (!isVisible) return; // si no está visible, no renderiza
-    stats.begin();
     renderer.render(scene, camera);
-    stats.end();
     animationId = requestAnimationFrame(animate);
   }
 

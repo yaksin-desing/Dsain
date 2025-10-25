@@ -2,8 +2,6 @@ import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
 import { gsap } from "https://cdn.skypack.dev/gsap@3.12.2";
-import Stats from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/libs/stats.module.js";
-
 // 🟢 Contenedor
 const container = document.getElementById("section_once");
 
@@ -36,7 +34,7 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true,
 });
 renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.setClearColor(0x000000, 0);
+renderer.setClearColor(0xffffff, 0);
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.shadowMap.enabled = !isMobileOrTablet;
@@ -164,19 +162,10 @@ const observer = new IntersectionObserver(
 );
 observer.observe(container);
 
-// 🟢 Stats.js (monitor de FPS)
-const stats = new Stats();
-stats.showPanel(0);
-stats.dom.style.position = "fixed";
-stats.dom.style.left = "10px";
-stats.dom.style.top = "200px";
-stats.dom.style.zIndex = "9999";
-document.body.appendChild(stats.dom);
 
 // 🟢 Loop de render
 function animate() {
   requestAnimationFrame(animate);
-  stats.begin();
 
   if (!isInViewport) return;
 
@@ -206,7 +195,7 @@ function animate() {
 
   controls.update();
   renderer.render(scene, camera);
-  stats.end();
+
 }
 animate();
 
