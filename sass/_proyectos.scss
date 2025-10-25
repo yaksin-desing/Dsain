@@ -2348,7 +2348,7 @@ $fondoboto: #eff3ff;
                 position: relative;
                 overflow: visible;
                 background: transparent;
-                
+
 
                 #cont_escena_tubo {
                     width: 100%;
@@ -2690,12 +2690,14 @@ $fondoboto: #eff3ff;
                 padding: 5vw 4vw 1vw 4.3vw;
                 justify-content: space-between;
 
-                a {
+
+
+                .logo {
                     display: flex;
                     align-items: center;
-
-
+                    z-index: 1000;
                 }
+
 
                 .cont_menu {
                     display: flex;
@@ -2741,7 +2743,6 @@ $fondoboto: #eff3ff;
                         .cont_boton_menu {
                             display: flex;
                             border-radius: 100%;
-                            border: 4px solid #eff3ff;
                             overflow: hidden;
                             width: 100%;
                             background: $fondoboto;
@@ -2750,9 +2751,9 @@ $fondoboto: #eff3ff;
 
 
                             #menu-button {
-                                padding: 5px;
-                                width: 5vw;
-                                height: 5vw;
+                                padding: 10px;
+                                width: 9vw;
+                                height: 9vw;
                                 z-index: 1000;
                                 cursor: pointer;
                                 border-radius: 100%;
@@ -2761,7 +2762,7 @@ $fondoboto: #eff3ff;
                         }
 
                         .cont_boton_menu:hover {
-                            box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.247);
+                            box-shadow: 0em 0em 0em rgba(0, 0, 0, 0.247);
                         }
 
                     }
@@ -2796,8 +2797,8 @@ $fondoboto: #eff3ff;
                         list-style: none;
                         padding: 0;
                         margin: 0;
-                        top: 20%;
-                        left: 15%;
+                        top: 17%;
+                        left: 5%;
 
                         p {
                             text-decoration: none;
@@ -2877,7 +2878,7 @@ $fondoboto: #eff3ff;
                     width: 100dvw;
                     height: 100dvh;
                     right: 0;
-                    box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
+                    box-shadow: 0vw 0px 5px 0px rgba(0, 0, 0, 0.082);
                     border-radius: 0;
                     background-color: #ffffff;
 
@@ -2890,11 +2891,11 @@ $fondoboto: #eff3ff;
 
                         p {
                             text-decoration: none;
-                            font-size: 18px;
+                            font-size: 3vw;
                             opacity: 100%;
                             font-family: "Regular";
                             color: #c0c0c0;
-                            font-size: 0.9vw;
+                            font-size: 4vw;
                             opacity: 100%;
                         }
 
@@ -2903,11 +2904,10 @@ $fondoboto: #eff3ff;
 
                             a {
                                 text-decoration: none;
-                                font-size: 18px;
                                 opacity: 100%;
                                 font-family: "Medium";
                                 color: #999999;
-                                font-size: 2.2vw;
+                                font-size: 7.7vw;
                                 width: 100%;
                                 position: relative;
                                 overflow: hidden;
@@ -2936,10 +2936,10 @@ $fondoboto: #eff3ff;
                         padding: 0;
                         margin: 0;
                         bottom: 5%;
-                        left: 15%;
+                        left: 5%;
                         display: flex;
                         flex-direction: column;
-                        width: 60%;
+                        width: 90%;
                         opacity: 100%;
 
                         p {
@@ -2948,7 +2948,7 @@ $fondoboto: #eff3ff;
                             opacity: 100%;
                             font-family: "Regular";
                             color: #c0c0c0;
-                            font-size: 0.9vw;
+                            font-size: 3.5vw;
                             opacity: 100%;
                         }
 
@@ -2967,7 +2967,7 @@ $fondoboto: #eff3ff;
                                     opacity: 100%;
                                     font-family: "Medium";
                                     color: #000000;
-                                    font-size: 0.9vw;
+                                    font-size: 3vw;
                                     width: 100%;
                                     position: relative;
                                     overflow: hidden;
