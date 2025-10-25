@@ -244,12 +244,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- NUEVO BLOQUE: animación del tubo ---
     const idSeccion = sections[current].id;
-    let yValue = "0vh"; // posición base
+    let yValue = "0dvh"; // posición base
 
-    if (idSeccion === "section_ocho") yValue = "0vh";
-    else if (idSeccion === "section_nueve") yValue = "100vh";
-    else if (idSeccion === "section_diez") yValue = "200vh";
-    else if (idSeccion === "section_once") yValue = "200vh";
+    if (idSeccion === "section_ocho") yValue = "0dvh";
+    else if (idSeccion === "section_nueve") yValue = "100dvh";
+    else if (idSeccion === "section_diez") yValue = "200dvh";
+    else if (idSeccion === "section_once") yValue = "200dvh";
 
     gsap.to("#cont_escena_tubo", {
       y: yValue,

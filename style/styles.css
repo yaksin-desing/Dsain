@@ -4418,10 +4418,12 @@ h5 {
     position: absolute;
     top: -15dvh;
     z-index: 0;
+    border: 5px solid red;
   }
   .proyecto .contenedorproyectos #section_ocho #cont_escena_tubo .texto_escena {
     position: absolute;
-    bottom: 90dvh;
+    top: 90dvh;
+    bottom: none;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -2348,6 +2348,7 @@ $fondoboto: #eff3ff;
                 position: relative;
                 overflow: visible;
                 background: transparent;
+                
 
                 #cont_escena_tubo {
                     width: 100%;
@@ -2355,10 +2356,13 @@ $fondoboto: #eff3ff;
                     position: absolute;
                     top: -15dvh;
                     z-index: 0;
+                    border: 5px solid red;
+
 
                     .texto_escena {
                         position: absolute;
-                        bottom: 90dvh;
+                        top: 90dvh;
+                        bottom: none;
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
