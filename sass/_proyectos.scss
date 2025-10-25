@@ -3670,14 +3670,15 @@ $fondoboto: #eff3ff;
 
                     .texto_escena {
                         position: absolute;
-                        bottom: 90dvh;
+                        top: 100dvh;
+                        bottom: none;
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
                         width: 100%;
-                        padding-left: 20vw;
-                        padding-right: 20vw;
+                        padding-left: 15vw;
+                        padding-right: 15vw;
 
                         // --- TÍTULO ---
                         .titulo_parrafo_escena {
@@ -3726,7 +3727,6 @@ $fondoboto: #eff3ff;
 
                 }
             }
-
 
             #section_nueve {
                 width: 100%;
