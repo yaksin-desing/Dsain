@@ -2356,8 +2356,6 @@ $fondoboto: #eff3ff;
                     position: absolute;
                     top: -15dvh;
                     z-index: 0;
-                    border: 5px solid red;
-
 
                     .texto_escena {
                         position: absolute;
@@ -2368,15 +2366,15 @@ $fondoboto: #eff3ff;
                         justify-content: center;
                         align-items: center;
                         width: 100%;
-                        padding-left: 20vw;
-                        padding-right: 20vw;
+                        padding-left: 15vw;
+                        padding-right: 15vw;
 
                         // --- TÍTULO ---
                         .titulo_parrafo_escena {
                             font-family: "Semibold";
-                            font-size: 1.5vw;
+                            font-size: 4vw;
                             font-weight: 700;
-                            text-align: left;
+                            text-align: center;
                             color: $colorp;
                             text-shadow: 0 0 1px rgb(20, 0, 199);
                             display: inline-block;
@@ -2394,12 +2392,12 @@ $fondoboto: #eff3ff;
                         // --- PÁRRAFO ---
                         .parrafo_escena {
                             font-family: "Regular";
-                            font-size: 0.8vw;
+                            font-size: 3vw;
                             font-weight: normal;
                             letter-spacing: normal;
                             color: $colorp;
                             padding-top: 0.8vw;
-                            text-align: left;
+                            text-align: center;
                             line-height: 1.5;
                             max-width: 60vw;
                             display: inline-block;

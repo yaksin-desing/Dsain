@@ -155,19 +155,19 @@ window.addEventListener("load", () => {
 
         if (id === "section_ocho") {
           rotY = 1.57;
-          posY = isMobile ? 0.27 : -0.13;
+          posY = isMobile ? 0.3 : -0.13;
           posZ = isMobile ? 0.7 : 0;
           scale = isMobile ? 0.8 : 1;
           camZ = isMobile ? 4.2 : 3.4;
         } else if (id === "section_nueve") {
           rotY = 3.65;
-          posY = isMobile ? 1.19 : 0.87;
+          posY = isMobile ? 1.1 : 0.87;
           posZ = isMobile ? 0.7 : 0;
           scale = isMobile ? 0.8 : 1;
           camZ = isMobile ? 4.2 : 3.4;
         } else if (id === "section_diez") {
           rotY = 5.75;
-          posY = isMobile ? 2.1 : 1.87;
+          posY = isMobile ? 1.9 : 1.87;
           posZ = isMobile ? 0.7 : 0;
           scale = isMobile ? 0.8 : 1;
           camZ = isMobile ? 4.2 : 3.4;
