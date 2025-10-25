@@ -2491,6 +2491,10 @@ h5 {
   /* Comienza oculto */
   /* Clase para mostrar el menú */
 }
+.proyecto .contenedorproyectos .barra_nav .logo {
+  display: flex;
+  align-items: center;
+}
 .proyecto .contenedorproyectos .barra_nav .cont_menu {
   display: flex;
   flex-direction: row;
@@ -2538,7 +2542,6 @@ h5 {
 .proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu {
   display: flex;
   border-radius: 100%;
-  border: 4px solid #eff3ff;
   overflow: hidden;
   width: 100%;
   background: #eff3ff;
@@ -2546,9 +2549,9 @@ h5 {
   align-items: center;
 }
 .proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu #menu-button {
-  padding: 2px;
-  width: 2vw;
-  height: 2vw;
+  padding: 7px;
+  width: 2.7vw;
+  height: 2.7vw;
   z-index: 1000;
   cursor: pointer;
   border-radius: 100%;
@@ -3590,9 +3593,10 @@ h5 {
     /* Comienza oculto */
     /* Clase para mostrar el menú */
   }
-  .proyecto .contenedorproyectos .barra_nav a {
+  .proyecto .contenedorproyectos .barra_nav .logo {
     display: flex;
     align-items: center;
+    z-index: 1000;
   }
   .proyecto .contenedorproyectos .barra_nav .cont_menu {
     display: flex;
@@ -3635,7 +3639,6 @@ h5 {
   .proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu {
     display: flex;
     border-radius: 100%;
-    border: 4px solid #eff3ff;
     overflow: hidden;
     width: 100%;
     background: #eff3ff;
@@ -3643,16 +3646,16 @@ h5 {
     align-items: center;
   }
   .proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu #menu-button {
-    padding: 2px;
-    width: 7.9vw;
-    height: 7.9vw;
+    padding: 7px;
+    width: 10vw;
+    height: 10vw;
     z-index: 1000;
     cursor: pointer;
     border-radius: 100%;
     background: #eff3ff;
   }
   .proyecto .contenedorproyectos .barra_nav .cont_menu .contd_menu .cont_boton_menu:hover {
-    box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.247);
+    box-shadow: 0em 0em 0em rgba(0, 0, 0, 0.247);
   }
   .proyecto .contenedorproyectos .barra_nav eff3ff .magnetic-button {
     transition: transform 0.2s ease;
@@ -3677,8 +3680,8 @@ h5 {
     list-style: none;
     padding: 0;
     margin: 0;
-    top: 20%;
-    left: 15%;
+    top: 17%;
+    left: 5%;
   }
   .proyecto .contenedorproyectos .barra_nav #nav-menu .contlistmenu p {
     text-decoration: none;
@@ -3738,10 +3741,10 @@ h5 {
   .proyecto .contenedorproyectos .barra_nav #nav-menu.show {
     top: 0vh;
     right: 0vh;
-    width: 50dvw;
+    width: 100dvw;
     height: 100dvh;
     right: 0;
-    box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
+    box-shadow: 0vw 0px 5px 0px rgba(0, 0, 0, 0.082);
     border-radius: 0;
     background-color: #ffffff;
     /* Desliza el menú hacia dentro */
@@ -3754,11 +3757,11 @@ h5 {
   }
   .proyecto .contenedorproyectos .barra_nav #nav-menu.show .contlistmenu p {
     text-decoration: none;
-    font-size: 18px;
+    font-size: 3vw;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 0.9vw;
+    font-size: 4vw;
     opacity: 100%;
   }
   .proyecto .contenedorproyectos .barra_nav #nav-menu.show .contlistmenu li {
@@ -3770,7 +3773,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #999999;
-    font-size: 2.2vw;
+    font-size: 7vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -3789,10 +3792,10 @@ h5 {
     padding: 0;
     margin: 0;
     bottom: 5%;
-    left: 15%;
+    left: 5%;
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 90%;
     opacity: 100%;
   }
   .proyecto .contenedorproyectos .barra_nav #nav-menu.show .contsocial p {
@@ -3801,7 +3804,7 @@ h5 {
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 0.9vw;
+    font-size: 3.5vw;
     opacity: 100%;
   }
   .proyecto .contenedorproyectos .barra_nav #nav-menu.show .contsocial .list_social {
@@ -3818,7 +3821,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #000000;
-    font-size: 0.9vw;
+    font-size: 3vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -4849,7 +4852,7 @@ h5 {
   .proyecto .contenedorproyectos .barra_nav #nav-menu.show {
     top: 0vh;
     right: 0vh;
-    width: 50dvw;
+    width: 100dvw;
     height: 100dvh;
     right: 0;
     box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
