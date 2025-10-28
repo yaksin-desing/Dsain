@@ -35,21 +35,6 @@
         <div id="progress-bar"></div>
       </div>
 
-      <div
-        id="screenSize"
-        style="
-          position: fixed;
-          bottom: 10px;
-          right: 10px;
-          background: rgba(0, 0, 0, 0.6);
-          color: #fff;
-          padding: 8px 12px;
-          border-radius: 6px;
-          font-family: monospace;
-          z-index: 9999;
-        "
-      ></div>
-
       <div class="text_guia">
         <p id="texto-guia">Texto guia</p>
         <img src="../src/img/star.svg" alt="" />
@@ -722,17 +707,7 @@
       </section>
     </div>
 
-    <script>
-      function showSize() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        document.getElementById(
-          "screenSize"
-        ).textContent = `Ancho: ${width}px | Alto: ${height}px`;
-      }
-      window.addEventListener("resize", showSize);
-      showSize(); // mostrar al cargar
-    </script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>

@@ -352,8 +352,10 @@ if (window.innerWidth <= 480) {
       clearInterval(esperarModelo);
 
       // Solicitar permiso en iOS (obligatorio desde iOS 13)
-      if (typeof DeviceOrientationEvent !== "undefined" &&
-          typeof DeviceOrientationEvent.requestPermission === "function") {
+      if (
+        typeof DeviceOrientationEvent !== "undefined" &&
+        typeof DeviceOrientationEvent.requestPermission === "function"
+      ) {
         const botonPermiso = document.createElement("button");
         botonPermiso.textContent = "Activar movimiento";
         botonPermiso.style.cssText = `
@@ -392,13 +394,27 @@ if (window.innerWidth <= 480) {
       if (!modeloCelular) return;
 
       const inclinacionX = event.beta || 0; // Adelante / atrás
-      const rotacionLimitada = THREE.MathUtils.clamp(inclinacionX, -45, 45); // grados
-      const rotX = THREE.MathUtils.degToRad(rotacionLimitada) * 0.3; // convertir a radianes y suavizar
+      const inclinacionY = event.gamma || 0; // Izquierda / derecha
 
-      // Aplicar rotación con suavizado
+      // Limitar valores para evitar movimientos bruscos
+      const rotacionLimitadaX = THREE.MathUtils.clamp(inclinacionX, -45, 45);
+      const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionY, -45, 45);
+
+      // Convertir a radianes y suavizar
+      const rotX = THREE.MathUtils.degToRad(rotacionLimitadaX) * 0.3;
+      const movCamX = rotacionLimitadaY * 0.01; // sensibilidad para cámara
+
+      // 🔹 Rotar modelo suavemente en eje X
       gsap.to(modeloCelular.rotation, {
         x: rotX,
         duration: 0.3,
+        ease: "power2.out",
+      });
+
+      // 🔹 Mover cámara en eje X (ligero efecto de parallax)
+      gsap.to(camera.position, {
+        x: movCamX,
+        duration: 0.4,
         ease: "power2.out",
       });
     });
