@@ -340,3 +340,67 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
 });
+
+// ✅ Efecto giroscopio solo en móviles
+if (window.innerWidth <= 480) {
+  let modeloCelular = null;
+
+  // Esperar a que el modelo esté cargado
+  const esperarModelo = setInterval(() => {
+    if (modelos.length > 0) {
+      modeloCelular = modelos[0].model;
+      clearInterval(esperarModelo);
+
+      // Solicitar permiso en iOS (obligatorio desde iOS 13)
+      if (typeof DeviceOrientationEvent !== "undefined" &&
+          typeof DeviceOrientationEvent.requestPermission === "function") {
+        const botonPermiso = document.createElement("button");
+        botonPermiso.textContent = "Activar movimiento";
+        botonPermiso.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: #000;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          padding: 10px 16px;
+          font-size: 14px;
+          z-index: 9999;
+        `;
+        document.body.appendChild(botonPermiso);
+
+        botonPermiso.addEventListener("click", async () => {
+          const permiso = await DeviceOrientationEvent.requestPermission();
+          if (permiso === "granted") {
+            iniciarGiroscopio();
+            botonPermiso.remove();
+          } else {
+            alert("No se concedió acceso al giroscopio");
+          }
+        });
+      } else {
+        // En Android o navegadores sin restricción
+        iniciarGiroscopio();
+      }
+    }
+  }, 200);
+
+  function iniciarGiroscopio() {
+    window.addEventListener("deviceorientation", (event) => {
+      if (!modeloCelular) return;
+
+      const inclinacionX = event.beta || 0; // Adelante / atrás
+      const rotacionLimitada = THREE.MathUtils.clamp(inclinacionX, -45, 45); // grados
+      const rotX = THREE.MathUtils.degToRad(rotacionLimitada) * 0.3; // convertir a radianes y suavizar
+
+      // Aplicar rotación con suavizado
+      gsap.to(modeloCelular.rotation, {
+        x: rotX,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+  }
+}
