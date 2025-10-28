@@ -397,7 +397,7 @@ if (window.innerWidth <= 480) {
 
       // Aplicar rotación con suavizado
       gsap.to(modeloCelular.rotation, {
-        y: rotX,
+        x: rotX,
         duration: 0.3,
         ease: "power2.out",
       });
