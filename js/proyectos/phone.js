@@ -393,11 +393,12 @@ if (window.innerWidth <= 480) {
 
       const inclinacionX = event.beta || 0; // Adelante / atrás
       const rotacionLimitada = THREE.MathUtils.clamp(inclinacionX, -45, 45); // grados
-      const rotX = THREE.MathUtils.degToRad(rotacionLimitada) * 0.3; // convertir a radianes y suavizar
+      const rotX = THREE.MathUtils.degToRad(rotacionLimitada) * 0.5; // convertir a radianes y suavizar
 
       // Aplicar rotación con suavizado
       gsap.to(modeloCelular.rotation, {
-        x: rotX,
+        y: rotX,
+        x: rotX - 0.2,
         duration: 0.3,
         ease: "power2.out",
       });
