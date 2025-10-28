@@ -341,7 +341,7 @@ window.addEventListener("resize", () => {
   renderer.setSize(container.clientWidth, container.clientHeight);
 });
 
-// ✅ Efecto giroscopio solo en móviles
+// ✅ Efecto giroscopio solo en móviles (X y Y)
 if (window.innerWidth <= 480) {
   let modeloCelular = null;
 
@@ -392,13 +392,20 @@ if (window.innerWidth <= 480) {
       if (!modeloCelular) return;
 
       const inclinacionX = event.beta || 0; // Adelante / atrás
-      const rotacionLimitada = THREE.MathUtils.clamp(inclinacionX, -45, 45); // grados
-      const rotX = THREE.MathUtils.degToRad(rotacionLimitada) * 0.5; // convertir a radianes y suavizar
+      const inclinacionY = event.gamma || 0; // Izquierda / derecha
+
+      // Limitar los grados de inclinación
+      const limitX = THREE.MathUtils.clamp(inclinacionX, -45, 45);
+      const limitY = THREE.MathUtils.clamp(inclinacionY, -45, 45);
+
+      // Convertir a radianes y reducir el movimiento para hacerlo más suave
+      const rotX = THREE.MathUtils.degToRad(limitX) * 0.3;
+      const rotY = THREE.MathUtils.degToRad(limitY) * 0.3;
 
       // Aplicar rotación con suavizado
       gsap.to(modeloCelular.rotation, {
-        y: rotX,
-        x: rotX - 0.2,
+        x: rotX,
+        y: -rotY, // invertir para que coincida con la dirección visual
         duration: 0.3,
         ease: "power2.out",
       });
