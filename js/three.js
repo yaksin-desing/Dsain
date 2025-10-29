@@ -134,7 +134,7 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
       // Aplicar movimiento con animación suave
       gsap.to(camera.position, {
         x: movCamX,
-        duration: 0.4,
+        duration: 0.79,
         ease: "power2.out",
       });
     });
