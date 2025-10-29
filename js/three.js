@@ -127,7 +127,7 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
       const inclinacionY = event.gamma || 0; // Izquierda / derecha → eje X
 
       // Limitar valores para evitar movimientos excesivos
-      const rotacionLimitadaX = THREE.MathUtils.clamp(inclinacionY, -25, 25);
+      const rotacionLimitadaX = THREE.MathUtils.clamp(inclinacionY, -45, 45);
       const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionX, -35, 35);
 
       // Escalar para ajustar sensibilidad del movimiento
