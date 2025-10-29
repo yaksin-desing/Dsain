@@ -118,23 +118,26 @@ function main() {
     window.addEventListener("mousemove", onMouseMove);
   }
 
-
   // ✅ Efecto giroscopio SOLO en Android y pantallas menores a 500 px
 if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
 
   function iniciarGiroscopioAndroid() {
     window.addEventListener("deviceorientation", (event) => {
-      const inclinacionY = event.gamma || 0; // Movimiento izquierda / derecha
+      const inclinacionX = event.beta || 0;  // Adelante / atrás → eje Y
+      const inclinacionY = event.gamma || 0; // Izquierda / derecha → eje X
 
-      // Limitar el rango de movimiento
-      const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionY, -45, 45);
+      // Limitar valores para evitar movimientos excesivos
+      const rotacionLimitadaX = THREE.MathUtils.clamp(inclinacionY, -25, 25);
+      const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionX, -35, 35);
 
-      // Convertir el valor a un desplazamiento suave en el eje X de la cámara
-      const movCamX = rotacionLimitadaY * 0.01; // Ajusta la sensibilidad aquí (0.01 → más suave)
+      // Escalar para ajustar sensibilidad del movimiento
+      const movCamX = rotacionLimitadaX * 0.01;  // movimiento lateral
+      const movCamY = rotacionLimitadaY * -0.01; // movimiento vertical (invertido para naturalidad)
 
-      // Aplicar movimiento con animación suave
+      // Aplicar movimiento con suavizado
       gsap.to(camera.position, {
         x: movCamX,
+        y: movCamY,
         duration: 0.4,
         ease: "power2.out",
       });
