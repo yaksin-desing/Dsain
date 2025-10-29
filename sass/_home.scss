@@ -769,7 +769,7 @@ eff3ff
                         display: flex;
                         flex-direction: row;
                         align-items: center;
-                        gap: 5px;
+                        gap: 15px;
                         height: auto;
                         z-index: 1000;
 
@@ -781,14 +781,14 @@ eff3ff
 
                         .logoestatico {
                             position: absolute;
-                            width: 7vw;
+                            width: 8vw;
                             opacity: 0%;
-                            height: 7vw;
+                            height: 8vw;
                         }
 
                         #nombrelogo {
                             font-family: "Extrabold";
-                            font-size: 7vw;
+                            font-size: 5.9vw;
                             color: #ffffff;
                             overflow: hidden;
                             width: 0%;
