@@ -398,7 +398,7 @@ if (window.innerWidth <= 480) {
 
       // Limitar valores para evitar movimientos bruscos
       const rotacionLimitadaX = THREE.MathUtils.clamp(inclinacionX, -45, 45);
-      const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionY, -45, 45);
+      const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionY, -35, 35);
 
       // Convertir a radianes y suavizar
       const rotX = THREE.MathUtils.degToRad(rotacionLimitadaX) * 0.3;
