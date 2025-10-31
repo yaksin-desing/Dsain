@@ -256,7 +256,8 @@ function escenaMobile() {
             );
             timeline.fromTo(
               model.rotation, {
-                y: 0
+                y: 0,
+                x: -0.2,
               }, {
                 y: "+=" + Math.PI * 1,
                 duration: 1.5,
