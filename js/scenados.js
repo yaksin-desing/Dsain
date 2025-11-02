@@ -206,7 +206,7 @@ const mixers = [];
 
 
   // Detecta si el dispositivo es Android y móvil
-  const isAndroidMobile = /Android/i.test(navigator.userAgent) && window.innerWidth <= 500;
+  const isAndroidMobile = /Android/i.test(navigator.userAgent) && container.clientWidth <= 500;
 
 
 // Crear el render target con el ancho aumentado

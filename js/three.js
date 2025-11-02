@@ -74,7 +74,7 @@ function main() {
 
   //////////////////////////////////////////
    // Detecta si el dispositivo es Android y móvil
-  const isAndroidMobile = /Android/i.test(navigator.userAgent) && window.innerWidth <= 500;
+  const isAndroidMobile = /Android/i.test(navigator.userAgent) && container.clientWidth <= 500;
 
   
   // Inicializa el renderer antes de utilizarlo
