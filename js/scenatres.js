@@ -210,6 +210,7 @@ const renderTargetTres = new THREE.WebGLRenderTarget(
     format: THREE.RGBAFormat,
     minFilter: THREE.LinearFilter,
     magFilter: THREE.LinearFilter,
+    
   }
 );
 

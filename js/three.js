@@ -73,11 +73,14 @@ function main() {
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
   //////////////////////////////////////////
+   // Detecta si el dispositivo es Android y móvil
+  const isAndroidMobile = /Android/i.test(navigator.userAgent) && window.innerWidth <= 100;
 
+  
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance",
-    antialias: true,
+    antialias: !isAndroidMobile // ❌ false en Android móvil, ✅ true en los demás
   });
 
   renderer.shadowMap.enabled = true;
@@ -1121,14 +1124,14 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
 
   const clock = new THREE.Clock();
 
-  //var stats = new Stats();
-  //stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-  //container.appendChild(stats.dom);
+  var stats = new Stats();
+  stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+  container.appendChild(stats.dom);
 
   function animate() {
-    //stats.begin();
+    stats.begin();
     //monitored code goes here
-    //stats.end();
+    stats.end();
 
     requestAnimationFrame(animate);
 
