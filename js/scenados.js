@@ -218,7 +218,7 @@ const renderTarget = new THREE.WebGLRenderTarget(
     format: THREE.RGBAFormat,
     minFilter: THREE.LinearFilter,
     magFilter: THREE.LinearFilter,
-    antialias: !isAndroidMobile // ❌ false en Android móvil, ✅ true en los demás
+    antialias: false // ❌ false en Android móvil, ✅ true en los demás
   }
   
 );

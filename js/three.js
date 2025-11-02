@@ -80,7 +80,7 @@ function main() {
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance",
-    antialias: !isAndroidMobile // ❌ false en Android móvil, ✅ true en los demás
+    antialias: false // ❌ false en Android móvil, ✅ true en los demás
   });
 
   renderer.shadowMap.enabled = true;
