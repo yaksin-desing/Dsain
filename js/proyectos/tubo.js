@@ -167,7 +167,7 @@ window.addEventListener("load", () => {
           camZ = isMobile ? 5 : 3.4;
         } else if (id === "section_diez") {
           rotY = 5.75;
-          posY = isMobile ? 2.1 : 1.87;
+          posY = isMobile ? 2.13 : 1.87;
           posZ = isMobile ? 0.7 : 0;
           scale = isMobile ? 0.8 : 1;
           camZ = isMobile ? 5 : 3.4;
