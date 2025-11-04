@@ -73,14 +73,12 @@ function main() {
   scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
 
   //////////////////////////////////////////
-   // Detecta si el dispositivo es Android y móvil
-  const isAndroidMobile = /Android/i.test(navigator.userAgent) && container.clientWidth <= 500;
 
   
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance",
-    antialias: false // ❌ false en Android móvil, ✅ true en los demás
+    antialias: false,
   });
 
   renderer.shadowMap.enabled = true;

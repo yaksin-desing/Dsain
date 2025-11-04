@@ -205,8 +205,6 @@ david.load(
 const mixers = [];
 
 
-  // Detecta si el dispositivo es Android y móvil
-  const isAndroidMobile = /Android/i.test(navigator.userAgent) && container.clientWidth <= 500;
 
 
 // Crear el render target con el ancho aumentado
@@ -218,7 +216,7 @@ const renderTarget = new THREE.WebGLRenderTarget(
     format: THREE.RGBAFormat,
     minFilter: THREE.LinearFilter,
     magFilter: THREE.LinearFilter,
-    antialias: false // ❌ false en Android móvil, ✅ true en los demás
+    
   }
   
 );

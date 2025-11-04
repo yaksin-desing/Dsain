@@ -158,19 +158,19 @@ window.addEventListener("load", () => {
           posY = isMobile ? 0.3 : -0.13;
           posZ = isMobile ? 0.7 : 0;
           scale = isMobile ? 0.8 : 1;
-          camZ = isMobile ? 4.2 : 3.4;
+          camZ = isMobile ? 5 : 3.4;
         } else if (id === "section_nueve") {
           rotY = 3.65;
           posY = isMobile ? 1.1 : 0.87;
           posZ = isMobile ? 0.7 : 0;
           scale = isMobile ? 0.8 : 1;
-          camZ = isMobile ? 4.2 : 3.4;
+          camZ = isMobile ? 5 : 3.4;
         } else if (id === "section_diez") {
           rotY = 5.75;
           posY = isMobile ? 1.9 : 1.87;
           posZ = isMobile ? 0.7 : 0;
           scale = isMobile ? 0.8 : 1;
-          camZ = isMobile ? 4.2 : 3.4;
+          camZ = isMobile ? 5 : 3.4;
         }
 
         gsap.to(grupoTubo.rotation, { y: rotY, duration: 1, ease: "power2.out" });
