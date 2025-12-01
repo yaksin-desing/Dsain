@@ -1114,10 +1114,28 @@ function main() {
 
 
 
-
+let frameCongelado = false;
+let freezeSceneDos = false;
 
 
   const clock = new THREE.Clock();
+
+  // 🚫 Congelar sceneDos completamente
+if (freezeSceneDos) {
+
+  // detener shaders animados
+  planesD.forEach(p => {
+    if (p.material?.uniforms?.uTime) {
+      p.material.uniforms.uTime.value = p.material.uniforms.uTime.value; // no avanzar
+    }
+  });
+
+  // detener mixers (si existen)
+  if (mixerDos) mixerDos.update = () => {};
+
+  // evitar updatePlanesDos()
+  // (si te interesa, lo puedes dejar sin efecto)
+}
 
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -1192,33 +1210,32 @@ function main() {
         }
       });
 
-      let frameCongelado = false;
-      // Nueva condición dentro del primer if
+
+// Nueva condición dentro del primer if
 if (cameraDos.position.z >= 1100) {
 
-  // 🔥 Congelar último frame de sceneDos SOLO una vez
+  // 🔥 Congelar el frame SOLO una vez
   if (!frameCongelado) {
     renderer.setRenderTarget(renderTargetTres);
     renderer.render(sceneDos, cameraDos);
     renderer.setRenderTarget(null);
 
-    frameCongelado = true; // ← marca como congelado
+    frameCongelado = true;   // marcar que ya está congelado
+    freezeSceneDos = true;   // detener toda actualización ligada a sceneDos
   }
 
-  // Animación de agua (esto se mantiene igual)
+  // Animación de agua dentro de sceneTres
   if (water?.material?.uniforms?.time) {
     water.material.uniforms.time.value += 0.02;
   }
 
-  // Renderiza escenaTres normalmente
+  // Renderizar sceneTres normalmente
   renderer.render(sceneTres, cameraTres);
   updateTextVisibility(cameraTres);
 
-  // Ocultar objetos de escena principal
+  // Ocultar objetos de scene principal
   scene.traverse((child) => {
-    if (child.isMesh) {
-      child.visible = false;
-    }
+    if (child.isMesh) child.visible = false;
   });
 }
 
