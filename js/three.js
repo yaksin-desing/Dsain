@@ -74,7 +74,7 @@ function main() {
 
   //////////////////////////////////////////
 
-  
+
   // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance",
@@ -120,30 +120,30 @@ function main() {
   }
 
   // ✅ Efecto giroscopio SOLO en Android y pantallas menores a 500 px
-if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
+  if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
 
-  function iniciarGiroscopioAndroid() {
-    window.addEventListener("deviceorientation", (event) => {
-      const inclinacionY = event.gamma || 0; // Movimiento izquierda / derecha
+    function iniciarGiroscopioAndroid() {
+      window.addEventListener("deviceorientation", (event) => {
+        const inclinacionY = event.gamma || 0; // Movimiento izquierda / derecha
 
-      // Limitar el rango de movimiento
-      const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionY, -25, 25);
+        // Limitar el rango de movimiento
+        const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionY, -25, 25);
 
-      // Convertir el valor a un desplazamiento suave en el eje X de la cámara
-      const movCamX = rotacionLimitadaY * 0.01; // Ajusta la sensibilidad aquí (0.01 → más suave)
+        // Convertir el valor a un desplazamiento suave en el eje X de la cámara
+        const movCamX = rotacionLimitadaY * 0.01; // Ajusta la sensibilidad aquí (0.01 → más suave)
 
-      // Aplicar movimiento con animación suave
-      gsap.to(camera.position, {
-        x: movCamX,
-        duration: 0.79,
-        ease: "power2.out",
+        // Aplicar movimiento con animación suave
+        gsap.to(camera.position, {
+          x: movCamX,
+          duration: 0.79,
+          ease: "power2.out",
+        });
       });
-    });
-  }
+    }
 
-  // Iniciar el giroscopio directamente en Android
-  iniciarGiroscopioAndroid();
-}
+    // Iniciar el giroscopio directamente en Android
+    iniciarGiroscopioAndroid();
+  }
 
 
 
@@ -930,10 +930,7 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
 
       animationStarted = true; // Permitir que ScrollTrigger controle Lottie
 
-
       const endFrame = 300; // Suponiendo que la animación tiene 500 frames totales
-
-
 
       // Animación con GSAP y ScrollTrigger
       gsap.timeline({
@@ -1161,9 +1158,6 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
       // Renderiza la escena secundaria en pantalla
       renderer.render(sceneDos, cameraDos);
       updateTextVisibility(cameraDos);
-
-
-
       // Actualizar el tiempo en cada material
       planesD.forEach(planeD => {
         if (planeD.material.uniforms.uTime) {
@@ -1183,8 +1177,6 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
         // Actualizar planos
         updatePlanesTres();
       }
-
-
 
       // Ocultar objetos de la escena principal para liberar GPU
       scene.traverse((child) => {
@@ -1222,6 +1214,10 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
           if (child.isMesh) {
             child.visible = false;
           }
+        });
+
+        sceneDos.traverse(child => {
+          if (child.isMesh) child.visible = false;
         });
 
         // Agrega aquí lo que debe pasar si la nueva condición es verdadera
@@ -1279,7 +1275,7 @@ if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
 
     // SIEMPRE ejecuta updatePlanes para que el botón también baje cuando z < 30
     planes.forEach(plane => {
-      if (plane.material?.uniforms?.uTime) {
+      if (plane.material ?.uniforms ?.uTime) {
         plane.material.uniforms.uTime.value += 0.02;
       }
     });
