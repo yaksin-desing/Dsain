@@ -1192,36 +1192,36 @@ function main() {
         }
       });
 
+      let frameCongelado = false;
       // Nueva condición dentro del primer if
-      if (cameraDos.position.z >= 1100) {
-        if (water) {
-          if (water.material.uniforms['time']) {
-            water.material.uniforms['time'].value += 0.02; // Ajusta la velocidad de la animación
-          }
-        }
-        // Dividir el ancho de la cámara
-        // Renderiza la escena primaria al render target
-        renderer.setRenderTarget(renderTargetTres);
-        renderer.render(sceneDos, cameraDos);
-        renderer.setRenderTarget(null); // Restablece el render target
-        // Actualizar la relación de aspecto de la cámara
-        // Renderiza la escena secundaria en pantalla
-        renderer.render(sceneTres, cameraTres);
-        updateTextVisibility(cameraTres);
+if (cameraDos.position.z >= 1100) {
 
-        // Ocultar objetos de la escena principal para liberar GPU
-        scene.traverse((child) => {
-          if (child.isMesh) {
-            child.visible = false;
-          }
-        });
+  // 🔥 Congelar último frame de sceneDos SOLO una vez
+  if (!frameCongelado) {
+    renderer.setRenderTarget(renderTargetTres);
+    renderer.render(sceneDos, cameraDos);
+    renderer.setRenderTarget(null);
 
-        sceneDos.traverse(child => {
-          if (child.isMesh) child.visible = false;
-        });
+    frameCongelado = true; // ← marca como congelado
+  }
 
-        // Agrega aquí lo que debe pasar si la nueva condición es verdadera
-      }
+  // Animación de agua (esto se mantiene igual)
+  if (water?.material?.uniforms?.time) {
+    water.material.uniforms.time.value += 0.02;
+  }
+
+  // Renderiza escenaTres normalmente
+  renderer.render(sceneTres, cameraTres);
+  updateTextVisibility(cameraTres);
+
+  // Ocultar objetos de escena principal
+  scene.traverse((child) => {
+    if (child.isMesh) {
+      child.visible = false;
+    }
+  });
+}
+
     } else {
 
       // Ocultar objetos de la escena principal para liberar GPU
