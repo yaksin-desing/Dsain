@@ -42,12 +42,6 @@ function createAnimation() {
             height: "96dvh",
             borderRadius: "2vh",
         });
-        animaloading.to(tituloh1, {
-            opacity: "100%",
-        });
-        animaloading.to(parrafodeinicio, {
-            opacity: "100%",
-        });
         animaloading.to(logoanimado, {
             duration: 1,
             ease: 'power2.out',
@@ -55,6 +49,19 @@ function createAnimation() {
             left: "3vh",
             width: "max-content",
         });
+
+        animaloading.to(textologo, {
+            duration: 1,
+            width: "max-content",
+            display: "flex"
+        });
+        animaloading.to(tituloh1, {
+            opacity: "100%",
+        });
+        animaloading.to(parrafodeinicio, {
+            opacity: "100%",
+        });
+
         animaloading.to(contactnav, {
             opacity: "100%",
         });
@@ -69,11 +76,7 @@ function createAnimation() {
             duration: 0,
             opacity: "0%",
         });
-        animaloading.to(textologo, {
-            duration: 1,
-            width: "max-content",
-            display: "flex"
-        });
+
         animaloading.to(imgparrafoinicio, {
             duration: 1,
             opacity: "100%",
@@ -108,9 +111,6 @@ function createAnimation() {
             height: "96dvh",
             borderRadius: "2vh",
         });
-        animaloading.to(tituloh1, {
-            opacity: "100%",
-        });
         animaloading.to(logoanimado, {
             duration: 1,
             ease: 'power2.out',
@@ -118,6 +118,16 @@ function createAnimation() {
             left: "3vh",
             width: "max-content",
         });
+        animaloading.to(textologo, {
+            duration: 1,
+            width: "max-content",
+            display: "flex"
+        });
+
+        animaloading.to(tituloh1, {
+            opacity: "100%",
+        });
+
         animaloading.to(contactnav, {
             opacity: "100%",
         });
@@ -132,11 +142,7 @@ function createAnimation() {
             duration: 0,
             opacity: "0%",
         });
-        animaloading.to(textologo, {
-            duration: 1,
-            width: "max-content",
-            display: "flex"
-        });
+
         animaloading.to(imgparrafoinicio, {
             duration: 1,
             opacity: "100%",
@@ -168,19 +174,26 @@ function createAnimation() {
             height: "96vh",
             borderRadius: "2vh",
         });
-        animaloading.to(tituloh1, {
-            opacity: "100%",
-        });
-        animaloading.to(parrafodeinicio, {
-            opacity: "100%",
-        });
         animaloading.to(logoanimado, {
-            duration: 1,
+            delay: -1,
             ease: 'power2.out',
             top: "3vh",
             left: "3vh",
             width: "max-content",
         });
+        animaloading.to(textologo, {
+            delay: -1,
+            width: "max-content",
+            display: "flex"
+        });
+        animaloading.to(tituloh1, {
+
+            opacity: "100%",
+        });
+        animaloading.to(parrafodeinicio, {
+            opacity: "100%",
+        });
+
         animaloading.to(contactnav, {
             opacity: "100%",
         });
@@ -195,11 +208,7 @@ function createAnimation() {
             duration: 0,
             opacity: "0%",
         });
-        animaloading.to(textologo, {
-            duration: 1,
-            width: "max-content",
-            display: "flex"
-        });
+
         animaloading.to(imgparrafoinicio, {
             duration: 1,
             opacity: "100%",
@@ -221,13 +230,22 @@ function createAnimation() {
     return animaloading;
 }
 
-// Crear la animación al cargar la página
+// Crear la animación al cargar la página (pero NO la ejecutes aún)
 let animaloading = createAnimation();
+let loaderFinished = false;
 
-// Ejecutar la animación cuando termine la carga
-setTimeout(() => {
+// Función que realmente dispara la animación cuando todo esté listo
+function startMainAnimation() {
+    if (!loaderFinished) return;
     animaloading.play();
-}, 0);
+}
+
+// Cuando el loader termina (100%)
+function finishLoader() {
+    loaderFinished = true;
+    startMainAnimation();
+}
+
 
 
 let progress = 0;
@@ -246,11 +264,10 @@ function updateProgressBar() {
         pageLoaded = true; // Cambia la variable
 
         setTimeout(() => {
-            // audioPlayer.play();
             animateWave();
-            conteprogress.style.display = "none"; // Oculta el loader
-            animaloading.play(); // Inicia animaciones
-        }, 500 + extraDelay); // Suma el tiempo extra si es móvil
+            conteprogress.style.display = "none";
+            finishLoader();
+        }, 500 + extraDelay);
     }
 }
 
@@ -677,5 +694,3 @@ ScrollTrigger.scrollerProxy(contenedorsc, {
 
 // Escuchar los eventos de scroll de Smooth Scrollbar
 scrollbar.addListener(ScrollTrigger.update);
-
-

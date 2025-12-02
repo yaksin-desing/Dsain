@@ -1155,7 +1155,7 @@ if (freezeSceneDos) {
       mixerpuerta.update(delta);
     }
 
-    camera.position.x += (mouse.x - camera.position.x) * 0.09;
+    camera.position.x += (mouse.x - camera.position.x) * 0.07;
     camera.position.x = Math.max(
       minCameraX,
       Math.min(camera.position.x, maxCameraX)

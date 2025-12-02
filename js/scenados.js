@@ -29,7 +29,7 @@ const minCameraX = -5;
 const maxCameraX = 5;
 
 function onMouseMove(event) {
-  mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25; // Normaliza entre -1 y 1
+  mouse.x = (event.clientX / window.innerWidth) * 0.3 - 0.15; // Normaliza entre -1 y 1
 }
 
 window.addEventListener("mousemove", onMouseMove);
