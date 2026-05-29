@@ -75,7 +75,7 @@ let muro;
 // 🟢 Carga del modelo
 const loader = new GLTFLoader();
 loader.load(
-  "/src/objt/piedepagina/monedadsain.glb",
+  "../src/objt/piedepagina/monedadsain.glb",
   (gltf) => {
     const model = gltf.scene;
     model.scale.set(0.4, 0.4, 0.4);
