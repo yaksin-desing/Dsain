@@ -1,10 +1,8 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
-import { gsap } from "https://cdn.skypack.dev/gsap@3.12.2";
 // 🟢 Contenedor
 const container = document.getElementById("section_once");
-
 // 🟢 Detección de dispositivo y ancho
 const isMobileOrTablet = /Mobi|Android|iPad|iPod/i.test(navigator.userAgent);
 const disableInteractions = window.innerWidth <= 770;
@@ -42,6 +40,20 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 1.2 : 2));
 container.appendChild(renderer.domElement);
 
+// Después de: container.appendChild(renderer.domElement);
+
+// Forzar tamaño correcto después de que el DOM esté pintado
+requestAnimationFrame(() => {
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  
+  console.log("Tamaño del contenedor:", w, h); // 👈 verifica en consola
+  
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+});
+
 // 🟢 Controles
 const controls = !isMobileOrTablet ? new OrbitControls(camera, renderer.domElement) : { update() {} };
 
@@ -63,7 +75,7 @@ let muro;
 // 🟢 Carga del modelo
 const loader = new GLTFLoader();
 loader.load(
-  "../src/objt/piedepagina/monedadsain.glb",
+  "/src/objt/piedepagina/monedadsain.glb",
   (gltf) => {
     const model = gltf.scene;
     model.scale.set(0.4, 0.4, 0.4);
@@ -137,7 +149,7 @@ function onMouseLeave() {
 enableMouse();
 
 // 🟢 IntersectionObserver (pausa inteligente)
-let isInViewport = true;
+let isInViewport = false;
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -205,3 +217,10 @@ window.addEventListener("resize", () => {
   renderer.setSize(container.clientWidth, container.clientHeight);
   updateCameraPosition();
 });
+
+
+setTimeout(() => {
+  console.log("¿Canvas en DOM?", container.querySelector("canvas"));
+  console.log("Hitboxes:", hitboxes.length);
+  console.log("Muro:", muro);
+}, 3000);

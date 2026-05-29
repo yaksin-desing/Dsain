@@ -145,10 +145,6 @@ function main() {
     iniciarGiroscopioAndroid();
   }
 
-
-
-
-
   let textMeshes = {}; // Objeto para almacenar los textos
   const loadertx = new FontLoader();
 
@@ -400,8 +396,6 @@ function main() {
     (error) => console.error("Error al cargar el modelo:", error)
   );
 
-
-
   // EVENTO UNO
   const loaderbanderas = new THREE.TextureLoader();
   const textures = [
@@ -428,7 +422,7 @@ function main() {
       void main() {
         vUv = uv;
         vec3 pos = position;
-        float wave = sin(pos.y * 3.0 + uTime * 1.0) * 0.1;
+        float wave = sin(pos.y * 2.0 + uTime * 1.0) * 0.1;
         pos.x += wave;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
@@ -483,7 +477,7 @@ function main() {
     let isVisible = false;
 
     planes.forEach(plane => {
-      plane.position.z += (cameraZ - 2 - plane.position.z) * 0.1;
+      plane.position.z += (cameraZ - 2.9 - plane.position.z) * 0.5;
       plane.position.x += (cameraX - plane.position.x) * 0.1;
       plane.position.y += (cameraY - plane.position.y) * 0.1;
       plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
@@ -537,7 +531,7 @@ function main() {
       void main() {
         vUv = uv;
         vec3 pos = position;
-        float wave = sin(pos.y * 3.0 + uTime * 1.0) * 0.1;
+        float wave = sin(pos.y * 2.0 + uTime * 1.0) * 0.1;
         pos.x += wave;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
@@ -599,7 +593,7 @@ function main() {
       minZ,
       maxZ
     }) => {
-      planeD.position.z += (cameraZ - 2 - planeD.position.z) * 0.12;
+      planeD.position.z += (cameraZ - 2.9 - planeD.position.z) * 0.5;
       planeD.position.x += (cameraX - planeD.position.x) * 0.1;
       planeD.position.y += (cameraY - planeD.position.y) * 0.1;
       planeD.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
@@ -649,7 +643,7 @@ function main() {
       void main() {
         vUv = uv;
         vec3 pos = position;
-        float wave = sin(pos.y * 3.0 + uTime * 1.0) * 0.1;
+        float wave = sin(pos.y * 2.0 + uTime * 1.0) * 0.1;
         pos.x += wave;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
@@ -709,7 +703,7 @@ function main() {
       minZ,
       maxZ
     }) => {
-      planeT.position.z += (cameraZ - 2 - planeT.position.z) * 0.12;
+      planeT.position.z += (cameraZ - 2.9 - planeT.position.z) * 0.12;
       planeT.position.x += (cameraX - planeT.position.x) * 0.1;
       planeT.position.y += (cameraY - planeT.position.y) * 0.1;
       planeT.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
@@ -1179,7 +1173,7 @@ if (freezeSceneDos) {
       // Actualizar el tiempo en cada material
       planesD.forEach(planeD => {
         if (planeD.material.uniforms.uTime) {
-          planeD.material.uniforms.uTime.value += 0.02;
+          planeD.material.uniforms.uTime.value += 0.01;
         }
       });
 
@@ -1189,7 +1183,7 @@ if (freezeSceneDos) {
       if (cameraTres.position.z >= 5) { // Actualizar el tiempo en cada material
         planesT.forEach(planeT => {
           if (planeT.material.uniforms.uTime) {
-            planeT.material.uniforms.uTime.value += 0.02;
+            planeT.material.uniforms.uTime.value += 0.01;
           }
         });
         // Actualizar planos
@@ -1293,7 +1287,7 @@ if (cameraDos.position.z >= 1100) {
     // SIEMPRE ejecuta updatePlanes para que el botón también baje cuando z < 30
     planes.forEach(plane => {
       if (plane.material ?.uniforms ?.uTime) {
-        plane.material.uniforms.uTime.value += 0.02;
+        plane.material.uniforms.uTime.value += 0.01;
       }
     });
     updatePlanes(); // <- sin condicional
