@@ -207,7 +207,7 @@ window.addEventListener("load", () => {
       y: 30,
       opacity: 0,
       stagger: 0.04,
-      duration: 0.2,
+      duration: 0.7,
       ease: "back.out(1.7)",
     });
   }

@@ -17,18 +17,9 @@ import {
   Water
 } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Water.js";
 
-
-
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
-
-
-
-
 import Stats from 'https://cdnjs.cloudflare.com/ajax/libs/stats.js/17/Stats.js'
-
-
-
 
 import {
   mixerpuerta,
@@ -92,9 +83,6 @@ function main() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Máximo x2 para evitar sobrecarga
   container.appendChild(renderer.domElement);
 
-
-
-
   // Carga la animación Lottie
   const animationprogres = lottie.loadAnimation({
     container: document.getElementById("lottie-container"), // Contenedor para la animación
@@ -103,8 +91,6 @@ function main() {
     autoplay: false,
     path: "./src/img/progreso.json", // Ruta de tu archivo Lottie
   });
-
-
 
 
   const mouse = new THREE.Vector2();
