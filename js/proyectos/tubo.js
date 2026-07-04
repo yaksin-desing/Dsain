@@ -221,7 +221,8 @@ window.addEventListener("load", () => {
         opacity: 0,
         stagger: 0.02,
         duration: 0.1,
-        ease: "power2.in",
+        ease: "power2.in", 
+        
         onComplete: () => {
           elemento.splitText.revert();
           mostrarNuevoTexto(elemento, nuevoTexto);
