@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         } else {
           gsap.to(".imagen_proyecto", {
-            width: "70%",
+            width: "47%",
             duration: 1,
             ease: "power2.out"
           });
@@ -146,18 +146,18 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- TABLET GRANDE / LAPTOP (769px a 1024px) ---
         if (idActual === "section_screen_uno") {
           gsap.to(".imagen_proyecto", {
-            width: "85vw",
+            width: "90vw",
             duration: 1,
             ease: "power2.out"
           });
           gsap.to(".imagen_proyecto", {
-            y: "38vw",
+            y: "77vw",
             duration: 1,
             ease: "power2.out"
           });
         } else {
           gsap.to(".imagen_proyecto", {
-            width: "15vw",
+            width: "27%",
             duration: 1,
             ease: "power2.out"
           });
@@ -172,18 +172,18 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- PANTALLAS GRANDES (> 1024px) ---
         if (idActual === "section_screen_uno") {
           gsap.to(".imagen_proyecto", {
-            width: "85vw",
+            width: "77vw",
             duration: 1,
             ease: "power2.out"
           });
           gsap.to(".imagen_proyecto", {
-            y: "38vw",
+            y: "37vw",
             duration: 1,
             ease: "power2.out"
           });
         } else {
           gsap.to(".imagen_proyecto", {
-            width: "15vw",
+            width: "13vw",
             duration: 1,
             ease: "power2.out"
           });
