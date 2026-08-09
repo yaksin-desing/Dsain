@@ -87,12 +87,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const mqLarge = window.matchMedia("(min-width: 769px) and (max-width: 1024px)");
     // Si no entra en ninguno, asumimos que es > 1024px
 
-    function aplicarAnimacion() {
+function aplicarAnimacion() {
       const idActual = sections[current].id;
 
       if (mqSmall.matches) {
         // --- MÓVIL PEQUEÑO (hasta 480px) ---
+        console.log("[aplicarAnimacion] Breakpoint: MÓVIL PEQUEÑO (mqSmall)", "| Sección:", idActual);
+
         if (idActual === "section_screen_uno") {
+          console.log("[aplicarAnimacion] Rama: section_screen_uno");
           gsap.to(".imagen_proyecto", {
             width: "130vh",
             duration: 1,
@@ -104,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ease: "power2.out"
           });
         } else {
+          console.log("[aplicarAnimacion] Rama: else (otra sección)");
           gsap.to(".imagen_proyecto", {
             width: "70%",
             duration: 1,
@@ -118,7 +122,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       } else if (mqMedium.matches) {
         // --- TABLET PEQUEÑA (481px a 768px) ---
+        console.log("[aplicarAnimacion] Breakpoint: TABLET PEQUEÑA (mqMedium)", "| Sección:", idActual);
+
         if (idActual === "section_screen_uno") {
+          console.log("[aplicarAnimacion] Rama: section_screen_uno");
           gsap.to(".imagen_proyecto", {
             width: "100vw",
             duration: 1,
@@ -130,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ease: "power2.out"
           });
         } else {
+          console.log("[aplicarAnimacion] Rama: else (otra sección)");
           gsap.to(".imagen_proyecto", {
             width: "47%",
             duration: 1,
@@ -144,7 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       } else if (mqLarge.matches) {
         // --- TABLET GRANDE / LAPTOP (769px a 1024px) ---
+        console.log("[aplicarAnimacion] Breakpoint: TABLET GRANDE / LAPTOP (mqLarge)", "| Sección:", idActual);
+
         if (idActual === "section_screen_uno") {
+          console.log("[aplicarAnimacion] Rama: section_screen_uno");
           gsap.to(".imagen_proyecto", {
             width: "90vw",
             duration: 1,
@@ -156,6 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ease: "power2.out"
           });
         } else {
+          console.log("[aplicarAnimacion] Rama: else (otra sección)");
           gsap.to(".imagen_proyecto", {
             width: "27%",
             duration: 1,
@@ -170,25 +182,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
       } else {
         // --- PANTALLAS GRANDES (> 1024px) ---
+        console.log("[aplicarAnimacion] Breakpoint: PANTALLA GRANDE (default)", "| Sección:", idActual);
+
         if (idActual === "section_screen_uno") {
+          console.log("[aplicarAnimacion] Rama: section_screen_uno");
           gsap.to(".imagen_proyecto", {
             width: "77vw",
             duration: 1,
             ease: "power2.out"
           });
           gsap.to(".imagen_proyecto", {
-            y: "37vw",
+            y: "90%",
             duration: 1,
             ease: "power2.out"
           });
         } else {
+          console.log("[aplicarAnimacion] Rama: else (otra sección)");
           gsap.to(".imagen_proyecto", {
             width: "13vw",
             duration: 1,
             ease: "power2.out"
           });
           gsap.to(".imagen_proyecto", {
-            y: "0vw",
+            y: "0%",
             duration: 1,
             ease: "power2.out"
           });
