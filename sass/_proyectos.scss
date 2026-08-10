@@ -656,13 +656,13 @@ $fondoboto: #eff3ff;
             }
 
             .cont_color {
-                display: flex;
-                flex-direction: row;
-                gap: 5vw;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(18vw, 1fr));
+                gap: 3vw;
                 margin: 3vw;
 
-                .coloruno {
-                    width: 20vw;
+                >div {
+                    width: 100%;
                     height: 30vw;
                     display: flex;
                     flex-direction: column;
@@ -670,7 +670,6 @@ $fondoboto: #eff3ff;
                     align-items: center;
                     padding: 20px 27px;
                     border-radius: 5px;
-                    background-color: #0048ff;
 
                     .hex {
                         width: 100%;
@@ -682,7 +681,6 @@ $fondoboto: #eff3ff;
                         line-height: normal;
                         letter-spacing: normal;
                         text-align: start;
-                        color: #fff;
                     }
 
                     .titulo {
@@ -692,7 +690,6 @@ $fondoboto: #eff3ff;
                         font-style: normal;
                         line-height: 1;
                         text-align: center;
-                        color: #fff;
                     }
 
                     .texto {
@@ -705,60 +702,8 @@ $fondoboto: #eff3ff;
                         line-height: 0.9;
                         letter-spacing: normal;
                         text-align: end;
-                        color: #fff;
                     }
                 }
-
-                .colordos {
-                    width: 20vw;
-                    height: 30vw;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 20px 27px;
-                    border-radius: 5px;
-                    background-color: #F4F6FF;
-
-                    .hex {
-                        width: 100%;
-                        font-family: "Regular";
-                        font-size: 12px;
-                        font-weight: 500;
-                        font-stretch: normal;
-                        font-style: normal;
-                        line-height: normal;
-                        letter-spacing: normal;
-                        text-align: start;
-                        color: #0048ff;
-                    }
-
-                    .titulo {
-                        font-family: "light";
-                        font-size: 0.7vw;
-                        font-stretch: normal;
-                        font-style: normal;
-                        line-height: 1;
-                        text-align: center;
-                        color: #0048ff;
-                    }
-
-                    .texto {
-                        width: 100%;
-                        font-family: "Regular";
-                        font-size: 70px;
-                        font-weight: 600;
-                        font-stretch: normal;
-                        font-style: normal;
-                        line-height: 0.9;
-                        letter-spacing: normal;
-                        text-align: end;
-                        color: #0048ff;
-                    }
-                }
-
-
-
             }
         }
 
@@ -1955,113 +1900,46 @@ $fondoboto: #eff3ff;
                 }
 
                 .cont_color {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 5vw;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 4vw;
                     margin: 3vw;
                     width: 100%;
-                    height: 100%;
 
-                    .coloruno {
-                        width: 70%;
-                        height: 50%;
+                    >div {
+                        width: 100%;
+                        height: 40vw;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
-                        padding: 20px 20px;
-                        border-radius: 5px;
-                        background-color: #0048ff;
+                        padding: 15px 15px;
+                        border-radius: 8px;
 
                         .hex {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 12px;
+                            font-size: 3vw;
                             font-weight: 500;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: normal;
-                            letter-spacing: normal;
                             text-align: start;
-                            color: #fff;
                         }
 
                         .titulo {
                             font-family: "light";
                             font-size: 3.5vw;
-                            font-stretch: normal;
-                            font-style: normal;
                             line-height: 1;
                             text-align: center;
-                            color: #fff;
                         }
 
                         .texto {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 70px;
+                            font-size: 9vw;
                             font-weight: 600;
-                            font-stretch: normal;
-                            font-style: normal;
                             line-height: 0.9;
-                            letter-spacing: normal;
                             text-align: end;
-                            color: #fff;
                         }
                     }
-
-                    .colordos {
-                        width: 70%;
-                        height: 50%;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding: 20px 20px;
-                        border-radius: 5px;
-                        background-color: #F4F6FF;
-
-                        .hex {
-                            width: 100%;
-                            font-family: "Regular";
-                            font-size: 12px;
-                            font-weight: 500;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: normal;
-                            letter-spacing: normal;
-                            text-align: start;
-                            color: #0048ff;
-                        }
-
-                        .titulo {
-                            font-family: "light";
-                            font-size: 3.7vw;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: 1;
-                            text-align: center;
-                            color: #0048ff;
-                        }
-
-                        .texto {
-                            width: 100%;
-                            font-family: "Regular";
-                            font-size: 70px;
-                            font-weight: 600;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: 0.9;
-                            letter-spacing: normal;
-                            text-align: end;
-                            color: #0048ff;
-                        }
-                    }
-
-
-
                 }
             }
 
@@ -3267,113 +3145,46 @@ $fondoboto: #eff3ff;
                 }
 
                 .cont_color {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 5vw;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 4vw;
                     margin: 3vw;
                     width: 100%;
-                    height: 100%;
 
-                    .coloruno {
-                        width: 50%;
-                        height: 50%;
+                    >div {
+                        width: 100%;
+                        height: 35vw;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
                         padding: 20px 20px;
                         border-radius: 10px;
-                        background-color: #0048ff;
 
                         .hex {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 17px;
+                            font-size: 2.2vw;
                             font-weight: 500;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: normal;
-                            letter-spacing: normal;
                             text-align: start;
-                            color: #fff;
                         }
 
                         .titulo {
                             font-family: "light";
                             font-size: 3vw;
-                            font-stretch: normal;
-                            font-style: normal;
                             line-height: 1;
                             text-align: center;
-                            color: #fff;
                         }
 
                         .texto {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 75px;
+                            font-size: 8vw;
                             font-weight: 600;
-                            font-stretch: normal;
-                            font-style: normal;
                             line-height: 0.9;
-                            letter-spacing: normal;
                             text-align: end;
-                            color: #fff;
                         }
                     }
-
-                    .colordos {
-                        width: 50%;
-                        height: 50%;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding: 20px 20px;
-                        border-radius: 10px;
-                        background-color: #F4F6FF;
-
-                        .hex {
-                            width: 100%;
-                            font-family: "Regular";
-                            font-size: 17px;
-                            font-weight: 500;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: normal;
-                            letter-spacing: normal;
-                            text-align: start;
-                            color: #0048ff;
-                        }
-
-                        .titulo {
-                            font-family: "light";
-                            font-size: 3vw;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: 1;
-                            text-align: center;
-                            color: #0048ff;
-                        }
-
-                        .texto {
-                            width: 100%;
-                            font-family: "Regular";
-                            font-size: 75px;
-                            font-weight: 600;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: 0.9;
-                            letter-spacing: normal;
-                            text-align: end;
-                            color: #0048ff;
-                        }
-                    }
-
-
-
                 }
             }
 
@@ -4579,113 +4390,46 @@ $fondoboto: #eff3ff;
                 }
 
                 .cont_color {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 5vw;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 3vw;
                     margin: 3vw;
                     width: 100%;
-                    height: 100%;
 
-                    .coloruno {
-                        width: 50%;
-                        height: 50%;
+                    >div {
+                        width: 100%;
+                        height: 25vw;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         align-items: center;
                         padding: 20px 20px;
                         border-radius: 10px;
-                        background-color: #0048ff;
 
                         .hex {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 17px;
+                            font-size: 1.8vw;
                             font-weight: 500;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: normal;
-                            letter-spacing: normal;
                             text-align: start;
-                            color: #fff;
                         }
 
                         .titulo {
                             font-family: "light";
-                            font-size: 3vw;
-                            font-stretch: normal;
-                            font-style: normal;
+                            font-size: 2.5vw;
                             line-height: 1;
                             text-align: center;
-                            color: #fff;
                         }
 
                         .texto {
                             width: 100%;
                             font-family: "Regular";
-                            font-size: 75px;
+                            font-size: 6vw;
                             font-weight: 600;
-                            font-stretch: normal;
-                            font-style: normal;
                             line-height: 0.9;
-                            letter-spacing: normal;
                             text-align: end;
-                            color: #fff;
                         }
                     }
-
-                    .colordos {
-                        width: 50%;
-                        height: 50%;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding: 20px 20px;
-                        border-radius: 10px;
-                        background-color: #F4F6FF;
-
-                        .hex {
-                            width: 100%;
-                            font-family: "Regular";
-                            font-size: 17px;
-                            font-weight: 500;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: normal;
-                            letter-spacing: normal;
-                            text-align: start;
-                            color: #0048ff;
-                        }
-
-                        .titulo {
-                            font-family: "light";
-                            font-size: 3vw;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: 1;
-                            text-align: center;
-                            color: #0048ff;
-                        }
-
-                        .texto {
-                            width: 100%;
-                            font-family: "Regular";
-                            font-size: 75px;
-                            font-weight: 600;
-                            font-stretch: normal;
-                            font-style: normal;
-                            line-height: 0.9;
-                            letter-spacing: normal;
-                            text-align: end;
-                            color: #0048ff;
-                        }
-                    }
-
-
-
                 }
             }
 
