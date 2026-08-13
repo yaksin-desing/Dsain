@@ -2822,6 +2822,7 @@ h5 {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #000000;
 }
 .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto .imagen_proyecto {
   width: 13vw;
@@ -2997,10 +2998,10 @@ h5 {
   padding-bottom: 5px;
 }
 .proyecto .contenedorproyectos #section_tres .cont_color {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18vw, 1fr));
   gap: 3vw;
   margin: 3vw;
-  width: 100%;
 }
 .proyecto .contenedorproyectos #section_tres .cont_color > div {
   width: 100%;
@@ -3258,7 +3259,8 @@ h5 {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
   display: block;
   transform: translateY(-0.5px);
   /* elimina línea negra inferior */
@@ -3416,6 +3418,7 @@ h5 {
 }
 .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto .boton_contact {
   white-space: nowrap;
+  width: -moz-min-content;
   width: min-content;
   display: flex;
   flex-direction: row;
@@ -3446,12 +3449,12 @@ h5 {
   overflow: hidden;
   display: flex;
   background-color: rgba(0, 0, 0, 0.2);
-  -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   justify-content: start;
 }
 .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel {
   display: flex;
+  width: -moz-max-content;
   width: max-content;
   animation: scroll 15s linear infinite;
 }
@@ -3876,6 +3879,7 @@ h5 {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #000000;
   }
   .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto .imagen_proyecto {
     width: 70%;
@@ -4308,7 +4312,8 @@ h5 {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
     display: block;
     transform: translateY(-0.5px);
     /* elimina línea negra inferior */
@@ -4468,6 +4473,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto .boton_contact {
     white-space: nowrap;
+    width: -moz-min-content;
     width: min-content;
     display: flex;
     flex-direction: row;
@@ -4500,12 +4506,12 @@ h5 {
     overflow: hidden;
     display: flex;
     background-color: rgba(0, 0, 0, 0.2);
-    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     justify-content: start;
   }
   .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel {
     display: flex;
+    width: -moz-max-content;
     width: max-content;
     animation: scroll 15s linear infinite;
   }
@@ -5363,7 +5369,8 @@ h5 {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
     display: block;
     transform: translateY(-0.5px);
     /* elimina línea negra inferior */
@@ -5523,6 +5530,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto .boton_contact {
     white-space: nowrap;
+    width: -moz-min-content;
     width: min-content;
     display: flex;
     flex-direction: row;
@@ -5555,12 +5563,12 @@ h5 {
     overflow: hidden;
     display: flex;
     background-color: rgba(0, 0, 0, 0.2);
-    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     justify-content: start;
   }
   .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel {
     display: flex;
+    width: -moz-max-content;
     width: max-content;
     animation: scroll 15s linear infinite;
   }
@@ -6418,7 +6426,8 @@ h5 {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
     display: block;
     transform: translateY(-0.5px);
     /* elimina línea negra inferior */
@@ -6578,6 +6587,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_boton_contacto .boton_contact {
     white-space: nowrap;
+    width: -moz-min-content;
     width: min-content;
     display: flex;
     flex-direction: row;
@@ -6610,12 +6620,12 @@ h5 {
     overflow: hidden;
     display: flex;
     background-color: rgba(0, 0, 0, 0.2);
-    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     justify-content: start;
   }
   .proyecto .contenedorproyectos #section_once footer .cont_pie .cont_riel_pie .espacio_riel {
     display: flex;
+    width: -moz-max-content;
     width: max-content;
     animation: scroll 15s linear infinite;
   }

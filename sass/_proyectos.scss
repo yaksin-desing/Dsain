@@ -452,6 +452,10 @@ $fondoboto: #eff3ff;
             }
 
             .cont_imagen_proyecto {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
                 .imagen_proyecto {
                     width: 13vw;
                     height: auto;
@@ -656,10 +660,10 @@ $fondoboto: #eff3ff;
             }
 
             .cont_color {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(18vw, 1fr));
+                display: flex;
                 gap: 3vw;
                 margin: 3vw;
+                width: 100%;
 
                 >div {
                     width: 100%;
@@ -1238,7 +1242,7 @@ $fondoboto: #eff3ff;
 /* Móvil pequeño */
 @media (max-width: 480px) {
     .proyecto {
-        overflow: hidden;
+        overflow: none;
 
         .word {
 
@@ -1694,6 +1698,7 @@ $fondoboto: #eff3ff;
                     justify-content: center;
 
                     .imagen_proyecto {
+
                         width: 70%;
                         height: auto;
                         border-radius: 5px;
@@ -1887,6 +1892,7 @@ $fondoboto: #eff3ff;
                 align-items: center;
                 flex-direction: column;
                 position: relative;
+
 
                 .titulo_seccion {
                     font-family: "medium";
@@ -4180,6 +4186,7 @@ $fondoboto: #eff3ff;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+
 
                     .imagen_proyecto {
                         width: 27%;
