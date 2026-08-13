@@ -737,14 +737,14 @@ $fondoboto: #eff3ff;
                 justify-content: center;
                 display: flex;
                 flex-direction: column;
-                align-items: center;
-                gap: 2vw;
-                margin: 3vw;
+                align-items: left;
+                gap: 0.5vw;
+                margin: 1vw;
                 width: 100%;
 
                 .titulo_fuente {
                     font-family: "bold";
-                    font-size: 3vw;
+                    font-size: 2.5vw;
                     font-weight: bold;
                     font-stretch: normal;
                     font-style: normal;
@@ -756,8 +756,8 @@ $fondoboto: #eff3ff;
                 }
 
                 .parrafo_fuente {
-                    margin-left: 3vw;
-                    margin-right: 3vw;
+                    margin-left: 1vw;
+                    margin-right: 1vw;
                     font-family: "Regular";
                     font-size: 1vw;
                     font-weight: normal;
@@ -765,7 +765,7 @@ $fondoboto: #eff3ff;
                     font-style: normal;
                     line-height: 1.5;
                     letter-spacing: normal;
-                    text-align: center;
+                    text-align: left;
                     color: $colorp;
 
                 }
