@@ -149,7 +149,7 @@ function onMouseLeave() {
 enableMouse();
 
 // 🟢 IntersectionObserver (pausa inteligente)
-let isInViewport = false;
+let isInViewport = false;   // 👈 agrega esta línea de vuelta
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -160,13 +160,11 @@ const observer = new IntersectionObserver(
         if (!disableInteractions) enableMouse();
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileOrTablet ? 1.2 : 2));
         renderer.shadowMap.enabled = !isMobileOrTablet;
-        gsap.globalTimeline.resume();
       } else if (!visible && isInViewport) {
         isInViewport = false;
         disableMouse();
         renderer.setPixelRatio(0.5);
         renderer.shadowMap.enabled = false;
-        gsap.globalTimeline.pause();
       }
     });
   },
