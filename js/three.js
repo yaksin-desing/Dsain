@@ -42,6 +42,12 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 function main() {
+  const idioma = document.documentElement.lang;
+  document.querySelectorAll("[data-es]").forEach((elemento) => {
+    if (idioma === "es") {
+      elemento.textContent = elemento.dataset.es;
+    }
+  });
 
 
 
@@ -141,53 +147,53 @@ function main() {
     if (screenWidth < 450) {
       // Configuración para pantallas muy pequeñas (<400px)
       return [{
-          id: "text2",
-          text: "Middle Ux-Designer",
-          font: "src/fonts/Light_Regular.json",
-          size: 2000,
-          y: 2.8
-        },
-        {
-          id: "text1",
-          text: "YAKSIN SAIN",
-          font: "src/fonts/false_Semi-bold.json",
-          size: 900,
-          y: 2
-        },
+        id: "text2",
+        text: "Middle Ux-Designer",
+        font: "src/fonts/Light_Regular.json",
+        size: 2000,
+        y: 2.8
+      },
+      {
+        id: "text1",
+        text: "YAKSIN SAIN",
+        font: "src/fonts/false_Semi-bold.json",
+        size: 900,
+        y: 2
+      },
       ];
     } else if (screenWidth < 855) {
       // Configuración para pantallas pequeñas (<855px)
       return [{
-          id: "text2",
-          text: "Middle Ux-Designer",
-          font: "src/fonts/Light_Regular.json",
-          size: 2500,
-          y: 2.5
-        },
-        {
-          id: "text1",
-          text: "YAKSIN SAIN",
-          font: "src/fonts/false_Semi-bold.json",
-          size: 800,
-          y: 1.5
-        },
+        id: "text2",
+        text: "Middle Ux-Designer",
+        font: "src/fonts/Light_Regular.json",
+        size: 2500,
+        y: 2.5
+      },
+      {
+        id: "text1",
+        text: "YAKSIN SAIN",
+        font: "src/fonts/false_Semi-bold.json",
+        size: 800,
+        y: 1.5
+      },
       ];
     } else {
       // Configuración para pantallas grandes (>=855px)
       return [{
-          id: "text2",
-          text: "Middle Ux-Designer",
-          font: "src/fonts/Light_Regular.json",
-          size: 4000,
-          y: 3.5
-        },
-        {
-          id: "text1",
-          text: "YAKSIN SAIN",
-          font: "src/fonts/false_Semi-bold.json",
-          size: 900,
-          y: 1.2
-        },
+        id: "text2",
+        text: "Middle Ux-Designer",
+        font: "src/fonts/Light_Regular.json",
+        size: 4000,
+        y: 3.5
+      },
+      {
+        id: "text1",
+        text: "YAKSIN SAIN",
+        font: "src/fonts/false_Semi-bold.json",
+        size: 900,
+        y: 1.2
+      },
       ];
     }
 
@@ -570,7 +576,7 @@ function main() {
       planeD: planesD[0],
       minZ: 1040,
       maxZ: 1090
-    }, ];
+    },];
 
     let isVisible = false; // ← Aquí lo inicializamos
 
@@ -914,22 +920,22 @@ function main() {
 
       // Animación con GSAP y ScrollTrigger
       gsap.timeline({
-          scrollTrigger: {
-            scroller: "#scroll-content", // Usar el contenedor virtual
-            trigger: "#contenedor",
-            start: "top top",
-            end: () => window.innerWidth > 768 ? "25000vh" : "10000vh", // 200vh para desktop, 500vh para móvil
-            scrub: 2,
-            pin: true,
-            markers: false,
-            onUpdate: function (self) {
-              const progress = self.progress; // Progreso del scroll (0 a 1)
-              const frame = Math.round(61 + progress * (endFrame - 61));
-              animationprogres.goToAndStop(frame, true);
-            },
-
+        scrollTrigger: {
+          scroller: "#scroll-content", // Usar el contenedor virtual
+          trigger: "#contenedor",
+          start: "top top",
+          end: () => window.innerWidth > 768 ? "25000vh" : "10000vh", // 200vh para desktop, 500vh para móvil
+          scrub: 2,
+          pin: true,
+          markers: false,
+          onUpdate: function (self) {
+            const progress = self.progress; // Progreso del scroll (0 a 1)
+            const frame = Math.round(61 + progress * (endFrame - 61));
+            animationprogres.goToAndStop(frame, true);
           },
-        })
+
+        },
+      })
         .to(camera.position, {
           duration: 10,
           y: 2,
@@ -994,23 +1000,23 @@ function main() {
 
   // Definir rangos personalizados con sus respectivas cámaras
   const ranges = [{
-      id: "proyecto-1",
-      min: 30,
-      max: 80,
-      camera: camera
-    },
-    {
-      id: "proyecto-2",
-      min: 1040,
-      max: 1090,
-      camera: cameraDos
-    },
-    {
-      id: "proyecto-3",
-      min: 20,
-      max: 110,
-      camera: cameraTres
-    },
+    id: "proyecto-1",
+    min: 30,
+    max: 80,
+    camera: camera
+  },
+  {
+    id: "proyecto-2",
+    min: 1040,
+    max: 1090,
+    camera: cameraDos
+  },
+  {
+    id: "proyecto-3",
+    min: 20,
+    max: 110,
+    camera: cameraTres
+  },
   ];
 
   // Función para animar texto letra por letra
@@ -1094,28 +1100,28 @@ function main() {
 
 
 
-let frameCongelado = false;
-let freezeSceneDos = false;
+  let frameCongelado = false;
+  let freezeSceneDos = false;
 
 
   const clock = new THREE.Clock();
 
   // 🚫 Congelar sceneDos completamente
-if (freezeSceneDos) {
+  if (freezeSceneDos) {
 
-  // detener shaders animados
-  planesD.forEach(p => {
-    if (p.material?.uniforms?.uTime) {
-      p.material.uniforms.uTime.value = p.material.uniforms.uTime.value; // no avanzar
-    }
-  });
+    // detener shaders animados
+    planesD.forEach(p => {
+      if (p.material?.uniforms?.uTime) {
+        p.material.uniforms.uTime.value = p.material.uniforms.uTime.value; // no avanzar
+      }
+    });
 
-  // detener mixers (si existen)
-  if (mixerDos) mixerDos.update = () => {};
+    // detener mixers (si existen)
+    if (mixerDos) mixerDos.update = () => { };
 
-  // evitar updatePlanesDos()
-  // (si te interesa, lo puedes dejar sin efecto)
-}
+    // evitar updatePlanesDos()
+    // (si te interesa, lo puedes dejar sin efecto)
+  }
 
   var stats = new Stats();
   stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -1191,33 +1197,33 @@ if (freezeSceneDos) {
       });
 
 
-// Nueva condición dentro del primer if
-if (cameraDos.position.z >= 1100) {
+      // Nueva condición dentro del primer if
+      if (cameraDos.position.z >= 1100) {
 
-  // 🔥 Congelar el frame SOLO una vez
-  if (!frameCongelado) {
-    renderer.setRenderTarget(renderTargetTres);
-    renderer.render(sceneDos, cameraDos);
-    renderer.setRenderTarget(null);
+        // 🔥 Congelar el frame SOLO una vez
+        if (!frameCongelado) {
+          renderer.setRenderTarget(renderTargetTres);
+          renderer.render(sceneDos, cameraDos);
+          renderer.setRenderTarget(null);
 
-    frameCongelado = true;   // marcar que ya está congelado
-    freezeSceneDos = true;   // detener toda actualización ligada a sceneDos
-  }
+          frameCongelado = true;   // marcar que ya está congelado
+          freezeSceneDos = true;   // detener toda actualización ligada a sceneDos
+        }
 
-  // Animación de agua dentro de sceneTres
-  if (water?.material?.uniforms?.time) {
-    water.material.uniforms.time.value += 0.02;
-  }
+        // Animación de agua dentro de sceneTres
+        if (water?.material?.uniforms?.time) {
+          water.material.uniforms.time.value += 0.02;
+        }
 
-  // Renderizar sceneTres normalmente
-  renderer.render(sceneTres, cameraTres);
-  updateTextVisibility(cameraTres);
+        // Renderizar sceneTres normalmente
+        renderer.render(sceneTres, cameraTres);
+        updateTextVisibility(cameraTres);
 
-  // Ocultar objetos de scene principal
-  scene.traverse((child) => {
-    if (child.isMesh) child.visible = false;
-  });
-}
+        // Ocultar objetos de scene principal
+        scene.traverse((child) => {
+          if (child.isMesh) child.visible = false;
+        });
+      }
 
     } else {
 
@@ -1272,7 +1278,7 @@ if (cameraDos.position.z >= 1100) {
 
     // SIEMPRE ejecuta updatePlanes para que el botón también baje cuando z < 30
     planes.forEach(plane => {
-      if (plane.material ?.uniforms ?.uTime) {
+      if (plane.material?.uniforms?.uTime) {
         plane.material.uniforms.uTime.value += 0.01;
       }
     });
