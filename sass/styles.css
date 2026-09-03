@@ -2475,7 +2475,7 @@ h5 {
   border-radius: 1000px;
   height: 0%;
   width: 100%;
-  background: #0048FF;
+  background: #0048ff;
   transition: height 0.1s linear;
 }
 .proyecto .contenedorproyectos .text_guia {
@@ -2497,7 +2497,7 @@ h5 {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0048FF;
+  color: #0048ff;
   writing-mode: sideways-lr;
 }
 .proyecto .contenedorproyectos .text_guia img {
@@ -2529,7 +2529,7 @@ h5 {
   justify-content: center;
   gap: 10px;
   padding: 10px 20px 10px 20px;
-  background-color: #0048FF;
+  background-color: #0048ff;
   border-radius: 30px;
   font-family: "Medium";
   font-size: 12px;
@@ -2790,7 +2790,7 @@ h5 {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0048FF;
+  color: #0048ff;
 }
 .proyecto .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
   padding-bottom: 4vh;
@@ -2802,7 +2802,7 @@ h5 {
   line-height: 0.67;
   letter-spacing: -0.25px;
   text-align: center;
-  color: #0048FF;
+  color: #0048ff;
 }
 .proyecto .contenedorproyectos #section_uno .parrafo {
   bottom: 7vw;
@@ -2816,19 +2816,54 @@ h5 {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0048FF;
+  color: #0048ff;
 }
 .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #000000;
 }
 .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto .imagen_proyecto {
   width: 13vw;
   height: auto;
   border-radius: 5px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+.proyecto .contenedorproyectos #section_uno .boton_launch {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 20px 10px 20px;
+  background-color: #0048ff;
+  border-radius: 30px;
+  font-family: "Medium";
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #eff3ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 2vw;
+  bottom: 2vw;
+}
+.proyecto .contenedorproyectos #section_uno .boton_launch:hover {
+  background-color: #003bd1;
+  transform: scale(1.05);
+  gap: 20px;
+}
+.proyecto .contenedorproyectos #section_uno .boton_launch .texto_boton {
+  text-decoration: none;
+  color: #eff3ff;
+}
+.proyecto .contenedorproyectos #section_uno .boton_launch img {
+  width: 17px;
 }
 .proyecto .contenedorproyectos #section_screen_uno {
   width: 100%;
@@ -2858,7 +2893,7 @@ h5 {
   line-height: 1.33;
   letter-spacing: -0.25px;
   text-align: left;
-  color: #0048FF;
+  color: #0048ff;
   padding-bottom: 2vw;
 }
 .proyecto .contenedorproyectos #section_dos .column_uno .parrafo {
@@ -2870,7 +2905,7 @@ h5 {
   line-height: 1.5;
   letter-spacing: normal;
   text-align: left;
-  color: #0048FF;
+  color: #0048ff;
   padding-bottom: 2vw;
 }
 .proyecto .contenedorproyectos #section_dos .column_uno .cont_info_proyecto {
@@ -2906,11 +2941,11 @@ h5 {
   line-height: 1.2;
   letter-spacing: normal;
   text-align: left;
-  color: #0048FF;
+  color: #0048ff;
 }
 .proyecto .contenedorproyectos #section_dos .column_dos {
   padding: 0vw 2vw 5vw 2vw;
-  border-left: 1px solid #0048FF;
+  border-left: 1px solid #0048ff;
   width: 50%;
   height: 100%;
   justify-content: space-between;
@@ -2975,7 +3010,7 @@ h5 {
   line-height: 1.2;
   letter-spacing: normal;
   text-align: left;
-  color: #0048FF;
+  color: #0048ff;
 }
 .proyecto .contenedorproyectos #section_tres {
   padding: 5vw 4vw 0vw 4vw;
@@ -2992,16 +3027,16 @@ h5 {
   font-size: 0.7vw;
   text-transform: uppercase;
   text-align: start;
-  color: #0048FF;
+  color: #0048ff;
   width: 100%;
-  border-bottom: #0048FF 1px solid;
+  border-bottom: #0048ff 1px solid;
   padding-bottom: 5px;
 }
 .proyecto .contenedorproyectos #section_tres .cont_color {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18vw, 1fr));
+  display: flex;
   gap: 3vw;
   margin: 3vw;
+  width: 100%;
 }
 .proyecto .contenedorproyectos #section_tres .cont_color > div {
   width: 100%;
@@ -3058,34 +3093,34 @@ h5 {
   font-size: 0.7vw;
   text-transform: uppercase;
   text-align: start;
-  color: #0048FF;
+  color: #0048ff;
   width: 100%;
-  border-bottom: #0048FF 1px solid;
+  border-bottom: #0048ff 1px solid;
   padding-bottom: 5px;
 }
 .proyecto .contenedorproyectos #section_cuatro .cont_fuente {
   justify-content: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 2vw;
-  margin: 3vw;
+  align-items: left;
+  gap: 0.5vw;
+  margin: 1vw;
   width: 100%;
 }
 .proyecto .contenedorproyectos #section_cuatro .cont_fuente .titulo_fuente {
   font-family: "bold";
-  font-size: 3vw;
+  font-size: 2.5vw;
   font-weight: bold;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.33;
   letter-spacing: -0.25px;
   text-align: left;
-  color: #0048FF;
+  color: #0048ff;
 }
 .proyecto .contenedorproyectos #section_cuatro .cont_fuente .parrafo_fuente {
-  margin-left: 3vw;
-  margin-right: 3vw;
+  margin-left: 1vw;
+  margin-right: 1vw;
   font-family: "Regular";
   font-size: 1vw;
   font-weight: normal;
@@ -3093,8 +3128,8 @@ h5 {
   font-style: normal;
   line-height: 1.5;
   letter-spacing: normal;
-  text-align: center;
-  color: #0048FF;
+  text-align: left;
+  color: #0048ff;
 }
 .proyecto .contenedorproyectos #section_cuatro .cont_fuente .cont_tipe_texto {
   justify-content: space-between;
@@ -3120,9 +3155,9 @@ h5 {
   font-size: 0.7vw;
   text-transform: uppercase;
   text-align: start;
-  color: #0048FF;
+  color: #0048ff;
   width: 100%;
-  border-bottom: #0048FF 1px solid;
+  border-bottom: #0048ff 1px solid;
   padding-bottom: 5px;
 }
 .proyecto .contenedorproyectos #section_cinco .cont_moodboard {
@@ -3153,9 +3188,9 @@ h5 {
   font-size: 0.7vw;
   text-transform: uppercase;
   text-align: start;
-  color: #0048FF;
+  color: #0048ff;
   width: 100%;
-  border-bottom: #0048FF 1px solid;
+  border-bottom: #0048ff 1px solid;
   padding-bottom: 5px;
 }
 .proyecto .contenedorproyectos #section_seis .cont_img_section_seis {
@@ -3178,7 +3213,7 @@ h5 {
   height: 40%;
   overflow: hidden;
   border-radius: 30px;
-  background: #0048FF;
+  background: #0048ff;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -3201,7 +3236,7 @@ h5 {
   height: 100%;
   overflow: hidden;
   border-radius: 30px;
-  background: #0048FF;
+  background: #0048ff;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -3220,7 +3255,7 @@ h5 {
   overflow: hidden;
   border-radius: 30px;
   height: 60%;
-  background: #0048FF;
+  background: #0048ff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3232,7 +3267,7 @@ h5 {
   overflow: hidden;
   border-radius: 30px;
   height: 40%;
-  background: #0048FF;
+  background: #0048ff;
   position: relative;
 }
 .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_dos img {
@@ -3312,7 +3347,7 @@ h5 {
   font-size: 1.5vw;
   font-weight: 700;
   text-align: left;
-  color: #0048FF;
+  color: #0048ff;
   text-shadow: 0 0 1px rgb(20, 0, 199);
   display: inline-block;
   line-height: 1.3;
@@ -3328,7 +3363,7 @@ h5 {
   font-size: 0.8vw;
   font-weight: normal;
   letter-spacing: normal;
-  color: #0048FF;
+  color: #0048ff;
   padding-top: 0.8vw;
   text-align: center;
   line-height: 1.5;
@@ -3436,7 +3471,7 @@ h5 {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0048FF;
+  color: #0048ff;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -3535,7 +3570,7 @@ h5 {
     border-radius: 1000px;
     height: 0%;
     width: 100%;
-    background: #0048FF;
+    background: #0048ff;
     transition: height 0.1s linear;
   }
   .proyecto .contenedorproyectos .text_guia {
@@ -3557,7 +3592,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     writing-mode: sideways-lr;
   }
   .proyecto .contenedorproyectos .text_guia img {
@@ -3603,7 +3638,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     cursor: pointer;
     transition: all 0.3s ease;
     display: none;
@@ -3847,7 +3882,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
     padding-bottom: 4vh;
@@ -3859,7 +3894,7 @@ h5 {
     line-height: 0.67;
     letter-spacing: -0.25px;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .parrafo {
     bottom: 17vw;
@@ -3873,19 +3908,24 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #000000;
   }
   .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto .imagen_proyecto {
     width: 70%;
     height: auto;
     border-radius: 5px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .proyecto .contenedorproyectos #section_uno .boton_launch {
+    left: 50%;
+    right: auto;
+    bottom: 20px;
+    transform: translateX(-50%);
   }
   .proyecto .contenedorproyectos #section_screen_uno {
     width: 100%;
@@ -3915,7 +3955,7 @@ h5 {
     line-height: 1.33;
     letter-spacing: -0.25px;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     padding-bottom: 2vw;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .parrafo {
@@ -3927,7 +3967,7 @@ h5 {
     line-height: 1.5;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     padding-bottom: 2vw;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .cont_info_proyecto {
@@ -3963,11 +4003,11 @@ h5 {
     line-height: 1.2;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_dos .column_dos {
     padding: 0vw 0vw 0vw 0vw;
-    border-left: 0px solid #0048FF;
+    border-left: 0px solid #0048ff;
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -4034,7 +4074,7 @@ h5 {
     line-height: 1.2;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_tres {
     padding: 17vw 4vw 0vw 4vw;
@@ -4051,9 +4091,9 @@ h5 {
     font-size: 3.5vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color {
@@ -4109,9 +4149,9 @@ h5 {
     font-size: 3.5vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente {
@@ -4130,7 +4170,7 @@ h5 {
     font-stretch: normal;
     font-style: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente .parrafo_fuente {
     margin-left: 3vw;
@@ -4143,7 +4183,7 @@ h5 {
     line-height: 1.5;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente .cont_tipe_texto {
     justify-content: space-between;
@@ -4169,9 +4209,9 @@ h5 {
     font-size: 3.7vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_cinco .cont_moodboard {
@@ -4206,9 +4246,9 @@ h5 {
     font-size: 3.7vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis {
@@ -4231,7 +4271,7 @@ h5 {
     height: 40%;
     overflow: hidden;
     border-radius: 10px;
-    background: #0048FF;
+    background: #0048ff;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -4254,7 +4294,7 @@ h5 {
     height: 100%;
     overflow: hidden;
     border-radius: 10px;
-    background: #0048FF;
+    background: #0048ff;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -4273,7 +4313,7 @@ h5 {
     overflow: hidden;
     border-radius: 10px;
     height: 60%;
-    background: #0048FF;
+    background: #0048ff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -4285,7 +4325,7 @@ h5 {
     overflow: hidden;
     border-radius: 10px;
     height: 40%;
-    background: #0048FF;
+    background: #0048ff;
     position: relative;
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_dos img {
@@ -4366,7 +4406,7 @@ h5 {
     font-size: 4vw;
     font-weight: 700;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     text-shadow: 0 0 1px rgb(20, 0, 199);
     display: inline-block;
     line-height: 1.3;
@@ -4382,7 +4422,7 @@ h5 {
     font-size: 3vw;
     font-weight: normal;
     letter-spacing: normal;
-    color: #0048FF;
+    color: #0048ff;
     padding-top: 0.8vw;
     text-align: center;
     line-height: 1.5;
@@ -4491,7 +4531,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     cursor: pointer;
     transition: all 0.3s ease;
   }
@@ -4590,7 +4630,7 @@ h5 {
     border-radius: 1000px;
     height: 0%;
     width: 100%;
-    background: #0048FF;
+    background: #0048ff;
     transition: height 0.1s linear;
   }
   .proyecto .contenedorproyectos .text_guia {
@@ -4612,7 +4652,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     writing-mode: sideways-lr;
   }
   .proyecto .contenedorproyectos .text_guia img {
@@ -4658,7 +4698,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     cursor: pointer;
     transition: all 0.3s ease;
     display: none;
@@ -4902,7 +4942,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
     padding-bottom: 4vh;
@@ -4914,7 +4954,7 @@ h5 {
     line-height: 0.67;
     letter-spacing: -0.25px;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .parrafo {
     bottom: 17vw;
@@ -4928,7 +4968,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto {
     display: flex;
@@ -4969,7 +5009,7 @@ h5 {
     line-height: 1.33;
     letter-spacing: -0.25px;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     padding-bottom: 2vw;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .parrafo {
@@ -4981,7 +5021,7 @@ h5 {
     line-height: 1.5;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     padding-bottom: 2vw;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .cont_info_proyecto {
@@ -5018,12 +5058,12 @@ h5 {
     line-height: 1.2;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     white-space: nowrap;
   }
   .proyecto .contenedorproyectos #section_dos .column_dos {
     padding: 0vw 0vw 0vw 0vw;
-    border-left: 0px solid #0048FF;
+    border-left: 0px solid #0048ff;
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -5091,7 +5131,7 @@ h5 {
     line-height: 1.2;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_tres {
     padding: 14vw 4vw 0vw 4vw;
@@ -5108,9 +5148,9 @@ h5 {
     font-size: 3.5vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color {
@@ -5166,9 +5206,9 @@ h5 {
     font-size: 3.5vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente {
@@ -5187,7 +5227,7 @@ h5 {
     font-stretch: normal;
     font-style: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente .parrafo_fuente {
     margin-left: 3vw;
@@ -5200,7 +5240,7 @@ h5 {
     line-height: 1.5;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente .cont_tipe_texto {
     justify-content: space-between;
@@ -5226,9 +5266,9 @@ h5 {
     font-size: 3.7vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_cinco .cont_moodboard {
@@ -5263,9 +5303,9 @@ h5 {
     font-size: 3.7vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis {
@@ -5288,7 +5328,7 @@ h5 {
     height: 50%;
     overflow: hidden;
     border-radius: 10px;
-    background: #0048FF;
+    background: #0048ff;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -5311,7 +5351,7 @@ h5 {
     height: 100%;
     overflow: hidden;
     border-radius: 10px;
-    background: #0048FF;
+    background: #0048ff;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -5330,7 +5370,7 @@ h5 {
     overflow: hidden;
     border-radius: 10px;
     height: 60%;
-    background: #0048FF;
+    background: #0048ff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5342,7 +5382,7 @@ h5 {
     overflow: hidden;
     border-radius: 10px;
     height: 40%;
-    background: #0048FF;
+    background: #0048ff;
     position: relative;
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_dos img {
@@ -5423,7 +5463,7 @@ h5 {
     font-size: 3.5vw;
     font-weight: 700;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     text-shadow: 0 0 1px rgb(20, 0, 199);
     display: inline-block;
     line-height: 1.3;
@@ -5439,7 +5479,7 @@ h5 {
     font-size: 2.5vw;
     font-weight: normal;
     letter-spacing: normal;
-    color: #0048FF;
+    color: #0048ff;
     padding-top: 0.8vw;
     text-align: center;
     line-height: 1.5;
@@ -5548,7 +5588,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     cursor: pointer;
     transition: all 0.3s ease;
   }
@@ -5647,7 +5687,7 @@ h5 {
     border-radius: 1000px;
     height: 0%;
     width: 100%;
-    background: #0048FF;
+    background: #0048ff;
     transition: height 0.1s linear;
   }
   .proyecto .contenedorproyectos .text_guia {
@@ -5669,7 +5709,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     writing-mode: sideways-lr;
   }
   .proyecto .contenedorproyectos .text_guia img {
@@ -5715,7 +5755,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     cursor: pointer;
     transition: all 0.3s ease;
     display: none;
@@ -5959,7 +5999,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .cont_titulo .tituloproyecto {
     padding-bottom: 4vh;
@@ -5971,7 +6011,7 @@ h5 {
     line-height: 0.67;
     letter-spacing: -0.25px;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .parrafo {
     bottom: 17vw;
@@ -5985,7 +6025,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_uno .cont_imagen_proyecto {
     display: flex;
@@ -6026,7 +6066,7 @@ h5 {
     line-height: 1.33;
     letter-spacing: -0.25px;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     padding-bottom: 2vw;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .parrafo {
@@ -6038,7 +6078,7 @@ h5 {
     line-height: 1.5;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     padding-bottom: 2vw;
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .cont_info_proyecto {
@@ -6075,12 +6115,12 @@ h5 {
     line-height: 1.2;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     white-space: nowrap;
   }
   .proyecto .contenedorproyectos #section_dos .column_dos {
     padding: 0vw 0vw 0vw 0vw;
-    border-left: 0px solid #0048FF;
+    border-left: 0px solid #0048ff;
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -6148,7 +6188,7 @@ h5 {
     line-height: 1.2;
     letter-spacing: normal;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_tres {
     padding: 14vw 4vw 0vw 4vw;
@@ -6165,9 +6205,9 @@ h5 {
     font-size: 3.5vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color {
@@ -6223,9 +6263,9 @@ h5 {
     font-size: 3.5vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente {
@@ -6244,7 +6284,7 @@ h5 {
     font-stretch: normal;
     font-style: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente .parrafo_fuente {
     margin-left: 3vw;
@@ -6257,7 +6297,7 @@ h5 {
     line-height: 1.5;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
   }
   .proyecto .contenedorproyectos #section_cuatro .cont_fuente .cont_tipe_texto {
     justify-content: space-between;
@@ -6283,9 +6323,9 @@ h5 {
     font-size: 3.7vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_cinco .cont_moodboard {
@@ -6320,9 +6360,9 @@ h5 {
     font-size: 3.7vw;
     text-transform: uppercase;
     text-align: start;
-    color: #0048FF;
+    color: #0048ff;
     width: 100%;
-    border-bottom: #0048FF 1px solid;
+    border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis {
@@ -6345,7 +6385,7 @@ h5 {
     height: 50%;
     overflow: hidden;
     border-radius: 10px;
-    background: #0048FF;
+    background: #0048ff;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -6368,7 +6408,7 @@ h5 {
     height: 100%;
     overflow: hidden;
     border-radius: 10px;
-    background: #0048FF;
+    background: #0048ff;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -6387,7 +6427,7 @@ h5 {
     overflow: hidden;
     border-radius: 10px;
     height: 60%;
-    background: #0048FF;
+    background: #0048ff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -6399,7 +6439,7 @@ h5 {
     overflow: hidden;
     border-radius: 10px;
     height: 40%;
-    background: #0048FF;
+    background: #0048ff;
     position: relative;
   }
   .proyecto .contenedorproyectos #section_seis .cont_img_section_seis .cont_uno .sect_dos .sect_dos_dos .img_dos img {
@@ -6480,7 +6520,7 @@ h5 {
     font-size: 3.5vw;
     font-weight: 700;
     text-align: left;
-    color: #0048FF;
+    color: #0048ff;
     text-shadow: 0 0 1px rgb(20, 0, 199);
     display: inline-block;
     line-height: 1.3;
@@ -6496,7 +6536,7 @@ h5 {
     font-size: 2.5vw;
     font-weight: normal;
     letter-spacing: normal;
-    color: #0048FF;
+    color: #0048ff;
     padding-top: 0.8vw;
     text-align: center;
     line-height: 1.5;
@@ -6605,7 +6645,7 @@ h5 {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #0048FF;
+    color: #0048ff;
     cursor: pointer;
     transition: all 0.3s ease;
   }
