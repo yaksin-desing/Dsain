@@ -27,7 +27,7 @@ function updateCameraPosition() {
   const width = window.innerWidth;
   if (width <= 480) camera.position.set(0, 0, 7);
   else if (width <= 768) camera.position.set(0, 0.1, 4);
-  else camera.position.set(0, 0, 7);
+  else camera.position.set(0, 0, 5);
   camera.updateProjectionMatrix();
 }
 updateCameraPosition();
@@ -36,6 +36,7 @@ updateCameraPosition();
 const renderer = new THREE.WebGLRenderer({
   antialias: false,
   alpha: true,
+  preserveDrawingBuffer: true, // 🆕 necesario para poder capturar el canvas
 });
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setClearColor(0xffffff, 0);
@@ -137,7 +138,7 @@ world.addBody(wallRight);
 // así que entre más angosto sea este rango, más consistente es la colisión
 // mouse-moneda (si lo dejas muy ancho, las monedas pueden quedar demasiado
 // lejos del plano del mouse y nunca tocarlo).
-const DEPTH_HALF = 0.6;
+const DEPTH_HALF = 0.1;
 const wallBack = new CANNON.Body({ mass: 0, material: sueloMaterial });
 wallBack.addShape(new CANNON.Plane()); // normal por defecto ya apunta a +z
 world.addBody(wallBack);
@@ -191,10 +192,14 @@ function updateStaticBounds() {
   wallLeft.position.set(-bounds.halfW, 0, 0);
   wallRight.position.set(bounds.halfW, 0, 0);
   wallBack.position.set(0, 0, -DEPTH_HALF);
-  wallFront.position.set(0, 0, DEPTH_HALF);
+  wallFront.position.set(0, 0, 1.5);
 
   // 🟡 Ajusta la pared visual al ancho/alto real del viewport (responsive)
-  wallBackVisualMesh.scale.set(bounds.halfW * 2, bounds.halfH * 2, 1);
+  // 🆕 105% en vez de 100%: deja un margen de sobra para que no se vea
+  // el borde del plano en los extremos (por ejemplo si la cámara se mueve
+  // un poco con OrbitControls, o hay pequeños desajustes de aspect ratio).
+  const BACKGROUND_COVERAGE = 1.05;
+  wallBackVisualMesh.scale.set(bounds.halfW * 2 * BACKGROUND_COVERAGE, bounds.halfH * 2 * BACKGROUND_COVERAGE, 1);
   wallBackVisualMesh.position.set(0, 0, -DEPTH_HALF - 0.02); // ligeramente detrás para evitar z-fighting con las monedas
 
   // 🟡 El frustum de sombra del light debe cubrir el mismo rango visible,
@@ -474,7 +479,7 @@ function animate() {
 
   // 🟣 Fuerza suave hacia z=0 — el mouse solo colisiona en ese plano,
   // así que evitamos que las monedas se alejen tanto que dejen de tocarlo.
-  const Z_SPRING = 3.5;
+  const Z_SPRING = 3;
   monedas.forEach(({ body }) => {
     body.velocity.z -= body.position.z * Z_SPRING * delta;
   });
