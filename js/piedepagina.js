@@ -13,10 +13,20 @@ const disableInteractions = window.innerWidth <= 770;
 // 🟢 Cuántas monedas caen (antes era una pared de 60-170, ahora solo un puñado)
 const NUM_MONEDAS = isMobileOrTablet ? 7 : 17;
 
+// 🟢 Escala de las monedas según el ancho del dispositivo (se fija una sola
+// vez al cargar la página, igual que NUM_MONEDAS)
+function obtenerEscalaMonedas() {
+  const width = window.innerWidth;
+  if (width <= 480) return 0.1;      // celulares chicos
+  else if (width <= 768) return 0.17; // tablets 
+  else return 0.4;                    // desktop
+}
+const ESCALA_MONEDAS = obtenerEscalaMonedas();
+
 // 🟢 Escena y cámara
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-  isMobileOrTablet ? 50 : 55,
+  isMobileOrTablet ? 70 : 77,
   container.clientWidth / container.clientHeight,
   0.1,
   1000
@@ -60,7 +70,7 @@ requestAnimationFrame(() => {
 });
 
 // 🟢 Controles
-const controls = !isMobileOrTablet ? new OrbitControls(camera, renderer.domElement) : { update() {} };
+const controls = !isMobileOrTablet ? new OrbitControls(camera, renderer.domElement) : { update() { } };
 
 // 🟢 Luces (igual que antes)
 const light = new THREE.DirectionalLight(0xffffff, isMobileOrTablet ? 0.8 : 1);
@@ -139,6 +149,11 @@ world.addBody(wallRight);
 // mouse-moneda (si lo dejas muy ancho, las monedas pueden quedar demasiado
 // lejos del plano del mouse y nunca tocarlo).
 const DEPTH_HALF = 0.1;
+// 🆕 Movido acá arriba (antes vivía dentro de updateStaticBounds) para que
+// tanto el fondo como el texto lean el MISMO valor y siempre tengan el
+// mismo ancho, sin duplicar el número en dos lugares distintos.
+const BACKGROUND_COVERAGE = 1.05;
+
 const wallBack = new CANNON.Body({ mass: 0, material: sueloMaterial });
 wallBack.addShape(new CANNON.Plane()); // normal por defecto ya apunta a +z
 world.addBody(wallBack);
@@ -163,6 +178,48 @@ if (DEBUG_WALLS) {
     new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false })
   );
   scene.add(wallBackMesh, wallFrontMesh);
+}
+
+// =========================================================
+// 🔤 TEXTO COMO PNG (mismo ancho que el fondo, pegado al piso del viewport)
+// =========================================================
+let textoMesh = null;
+let textoAspect = 1; // se calcula real cuando carga la imagen
+
+new THREE.TextureLoader().load(
+  "../src/img/dsain-texto.png", // 🔧 tu PNG con el texto ya diseñado
+  (texture) => {
+    texture.encoding = THREE.sRGBEncoding;
+
+    // 🟢 esto es lo importante: el aspecto real del PNG, no un número inventado
+    textoAspect = texture.image.width / texture.image.height;
+
+    const textoMaterial = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true, // para que se respete el canal alfa del PNG
+    });
+
+    textoMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), textoMaterial);
+    scene.add(textoMesh);
+
+    actualizarTextoResponsive(); // por si la imagen carga después del primer resize
+  },
+  undefined,
+  (err) => console.error("Error al cargar textura de texto:", err)
+);
+
+function actualizarTextoResponsive() {
+  if (!textoMesh) return; // todavía no cargó el PNG
+
+  // 🟢 mismo ancho que wallBackVisualMesh: bounds.halfW * 2 * BACKGROUND_COVERAGE
+  const anchoDeseado = bounds.halfW * 2 * BACKGROUND_COVERAGE;
+  const altoDeseado = anchoDeseado / textoAspect; // el alto sigue siendo proporcional al PNG del texto, no al del fondo
+
+  textoMesh.scale.set(anchoDeseado, altoDeseado, 1);
+
+  // 🟢 pegado al piso del viewport: el borde inferior del plano coincide
+  // con -bounds.halfH (el mismo borde inferior que usa floorBody)
+  textoMesh.position.set(0, -bounds.halfH + altoDeseado / 2, 0);
 }
 
 // 🟡 Pared visual de fondo (PNG) — coincide con wallBack físico y recibe sombra
@@ -198,7 +255,6 @@ function updateStaticBounds() {
   // 🆕 105% en vez de 100%: deja un margen de sobra para que no se vea
   // el borde del plano en los extremos (por ejemplo si la cámara se mueve
   // un poco con OrbitControls, o hay pequeños desajustes de aspect ratio).
-  const BACKGROUND_COVERAGE = 1.05;
   wallBackVisualMesh.scale.set(bounds.halfW * 2 * BACKGROUND_COVERAGE, bounds.halfH * 2 * BACKGROUND_COVERAGE, 1);
   wallBackVisualMesh.position.set(0, 0, -DEPTH_HALF - 0.02); // ligeramente detrás para evitar z-fighting con las monedas
 
@@ -218,6 +274,8 @@ function updateStaticBounds() {
     wallFrontMesh.scale.set(w, h, 1);
     wallFrontMesh.position.set(0, 0, DEPTH_HALF);
   }
+
+  actualizarTextoResponsive(); // 🆕 recalcula el ancho/alto/posición del texto con los nuevos bounds
 }
 updateStaticBounds();
 
@@ -377,7 +435,7 @@ loader.load(
   "../src/objt/piedepagina/monedadsain.glb",
   (gltf) => {
     modeloBase = gltf.scene;
-    modeloBase.scale.set(0.4, 0.4, 0.4);
+    modeloBase.scale.set(ESCALA_MONEDAS, ESCALA_MONEDAS, ESCALA_MONEDAS); // 🔧 antes: 0.4, 0.4, 0.4 fijo
     crearMonedas();
   },
   undefined,
@@ -387,7 +445,7 @@ loader.load(
 const baseMaterialColor = new THREE.MeshStandardMaterial({ metalness: 0.3, roughness: 0.6 });
 
 function crearMonedas() {
-  const escala = 0.4;
+  const escala = ESCALA_MONEDAS; // 🔧 antes: const escala = 0.4; ahora depende del ancho del dispositivo
   // Medio ancho/alto aproximado de la moneda ya escalada, para la caja de colisión
   const halfExtent = new CANNON.Vec3(escala * 0.9, escala * 0.9, escala * 0.35);
   const shape = new CANNON.Box(halfExtent);
@@ -533,6 +591,7 @@ const observer = new IntersectionObserver(
   },
   { threshold: 0.1 }
 );
+
 observer.observe(container);
 
 // 🟢 Resize
