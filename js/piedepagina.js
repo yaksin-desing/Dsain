@@ -19,14 +19,14 @@ function obtenerEscalaMonedas() {
   const width = window.innerWidth;
   if (width <= 480) return 0.1;      // celulares chicos
   else if (width <= 768) return 0.17; // tablets 
-  else return 0.4;                    // desktop
+  else return 0.25;                    // desktop
 }
 const ESCALA_MONEDAS = obtenerEscalaMonedas();
 
 // 🟢 Escena y cámara
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-  isMobileOrTablet ? 70 : 77,
+  isMobileOrTablet ? 40 : 40,
   container.clientWidth / container.clientHeight,
   0.1,
   1000
@@ -148,7 +148,7 @@ world.addBody(wallRight);
 // así que entre más angosto sea este rango, más consistente es la colisión
 // mouse-moneda (si lo dejas muy ancho, las monedas pueden quedar demasiado
 // lejos del plano del mouse y nunca tocarlo).
-const DEPTH_HALF = 0.1;
+const DEPTH_HALF = -0.5;
 // 🆕 Movido acá arriba (antes vivía dentro de updateStaticBounds) para que
 // tanto el fondo como el texto lean el MISMO valor y siempre tengan el
 // mismo ancho, sin duplicar el número en dos lugares distintos.
@@ -212,14 +212,14 @@ function actualizarTextoResponsive() {
   if (!textoMesh) return; // todavía no cargó el PNG
 
   // 🟢 mismo ancho que wallBackVisualMesh: bounds.halfW * 2 * BACKGROUND_COVERAGE
-  const anchoDeseado = bounds.halfW * 2 * BACKGROUND_COVERAGE;
+  const anchoDeseado = bounds.halfW * 1.8 * BACKGROUND_COVERAGE;
   const altoDeseado = anchoDeseado / textoAspect; // el alto sigue siendo proporcional al PNG del texto, no al del fondo
 
   textoMesh.scale.set(anchoDeseado, altoDeseado, 1);
 
   // 🟢 pegado al piso del viewport: el borde inferior del plano coincide
   // con -bounds.halfH (el mismo borde inferior que usa floorBody)
-  textoMesh.position.set(0, -bounds.halfH + altoDeseado / 2, 0);
+  textoMesh.position.set(0, -bounds.halfH + altoDeseado / 2, 0.5);
 }
 
 // 🟡 Pared visual de fondo (PNG) — coincide con wallBack físico y recibe sombra
