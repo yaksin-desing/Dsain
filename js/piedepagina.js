@@ -19,7 +19,7 @@ function obtenerEscalaMonedas() {
   const width = window.innerWidth;
   if (width <= 480) return 0.1;      // celulares chicos
   else if (width <= 768) return 0.17; // tablets 
-  else return 0.25;                    // desktop
+  else return 0.3;                    // desktop
 }
 const ESCALA_MONEDAS = obtenerEscalaMonedas();
 
@@ -37,7 +37,7 @@ function updateCameraPosition() {
   const width = window.innerWidth;
   if (width <= 480) camera.position.set(0, 0, 7);
   else if (width <= 768) camera.position.set(0, 0.1, 4);
-  else camera.position.set(0, 0, 5);
+  else camera.position.set(0, 0, 7);
   camera.updateProjectionMatrix();
 }
 updateCameraPosition();
@@ -148,7 +148,7 @@ world.addBody(wallRight);
 // así que entre más angosto sea este rango, más consistente es la colisión
 // mouse-moneda (si lo dejas muy ancho, las monedas pueden quedar demasiado
 // lejos del plano del mouse y nunca tocarlo).
-const DEPTH_HALF = -0.5;
+const DEPTH_HALF = 0;
 // 🆕 Movido acá arriba (antes vivía dentro de updateStaticBounds) para que
 // tanto el fondo como el texto lean el MISMO valor y siempre tengan el
 // mismo ancho, sin duplicar el número en dos lugares distintos.
@@ -194,12 +194,15 @@ new THREE.TextureLoader().load(
     // 🟢 esto es lo importante: el aspecto real del PNG, no un número inventado
     textoAspect = texture.image.width / texture.image.height;
 
-    const textoMaterial = new THREE.MeshBasicMaterial({
+    const textoMaterial = new THREE.MeshStandardMaterial({
       map: texture,
       transparent: true, // para que se respete el canal alfa del PNG
+        roughness: 1,
+        metalness: 0,
     });
 
     textoMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), textoMaterial);
+    textoMesh.receiveShadow = true;
     scene.add(textoMesh);
 
     actualizarTextoResponsive(); // por si la imagen carga después del primer resize
@@ -212,14 +215,14 @@ function actualizarTextoResponsive() {
   if (!textoMesh) return; // todavía no cargó el PNG
 
   // 🟢 mismo ancho que wallBackVisualMesh: bounds.halfW * 2 * BACKGROUND_COVERAGE
-  const anchoDeseado = bounds.halfW * 1.8 * BACKGROUND_COVERAGE;
+  const anchoDeseado = bounds.halfW * 2 * BACKGROUND_COVERAGE;
   const altoDeseado = anchoDeseado / textoAspect; // el alto sigue siendo proporcional al PNG del texto, no al del fondo
 
   textoMesh.scale.set(anchoDeseado, altoDeseado, 1);
 
   // 🟢 pegado al piso del viewport: el borde inferior del plano coincide
   // con -bounds.halfH (el mismo borde inferior que usa floorBody)
-  textoMesh.position.set(0, -bounds.halfH + altoDeseado / 2, 0.5);
+  textoMesh.position.set(0, -bounds.halfH + altoDeseado / 2, 0);
 }
 
 // 🟡 Pared visual de fondo (PNG) — coincide con wallBack físico y recibe sombra
@@ -249,14 +252,14 @@ function updateStaticBounds() {
   wallLeft.position.set(-bounds.halfW, 0, 0);
   wallRight.position.set(bounds.halfW, 0, 0);
   wallBack.position.set(0, 0, -DEPTH_HALF);
-  wallFront.position.set(0, 0, 1.5);
+  wallFront.position.set(0, 0, 1);
 
   // 🟡 Ajusta la pared visual al ancho/alto real del viewport (responsive)
   // 🆕 105% en vez de 100%: deja un margen de sobra para que no se vea
   // el borde del plano en los extremos (por ejemplo si la cámara se mueve
   // un poco con OrbitControls, o hay pequeños desajustes de aspect ratio).
   wallBackVisualMesh.scale.set(bounds.halfW * 2 * BACKGROUND_COVERAGE, bounds.halfH * 2 * BACKGROUND_COVERAGE, 1);
-  wallBackVisualMesh.position.set(0, 0, -DEPTH_HALF - 0.02); // ligeramente detrás para evitar z-fighting con las monedas
+  wallBackVisualMesh.position.set(0, 0, -DEPTH_HALF ,0); // ligeramente detrás para evitar z-fighting con las monedas
 
   // 🟡 El frustum de sombra del light debe cubrir el mismo rango visible,
   // si no las sombras se recortan o desaparecen al hacer resize
@@ -291,7 +294,7 @@ world.addContactMaterial(
   })
 );
 
-const MOUSE_RADIUS = 0.6;
+const MOUSE_RADIUS = 1;
 const mouseBody = new CANNON.Body({
   mass: 0,
   type: CANNON.Body.KINEMATIC,
