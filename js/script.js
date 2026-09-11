@@ -422,7 +422,7 @@ function fadeVolume(audioElement, targetVolume) {
 
 
 
-//lottie menu
+// ******************** menu *******************
 
 // Inicializar la animación de Lottie
 const lottiePlayer = lottie.loadAnimation({

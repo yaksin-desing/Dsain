@@ -1,8 +1,9 @@
 <!doctype html>
-<html>
+<html translate="no">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
     <link rel="stylesheet" href="../style/styles.css" />
     <link rel="icon" type="image/svg" href="../src/img/logo.svg" />
     <title>Proyecto Dsains</title>
@@ -46,13 +47,39 @@
         </a>
 
         <div class="cont_menu">
+          <!-- 🌐 Botón de idioma -->
+          <button
+            id="lang-toggle"
+            class="lang-switch"
+            data-lang="en"
+            type="button"
+            aria-label="Cambiar idioma"
+          >
+            <span class="lang-switch-label lang-switch-label-en">EN</span>
+            <span class="lang-switch-track">
+              <span class="lang-switch-thumb">
+                <img
+                  class="flag flag-en"
+                  src="../src/img/in.png"
+                  alt=""
+                />
+                <img
+                  class="flag flag-es"
+                  src="../src/img/es.png"
+                  alt=""
+                />
+              </span>
+            </span>
+            <span class="lang-switch-label lang-switch-label-es">ES</span>
+          </button>
+
           <div
             class="boton_contact cursor-scale magnetic-button"
             data-strength="0.7"
             data-text-strength="0.2"
           >
             <a class="texto_boton" href="./proyectodos.html">
-              <p class="magnetic-text">Talk me</p>
+              <p class="magnetic-text" data-i18n="cta-talk">Talk me</p>
             </a>
             <img src="../src/img/flechabotoncontact.svg" alt="" />
           </div>
@@ -65,9 +92,13 @@
 
           <nav id="nav-menu" class="hidden">
             <ul class="contlistmenu">
-              <p id="menuTitle">Menu</p>
+              <p id="menuTitle" data-i18n="menu-title">Menu</p>
               <li>
-                <a class="animated-text" href="../index.html" data-delay="0.1"
+                <a
+                  class="animated-text"
+                  href="../index.html"
+                  data-delay="0.1"
+                  data-i18n="nav-home"
                   >Home</a
                 >
               </li>
@@ -76,6 +107,7 @@
                   class="cursor-scale animated-text"
                   href="#about"
                   data-delay="0.1"
+                  data-i18n="nav-blogs"
                   >Blogs</a
                 >
               </li>
@@ -84,6 +116,7 @@
                   class="cursor-scale animated-text"
                   href="#services"
                   data-delay="0.1"
+                  data-i18n="nav-works"
                   >Works</a
                 >
               </li>
@@ -92,18 +125,20 @@
                   class="cursor-scale animated-text"
                   href="#contact"
                   data-delay="0.1"
+                  data-i18n="nav-about"
                   >About me</a
                 >
               </li>
             </ul>
             <ul class="contsocial">
-              <p>Social</p>
+              <p data-i18n="social-title">Social</p>
               <div class="list_social">
                 <li>
                   <a
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#home"
+                    translate="no"
                     >Whatsapp</a
                   >
                 </li>
@@ -112,6 +147,7 @@
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#about"
+                    translate="no"
                     >Gmail</a
                   >
                 </li>
@@ -120,6 +156,7 @@
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#services"
+                    translate="no"
                     >Instagram</a
                   >
                 </li>
@@ -128,6 +165,7 @@
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#contact"
+                    translate="no"
                     >Facebook</a
                   >
                 </li>
@@ -139,7 +177,12 @@
       <!-- SECCION UNO -->
       <section id="section_uno">
         <div class="cont_titulo">
-          <p class="data animar-texto" data-tipo="letras" data-velocidad="0.4">
+          <p
+            class="data animar-texto"
+            data-tipo="letras"
+            data-velocidad="0.4"
+            data-i18n="hero-date"
+          >
             finished project - Jul 01 2026
           </p>
           <h1
@@ -152,16 +195,6 @@
           </h1>
         </div>
 
-        <p
-          class="parrafo animar-texto"
-          data-tipo="palabras"
-          data-velocidad="0.05"
-        >
-          Concept project for Samy Cosmetics focused on product presentation,
-          integrating visual design, animations, and 3D experiences to create
-          greater impact and user engagement.
-        </p>
-
         <div class="cont_imagen_proyecto">
           <video
             class="imagen_proyecto"
@@ -172,6 +205,17 @@
             loop
           ></video>
         </div>
+
+        <p
+          class="parrafo animar-texto"
+          data-tipo="palabras"
+          data-velocidad="0.05"
+          data-i18n="hero-desc"
+        >
+          Concept project for Samy Cosmetics focused on product presentation,
+          integrating visual design, animations, and 3D experiences to create
+          greater impact and user engagement.
+        </p>
 
         <!-- boton prueba -->
         <div
@@ -185,7 +229,7 @@
             rel="noopener noreferrer"
             href="https://yaksin-desing.github.io/samycosmetics/"
           >
-            <p class="magnetic-text">Launch project</p>
+            <p class="magnetic-text" data-i18n="cta-launch">Launch project</p>
           </a>
           <img src="../src/img/flechabotoncontact.svg" alt="" />
         </div>
@@ -200,6 +244,7 @@
             class="titulo animar-texto"
             data-tipo="letras"
             data-velocidad="0.6"
+            data-i18n="details-title"
           >
             Proyect details
           </h3>
@@ -207,6 +252,7 @@
             class="parrafo aanimar-texto"
             data-tipo="palabras"
             data-velocidad="0.2"
+            data-i18n="details-desc"
           >
             This project consists of the design and development of an
             interactive website for showcasing the
@@ -224,6 +270,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-client"
               >
                 Client
               </h4>
@@ -231,6 +278,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Yaksin sains
               </p>
@@ -240,6 +288,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-location"
               >
                 Location
               </h4>
@@ -247,6 +296,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Colombia
               </p>
@@ -256,6 +306,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-industry"
               >
                 Industry
               </h4>
@@ -263,6 +314,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-industry-1"
               >
                 Cosmetics
               </p>
@@ -270,6 +322,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-industry-2"
               >
                 E-commerce
               </p>
@@ -279,6 +332,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-services"
               >
                 Services
               </h4>
@@ -286,6 +340,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-services-1"
               >
                 Front and Development
               </p>
@@ -293,6 +348,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-services-2"
               >
                 Ux-Ui Design
               </p>
@@ -311,8 +367,9 @@
                 class="text-style-1 aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="1.5"
+                translate="no"
                 >4</span
-              >months
+              ><span data-i18n="label-months">months</span>
             </span>
             <span
               class="-Usd aanimar-texto"
@@ -325,7 +382,7 @@
                 data-tipo="letras"
                 data-velocidad="1.5"
                 >1.300</span
-              >$ Usd
+              ><span data-i18n="label-usd">$ Usd</span>
             </span>
           </div>
           <div class="cont_data">
@@ -386,6 +443,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-team"
               >
                 Project team and roles
               </h4>
@@ -393,6 +451,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-uxui"
               >
                 ( Ux - Ui ) Yaksin sains
               </p>
@@ -400,6 +459,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-frontend"
               >
                 ( Frontend ) Yaksin sains
               </p>
@@ -407,6 +467,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-3d"
               >
                 ( 3D modeler ) Yaksin sains
               </p>
@@ -414,6 +475,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-illustrator"
               >
                 ( Illustrator ) Yaksin sains
               </p>
@@ -421,6 +483,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-creativedev"
               >
                 ( Creative Dev ) Yaksin sains
               </p>
@@ -567,6 +630,7 @@
           class="titulo_seccion animar-texto"
           data-tipo="letras"
           data-velocidad="0.7"
+          data-i18n="type-title"
         >
           MAIN TYPE
         </p>
@@ -575,14 +639,19 @@
             class="titulo_fuente animar-texto"
             data-tipo="letras"
             data-velocidad="0.7"
+            translate="no"
           >
             Mona sans
           </h3>
 
-          <p class="parrafo_fuente aanimar-texto" data-tipo="palabras">
-            Mona is SAMY’s accent typeface, self-hosted within the project. It
+          <p
+            class="parrafo_fuente aanimar-texto"
+            data-tipo="palabras"
+            data-i18n="mona-desc"
+          >
+            Mona is SAMY's accent typeface, self-hosted within the project. It
             is used exclusively in the regular weight and appears in the
-            featured titles of each product’s pop-up, adding a more personal,
+            featured titles of each product's pop-up, adding a more personal,
             brand-driven character to the typographic system.
           </p>
 
@@ -610,11 +679,16 @@
             class="titulo_fuente animar-texto"
             data-tipo="letras"
             data-velocidad="0.7"
+            translate="no"
           >
             Montserrat
           </h3>
 
-          <p class="parrafo_fuente aanimar-texto" data-tipo="palabras">
+          <p
+            class="parrafo_fuente aanimar-texto"
+            data-tipo="palabras"
+            data-i18n="mont-desc"
+          >
             With weights ranging from Light to Semibold, Montserrat is SAMY’s
             primary typeface. This highly legible geometric sans serif is used
             throughout the interface—including buttons, labels, values and
@@ -653,111 +727,250 @@
       <section id="section_once">
         <footer class="cont_footer">
           <div class="contenedor_uno">
-          <div class="conten_uno">
-            <h2>
-              SOY DEL EXPERTO EN EXPERIENCIAS POSITIVAS QUE ESTAS BUSCANDO
-            </h2>
-            <!-- boton call to action -->
-            <div
-              class="boton_contact cursor-scale magnetic-button"
-              data-strength="0.7"
-              data-text-strength="0.2"
-            >
-              <a
-                class="texto_boton"
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://yaksin-desing.github.io/samycosmetics/"
+            <div class="conten_uno">
+              <h2 data-i18n="footer-cta">
+                SOY EL EXPERTO EN EXPERIENCIAS POSITIVAS QUE ESTAS BUSCANDO
+              </h2>
+              <!-- boton call to action -->
+              <div
+                class="boton_contact cursor-scale magnetic-button"
+                data-strength="0.7"
+                data-text-strength="0.2"
               >
-                <p class="magnetic-text">Talk me</p>
-              </a>
-              <img src="../src/img/flechabotoncontactazul.svg" alt="" />
+                <a
+                  class="texto_boton"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://yaksin-desing.github.io/samycosmetics/"
+                >
+                  <p class="magnetic-text" data-i18n="cta-talk">Talk me</p>
+                </a>
+                <img src="../src/img/flechabotoncontactazul.svg" alt="" />
+              </div>
+            </div>
+
+            <!-- ------ -->
+
+            <div class="conten_dos">
+              <ul class="social">
+                <p data-i18n="social-title">Social</p>
+                <div class="list_social">
+                  <li>
+                    <a
+                      class="cursor-scale animated-text"
+                      data-delay="0.1"
+                      href="#home"
+                      translate="no"
+                      >Whatsapp</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="cursor-scale animated-text"
+                      data-delay="0.1"
+                      href="#about"
+                      translate="no"
+                      >Gmail</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="cursor-scale animated-text"
+                      data-delay="0.1"
+                      href="#services"
+                      translate="no"
+                      >Instagram</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="cursor-scale animated-text"
+                      data-delay="0.1"
+                      href="#contact"
+                      translate="no"
+                      >Facebook</a
+                    >
+                  </li>
+                </div>
+              </ul>
+              <ul class="listmenu">
+                <p id="menuTitle" data-i18n="menu-title">Menu</p>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    href="../index.html"
+                    data-delay="0.1"
+                    data-i18n="nav-home"
+                    >Home</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    href="#about"
+                    data-delay="0.1"
+                    data-i18n="nav-blogs"
+                    >Blogs</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    href="#services"
+                    data-delay="0.1"
+                    data-i18n="nav-works"
+                    >Works</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    href="#contact"
+                    data-delay="0.1"
+                    data-i18n="nav-about"
+                    >About me</a
+                  >
+                </li>
+              </ul>
             </div>
           </div>
 
-          <!-- ------ -->
-
-          <div class="conten_dos">
-            <ul class="social">
-              <p>Social</p>
-              <div class="list_social">
-                <li>
-                  <a
-                    class="cursor-scale animated-text"
-                    data-delay="0.1"
-                    href="#home"
-                    >Whatsapp</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="cursor-scale animated-text"
-                    data-delay="0.1"
-                    href="#about"
-                    >Gmail</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="cursor-scale animated-text"
-                    data-delay="0.1"
-                    href="#services"
-                    >Instagram</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="cursor-scale animated-text"
-                    data-delay="0.1"
-                    href="#contact"
-                    >Facebook</a
-                  >
-                </li>
-              </div>
-            </ul>
-            <ul class="listmenu">
-              <p id="menuTitle">Menu</p>
-              <li>
-                <a class="cursor-scale animated-text" href="../index.html" data-delay="0.1"
-                  >Home</a
-                >
-              </li>
-              <li>
-                <a
-                  class="cursor-scale animated-text"
-                  href="#about"
-                  data-delay="0.1"
-                  >Blogs</a
-                >
-              </li>
-              <li>
-                <a
-                  class="cursor-scale animated-text"
-                  href="#services"
-                  data-delay="0.1"
-                  >Works</a
-                >
-              </li>
-              <li>
-                <a
-                  class="cursor-scale animated-text"
-                  href="#contact"
-                  data-delay="0.1"
-                  >About me</a
-                >
-              </li>
-            </ul>
-
-          </div>
-          </div>
-
           <div class="contenedor_dos">
-            <p class="izquierdo">Made by Dsain © 2025</p>
-            <p class="derecho">By yaksin sain</p>
+            <p class="izquierdo notranslate" translate="no">
+              Made by Dsain © 2025
+            </p>
+            <p class="derecho notranslate" translate="no">By yaksin sain</p>
           </div>
         </footer>
       </section>
     </div>
+
+    <script>
+      (function () {
+        var i18n = {
+          en: {
+            "cta-talk": "Talk me",
+            "cta-launch": "Launch project",
+            "menu-title": "Menu",
+            "nav-home": "Home",
+            "nav-blogs": "Blogs",
+            "nav-works": "Works",
+            "nav-about": "About me",
+            "social-title": "Social",
+            "hero-date": "finished project - Jul 01 2026",
+            "hero-desc":
+              "Concept project for Samy Cosmetics focused on product presentation, integrating visual design, animations, and 3D experiences to create greater impact and user engagement.",
+            "details-title": "Proyect details",
+            "details-desc":
+              "This project consists of the design and development of an interactive website for showcasing the Samy Creamy Liquid Lipstick, integrating 3D and augmented reality technologies. The platform allows users to view the product in a three-dimensional scene, change its shade through a color carousel, and see the transition with an animated rotation. Additionally, it includes an augmented reality module that enables users to virtually try on the selected lipstick shade on their lips in real time, providing an innovative and immersive experience.",
+            "label-client": "Client",
+            "label-location": "Location",
+            "label-industry": "Industry",
+            "label-services": "Services",
+            "val-industry-1": "Cosmetics",
+            "val-industry-2": "E-commerce",
+            "val-services-1": "Front and Development",
+            "val-services-2": "Ux-Ui Design",
+            "label-months": "months",
+            "label-usd": "$ Usd",
+            "label-team": "Project team and roles",
+            "role-uxui": "( Ux - Ui ) Yaksin sains",
+            "role-frontend": "( Frontend ) Yaksin sains",
+            "role-3d": "( 3D modeler ) Yaksin sains",
+            "role-illustrator": "( Illustrator ) Yaksin sains",
+            "role-creativedev": "( Creative Dev ) Yaksin sains",
+            "type-title": "MAIN TYPE",
+            "mona-desc":
+              "Mona is SAMY's accent typeface, self-hosted within the project. It is used exclusively in the regular weight and appears in the featured titles of each product's pop-up, adding a more personal, brand-driven character to the typographic system.",
+            "mont-desc":
+              "With weights ranging from Light to Semibold, Montserrat is SAMY's primary typeface. This highly legible geometric sans serif is used throughout the interface—including buttons, labels, values and prices, and navigation text—providing the consistency and clarity needed for a cohesive user experience.",
+            "footer-cta":
+              "I'M THE EXPERT IN POSITIVE EXPERIENCES YOU'RE LOOKING FOR",
+          },
+          es: {
+            "cta-talk": "Hablemos",
+            "cta-launch": "Ver proyecto",
+            "menu-title": "Menú",
+            "nav-home": "Inicio",
+            "nav-blogs": "Blog",
+            "nav-works": "Proyectos",
+            "nav-about": "Sobre mí",
+            "social-title": "Redes",
+            "hero-date": "proyecto terminado - 01 jul 2026",
+            "hero-desc":
+              "Proyecto conceptual para Samy Cosmetics enfocado en la presentación de producto, integrando diseño visual, animaciones y experiencias 3D para generar mayor impacto y conexión con el usuario.",
+            "details-title": "Detalles del proyecto",
+            "details-desc":
+              "Este proyecto consiste en el diseño y desarrollo de un sitio web interactivo para mostrar el Samy Creamy Liquid Lipstick, integrando tecnologías 3D y de realidad aumentada. La plataforma permite ver el producto en una escena tridimensional, cambiar su tono mediante un carrusel de colores y ver la transición con una rotación animada. Además, incluye un módulo de realidad aumentada que permite probar virtualmente el tono seleccionado sobre los labios en tiempo real, ofreciendo una experiencia innovadora e inmersiva.",
+            "label-client": "Cliente",
+            "label-location": "Ubicación",
+            "label-industry": "Industria",
+            "label-services": "Servicios",
+            "val-industry-1": "Cosmética",
+            "val-industry-2": "E-commerce",
+            "val-services-1": "Frontend y Desarrollo",
+            "val-services-2": "Diseño Ux-Ui",
+            "label-months": "meses",
+            "label-usd": "$ Usd",
+            "label-team": "Equipo y roles del proyecto",
+            "role-uxui": "( Ux - Ui ) Yaksin sains",
+            "role-frontend": "( Frontend ) Yaksin sains",
+            "role-3d": "( Modelador 3D ) Yaksin sains",
+            "role-illustrator": "( Ilustrador ) Yaksin sains",
+            "role-creativedev": "( Dev Creativo ) Yaksin sains",
+            "type-title": "TIPOGRAFÍA PRINCIPAL",
+            "mona-desc":
+              "Mona es la tipografía de acento de SAMY, alojada localmente dentro del proyecto. Se usa exclusivamente en su peso regular y aparece en los títulos destacados del pop-up de cada producto, aportando un carácter más personal y propio de la marca al sistema tipográfico.",
+            "mont-desc":
+              "Con pesos que van de Light a Semibold, Montserrat es la tipografía principal de SAMY. Este sans serif geométrico, muy legible, se usa en toda la interfaz —incluyendo botones, etiquetas, valores y precios, y textos de navegación— aportando la consistencia y claridad necesarias para una experiencia de usuario coherente.",
+            "footer-cta":
+              "SOY EL EXPERTO EN EXPERIENCIAS POSITIVAS QUE ESTÁS BUSCANDO",
+          },
+        };
+
+        var lang = localStorage.getItem("lang") || "en";
+        document.documentElement.lang = lang;
+
+        function aplicarTextos(l) {
+          document.querySelectorAll("[data-i18n]").forEach(function (el) {
+            var key = el.getAttribute("data-i18n");
+            var text = i18n[l] && i18n[l][key];
+            if (text !== undefined) el.textContent = text;
+          });
+        }
+
+        aplicarTextos(lang);
+
+        // 🌐 Botón de idioma — único listener, con posición instantánea
+        // al cargar y retraso antes de recargar para dejar ver la
+        // animación del switch.
+        var btn = document.getElementById("lang-toggle");
+        if (btn) {
+          btn.classList.add("lang-switch--instant");
+          btn.setAttribute("data-lang", lang);
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              btn.classList.remove("lang-switch--instant");
+            });
+          });
+
+          btn.addEventListener("click", function () {
+            var actual = localStorage.getItem("lang") || "en";
+            var next = actual === "en" ? "es" : "en";
+            btn.setAttribute("data-lang", next);
+            localStorage.setItem("lang", next);
+
+            setTimeout(function () {
+              if (window.reloadConTransicion) {
+                window.reloadConTransicion();
+              } else {
+                location.reload();
+              }
+            }, 320);
+          });
+        }
+      })();
+    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>

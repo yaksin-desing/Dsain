@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
     <link rel="stylesheet" href="../style/styles.css" />
     <link rel="icon" type="image/svg" href="../src/img/logo.svg" />
     <title>Proyecto Dsains</title>
@@ -47,13 +48,23 @@
         </a>
 
         <div class="cont_menu">
+          <!-- 🌐 Botón de idioma -->
+          <button
+            id="lang-toggle"
+            class="notranslate"
+            translate="no"
+            type="button"
+          >
+            ES / EN
+          </button>
+
           <div
             class="boton_contact cursor-scale magnetic-button"
             data-strength="0.7"
             data-text-strength="0.2"
           >
             <a class="texto_boton" href="./proyectodos.html">
-              <p class="magnetic-text">Talk me</p>
+              <p class="magnetic-text" data-i18n="cta-talk">Talk me</p>
             </a>
             <img src="../src/img/flechabotoncontact.svg" alt="" />
           </div>
@@ -66,9 +77,9 @@
 
           <nav id="nav-menu" class="hidden">
             <ul class="contlistmenu">
-              <p id="menuTitle">Menu</p>
+              <p id="menuTitle" data-i18n="menu-title">Menu</p>
               <li>
-                <a class="animated-text" href="../index.html" data-delay="0.1"
+                <a class="animated-text" href="../index.html" data-delay="0.1" data-i18n="nav-home"
                   >Home</a
                 >
               </li>
@@ -77,6 +88,7 @@
                   class="cursor-scale animated-text"
                   href="#about"
                   data-delay="0.1"
+                  data-i18n="nav-blogs"
                   >Blogs</a
                 >
               </li>
@@ -85,6 +97,7 @@
                   class="cursor-scale animated-text"
                   href="#services"
                   data-delay="0.1"
+                  data-i18n="nav-works"
                   >Works</a
                 >
               </li>
@@ -93,12 +106,13 @@
                   class="cursor-scale animated-text"
                   href="#contact"
                   data-delay="0.1"
+                  data-i18n="nav-about"
                   >About me</a
                 >
               </li>
             </ul>
             <ul class="contsocial">
-              <p>Social</p>
+              <p data-i18n="social-title">Social</p>
               <div class="list_social">
                 <li>
                   <a
@@ -140,7 +154,7 @@
       <!-- SECCION UNO -->
       <section id="section_uno">
         <div class="cont_titulo">
-          <p class="data animar-texto" data-tipo="letras" data-velocidad="0.4">
+          <p class="data animar-texto" data-tipo="letras" data-velocidad="0.4" data-i18n="hero-date">
             finished project - Aug 8 2025
           </p>
           <h1
@@ -151,14 +165,6 @@
             DSAINS
           </h1>
         </div>
-        <p
-          class="parrafo animar-texto"
-          data-tipo="palabras"
-          data-velocidad="0.05"
-        >
-          Hello, I am the ux ui designer you are looking for, I am very happy to
-          have you here, I welcome you to my portfolio.
-        </p>
         <div class="cont_imagen_proyecto">
           <video
             class="imagen_proyecto"
@@ -168,6 +174,17 @@
             muted
             loop
           ></video>
+        </div>
+        <p
+          class="parrafo animar-texto"
+          data-tipo="palabras"
+          data-velocidad="0.05"
+          data-i18n="hero-desc"
+        >
+          Hello, I am the ux ui designer you are looking for, I am very happy to
+          have you here, I welcome you to my portfolio.
+        </p>
+
       </section>
 
       <section id="section_screen_uno"></section>
@@ -179,6 +196,7 @@
             class="titulo animar-texto"
             data-tipo="letras"
             data-velocidad="0.6"
+            data-i18n="details-title"
           >
             Proyect details
           </h3>
@@ -198,6 +216,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-client"
               >
                 Client
               </h4>
@@ -205,6 +224,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Yaksin sains
               </p>
@@ -214,6 +234,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-location"
               >
                 Location
               </h4>
@@ -221,6 +242,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Colombia
               </p>
@@ -230,6 +252,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-industry"
               >
                 Industry
               </h4>
@@ -237,6 +260,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-industry-1"
               >
                 Design
               </p>
@@ -244,6 +268,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-industry-2"
               >
                 Ti
               </p>
@@ -253,6 +278,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-services"
               >
                 Services
               </h4>
@@ -260,6 +286,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-services-1"
               >
                 Front and Development
               </p>
@@ -267,6 +294,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-services-2"
               >
                 Brand Identity Design
               </p>
@@ -274,6 +302,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-services-3"
               >
                 Ux-Ui Design
               </p>
@@ -281,6 +310,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="val-services-4"
               >
                 Web Design
               </p>
@@ -299,20 +329,22 @@
                 class="text-style-1 aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="1.5"
+                translate="no"
                 >7</span
-              >Meses
+              ><span data-i18n="label-months">Meses</span>
             </span>
             <span
               class="-Usd aanimar-texto"
               data-tipo="letras"
               data-velocidad="0.7"
+              translate="no"
             >
               <span
                 class="text-style-1 aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="1.5"
                 >400</span
-              >$ Usd
+              ><span data-i18n="label-usd">$ Usd</span>
             </span>
           </div>
           <div class="cont_data">
@@ -321,6 +353,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-tools"
               >
                 Tools
               </h4>
@@ -328,6 +361,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Js vanilla
               </p>
@@ -335,6 +369,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Barba.js
               </p>
@@ -342,6 +377,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Three.js
               </p>
@@ -349,6 +385,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Gsap.js
               </p>
@@ -356,6 +393,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Blender
               </p>
@@ -363,6 +401,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Lottie
               </p>
@@ -370,6 +409,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                translate="no"
               >
                 Figma
               </p>
@@ -380,6 +420,7 @@
                 class="subtitulo aanimar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="label-team"
               >
                 Project team and roles
               </h4>
@@ -387,6 +428,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-uxui"
               >
                 ( Ux - Ui ) Yaksin sains
               </p>
@@ -394,6 +436,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-frontend"
               >
                 ( Frontend ) Yaksin sains
               </p>
@@ -401,6 +444,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-3d"
               >
                 ( 3D modeler ) Yaksin sains
               </p>
@@ -408,6 +452,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-illustrator"
               >
                 ( Illustrator ) Yaksin sains
               </p>
@@ -415,6 +460,7 @@
                 class="detalle animar-texto"
                 data-tipo="letras"
                 data-velocidad="0.6"
+                data-i18n="role-creativedev"
               >
                 ( Creative Dev ) Yaksin sains
               </p>
@@ -429,12 +475,13 @@
           class="titulo_seccion animar-texto"
           data-tipo="letras"
           data-velocidad="0.7"
+          translate="no"
         >
           COLORS
         </p>
         <div class="cont_color">
           <div class="coloruno" style="background-color: #0048ff;">
-            <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7" style="color: #ffffff;">
+            <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7" style="color: #ffffff;" translate="no">
               Hex - #0048ff
             </p>
             <p
@@ -442,6 +489,7 @@
               data-tipo="letras"
               data-velocidad="0.7"
               style="color: #ffffff;"
+              translate="no"
             >
               Primary color
             </p>
@@ -450,13 +498,14 @@
               data-tipo="letras"
               data-velocidad="0.7"
               style="color: #ffffff;"
+              translate="no"
             >
               Aa
             </p>
           </div>
 
           <div class="colordos" style="background-color: #F4F6FF;" >
-            <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7" style="color: #0048ff;">
+            <p class="hex animar-texto" data-tipo="letras" data-velocidad="0.7" style="color: #0048ff;" translate="no">
               Hex - #F4F6FF
             </p>
             <p
@@ -464,6 +513,7 @@
               data-tipo="letras"
               data-velocidad="0.7"
               style="color: #0048ff;"
+              translate="no"
             >
               Secondary color
             </p>
@@ -472,6 +522,7 @@
               data-tipo="letras"
               data-velocidad="0.7"
               style="color: #0048ff;"
+              translate="no"
             >
               Aa
             </p>
@@ -485,6 +536,7 @@
           class="titulo_seccion animar-texto"
           data-tipo="letras"
           data-velocidad="0.7"
+          data-i18n="type-title"
         >
           MAIN TYPE
         </p>
@@ -493,11 +545,12 @@
             class="titulo_fuente animar-texto"
             data-tipo="letras"
             data-velocidad="0.7"
+            translate="no"
           >
             Panchang Variable
           </h3>
 
-          <p class="parrafo_fuente aanimar-texto" data-tipo="palabras">
+          <p class="parrafo_fuente aanimar-texto" data-tipo="palabras" data-i18n="type-desc">
             Ranging in weight from Light through ExtraBold, the Panchang family
             has six wide sans serif fonts on offer. The typeface features
             letters so wide that they are almost panoramic. The family supports
@@ -533,6 +586,7 @@
           class="titulo_seccion animar-texto"
           data-tipo="letras"
           data-velocidad="0.7"
+          data-i18n="branding-title"
         >
           BRANDING
         </p>
@@ -559,6 +613,7 @@
           class="titulo_seccion animar-texto"
           data-tipo="letras"
           data-velocidad="0.7"
+          data-i18n="brandapps-title"
         >
           BRAND APPLICATIONS
         </p>
@@ -611,8 +666,8 @@
       <!-- SECCION OCHO -->
       <section
         id="section_ocho"
-        data-titulo="Ideación de escenas"
-        data-parrafo="Planeacion y maquetacion de las escenas en 3D"
+        data-titulo="Scene ideation"
+        data-parrafo="Planning and layout of the 3D scenes"
       >
         <!-- SECCION TUBO -->
         <section
@@ -631,88 +686,277 @@
       <!-- SECCION NUEVE -->
       <section
         id="section_nueve"
-        data-titulo="Modelado 3D"
-        data-parrafo="Modelado de las escenas"
+        data-titulo="3D modeling"
+        data-parrafo="Modeling the scenes"
       ></section>
 
       <!-- SECCION DIEZ -->
       <section
         id="section_diez"
-        data-titulo="Desarrollo de escenas"
-        data-parrafo="Desarrollo y animación de las escenas"
+        data-titulo="Scene development"
+        data-parrafo="Development and animation of the scenes"
       ></section>
 
       <!-- SECCION ONCE -->
       <section id="section_once">
-        <footer>
-          <div class="cont_pie">
-            <h3
-              class="titulo_pie animar-texto"
-              data-tipo="palabras"
-              data-velocidad="0.2"
+        <footer class="cont_footer">
+          <div class="contenedor_uno">
+          <div class="conten_uno">
+            <h2 data-i18n="footer-cta ">
+              SOY EL EXPERTO EN EXPERIENCIAS POSITIVAS QUE ESTAS BUSCANDO
+            </h2>
+            <!-- boton call to action -->
+            <div
+              class="boton_contact cursor-scale magnetic-button"
+              data-strength="0.7"
+              data-text-strength="0.2"
             >
-              Let’s design positive experiences that boost your product.
-            </h3>
-            <div class="cont_boton_contacto">
-              <div
-                class="boton_contact cursor-scale magnetic-button"
-                data-strength="0.7"
-                data-text-strength="0.3"
+              <a
+                class="texto_boton"
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://yaksin-desing.github.io/samycosmetics/"
               >
-                <p
-                  class="magnetic-text animar-texto"
-                  data-tipo="letras"
-                  data-velocidad="0.7"
-                >
-                  Let’s Talk
-                </p>
-              </div>
-            </div>
-
-            <div class="cont_riel_pie">
-              <div class="espacio_riel">
-                <!-- Originales -->
-
-                <div class="riel_pie">
-                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                  <p>DEVELOPMENT CREATIVE</p>
-                </div>
-
-                <div class="riel_pie">
-                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                  <p>POSITIVE EXPERIENCES</p>
-                </div>
-
-                <div class="riel_pie">
-                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                  <p>OUT OF THE ORDINARY</p>
-                </div>
-
-                <!-- Copias -->
-                <div class="riel_pie">
-                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                  <p>DEVELOPMENT CREATIVE</p>
-                </div>
-                <div class="riel_pie">
-                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                  <p>POSITIVE EXPERIENCES</p>
-                </div>
-                <div class="riel_pie">
-                  <img src="../src/img/assetproyectos/flechapie.png" alt="" />
-                  <p>OUT OF THE ORDINARY</p>
-                </div>
-              </div>
+                <p class="magnetic-text" data-i18n="cta-talk">Talk me</p>
+              </a>
+              <img src="../src/img/flechabotoncontactazul.svg" alt="" />
             </div>
           </div>
 
-          <h3 class="nombre_logo">DSAIN</h3>
+          <!-- ------ -->
 
-          <p class="copy animar-texto" data-tipo="letras" data-velocidad="0.7">
-            © 2024 Yaksin Sains. All rights reserved.
-          </p>
+          <div class="conten_dos">
+            <ul class="social">
+              <p data-i18n="social-title">Social</p>
+              <div class="list_social">
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#home"
+                    translate="no"
+                    >Whatsapp</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#about"
+                    translate="no"
+                    >Gmail</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#services"
+                    translate="no"
+                    >Instagram</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="cursor-scale animated-text"
+                    data-delay="0.1"
+                    href="#contact"
+                    translate="no"
+                    >Facebook</a
+                  >
+                </li>
+              </div>
+            </ul>
+            <ul class="listmenu">
+              <p id="menuTitle" data-i18n="menu-title">Menu</p>
+              <li>
+                <a class="cursor-scale animated-text" href="../index.html" data-delay="0.1" data-i18n="nav-home"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#about"
+                  data-delay="0.1"
+                  data-i18n="nav-blogs"
+                  >Blogs</a
+                >
+              </li>
+              <li>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#services"
+                  data-delay="0.1"
+                  data-i18n="nav-works"
+                  >Works</a
+                >
+              </li>
+              <li>
+                <a
+                  class="cursor-scale animated-text"
+                  href="#contact"
+                  data-delay="0.1"
+                  data-i18n="nav-about"
+                  >About me</a
+                >
+              </li>
+            </ul>
+
+          </div>
+          </div>
+
+          <div class="contenedor_dos">
+            <p class="izquierdo notranslate" translate="no">Made by Dsain © 2025</p>
+            <p class="derecho notranslate" translate="no">By yaksin sain</p>
+          </div>
         </footer>
       </section>
     </div>
+
+    <!-- 🌐 Traducción — debe ir PRIMERO, antes de cualquier script que lea o divida el texto -->
+    <script>
+      (function () {
+        var i18n = {
+          en: {
+            "cta-talk": "Talk me",
+            "menu-title": "Menu",
+            "nav-home": "Home",
+            "nav-blogs": "Blogs",
+            "nav-works": "Works",
+            "nav-about": "About me",
+            "social-title": "Social",
+            "hero-date": "finished project - Aug 8 2025",
+            "hero-desc":
+              "Hello, I am the ux ui designer you are looking for, I am very happy to have you here, I welcome you to my portfolio.",
+            "details-title": "Proyect details",
+            "label-client": "Client",
+            "label-location": "Location",
+            "label-industry": "Industry",
+            "label-services": "Services",
+            "val-industry-1": "Design",
+            "val-industry-2": "Ti",
+            "val-services-1": "Front and Development",
+            "val-services-2": "Brand Identity Design",
+            "val-services-3": "Ux-Ui Design",
+            "val-services-4": "Web Design",
+            "label-months": "Months",
+            "label-usd": "$ Usd",
+            "label-tools": "Tools",
+            "label-team": "Project team and roles",
+            "role-uxui": "( Ux - Ui ) Yaksin sains",
+            "role-frontend": "( Frontend ) Yaksin sains",
+            "role-3d": "( 3D modeler ) Yaksin sains",
+            "role-illustrator": "( Illustrator ) Yaksin sains",
+            "role-creativedev": "( Creative Dev ) Yaksin sains",
+            "type-title": "MAIN TYPE",
+            "type-desc":
+              "Ranging in weight from Light through ExtraBold, the Panchang family has six wide sans serif fonts on offer. The typeface features letters so wide that they are almost panoramic. The family supports all European languages written with the Latin script. Panchang's lowercase letters have a tall x-height, and their ascenders are visibly taller than the capitals. The design's broad letterforms look very industrial on the whole.",
+            "branding-title": "BRANDING",
+            "brandapps-title": "BRAND APPLICATIONS",
+            "footer-cta": "I'M THE EXPERT IN POSITIVE EXPERIENCES YOU'RE LOOKING FOR",
+            "cta-lets-talk": "Let's Talk",
+            "riel-1": "DEVELOPMENT CREATIVE",
+            "riel-2": "POSITIVE EXPERIENCES",
+            "riel-3": "OUT OF THE ORDINARY",
+            "footer-copy": "© 2024 Yaksin Sains. All rights reserved.",
+            "section_ocho-titulo": "Scene ideation",
+            "section_ocho-parrafo": "Planning and layout of the 3D scenes",
+            "section_nueve-titulo": "3D modeling",
+            "section_nueve-parrafo": "Modeling the scenes",
+            "section_diez-titulo": "Scene development",
+            "section_diez-parrafo": "Development and animation of the scenes"
+          },
+          es: {
+            "cta-talk": "Hablemos",
+            "menu-title": "Menú",
+            "nav-home": "Inicio",
+            "nav-blogs": "Blog",
+            "nav-works": "Proyectos",
+            "nav-about": "Sobre mí",
+            "social-title": "Redes",
+            "hero-date": "proyecto terminado - 8 ago 2025",
+            "hero-desc":
+              "Hola, soy el diseñador ux ui que estabas buscando, me alegra mucho tenerte por aquí, bienvenido a mi portafolio.",
+            "details-title": "Detalles del proyecto",
+            "label-client": "Cliente",
+            "label-location": "Ubicación",
+            "label-industry": "Industria",
+            "label-services": "Servicios",
+            "val-industry-1": "Diseño",
+            "val-industry-2": "TI",
+            "val-services-1": "Frontend y Desarrollo",
+            "val-services-2": "Identidad de Marca",
+            "val-services-3": "Diseño Ux-Ui",
+            "val-services-4": "Diseño Web",
+            "label-months": "Meses",
+            "label-usd": "$ Usd",
+            "label-tools": "Herramientas",
+            "label-team": "Equipo y roles del proyecto",
+            "role-uxui": "( Ux - Ui ) Yaksin sains",
+            "role-frontend": "( Frontend ) Yaksin sains",
+            "role-3d": "( Modelador 3D ) Yaksin sains",
+            "role-illustrator": "( Ilustrador ) Yaksin sains",
+            "role-creativedev": "( Dev Creativo ) Yaksin sains",
+            "type-title": "TIPOGRAFÍA PRINCIPAL",
+            "type-desc":
+              "Con pesos que van de Light a ExtraBold, la familia Panchang ofrece seis fuentes sans serif anchas. La tipografía presenta letras tan anchas que resultan casi panorámicas. La familia soporta todos los idiomas europeos escritos en alfabeto latino. Las minúsculas de Panchang tienen una x-height alta, y sus ascendentes son visiblemente más altos que las mayúsculas. Las formas anchas del diseño se ven muy industriales en conjunto.",
+            "branding-title": "BRANDING",
+            "brandapps-title": "APLICACIONES DE MARCA",
+            "footer-cta": "SOY EL EXPERTO EN EXPERIENCIAS POSITIVAS QUE ESTÁS BUSCANDO",
+            "cta-lets-talk": "Hablemos",
+            "riel-1": "DESARROLLO CREATIVO",
+            "riel-2": "EXPERIENCIAS POSITIVAS",
+            "riel-3": "FUERA DE LO COMÚN",
+            "footer-copy": "© 2024 Yaksin Sains. Todos los derechos reservados.",
+            "section_ocho-titulo": "Ideación de escenas",
+            "section_ocho-parrafo": "Planeación y maquetación de las escenas en 3D",
+            "section_nueve-titulo": "Modelado 3D",
+            "section_nueve-parrafo": "Modelado de las escenas",
+            "section_diez-titulo": "Desarrollo de escenas",
+            "section_diez-parrafo": "Desarrollo y animación de las escenas"
+          }
+        };
+
+        var lang = localStorage.getItem("lang") || "en";
+        document.documentElement.lang = lang;
+
+        function aplicarTextos(l) {
+          document.querySelectorAll("[data-i18n]").forEach(function (el) {
+            var key = el.getAttribute("data-i18n");
+            var text = i18n[l] && i18n[l][key];
+            if (text !== undefined) el.textContent = text;
+          });
+        }
+
+        // 🎬 Secciones del tubo 3D: el texto vive en data-titulo/data-parrafo,
+        // no en textContent, así que se traducen como atributos.
+        var seccionesEscena = ["section_ocho", "section_nueve", "section_diez"];
+
+        function aplicarAtributosEscena(l) {
+          seccionesEscena.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var titulo = i18n[l] && i18n[l][id + "-titulo"];
+            var parrafo = i18n[l] && i18n[l][id + "-parrafo"];
+            if (titulo !== undefined) el.setAttribute("data-titulo", titulo);
+            if (parrafo !== undefined) el.setAttribute("data-parrafo", parrafo);
+          });
+        }
+
+        aplicarTextos(lang);
+        aplicarAtributosEscena(lang);
+
+        var btn = document.getElementById("lang-toggle");
+        if (btn) {
+          btn.addEventListener("click", function () {
+            var next = lang === "en" ? "es" : "en";
+            localStorage.setItem("lang", next);
+            location.reload();
+          });
+        }
+      })();
+    </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>

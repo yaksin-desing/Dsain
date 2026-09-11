@@ -296,19 +296,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
 gsap.registerPlugin(SplitText);
 
-const textos = {
-  section_uno: "Proyecto terminado",
-  section_screen_uno: "Vista web",
-  section_dos: "Detalles del proyecto",
-  section_tres: "Colores",
-  section_cuatro: "Fonts",
-  section_cinco: "Branding",
-  section_seis: "Mapa del sitio",
-  section_siete: "Versión móvil",
-  section_ocho: "Ideación",
-  section_nueve: "Modelado",
-  section_diez: "Desarrollo",
+// 🌐 Diccionario bilingüe del texto guía — respeta el idioma elegido con
+// el botón ES/EN (mismo localStorage que usa el resto de la página).
+// Como el botón recarga la página al cambiar de idioma, basta con leer
+// localStorage una sola vez al cargar el script; no hace falta un
+// listener adicional acá.
+const textosI18n = {
+  en: {
+    section_uno: "Finished project",
+    section_screen_uno: "Web view",
+    section_dos: "Project details",
+    section_tres: "Colors",
+    section_cuatro: "Fonts",
+    section_cinco: "Branding",
+    section_seis: "Sitemap",
+    section_siete: "Mobile version",
+    section_ocho: "Ideation",
+    section_nueve: "Modeling",
+    section_diez: "Development",
+  },
+  es: {
+    section_uno: "Proyecto terminado",
+    section_screen_uno: "Vista web",
+    section_dos: "Detalles del proyecto",
+    section_tres: "Colores",
+    section_cuatro: "Tipografía",
+    section_cinco: "Branding",
+    section_seis: "Mapa del sitio",
+    section_siete: "Versión móvil",
+    section_ocho: "Ideación",
+    section_nueve: "Modelado",
+    section_diez: "Desarrollo",
+  },
 };
+
+const idiomaActual = localStorage.getItem("lang") || "en";
+const textos = textosI18n[idiomaActual];
 
 const textoGuia = document.getElementById("texto-guia");
 
