@@ -47,32 +47,6 @@
         </a>
 
         <div class="cont_menu">
-          <!-- 🌐 Botón de idioma -->
-          <button
-            id="lang-toggle"
-            class="lang-switch"
-            data-lang="en"
-            type="button"
-            aria-label="Cambiar idioma"
-          >
-            <span class="lang-switch-label lang-switch-label-en">EN</span>
-            <span class="lang-switch-track">
-              <span class="lang-switch-thumb">
-                <img
-                  class="flag flag-en"
-                  src="../src/img/in.png"
-                  alt=""
-                />
-                <img
-                  class="flag flag-es"
-                  src="../src/img/es.png"
-                  alt=""
-                />
-              </span>
-            </span>
-            <span class="lang-switch-label lang-switch-label-es">ES</span>
-          </button>
-
           <div
             class="boton_contact cursor-scale magnetic-button"
             data-strength="0.7"
@@ -171,6 +145,37 @@
                 </li>
               </div>
             </ul>
+            <!-- 🌐 Selector de idioma -->
+            <div
+              class="lang-select lang-select--instant"
+              id="lang-select"
+              role="radiogroup"
+              aria-label="Idioma"
+            >
+              <p data-i18n="lang-select-title" class="lang-select-title">lenguaje</p>
+              <div class="list-lenguaje">
+              <label class="lang-option">
+                <input type="radio" name="lang" value="en" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">English</span>
+                <img class="lang-flag" src="../src/img/ingles.png" alt="" />
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="lang" value="es" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">Español</span>
+                <img class="lang-flag" src="../src/img/español.png" alt="" />
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="lang" value="fr" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">Français</span>
+                <img class="lang-flag" src="../src/img/frances.png" alt="" />
+              </label>
+
+              </div>
+
+            </div>
           </nav>
         </div>
       </div>
@@ -886,6 +891,7 @@
               "With weights ranging from Light to Semibold, Montserrat is SAMY's primary typeface. This highly legible geometric sans serif is used throughout the interface—including buttons, labels, values and prices, and navigation text—providing the consistency and clarity needed for a cohesive user experience.",
             "footer-cta":
               "I'M THE EXPERT IN POSITIVE EXPERIENCES YOU'RE LOOKING FOR",
+            "lang-select-title": "Language",
           },
           es: {
             "cta-talk": "Hablemos",
@@ -925,6 +931,47 @@
               "Con pesos que van de Light a Semibold, Montserrat es la tipografía principal de SAMY. Este sans serif geométrico, muy legible, se usa en toda la interfaz —incluyendo botones, etiquetas, valores y precios, y textos de navegación— aportando la consistencia y claridad necesarias para una experiencia de usuario coherente.",
             "footer-cta":
               "SOY EL EXPERTO EN EXPERIENCIAS POSITIVAS QUE ESTÁS BUSCANDO",
+            "lang-select-title": "Idioma",
+          },
+          fr: {
+            "cta-talk": "Discutons",
+            "cta-launch": "Voir le projet",
+            "menu-title": "Menu",
+            "nav-home": "Accueil",
+            "nav-blogs": "Blog",
+            "nav-works": "Projets",
+            "nav-about": "À propos",
+            "social-title": "Réseaux",
+            "hero-date": "projet terminé - 01 juil. 2026",
+            "hero-desc":
+              "Projet conceptuel pour Samy Cosmetics axé sur la présentation de produit, intégrant design visuel, animations et expériences 3D pour un impact et un engagement utilisateur plus forts.",
+            "details-title": "Détails du projet",
+            "details-desc":
+              "Ce projet consiste en la conception et le développement d'un site web interactif pour présenter le Samy Creamy Liquid Lipstick, intégrant des technologies 3D et de réalité augmentée. La plateforme permet de visualiser le produit dans une scène tridimensionnelle, de changer sa teinte via un carrousel de couleurs et de voir la transition avec une rotation animée. Elle inclut aussi un module de réalité augmentée permettant d'essayer virtuellement la teinte choisie sur les lèvres en temps réel, pour une expérience innovante et immersive.",
+            "label-client": "Client",
+            "label-location": "Lieu",
+            "label-industry": "Secteur",
+            "label-services": "Services",
+            "val-industry-1": "Cosmétique",
+            "val-industry-2": "E-commerce",
+            "val-services-1": "Frontend et développement",
+            "val-services-2": "Design Ux-Ui",
+            "label-months": "mois",
+            "label-usd": "$ Usd",
+            "label-team": "Équipe et rôles du projet",
+            "role-uxui": "( Ux - Ui ) Yaksin sains",
+            "role-frontend": "( Frontend ) Yaksin sains",
+            "role-3d": "( Modélisateur 3D ) Yaksin sains",
+            "role-illustrator": "( Illustrateur ) Yaksin sains",
+            "role-creativedev": "( Dev Créatif ) Yaksin sains",
+            "type-title": "TYPOGRAPHIE PRINCIPALE",
+            "mona-desc":
+              "Mona est la police d'accent de SAMY, hébergée localement dans le projet. Elle est utilisée exclusivement en graisse regular et apparaît dans les titres mis en avant du pop-up de chaque produit, apportant un caractère plus personnel et propre à la marque au système typographique.",
+            "mont-desc":
+              "Avec des graisses allant de Light à Semibold, Montserrat est la police principale de SAMY. Ce sans-serif géométrique très lisible est utilisé dans toute l'interface — boutons, étiquettes, valeurs et prix, texte de navigation — apportant la cohérence et la clarté nécessaires à une expérience utilisateur homogène.",
+            "footer-cta":
+              "JE SUIS L'EXPERT EN EXPÉRIENCES POSITIVES QUE VOUS RECHERCHEZ",
+            "lang-select-title": "Langue",
           },
         };
 
@@ -941,32 +988,35 @@
 
         aplicarTextos(lang);
 
-        // 🌐 Botón de idioma — único listener, con posición instantánea
-        // al cargar y retraso antes de recargar para dejar ver la
-        // animación del switch.
-        var btn = document.getElementById("lang-toggle");
-        if (btn) {
-          btn.classList.add("lang-switch--instant");
-          btn.setAttribute("data-lang", lang);
+        // 🌐 Selector de idioma (radio buttons) — posición instantánea
+        // al cargar y retraso antes de recargar para ver la animación.
+        var langSelect = document.getElementById("lang-select");
+        if (langSelect) {
+          var radios = langSelect.querySelectorAll('input[name="lang"]');
+
+          radios.forEach(function (radio) {
+            radio.checked = radio.value === lang;
+          });
+
           requestAnimationFrame(function () {
             requestAnimationFrame(function () {
-              btn.classList.remove("lang-switch--instant");
+              langSelect.classList.remove("lang-select--instant");
             });
           });
 
-          btn.addEventListener("click", function () {
-            var actual = localStorage.getItem("lang") || "en";
-            var next = actual === "en" ? "es" : "en";
-            btn.setAttribute("data-lang", next);
-            localStorage.setItem("lang", next);
+          radios.forEach(function (radio) {
+            radio.addEventListener("change", function () {
+              if (!radio.checked) return;
+              localStorage.setItem("lang", radio.value);
 
-            setTimeout(function () {
-              if (window.reloadConTransicion) {
-                window.reloadConTransicion();
-              } else {
-                location.reload();
-              }
-            }, 320);
+              setTimeout(function () {
+                if (window.reloadConTransicion) {
+                  window.reloadConTransicion();
+                } else {
+                  location.reload();
+                }
+              }, 250);
+            });
           });
         }
       })();

@@ -19,6 +19,39 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  // 🌐 Recarga la página actual con la misma ola de transición que usan
+  // los links — la usa el botón ES/EN para que el cambio de idioma no
+  // se sienta como un reload seco.
+  window.reloadConTransicion = function () {
+    gsap.set("#transition", { pointerEvents: "auto" });
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        location.reload();
+      }
+    });
+
+    tl.to("#wave", {
+      duration: 0.5,
+      morphSVG: wavePathStart,
+      ease: "none"
+    })
+      .to("#wave", {
+        duration: 0.5,
+        morphSVG: wavePathMed,
+        ease: "none"
+      })
+      .to("#wave", {
+        duration: 0.4,
+        morphSVG: wavePathEnd,
+        ease: "power1.in"
+      })
+      .set("#gif-overlay", { display: "block", opacity: 0 })
+      .to("#gif-overlay", { opacity: 1, duration: 0.5 })
+      .to("#gif-overlay", { delay: 1.2, opacity: 0, duration: 0.5 })
+      .set("#gif-overlay", { display: "none" });
+  };
+
   // ⚡️ Detectar clics en enlaces
   document.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", (e) => {
@@ -296,11 +329,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 gsap.registerPlugin(SplitText);
 
-// 🌐 Diccionario bilingüe del texto guía — respeta el idioma elegido con
-// el botón ES/EN (mismo localStorage que usa el resto de la página).
-// Como el botón recarga la página al cambiar de idioma, basta con leer
-// localStorage una sola vez al cargar el script; no hace falta un
-// listener adicional acá.
+// 🌐 Diccionario del texto guía — respeta el idioma elegido con el
+// selector de radio buttons (mismo localStorage que usa el resto de
+// la página). Como el selector recarga la página al cambiar de
+// idioma, basta con leer localStorage una sola vez al cargar el
+// script; no hace falta un listener adicional acá.
 const textosI18n = {
   en: {
     section_uno: "Finished project",
@@ -327,6 +360,19 @@ const textosI18n = {
     section_ocho: "Ideación",
     section_nueve: "Modelado",
     section_diez: "Desarrollo",
+  },
+  fr: {
+    section_uno: "Projet terminé",
+    section_screen_uno: "Vue web",
+    section_dos: "Détails du projet",
+    section_tres: "Couleurs",
+    section_cuatro: "Typographie",
+    section_cinco: "Branding",
+    section_seis: "Plan du site",
+    section_siete: "Version mobile",
+    section_ocho: "Idéation",
+    section_nueve: "Modélisation",
+    section_diez: "Développement",
   },
 };
 

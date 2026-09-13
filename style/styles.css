@@ -2522,71 +2522,6 @@ h5 {
   flex-direction: row;
   gap: 10px;
 }
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-family: inherit;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch .lang-switch-label {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  color: #c2c0b8;
-  transition: color 0.25s ease;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch[data-lang=en] .lang-switch-label-en, .proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch[data-lang=es] .lang-switch-label-es {
-  color: #2c2c2a;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch .lang-switch-track {
-  position: relative;
-  width: 60px;
-  height: 32px;
-  border-radius: 999px;
-  background: #eceae3;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: background 0.25s ease;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch .lang-switch-track .lang-switch-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch .lang-switch-track .lang-switch-thumb .flag {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  transition: opacity 0.2s ease;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch .lang-switch-track .lang-switch-thumb .flag-en {
-  opacity: 1;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch .lang-switch-track .lang-switch-thumb .flag-es {
-  opacity: 0;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch[data-lang=es] .lang-switch-thumb {
-  transform: translateX(28px);
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch[data-lang=es] .flag-en {
-  opacity: 0;
-}
-.proyecto .contenedorproyectos .barra_nav .cont_menu .lang-switch[data-lang=es] .flag-es {
-  opacity: 1;
-}
 .proyecto .contenedorproyectos .barra_nav .cont_menu .boton_contact {
   display: flex;
   flex-direction: row;
@@ -2698,7 +2633,7 @@ h5 {
   list-style: none;
   padding: 0;
   margin: 0;
-  bottom: 5%;
+  bottom: 30%;
   left: 15%;
   display: flex;
   flex-direction: column;
@@ -2730,6 +2665,101 @@ h5 {
   color: #000000;
   font-size: 0.9vw;
   width: 100%;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 0%;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .lang-select-title {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input[type=radio] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #c7d0ff;
+  position: relative;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #2d5bff;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-name {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #cacaca;
+  font-size: 0.9vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+  border-color: #2d5bff;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+  color: #2d5bff;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+  opacity: 1;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje.lang-select--instant * {
+  transition: none !important;
 }
 .proyecto .contenedorproyectos .barra_nav {
   /* Clase para mostrar el menú */
@@ -2787,7 +2817,7 @@ h5 {
   list-style: none;
   padding: 0;
   margin: 0;
-  bottom: 5%;
+  bottom: 17%;
   left: 15%;
   display: flex;
   flex-direction: column;
@@ -2826,6 +2856,101 @@ h5 {
   display: inline-block;
   transform: translateY(100%);
   opacity: 0;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 100%;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .lang-select-title {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input[type=radio] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #c7d0ff;
+  position: relative;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #2d5bff;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-name {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #cacaca;
+  font-size: 0.9vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+  border-color: #2d5bff;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+  color: #2d5bff;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+  opacity: 1;
+}
+.proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje.lang-select--instant * {
+  transition: none !important;
 }
 .proyecto .contenedorproyectos .barra_nav .hidden {
   display: none;
