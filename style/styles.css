@@ -3983,6 +3983,101 @@ h5 {
     font-size: 0.9vw;
     width: 100%;
   }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select {
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    bottom: 5%;
+    left: 15%;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    opacity: 0%;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .lang-select-title {
+    text-decoration: none;
+    font-size: 18px;
+    opacity: 100%;
+    font-family: "Regular";
+    color: #c0c0c0;
+    font-size: 0.9vw;
+    opacity: 100%;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input[type=radio] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #c7d0ff;
+    position: relative;
+    transition: border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #2d5bff;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-name {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Medium";
+    color: #cacaca;
+    font-size: 0.9vw;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-flag {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+    border-color: #2d5bff;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+    color: #2d5bff;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+    opacity: 1;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu .lang-select .list-lenguaje.lang-select--instant * {
+    transition: none !important;
+  }
   .proyecto .contenedorproyectos .barra_nav {
     /* Clase para mostrar el menú */
   }
@@ -4038,7 +4133,7 @@ h5 {
     list-style: none;
     padding: 0;
     margin: 0;
-    bottom: 5%;
+    bottom: 15%;
     left: 5%;
     display: flex;
     flex-direction: column;
@@ -4077,6 +4172,100 @@ h5 {
     display: inline-block;
     transform: translateY(100%);
     opacity: 0;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select {
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    bottom: 5%;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    opacity: 100%;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .lang-select-title {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Regular";
+    color: #c0c0c0;
+    font-size: 3vw;
+    opacity: 100%;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option {
+    margin-right: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input[type=radio] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #c7d0ff;
+    position: relative;
+    transition: border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #2d5bff;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-name {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Medium";
+    color: #cacaca;
+    font-size: 3vw;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-flag {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+    border-color: #2d5bff;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+    color: #2d5bff;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+    opacity: 1;
+  }
+  .proyecto .contenedorproyectos .barra_nav #nav-menu.show .lang-select .list-lenguaje.lang-select--instant * {
+    transition: none !important;
   }
   .proyecto .contenedorproyectos .barra_nav .hidden {
     display: none;
@@ -4122,9 +4311,10 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_uno .parrafo {
     bottom: 17vw;
-    position: absolute;
-    padding-left: 20vw;
-    padding-right: 20vw;
+    position: none;
+    margin-top: 10px;
+    padding-left: 10vw;
+    padding-right: 10vw;
     font-family: "Regular";
     font-size: 12px;
     font-stretch: normal;
@@ -4150,6 +4340,7 @@ h5 {
     right: auto;
     bottom: 20px;
     transform: translateX(-50%);
+    width: max-content;
   }
   .proyecto .contenedorproyectos #section_screen_uno {
     width: 100%;
@@ -4172,7 +4363,7 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_dos .column_uno .titulo {
     font-family: "bold";
-    font-size: 7vw;
+    font-size: 5vw;
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
@@ -4234,10 +4425,10 @@ h5 {
     border-left: 0px solid #0048ff;
     width: 100%;
     height: 100%;
-    justify-content: center;
+    justify-content: start;
     display: flex;
     flex-direction: column-reverse;
-    gap: 10px;
+    gap: 5vh;
   }
   .proyecto .contenedorproyectos #section_dos .column_dos .cont_cabecera {
     padding-top: 0vw;
@@ -4322,14 +4513,16 @@ h5 {
   }
   .proyecto .contenedorproyectos #section_tres .cont_color {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 4vw;
     margin: 3vw;
     width: 100%;
+    height: 100%;
+    padding: 0vw 2vw 0vw 2vw;
   }
   .proyecto .contenedorproyectos #section_tres .cont_color > div {
     width: 100%;
-    height: 40vw;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -4353,7 +4546,7 @@ h5 {
   .proyecto .contenedorproyectos #section_tres .cont_color > div .texto {
     width: 100%;
     font-family: "Regular";
-    font-size: 9vw;
+    font-size: 5vw;
     font-weight: 600;
     line-height: 0.9;
     text-align: end;
@@ -4375,6 +4568,7 @@ h5 {
     text-align: start;
     color: #0048ff;
     width: 100%;
+    height: 100%;
     border-bottom: #0048ff 1px solid;
     padding-bottom: 5px;
   }
@@ -4400,7 +4594,7 @@ h5 {
     margin-left: 3vw;
     margin-right: 3vw;
     font-family: "Regular";
-    font-size: 3.7vw;
+    font-size: 12px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -4686,6 +4880,176 @@ h5 {
     flex-direction: column;
     position: relative;
     overflow: hidden;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer {
+    z-index: 1;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 3.7vw;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 80%;
+    justify-content: center;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_uno {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-right: 2.5vw;
+    align-items: center;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_uno h2 {
+    width: 100%;
+    padding-top: 7vh;
+    padding-bottom: 4vh;
+    font-family: "Regular";
+    font-size: 7vw;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: 0.25px;
+    text-align: center;
+    color: white;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_uno .boton_contact {
+    width: min-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px 10px 20px;
+    background-color: #eff3ff;
+    border-radius: 30px;
+    font-family: "Medium";
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #0048ff;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_uno .boton_contact:hover {
+    background-color: #f8faff;
+    transform: scale(1.05);
+    gap: 20px;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_uno .boton_contact .texto_boton {
+    text-decoration: none;
+    color: #0048ff;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_uno .boton_contact img {
+    width: 17px;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5vw;
+    margin-top: 3vh;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .listmenu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .listmenu p {
+    text-decoration: none;
+    font-size: 18px;
+    font-family: "Medium";
+    color: rgba(182, 181, 181, 0.8470588235);
+    font-size: 5vw;
+    margin: 0px 7px;
+    display: none;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .listmenu li {
+    margin: 7px 7px;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .listmenu li a {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 3vw;
+    font-family: "Regular";
+    color: white;
+    transition: transform 0.1s ease;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .listmenu li a:hover {
+    font-family: "Medium";
+    transform: scale(1.1);
+    color: #e2dfff;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .social {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .social p {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Medium";
+    color: #ffffff;
+    font-size: 3vw;
+    margin: 0px 7px;
+    display: none;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .social .list_social {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .social .list_social li {
+    margin: 7px 7px;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .social .list_social li a {
+    display: inline-block;
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Regular";
+    color: #ffffff;
+    font-size: 3vw;
+    transition: transform 0.1s ease;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_uno .conten_dos .social .list_social li a:hover {
+    font-family: "Medium";
+    transform: scale(1.1);
+    color: #e2dfff;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_dos {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-top: 5vh;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_dos .izquierdo {
+    text-align: left;
+    width: 50%;
+    font-size: 2vw;
+    font-family: "Regular";
+    color: white;
+    margin: 7px 7px;
+  }
+  .proyecto .contenedorproyectos #section_once .cont_footer .contenedor_dos .derecho {
+    text-align: right;
+    width: 50%;
+    font-size: 2vw;
+    font-family: "Regular";
+    color: white;
+    margin: 7px 7px;
   }
   .proyecto .contenedorproyectos #section_once canvas {
     position: absolute;

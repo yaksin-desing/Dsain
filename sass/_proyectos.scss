@@ -1730,6 +1730,112 @@ $fondoboto: #eff3ff;
               }
             }
           }
+
+          .lang-select {
+          position: absolute;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          bottom: 5%;
+          left: 15%;
+          display: flex;
+          flex-direction: column;
+          width: 60%;
+          opacity: 0%;
+
+          .lang-select-title {
+            text-decoration: none;
+            font-size: 18px;
+            opacity: 100%;
+            font-family: "Regular";
+            color: #c0c0c0;
+            font-size: 0.9vw;
+            opacity: 100%;
+          }
+
+          .list-lenguaje{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+          .lang-option {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+
+            input[type="radio"] {
+              position: absolute;
+              width: 0;
+              height: 0;
+              opacity: 0;
+            }
+
+            .lang-radio {
+              width: 14px;
+              height: 14px;
+              border-radius: 50%;
+              border: 2px solid #c7d0ff;
+              position: relative;
+              transition: border-color 0.2s ease;
+              flex-shrink: 0;
+
+              &::after {
+                content: "";
+                position: absolute;
+                inset: 2px;
+                border-radius: 50%;
+                background: #2d5bff;
+                opacity: 0;
+                transform: scale(0.4);
+                transition:
+                  opacity 0.2s ease,
+                  transform 0.2s ease;
+              }
+            }
+
+            .lang-name {
+                text-decoration: none;
+                opacity: 100%;
+                font-family: "Medium";
+                color: #cacaca;
+                font-size: 0.9vw;
+                width: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .lang-flag {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              object-fit: cover;
+              opacity: 0.45;
+              transition: opacity 0.2s ease;
+            }
+
+            input:checked ~ .lang-radio {
+              border-color: #2d5bff;
+            }
+            input:checked ~ .lang-radio::after {
+              opacity: 1;
+              transform: scale(1);
+            }
+            input:checked ~ .lang-name {
+              color: #2d5bff;
+            }
+            input:checked ~ .lang-flag {
+              opacity: 1;
+            }
+          }
+
+          &.lang-select--instant * {
+            transition: none !important;
+          }}
+        }
         }
 
         /* Clase para mostrar el menú */
@@ -1793,7 +1899,7 @@ $fondoboto: #eff3ff;
             list-style: none;
             padding: 0;
             margin: 0;
-            bottom: 5%;
+            bottom: 15%;
             left: 5%;
             display: flex;
             flex-direction: column;
@@ -1838,6 +1944,111 @@ $fondoboto: #eff3ff;
               }
             }
           }
+
+          .lang-select {
+          position: absolute;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          bottom: 5%;
+          left: 5%;
+          display: flex;
+          flex-direction: column;
+          width: 70%;
+          opacity: 100%;
+
+          .lang-select-title {
+            text-decoration: none;
+            opacity: 100%;
+            font-family: "Regular";
+            color: #c0c0c0;
+            font-size: 3vw;
+            opacity: 100%;
+          }
+
+          .list-lenguaje{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+          .lang-option {
+            margin-right: 7px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+
+            input[type="radio"] {
+              position: absolute;
+              width: 0;
+              height: 0;
+              opacity: 0;
+            }
+
+            .lang-radio {
+              width: 14px;
+              height: 14px;
+              border-radius: 50%;
+              border: 2px solid #c7d0ff;
+              position: relative;
+              transition: border-color 0.2s ease;
+              flex-shrink: 0;
+
+              &::after {
+                content: "";
+                position: absolute;
+                inset: 2px;
+                border-radius: 50%;
+                background: #2d5bff;
+                opacity: 0;
+                transform: scale(0.4);
+                transition:
+                  opacity 0.2s ease,
+                  transform 0.2s ease;
+              }
+            }
+
+            .lang-name {
+                text-decoration: none;
+                opacity: 100%;
+                font-family: "Medium";
+                color: #cacaca;
+                font-size: 3vw;
+                width: 100%;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .lang-flag {
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              object-fit: cover;
+              opacity: 0.45;
+              transition: opacity 0.2s ease;
+            }
+
+            input:checked ~ .lang-radio {
+              border-color: #2d5bff;
+            }
+            input:checked ~ .lang-radio::after {
+              opacity: 1;
+              transform: scale(1);
+            }
+            input:checked ~ .lang-name {
+              color: #2d5bff;
+            }
+            input:checked ~ .lang-flag {
+              opacity: 1;
+            }
+          }
+
+          &.lang-select--instant * {
+            transition: none !important;
+          }}
+        }
         }
 
         .hidden {
@@ -1889,9 +2100,10 @@ $fondoboto: #eff3ff;
 
         .parrafo {
           bottom: 17vw;
-          position: absolute;
-          padding-left: 20vw;
-          padding-right: 20vw;
+          position: none;
+          margin-top: 10px;
+          padding-left: 10vw;
+          padding-right: 10vw;
           font-family: "Regular";
           font-size: 12px;
           font-stretch: normal;
@@ -1920,6 +2132,7 @@ $fondoboto: #eff3ff;
           right: auto;
           bottom: 20px;
           transform: translateX(-50%);
+          width: max-content;
         }
       }
 
@@ -1945,7 +2158,7 @@ $fondoboto: #eff3ff;
 
           .titulo {
             font-family: "bold";
-            font-size: 7vw;
+            font-size: 5vw;
             font-weight: bold;
             font-stretch: normal;
             font-style: normal;
@@ -2015,10 +2228,10 @@ $fondoboto: #eff3ff;
           border-left: 0px solid $colorp;
           width: 100%;
           height: 100%;
-          justify-content: center;
+          justify-content: start;
           display: flex;
           flex-direction: column-reverse;
-          gap: 10px;
+          gap: 5vh;
 
           .cont_cabecera {
             padding-top: 0vw;
@@ -2113,14 +2326,16 @@ $fondoboto: #eff3ff;
 
         .cont_color {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(1, 1fr);
           gap: 4vw;
           margin: 3vw;
-          width: 100%;
+            width: 100%;
+            height: 100%;
+            padding: 0vw 2vw 0vw 2vw;
 
           > div {
             width: 100%;
-            height: 40vw;
+            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -2146,7 +2361,7 @@ $fondoboto: #eff3ff;
             .texto {
               width: 100%;
               font-family: "Regular";
-              font-size: 9vw;
+              font-size: 5vw;
               font-weight: 600;
               line-height: 0.9;
               text-align: end;
@@ -2172,6 +2387,7 @@ $fondoboto: #eff3ff;
           text-align: start;
           color: $colorp;
           width: 100%;
+          height: 100%;
           border-bottom: $colorp 1px solid;
           padding-bottom: 5px;
         }
@@ -2199,7 +2415,7 @@ $fondoboto: #eff3ff;
             margin-left: 3vw;
             margin-right: 3vw;
             font-family: "Regular";
-            font-size: 3.7vw;
+            font-size: 12px;
             font-weight: normal;
             font-stretch: normal;
             font-style: normal;
@@ -2524,6 +2740,197 @@ $fondoboto: #eff3ff;
         flex-direction: column;
         position: relative;
         overflow: hidden;
+
+      .cont_footer {
+        z-index: 1;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 3.7vw;
+
+        .contenedor_uno {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: 80%;
+          justify-content: center;
+          .conten_uno {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-right: 2.5vw;
+            align-items: center;
+
+            h2 {
+              width: 100%;
+              padding-top: 7vh;
+              padding-bottom: 4vh;
+              font-family: "Regular";
+              font-size: 7vw;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: 1;
+              letter-spacing: 0.25px;
+              text-align: center;
+              color: white;
+            }
+
+            .boton_contact {
+              width: min-content;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+              gap: 10px;
+              padding: 10px 20px 10px 20px;
+              background-color: $fondoboto;
+              border-radius: 30px;
+              font-family: "Medium";
+              font-size: 12px;
+              font-weight: 500;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: normal;
+              text-align: center;
+              color: $colorp;
+              white-space: nowrap;
+              cursor: pointer;
+              transition: all 0.3s ease;
+
+              &:hover {
+                background-color: #f8faff;
+                transform: scale(1.05);
+                gap: 20px;
+              }
+
+              .texto_boton {
+                text-decoration: none;
+                color: $colorp;
+              }
+
+              img {
+                width: 17px;
+              }
+            }
+          }
+
+          .conten_dos {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5vw;
+            margin-top: 3vh;
+
+            .listmenu {
+              list-style: none;
+              display: flex;
+              flex-direction: column;
+              width: 50%;
+
+              p {
+                text-decoration: none;
+                font-size: 18px;
+                font-family: "Medium";
+                color: #b6b5b5d8;
+                font-size: 5vw;
+                margin: 0px 7px;
+                display: none;
+              }
+
+              li {
+                margin: 7px 7px;
+
+                a {
+                  display: inline-block; // <- esto es lo que falta
+                  text-decoration: none;
+                font-size: 3vw;
+                  font-family: "Regular";
+                  color: white;
+                  transition: transform 0.1s ease;
+                  &:hover {
+                    font-family: "Medium";
+                    transform: scale(1.1);
+                    color: #e2dfff;
+                  }
+                }
+              }
+            }
+
+            .social {
+              list-style: none;
+              display: flex;
+              flex-direction: column;
+              width: 50%;
+
+              p {
+                text-decoration: none;
+                opacity: 100%;
+                font-family: "Medium";
+                color: #ffffff;
+                font-size: 3vw;
+                margin: 0px 7px;
+                display: none;
+              }
+
+              .list_social {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 100%;
+
+                li {
+                  margin: 7px 7px;
+
+                  a {
+                    display: inline-block; // <- esto es lo que falta
+                    text-decoration: none;
+                    opacity: 100%;
+                    font-family: "Regular";
+                    color: #ffffff;
+                font-size: 3vw;
+                    transition: transform 0.1s ease;
+
+                    &:hover {
+                      font-family: "Medium";
+                      transform: scale(1.1);
+                      color: #e2dfff;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .contenedor_dos {
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          padding-top: 5vh;
+
+          .izquierdo {
+            text-align: left;
+            width: 50%;
+            font-size: 2vw;
+            font-family: "Regular";
+            color: white;
+            margin: 7px 7px;
+          }
+
+          .derecho {
+            text-align: right;
+            width: 50%;
+            font-size: 2vw;
+            font-family: "Regular";
+            color: white;
+            margin: 7px 7px;
+          }
+        }
+      }
 
         canvas {
           position: absolute;

@@ -101,8 +101,16 @@ function aplicarAnimacion() {
             duration: 1,
             ease: "power2.out"
           });
+          
+                   
+          gsap.to(".parrafo", {
+            opacity: "0%",
+            duration: 1,
+            ease: "power2.out"
+          });
+
           gsap.to(".imagen_proyecto", {
-            y: "88vh",
+            y: "100vh",
             duration: 1,
             ease: "power2.out"
           });
@@ -113,6 +121,14 @@ function aplicarAnimacion() {
             duration: 1,
             ease: "power2.out"
           });
+
+          gsap.to(".parrafo", {
+            opacity: "100%",
+            duration: 1,
+            ease: "power2.out"
+          });
+
+
           gsap.to(".imagen_proyecto", {
             y: "0vw",
             duration: 1,
