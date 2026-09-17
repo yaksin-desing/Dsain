@@ -48,16 +48,6 @@
         </a>
 
         <div class="cont_menu">
-          <!-- 🌐 Botón de idioma -->
-          <button
-            id="lang-toggle"
-            class="notranslate"
-            translate="no"
-            type="button"
-          >
-            ES / EN
-          </button>
-
           <div
             class="boton_contact cursor-scale magnetic-button"
             data-strength="0.7"
@@ -79,7 +69,11 @@
             <ul class="contlistmenu">
               <p id="menuTitle" data-i18n="menu-title">Menu</p>
               <li>
-                <a class="animated-text" href="../index.html" data-delay="0.1" data-i18n="nav-home"
+                <a
+                  class="animated-text"
+                  href="../index.html"
+                  data-delay="0.1"
+                  data-i18n="nav-home"
                   >Home</a
                 >
               </li>
@@ -119,6 +113,7 @@
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#home"
+                    translate="no"
                     >Whatsapp</a
                   >
                 </li>
@@ -127,6 +122,7 @@
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#about"
+                    translate="no"
                     >Gmail</a
                   >
                 </li>
@@ -135,6 +131,7 @@
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#services"
+                    translate="no"
                     >Instagram</a
                   >
                 </li>
@@ -143,11 +140,43 @@
                     class="cursor-scale animated-text"
                     data-delay="0.1"
                     href="#contact"
+                    translate="no"
                     >Facebook</a
                   >
                 </li>
               </div>
             </ul>
+            <!-- 🌐 Selector de idioma -->
+            <div
+              class="lang-select lang-select--instant"
+              id="lang-select"
+              role="radiogroup"
+              aria-label="Idioma"
+            >
+              <p data-i18n="lang-select-title" class="lang-select-title">lenguaje</p>
+              <div class="list-lenguaje">
+              <label class="lang-option">
+                <input type="radio" name="lang" value="en" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">English</span>
+                <img class="lang-flag" src="../src/img/ingles.png" alt="" />
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="lang" value="es" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">Español</span>
+                <img class="lang-flag" src="../src/img/español.png" alt="" />
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="lang" value="fr" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">Français</span>
+                <img class="lang-flag" src="../src/img/frances.png" alt="" />
+              </label>
+
+              </div>
+
+            </div>
           </nav>
         </div>
       </div>
@@ -184,6 +213,23 @@
           Hello, I am the ux ui designer you are looking for, I am very happy to
           have you here, I welcome you to my portfolio.
         </p>
+
+        <!-- boton prueba -->
+        <div
+          class="boton_launch cursor-scale magnetic-button"
+          data-strength="0.7"
+          data-text-strength="0.2"
+        >
+          <a
+            class="texto_boton"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://yaksin-desing.github.io/samycosmetics/"
+          >
+            <p class="magnetic-text" data-i18n="cta-launch">Launch project</p>
+          </a>
+          <img src="../src/img/flechabotoncontact.svg" alt="" />
+        </div>
 
       </section>
 
