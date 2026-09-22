@@ -3,6 +3,168 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
 import * as CANNON from "https://cdn.skypack.dev/cannon-es@0.20.0";
 
+// =========================================================
+// 🌈 GRAINIENT — configuración del fondo animado
+// Ajusta estos valores para personalizar el gradiente.
+// =========================================================
+const GRAINIENT_CONFIG = {
+  color1: "#041dff",
+  color2: "#e8e6ff",
+  color3: "#2b80ff",
+
+  speed: 0.7,        // 0 - 2   → velocidad global de la animación
+  balance: 0.5,       // 0 - 1   → hacia qué color se inclina la mezcla
+  rotation: 0.15,     // 0 - 1   → rotación orgánica del campo de ruido
+
+  warpStrength: 0.55, // 0 - 1.5 → intensidad del "empuje" líquido
+  warpFreq: 1.4,      // 0.3 - 4 → frecuencia/ondulación del warp
+
+  angle: 70,          // 0 - 360 → ángulo base del gradiente (desktop, o en reposo)
+  angleGyroSensitivity: 1.5, // grados de ángulo por grado de inclinación del teléfono
+  angleTransitionSpeed: 4,   // qué tan rápido sigue el ángulo a la inclinación (suavizado)
+  softness: 0.45,     // 0.05 - 1 → qué tan difuminadas son las transiciones
+
+  grain: 0.09,        // 0 - 0.5  → densidad del grano de película (reposo)
+  grainHover: 0.32,   // 0 - 0.5  → densidad del grano al hacer hover en el CTA
+  grainTransitionSpeed: 6, // qué tan rápido sube/baja el grano (más alto = más brusco)
+  grainScale: 1.6,    // 0.5 - 4  → tamaño del grano
+  contrast: 1.05,     // 0.5 - 1.8
+  saturation: 1.1,    // 0 - 2
+
+  // Sombra de las monedas sobre el fondo animado (0 = desactivada)
+  shadowOpacity: 0.35,
+};
+
+const GRAINIENT_VERTEX_SHADER = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const GRAINIENT_FRAGMENT_SHADER = `
+  precision highp float;
+  varying vec2 vUv;
+
+  uniform float uTime;
+  uniform float uAspect;
+
+  uniform vec3 uColor1;
+  uniform vec3 uColor2;
+  uniform vec3 uColor3;
+
+  uniform float uSpeed;
+  uniform float uBalance;
+  uniform float uRotation;
+
+  uniform float uWarpStrength;
+  uniform float uWarpFreq;
+
+  uniform float uAngle;
+  uniform float uSoftness;
+
+  uniform float uGrain;
+  uniform float uGrainScale;
+  uniform float uContrast;
+  uniform float uSaturation;
+
+  vec2 hash(vec2 p) {
+    p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+    return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+  }
+
+  float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(
+      mix(dot(hash(i + vec2(0.0,0.0)), f - vec2(0.0,0.0)),
+          dot(hash(i + vec2(1.0,0.0)), f - vec2(1.0,0.0)), u.x),
+      mix(dot(hash(i + vec2(0.0,1.0)), f - vec2(0.0,1.0)),
+          dot(hash(i + vec2(1.0,1.0)), f - vec2(1.0,1.0)), u.x),
+      u.y
+    );
+  }
+
+  float fbm(vec2 p) {
+    float v = 0.0;
+    float a = 0.5;
+    mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
+    for (int i = 0; i < 5; i++) {
+      v += a * noise(p);
+      p = m * p;
+      a *= 0.5;
+    }
+    return v;
+  }
+
+  float hash1(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453);
+  }
+
+  vec3 rgb2hsv(vec3 c) {
+    vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
+    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0*d + e)), d / (q.x + e), q.x);
+  }
+  vec3 hsv2rgb(vec3 c) {
+    vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+  }
+
+  void main() {
+    // vUv ya cubre exactamente el viewport visible (el plano está escalado
+    // a bounds.halfW/halfH), así que solo falta corregir el aspecto igual
+    // que se hacía antes con gl_FragCoord / uResolution.
+    vec2 p = (vUv - 0.5);
+    p.x *= uAspect;
+
+    float t = uTime * uSpeed;
+
+    float rot = uRotation * t * 0.3;
+    mat2 rotM = mat2(cos(rot), -sin(rot), sin(rot), cos(rot));
+    vec2 rp = rotM * p;
+
+    vec2 warpUv = rp * uWarpFreq + vec2(t * 0.15, -t * 0.12);
+    float n1 = fbm(warpUv);
+    float n2 = fbm(warpUv + vec2(5.2, 1.3) + t * 0.08);
+    vec2 warped = rp + uWarpStrength * vec2(n1, n2);
+
+    float rad = radians(uAngle);
+    vec2 axis = vec2(cos(rad), sin(rad));
+    float g = dot(warped, axis) + 0.5;
+
+    float n3 = fbm(warped * 1.3 - t * 0.05);
+    g += n3 * 0.35;
+
+    float soft = max(uSoftness, 0.001);
+    float m1 = smoothstep(0.5 - soft, 0.5 + soft, g + (uBalance - 0.5));
+
+    vec3 col = mix(uColor1, uColor2, m1);
+    col = mix(col, uColor3, clamp((g - 0.65) / max(soft, 0.05), 0.0, 1.0) * 0.85);
+
+    float swirl = smoothstep(0.3, 0.9, fbm(warped * 0.8 + 3.1));
+    col = mix(col, uColor3, swirl * 0.25);
+
+    col = (col - 0.5) * uContrast + 0.5;
+    vec3 hsv = rgb2hsv(clamp(col, 0.0, 1.0));
+    hsv.y = clamp(hsv.y * uSaturation, 0.0, 1.0);
+    col = hsv2rgb(hsv);
+
+    vec2 grainUv = vUv * 1000.0 / uGrainScale;
+    float grainNoise = hash1(grainUv + fract(uTime) * 97.0) - 0.5;
+    col += grainNoise * uGrain;
+
+    col = clamp(col, 0.0, 1.0);
+    gl_FragColor = vec4(col, 1.0);
+  }
+`;
+
 // 🟢 Contenedor
 const container = document.getElementById("section_once");
 
@@ -144,14 +306,7 @@ wallRight.quaternion.setFromEuler(0, -Math.PI / 2, 0);
 world.addBody(wallRight);
 
 // 🟣 Paredes de profundidad (fondo y frente), para contener el eje Z
-// OJO: lo bajé de 1.5 a 0.6 — el mouse "vive" en el plano z=0 (ver más abajo),
-// así que entre más angosto sea este rango, más consistente es la colisión
-// mouse-moneda (si lo dejas muy ancho, las monedas pueden quedar demasiado
-// lejos del plano del mouse y nunca tocarlo).
 const DEPTH_HALF = 0;
-// 🆕 Movido acá arriba (antes vivía dentro de updateStaticBounds) para que
-// tanto el fondo como el texto lean el MISMO valor y siempre tengan el
-// mismo ancho, sin duplicar el número en dos lugares distintos.
 const BACKGROUND_COVERAGE = 1.05;
 
 const wallBack = new CANNON.Body({ mass: 0, material: sueloMaterial });
@@ -164,7 +319,6 @@ wallFront.quaternion.setFromEuler(0, Math.PI, 0); // voltea el normal a -z
 world.addBody(wallFront);
 
 // 🔴🟢 Planos DE DEPURACIÓN — visualizan dónde están fondo y frente.
-// Pon DEBUG_WALLS en true si necesitas verlos de nuevo más adelante.
 const DEBUG_WALLS = false;
 let wallBackMesh, wallFrontMesh;
 if (DEBUG_WALLS) {
@@ -225,26 +379,78 @@ function actualizarTextoResponsive() {
   textoMesh.position.set(0, -bounds.halfH + altoDeseado / 2, 0);
 }
 
-// 🟡 Pared visual de fondo (PNG) — coincide con wallBack físico y recibe sombra
-// de las monedas. Cambia la ruta por la de tu imagen.
-const wallBackTexture = new THREE.TextureLoader().load(
-  "../src/img/proyectounodd.png"
-);
-wallBackTexture.encoding = THREE.sRGBEncoding; // three 0.129 usa encoding, no colorSpace
+// =========================================================
+// 🌈 FONDO ANIMADO (Grainient) — reemplaza la textura estática
+// (antes: wallBackTexture / wallBackVisualMaterial con MeshStandardMaterial)
+// =========================================================
+function colorToVec3(hex) {
+  const c = new THREE.Color(hex);
+  return new THREE.Vector3(c.r, c.g, c.b);
+}
 
-const wallBackVisualMaterial = new THREE.MeshStandardMaterial({
-  map: wallBackTexture,
-  transparent: false, // por si el PNG trae canal alfa
-  roughness: 1,
-  metalness: 0,
+const grainientMaterial = new THREE.ShaderMaterial({
+  vertexShader: GRAINIENT_VERTEX_SHADER,
+  fragmentShader: GRAINIENT_FRAGMENT_SHADER,
+  uniforms: {
+    uTime: { value: 0 },
+    uAspect: { value: 1 },
+    uColor1: { value: colorToVec3(GRAINIENT_CONFIG.color1) },
+    uColor2: { value: colorToVec3(GRAINIENT_CONFIG.color2) },
+    uColor3: { value: colorToVec3(GRAINIENT_CONFIG.color3) },
+    uSpeed: { value: GRAINIENT_CONFIG.speed },
+    uBalance: { value: GRAINIENT_CONFIG.balance },
+    uRotation: { value: GRAINIENT_CONFIG.rotation },
+    uWarpStrength: { value: GRAINIENT_CONFIG.warpStrength },
+    uWarpFreq: { value: GRAINIENT_CONFIG.warpFreq },
+    uAngle: { value: GRAINIENT_CONFIG.angle },
+    uSoftness: { value: GRAINIENT_CONFIG.softness },
+    uGrain: { value: GRAINIENT_CONFIG.grain },
+    uGrainScale: { value: GRAINIENT_CONFIG.grainScale },
+    uContrast: { value: GRAINIENT_CONFIG.contrast },
+    uSaturation: { value: GRAINIENT_CONFIG.saturation },
+  },
 });
 
+// El plano de fondo ya NO recibe sombra (un ShaderMaterial sin "lights: true"
+// no participa del sistema de luces/sombras de three.js).
 const wallBackVisualMesh = new THREE.Mesh(
   new THREE.PlaneGeometry(1, 1), // el tamaño real se ajusta con .scale en updateStaticBounds
-  wallBackVisualMaterial
+  grainientMaterial
 );
-wallBackVisualMesh.receiveShadow = true;
 scene.add(wallBackVisualMesh);
+
+// 🌗 "Atrapa-sombras": plano transparente que SOLO dibuja la sombra que
+// proyectan las monedas, montado justo delante del fondo animado, para no
+// perder el efecto de sombra que antes caía sobre la textura PNG.
+// Si no te interesa conservarlo, borra este bloque y el mesh no se crea.
+const shadowCatcherMaterial = new THREE.ShadowMaterial({
+  opacity: GRAINIENT_CONFIG.shadowOpacity,
+});
+const shadowCatcherMesh = new THREE.Mesh(
+  new THREE.PlaneGeometry(1, 1),
+  shadowCatcherMaterial
+);
+shadowCatcherMesh.receiveShadow = true;
+scene.add(shadowCatcherMesh);
+
+// =========================================================
+// 🖱️ HOVER EN EL CTA ("Hablemos" / "Talk me") → sube el grano del fondo
+// Busca el botón dentro del footer (section_once), no el del menú de arriba.
+// =========================================================
+let grainTarget = GRAINIENT_CONFIG.grain;
+let angleTarget = GRAINIENT_CONFIG.angle; // 🌈 se mueve con el giroscopio en móvil (ver onDeviceMotion)
+
+const ctaButton = container.querySelector(".boton_contact");
+if (ctaButton) {
+  ctaButton.addEventListener("mouseenter", () => {
+    grainTarget = GRAINIENT_CONFIG.grainHover;
+  });
+  ctaButton.addEventListener("mouseleave", () => {
+    grainTarget = GRAINIENT_CONFIG.grain;
+  });
+} else {
+  console.warn('Grainient: no se encontró ".boton_contact" dentro de #section_once');
+}
 
 function updateStaticBounds() {
   bounds = getVisibleBounds();
@@ -254,12 +460,23 @@ function updateStaticBounds() {
   wallBack.position.set(0, 0, -DEPTH_HALF);
   wallFront.position.set(0, 0, 1);
 
-  // 🟡 Ajusta la pared visual al ancho/alto real del viewport (responsive)
-  // 🆕 105% en vez de 100%: deja un margen de sobra para que no se vea
-  // el borde del plano en los extremos (por ejemplo si la cámara se mueve
-  // un poco con OrbitControls, o hay pequeños desajustes de aspect ratio).
-  wallBackVisualMesh.scale.set(bounds.halfW * 2 * BACKGROUND_COVERAGE, bounds.halfH * 2 * BACKGROUND_COVERAGE, 1);
-  wallBackVisualMesh.position.set(0, 0, -DEPTH_HALF ,0); // ligeramente detrás para evitar z-fighting con las monedas
+  // 🟡 Ajusta el fondo animado y el atrapa-sombras al ancho/alto real del
+  // viewport (responsive). 105% en vez de 100% deja margen de sobra para
+  // que no se vea el borde del plano en los extremos.
+  const anchoFondo = bounds.halfW * 2 * BACKGROUND_COVERAGE;
+  const altoFondo = bounds.halfH * 2 * BACKGROUND_COVERAGE;
+
+  wallBackVisualMesh.scale.set(anchoFondo, altoFondo, 1);
+  wallBackVisualMesh.position.set(0, 0, -DEPTH_HALF); // ligeramente detrás para evitar z-fighting con las monedas
+
+  // Mismo tamaño, un pelín más cerca de la cámara para que no compita en
+  // el z-buffer con el plano del fondo (ambos están casi en el mismo z).
+  shadowCatcherMesh.scale.set(anchoFondo, altoFondo, 1);
+  shadowCatcherMesh.position.set(0, 0, -DEPTH_HALF + 0.01);
+
+  // El shader necesita el aspecto real del plano (== aspecto del viewport)
+  // para no deformar el ruido/warp en pantallas anchas o angostas.
+  grainientMaterial.uniforms.uAspect.value = anchoFondo / altoFondo;
 
   // 🟡 El frustum de sombra del light debe cubrir el mismo rango visible,
   // si no las sombras se recortan o desaparecen al hacer resize
@@ -332,8 +549,6 @@ function disableMouse() {
 }
 
 // Actualiza posición y velocidad del cuerpo del mouse cada frame.
-// Se le da velocidad real (no solo posición) para que cannon-es
-// resuelva el choque como un cuerpo en movimiento, no uno fijo.
 function updateMouseBody(delta) {
   if (disableInteractions || !mouseActive) {
     mouseBody.velocity.set(0, 0, 0);
@@ -356,12 +571,7 @@ function updateMouseBody(delta) {
 }
 
 // =========================================================
-// 📱 GRAVEDAD POR GIROSCOPIO (solo móvil) — el "lado más bajo" del
-// teléfono, según su inclinación real, se vuelve el punto de atracción.
-// Usamos accelerationIncludingGravity porque el sensor entrega
-// directamente el vector de gravedad en los ejes de la pantalla
-// (x = izquierda/derecha, y = arriba/abajo), que es justo lo que
-// necesitamos para mover world.gravity.
+// 📱 GRAVEDAD POR GIROSCOPIO (solo móvil)
 // =========================================================
 let gyroPermissionState = "unknown"; // 'unknown' | 'granted' | 'denied' | 'not-needed'
 
@@ -373,11 +583,14 @@ function onDeviceMotion(event) {
   const g = event.accelerationIncludingGravity;
   if (!g || g.x === null || g.x === undefined) return;
 
-  // Si en tu teléfono se siente "al revés" (las monedas ruedan al lado
-  // contrario de la inclinación), invierte el signo de gx y/o gy aquí.
   const gx = THREE.MathUtils.clamp(g.x, -BASE_GRAVITY, BASE_GRAVITY);
   const gy = THREE.MathUtils.clamp(-g.y, -BASE_GRAVITY, BASE_GRAVITY);
   world.gravity.set(gx, gy, 0); // z en 0: el eje Z lo maneja el resorte hacia el mouse
+
+  // 🌈 El mismo vector de gravedad indica hacia dónde está "abajo" según la
+  // inclinación del teléfono — lo usamos para rotar el ángulo del gradiente.
+  const tiltDeg = THREE.MathUtils.radToDeg(Math.atan2(gy, gx));
+  angleTarget = GRAINIENT_CONFIG.angle + tiltDeg * GRAINIENT_CONFIG.angleGyroSensitivity;
 }
 
 function startGyroListener() {
@@ -386,11 +599,9 @@ function startGyroListener() {
 function stopGyroListener() {
   window.removeEventListener("devicemotion", onDeviceMotion);
   world.gravity.set(0, -BASE_GRAVITY, 0); // vuelve a la gravedad normal hacia abajo
+  angleTarget = GRAINIENT_CONFIG.angle; // 🌈 vuelve al ángulo base del fondo
 }
 
-// iOS 13+ exige que el permiso se pida dentro de un gesto real del
-// usuario (touch/click) — por eso se engancha al primer toque en vez
-// de pedirse automáticamente al cargar la página.
 function requestGyroPermissionOnce() {
   if (gyroPermissionState !== "unknown") return;
 
@@ -417,9 +628,9 @@ function requestGyroPermissionOnce() {
 function enableGyroIfMobile() {
   if (!isMobileOrTablet) return;
   if (gyroPermissionState === "granted" || gyroPermissionState === "not-needed") {
-    startGyroListener(); // ya teníamos permiso, solo reanuda el listener
+    startGyroListener();
   } else {
-    requestGyroPermissionOnce(); // primera vez (o permiso aún no pedido)
+    requestGyroPermissionOnce();
   }
 }
 
@@ -438,7 +649,7 @@ loader.load(
   "../src/objt/piedepagina/monedadsain.glb",
   (gltf) => {
     modeloBase = gltf.scene;
-    modeloBase.scale.set(ESCALA_MONEDAS, ESCALA_MONEDAS, ESCALA_MONEDAS); // 🔧 antes: 0.4, 0.4, 0.4 fijo
+    modeloBase.scale.set(ESCALA_MONEDAS, ESCALA_MONEDAS, ESCALA_MONEDAS);
     crearMonedas();
   },
   undefined,
@@ -448,8 +659,7 @@ loader.load(
 const baseMaterialColor = new THREE.MeshStandardMaterial({ metalness: 0.3, roughness: 0.6 });
 
 function crearMonedas() {
-  const escala = ESCALA_MONEDAS; // 🔧 antes: const escala = 0.4; ahora depende del ancho del dispositivo
-  // Medio ancho/alto aproximado de la moneda ya escalada, para la caja de colisión
+  const escala = ESCALA_MONEDAS;
   const halfExtent = new CANNON.Vec3(escala * 0.9, escala * 0.9, escala * 0.35);
   const shape = new CANNON.Box(halfExtent);
 
@@ -457,10 +667,6 @@ function crearMonedas() {
     const clone = modeloBase.clone(true);
     clone.rotation.x = Math.PI / 2;
 
-    // 🔧 FIX: castShadow/receiveShadow puestos en el Group raíz (clone) no
-    // se propagan a los meshes hijos — three.js solo revisa esas flags en
-    // los objetos que realmente son Mesh al construir el shadow map. Por
-    // eso las monedas no proyectaban sombra: había que recorrer el árbol.
     clone.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = true;
@@ -476,9 +682,6 @@ function crearMonedas() {
           const color = new THREE.Color(0, 0, value);
           child.material = baseMaterialColor.clone();
           child.material.color = color;
-          // El traverse de arriba ya dejó castShadow/receiveShadow en
-          // `child`; reemplazar el material no borra esas flags, pero lo
-          // dejamos explícito por si en el futuro se clona el mesh entero.
           child.castShadow = true;
           child.receiveShadow = true;
         }
@@ -487,7 +690,6 @@ function crearMonedas() {
 
     scene.add(clone);
 
-    // Peso aleatorio -> masas distintas, cada moneda cae/reacciona distinto
     const mass = 0.6 + Math.random() * 1.2;
 
     const body = new CANNON.Body({
@@ -502,14 +704,13 @@ function crearMonedas() {
     monedas.push({ mesh: clone, body });
   }
 
-  soltarMonedas(); // primera caída al cargar
+  soltarMonedas();
 }
 
-// 🟣 Reposiciona las monedas arriba del viewport y las "suelta" con velocidad/rotación aleatoria
 function soltarMonedas() {
   monedas.forEach(({ body }, i) => {
     const x = (Math.random() * 2 - 1) * bounds.halfW * 0.7;
-    const y = bounds.halfH + 1 + Math.random() * 1.5 + i * 0.4; // escalonadas para que no caigan todas pegadas
+    const y = bounds.halfH + 1 + Math.random() * 1.5 + i * 0.4;
     const z = (Math.random() - 0.5) * 0.5;
 
     body.position.set(x, y, z);
@@ -528,9 +729,10 @@ function soltarMonedas() {
   });
 }
 
-// 🟢 Loop de render — con arranque/parada real (no solo "saltar trabajo")
+// 🟢 Loop de render
 const clock = new THREE.Clock();
 let rafId = null;
+let backgroundTime = 0; // 🌈 tiempo acumulado del shader, solo avanza mientras el loop corre
 
 function animate() {
   rafId = requestAnimationFrame(animate);
@@ -538,8 +740,28 @@ function animate() {
   const delta = Math.min(clock.getDelta(), 1 / 30);
   updateMouseBody(delta);
 
-  // 🟣 Fuerza suave hacia z=0 — el mouse solo colisiona en ese plano,
-  // así que evitamos que las monedas se alejen tanto que dejen de tocarlo.
+  // 🌈 Se pausa automáticamente junto con todo lo demás vía startLoop/stopLoop
+  backgroundTime += delta;
+  grainientMaterial.uniforms.uTime.value = backgroundTime;
+
+  // 🖱️ Transición suave del grano hacia el valor objetivo (hover o reposo),
+  // independiente del framerate (exponential smoothing).
+  const currentGrain = grainientMaterial.uniforms.uGrain.value;
+  grainientMaterial.uniforms.uGrain.value = THREE.MathUtils.lerp(
+    currentGrain,
+    grainTarget,
+    1 - Math.exp(-GRAINIENT_CONFIG.grainTransitionSpeed * delta)
+  );
+
+  // 📱 Transición suave del ángulo hacia el valor objetivo (giroscopio en
+  // móvil, o el ángulo base si no hay giroscopio / estamos en desktop).
+  const currentAngle = grainientMaterial.uniforms.uAngle.value;
+  grainientMaterial.uniforms.uAngle.value = THREE.MathUtils.lerp(
+    currentAngle,
+    angleTarget,
+    1 - Math.exp(-GRAINIENT_CONFIG.angleTransitionSpeed * delta)
+  );
+
   const Z_SPRING = 3;
   monedas.forEach(({ body }) => {
     body.velocity.z -= body.position.z * Z_SPRING * delta;
@@ -557,20 +779,18 @@ function animate() {
 }
 
 function startLoop() {
-  if (rafId !== null) return; // ya está corriendo
-  clock.getDelta(); // descarta el tiempo acumulado mientras estuvo detenido
+  if (rafId !== null) return;
+  clock.getDelta();
   animate();
 }
 
 function stopLoop() {
-  if (rafId === null) return; // ya está detenido
+  if (rafId === null) return;
   cancelAnimationFrame(rafId);
   rafId = null;
 }
 
-// 🟢 IntersectionObserver (pausa inteligente) — al salir detiene el loop
-// por completo con cancelAnimationFrame (cero trabajo, cero recursos);
-// al reentrar lo reanuda desde donde quedó la escena, sin reiniciar posiciones.
+// 🟢 IntersectionObserver (pausa inteligente)
 let isInViewport = false;
 const observer = new IntersectionObserver(
   (entries) => {
@@ -604,3 +824,8 @@ window.addEventListener("resize", () => {
   updateCameraPosition();
   updateStaticBounds();
 });
+
+
+
+
+
