@@ -190,6 +190,7 @@
             class="tituloproyecto animar-texto"
             data-tipo="letras"
             data-velocidad="0.4"
+            translate="no"
           >
             DSAINS
           </h1>
@@ -250,11 +251,12 @@
             class="parrafo aanimar-texto"
             data-tipo="palabras"
             data-velocidad="0.2"
+            data-i18n="details-desc"
           >
-            Lorem ipsum dolor sit amet consectetur. Tortor nibh in quis diam at
-            scelerisque posuere urna. Fringilla id amet sodales augue egestas
-            amet nibh. Lorem elit tristique quis non et. Lorem ut id mauris
-            commodo magna elementum commodo tincidunt.
+            Hello, I am the ux ui designer you are looking for. This project is
+            the redesign of my own portfolio, focused on building a distinctive
+            visual identity, smooth animations, and 3D scenes that reflect who
+            I am as a designer and developer.
           </p>
           <div class="cont_info_proyecto">
             <div class="info_proyecto">
@@ -377,7 +379,7 @@
                 data-velocidad="1.5"
                 translate="no"
                 >7</span
-              ><span data-i18n="label-months">Meses</span>
+              ><span data-i18n="label-months">Months</span>
             </span>
             <span
               class="-Usd aanimar-texto"
@@ -535,7 +537,7 @@
               data-tipo="letras"
               data-velocidad="0.7"
               style="color: #ffffff;"
-              translate="no"
+              data-i18n="color-primary"
             >
               Primary color
             </p>
@@ -559,7 +561,7 @@
               data-tipo="letras"
               data-velocidad="0.7"
               style="color: #0048ff;"
-              translate="no"
+              data-i18n="color-secondary"
             >
               Secondary color
             </p>
@@ -600,9 +602,9 @@
             Ranging in weight from Light through ExtraBold, the Panchang family
             has six wide sans serif fonts on offer. The typeface features
             letters so wide that they are almost panoramic. The family supports
-            all European languages written with the Latin script. Panchang’s
+            all European languages written with the Latin script. Panchang's
             lowercase letters have a tall x-height, and their ascenders are
-            visibly taller than the capitals. The design’s broad letterforms
+            visibly taller than the capitals. The design's broad letterforms
             look very industrial on the whole.
           </p>
           <div class="cont_tipe_texto">
@@ -748,7 +750,7 @@
         <footer class="cont_footer">
           <div class="contenedor_uno">
           <div class="conten_uno">
-            <h2 data-i18n="footer-cta ">
+            <h2 data-i18n="footer-cta">
               SOY EL EXPERTO EN EXPERIENCIAS POSITIVAS QUE ESTAS BUSCANDO
             </h2>
             <!-- boton call to action -->
@@ -866,6 +868,7 @@
         var i18n = {
           en: {
             "cta-talk": "Talk me",
+            "cta-launch": "Launch project",
             "menu-title": "Menu",
             "nav-home": "Home",
             "nav-blogs": "Blogs",
@@ -876,6 +879,8 @@
             "hero-desc":
               "Hello, I am the ux ui designer you are looking for, I am very happy to have you here, I welcome you to my portfolio.",
             "details-title": "Proyect details",
+            "details-desc":
+              "Hello, I am the ux ui designer you are looking for. This project is the redesign of my own portfolio, focused on building a distinctive visual identity, smooth animations, and 3D scenes that reflect who I am as a designer and developer.",
             "label-client": "Client",
             "label-location": "Location",
             "label-industry": "Industry",
@@ -895,6 +900,8 @@
             "role-3d": "( 3D modeler ) Yaksin sains",
             "role-illustrator": "( Illustrator ) Yaksin sains",
             "role-creativedev": "( Creative Dev ) Yaksin sains",
+            "color-primary": "Primary color",
+            "color-secondary": "Secondary color",
             "type-title": "MAIN TYPE",
             "type-desc":
               "Ranging in weight from Light through ExtraBold, the Panchang family has six wide sans serif fonts on offer. The typeface features letters so wide that they are almost panoramic. The family supports all European languages written with the Latin script. Panchang's lowercase letters have a tall x-height, and their ascenders are visibly taller than the capitals. The design's broad letterforms look very industrial on the whole.",
@@ -906,6 +913,7 @@
             "riel-2": "POSITIVE EXPERIENCES",
             "riel-3": "OUT OF THE ORDINARY",
             "footer-copy": "© 2024 Yaksin Sains. All rights reserved.",
+            "lang-select-title": "Language",
             "section_ocho-titulo": "Scene ideation",
             "section_ocho-parrafo": "Planning and layout of the 3D scenes",
             "section_nueve-titulo": "3D modeling",
@@ -915,6 +923,7 @@
           },
           es: {
             "cta-talk": "Hablemos",
+            "cta-launch": "Ver proyecto",
             "menu-title": "Menú",
             "nav-home": "Inicio",
             "nav-blogs": "Blog",
@@ -925,6 +934,8 @@
             "hero-desc":
               "Hola, soy el diseñador ux ui que estabas buscando, me alegra mucho tenerte por aquí, bienvenido a mi portafolio.",
             "details-title": "Detalles del proyecto",
+            "details-desc":
+              "Hola, soy el diseñador ux ui que estabas buscando. Este proyecto es el rediseño de mi propio portafolio, enfocado en construir una identidad visual distintiva, animaciones fluidas y escenas 3D que reflejan quién soy como diseñador y desarrollador.",
             "label-client": "Cliente",
             "label-location": "Ubicación",
             "label-industry": "Industria",
@@ -944,6 +955,8 @@
             "role-3d": "( Modelador 3D ) Yaksin sains",
             "role-illustrator": "( Ilustrador ) Yaksin sains",
             "role-creativedev": "( Dev Creativo ) Yaksin sains",
+            "color-primary": "Color primario",
+            "color-secondary": "Color secundario",
             "type-title": "TIPOGRAFÍA PRINCIPAL",
             "type-desc":
               "Con pesos que van de Light a ExtraBold, la familia Panchang ofrece seis fuentes sans serif anchas. La tipografía presenta letras tan anchas que resultan casi panorámicas. La familia soporta todos los idiomas europeos escritos en alfabeto latino. Las minúsculas de Panchang tienen una x-height alta, y sus ascendentes son visiblemente más altos que las mayúsculas. Las formas anchas del diseño se ven muy industriales en conjunto.",
@@ -955,12 +968,68 @@
             "riel-2": "EXPERIENCIAS POSITIVAS",
             "riel-3": "FUERA DE LO COMÚN",
             "footer-copy": "© 2024 Yaksin Sains. Todos los derechos reservados.",
+            "lang-select-title": "Idioma",
             "section_ocho-titulo": "Ideación de escenas",
             "section_ocho-parrafo": "Planeación y maquetación de las escenas en 3D",
             "section_nueve-titulo": "Modelado 3D",
             "section_nueve-parrafo": "Modelado de las escenas",
             "section_diez-titulo": "Desarrollo de escenas",
             "section_diez-parrafo": "Desarrollo y animación de las escenas"
+          },
+          fr: {
+            "cta-talk": "Discutons",
+            "cta-launch": "Voir le projet",
+            "menu-title": "Menu",
+            "nav-home": "Accueil",
+            "nav-blogs": "Blog",
+            "nav-works": "Projets",
+            "nav-about": "À propos",
+            "social-title": "Réseaux",
+            "hero-date": "projet terminé - 8 août 2025",
+            "hero-desc":
+              "Bonjour, je suis le designer ux ui que vous recherchiez, je suis très heureux de vous accueillir dans mon portfolio.",
+            "details-title": "Détails du projet",
+            "details-desc":
+              "Bonjour, je suis le designer ux ui que vous recherchiez. Ce projet est la refonte de mon propre portfolio, axée sur la création d'une identité visuelle distinctive, des animations fluides et des scènes 3D qui reflètent qui je suis en tant que designer et développeur.",
+            "label-client": "Client",
+            "label-location": "Lieu",
+            "label-industry": "Secteur",
+            "label-services": "Services",
+            "val-industry-1": "Design",
+            "val-industry-2": "TI",
+            "val-services-1": "Frontend et développement",
+            "val-services-2": "Identité de marque",
+            "val-services-3": "Design Ux-Ui",
+            "val-services-4": "Design Web",
+            "label-months": "Mois",
+            "label-usd": "$ Usd",
+            "label-tools": "Outils",
+            "label-team": "Équipe et rôles du projet",
+            "role-uxui": "( Ux - Ui ) Yaksin sains",
+            "role-frontend": "( Frontend ) Yaksin sains",
+            "role-3d": "( Modélisateur 3D ) Yaksin sains",
+            "role-illustrator": "( Illustrateur ) Yaksin sains",
+            "role-creativedev": "( Dev Créatif ) Yaksin sains",
+            "color-primary": "Couleur primaire",
+            "color-secondary": "Couleur secondaire",
+            "type-title": "TYPOGRAPHIE PRINCIPALE",
+            "type-desc":
+              "Avec des graisses allant de Light à ExtraBold, la famille Panchang propose six polices sans-serif larges. La police se distingue par des lettres si larges qu'elles paraissent presque panoramiques. La famille prend en charge toutes les langues européennes écrites en alphabet latin. Les minuscules de Panchang ont une hauteur d'x élevée, et leurs hampes sont visiblement plus hautes que les majuscules. Les formes larges de ce design paraissent globalement très industrielles.",
+            "branding-title": "BRANDING",
+            "brandapps-title": "APPLICATIONS DE MARQUE",
+            "footer-cta": "JE SUIS L'EXPERT EN EXPÉRIENCES POSITIVES QUE VOUS RECHERCHEZ",
+            "cta-lets-talk": "Discutons",
+            "riel-1": "DÉVELOPPEMENT CRÉATIF",
+            "riel-2": "EXPÉRIENCES POSITIVES",
+            "riel-3": "HORS DU COMMUN",
+            "footer-copy": "© 2024 Yaksin Sains. Tous droits réservés.",
+            "lang-select-title": "Langue",
+            "section_ocho-titulo": "Idéation des scènes",
+            "section_ocho-parrafo": "Planification et mise en page des scènes 3D",
+            "section_nueve-titulo": "Modélisation 3D",
+            "section_nueve-parrafo": "Modélisation des scènes",
+            "section_diez-titulo": "Développement des scènes",
+            "section_diez-parrafo": "Développement et animation des scènes"
           }
         };
 
@@ -993,6 +1062,39 @@
         aplicarTextos(lang);
         aplicarAtributosEscena(lang);
 
+        // 🌐 Selector de idioma (radio buttons) — posición instantánea
+        // al cargar y retraso antes de recargar para ver la animación.
+        var langSelect = document.getElementById("lang-select");
+        if (langSelect) {
+          var radios = langSelect.querySelectorAll('input[name="lang"]');
+
+          radios.forEach(function (radio) {
+            radio.checked = radio.value === lang;
+          });
+
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              langSelect.classList.remove("lang-select--instant");
+            });
+          });
+
+          radios.forEach(function (radio) {
+            radio.addEventListener("change", function () {
+              if (!radio.checked) return;
+              localStorage.setItem("lang", radio.value);
+
+              setTimeout(function () {
+                if (window.reloadConTransicion) {
+                  window.reloadConTransicion();
+                } else {
+                  location.reload();
+                }
+              }, 250);
+            });
+          });
+        }
+
+        // Compatibilidad: si existiera un botón simple de toggle en/es
         var btn = document.getElementById("lang-toggle");
         if (btn) {
           btn.addEventListener("click", function () {

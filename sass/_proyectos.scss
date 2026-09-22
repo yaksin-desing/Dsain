@@ -1387,10 +1387,9 @@ $fondoboto: #eff3ff;
 
               p {
                 text-decoration: none;
-                font-size: 18px;
-                font-family: "Medium";
+                font-family: "light";
                 color: #ffffff;
-                font-size: 1.1vw;
+                font-size: 0.7vw;
                 margin: 0px 7px;
               }
 
@@ -1400,8 +1399,8 @@ $fondoboto: #eff3ff;
                 a {
                   display: inline-block; // <- esto es lo que falta
                   text-decoration: none;
-                  font-size: 0.9vw;
-                  font-family: "Regular";
+                  font-size: 1vw;
+                  font-family: "Medium";
                   color: white;
                   transition: transform 0.1s ease;
                   &:hover {
@@ -1421,9 +1420,9 @@ $fondoboto: #eff3ff;
               p {
                 text-decoration: none;
                 opacity: 100%;
-                font-family: "Medium";
+                font-family: "Light";
                 color: #ffffff;
-                font-size: 1.1vw;
+                font-size: 0.7vw;
                 margin: 0px 7px;
               }
 
@@ -1440,9 +1439,9 @@ $fondoboto: #eff3ff;
                     display: inline-block; // <- esto es lo que falta
                     text-decoration: none;
                     opacity: 100%;
-                    font-family: "Regular";
+                    font-family: "Medium";
                     color: #ffffff;
-                    font-size: 0.9vw;
+                    font-size: 1vw;
                     transition: transform 0.1s ease;
 
                     &:hover {
@@ -4014,7 +4013,7 @@ $fondoboto: #eff3ff;
                 padding-top: 7vh;
                 padding-bottom: 4vh;
                 font-family: "Regular";
-                font-size: 7vw;
+                font-size: 5.9vw;
                 font-stretch: normal;
                 font-style: normal;
                 line-height: 1;
@@ -4034,7 +4033,7 @@ $fondoboto: #eff3ff;
                 background-color: $fondoboto;
                 border-radius: 30px;
                 font-family: "Medium";
-                font-size: 12px;
+                font-size: 20px;
                 font-weight: 500;
                 font-stretch: normal;
                 font-style: normal;
@@ -4078,10 +4077,9 @@ $fondoboto: #eff3ff;
 
                 p {
                   text-decoration: none;
-                  font-size: 18px;
-                  font-family: "Medium";
-                  color: #b6b5b5d8;
-                  font-size: 5vw;
+                  font-family: "light";
+                  color: #ffffff;
+                  font-size: 3vw;
                   margin: 0px 7px;
                   display:contents;
                 }
@@ -4092,8 +4090,8 @@ $fondoboto: #eff3ff;
                   a {
                     display: inline-block; // <- esto es lo que falta
                     text-decoration: none;
-                    font-size: 3vw;
-                    font-family: "Regular";
+                    font-size: 4vw;
+                    font-family: "Medium";
                     color: white;
                     transition: transform 0.1s ease;
                     &:hover {
@@ -4114,7 +4112,7 @@ $fondoboto: #eff3ff;
                 p {
                   text-decoration: none;
                   opacity: 100%;
-                  font-family: "Medium";
+                  font-family: "Light";
                   color: #ffffff;
                   font-size: 3vw;
                   margin: 0px 7px;
@@ -4134,9 +4132,9 @@ $fondoboto: #eff3ff;
                       display: inline-block; // <- esto es lo que falta
                       text-decoration: none;
                       opacity: 100%;
-                      font-family: "Regular";
+                      font-family: "Medium";
                       color: #ffffff;
-                      font-size: 3vw;
+                      font-size: 4vw;
                       transition: transform 0.1s ease;
 
                       &:hover {
