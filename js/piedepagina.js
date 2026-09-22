@@ -172,8 +172,10 @@ const container = document.getElementById("section_once");
 const isMobileOrTablet = /Mobi|Android|iPad|iPod/i.test(navigator.userAgent);
 const disableInteractions = window.innerWidth <= 770;
 
-// 🟢 Cuántas monedas caen (antes era una pared de 60-170, ahora solo un puñado)
-const NUM_MONEDAS = isMobileOrTablet ? 7 : 17;
+// 🟢 Monedas: en móvil no se cargan en absoluto (ni el modelo .glb, ni la
+// física, ni las sombras que proyectan) para ahorrar memoria y GPU.
+const ENABLE_COINS = !isMobileOrTablet;
+const NUM_MONEDAS = ENABLE_COINS ? 17 : 0;
 
 // 🟢 Escala de las monedas según el ancho del dispositivo (se fija una sola
 // vez al cargar la página, igual que NUM_MONEDAS)
@@ -422,16 +424,19 @@ scene.add(wallBackVisualMesh);
 // 🌗 "Atrapa-sombras": plano transparente que SOLO dibuja la sombra que
 // proyectan las monedas, montado justo delante del fondo animado, para no
 // perder el efecto de sombra que antes caía sobre la textura PNG.
-// Si no te interesa conservarlo, borra este bloque y el mesh no se crea.
-const shadowCatcherMaterial = new THREE.ShadowMaterial({
-  opacity: GRAINIENT_CONFIG.shadowOpacity,
-});
-const shadowCatcherMesh = new THREE.Mesh(
-  new THREE.PlaneGeometry(1, 1),
-  shadowCatcherMaterial
-);
-shadowCatcherMesh.receiveShadow = true;
-scene.add(shadowCatcherMesh);
+// En móvil no hay monedas, así que tampoco tiene sentido crear este plano.
+let shadowCatcherMesh = null;
+if (ENABLE_COINS) {
+  const shadowCatcherMaterial = new THREE.ShadowMaterial({
+    opacity: GRAINIENT_CONFIG.shadowOpacity,
+  });
+  shadowCatcherMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 1),
+    shadowCatcherMaterial
+  );
+  shadowCatcherMesh.receiveShadow = true;
+  scene.add(shadowCatcherMesh);
+}
 
 // =========================================================
 // 🖱️ HOVER EN EL CTA ("Hablemos" / "Talk me") → sube el grano del fondo
@@ -471,8 +476,10 @@ function updateStaticBounds() {
 
   // Mismo tamaño, un pelín más cerca de la cámara para que no compita en
   // el z-buffer con el plano del fondo (ambos están casi en el mismo z).
-  shadowCatcherMesh.scale.set(anchoFondo, altoFondo, 1);
-  shadowCatcherMesh.position.set(0, 0, -DEPTH_HALF + 0.01);
+  if (shadowCatcherMesh) {
+    shadowCatcherMesh.scale.set(anchoFondo, altoFondo, 1);
+    shadowCatcherMesh.position.set(0, 0, -DEPTH_HALF + 0.01);
+  }
 
   // El shader necesita el aspecto real del plano (== aspecto del viewport)
   // para no deformar el ruido/warp en pantallas anchas o angostas.
@@ -538,7 +545,7 @@ function onMouseLeave() {
   mouseActive = false;
 }
 function enableMouse() {
-  if (disableInteractions) return;
+  if (disableInteractions || !ENABLE_COINS) return;
   container.addEventListener("mousemove", onMouseMove);
   container.addEventListener("mouseleave", onMouseLeave);
 }
@@ -643,18 +650,20 @@ function disableGyroListener() {
 let monedas = []; // { mesh, body }
 let modeloBase = null;
 
-// 🟢 Carga del modelo
+// 🟢 Carga del modelo — en móvil ni siquiera se descarga el .glb
 const loader = new GLTFLoader();
-loader.load(
-  "../src/objt/piedepagina/monedadsain.glb",
-  (gltf) => {
-    modeloBase = gltf.scene;
-    modeloBase.scale.set(ESCALA_MONEDAS, ESCALA_MONEDAS, ESCALA_MONEDAS);
-    crearMonedas();
-  },
-  undefined,
-  (err) => console.error("Error al cargar modelo:", err)
-);
+if (ENABLE_COINS) {
+  loader.load(
+    "../src/objt/piedepagina/monedadsain.glb",
+    (gltf) => {
+      modeloBase = gltf.scene;
+      modeloBase.scale.set(ESCALA_MONEDAS, ESCALA_MONEDAS, ESCALA_MONEDAS);
+      crearMonedas();
+    },
+    undefined,
+    (err) => console.error("Error al cargar modelo:", err)
+  );
+}
 
 const baseMaterialColor = new THREE.MeshStandardMaterial({ metalness: 0.3, roughness: 0.6 });
 
