@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+    <meta name="google" content="notranslate" />
     <link rel="stylesheet" href="./style/styles.css" />
     <link rel="icon" type="image/svg" href="../src/img/logo.svg">
     <title>Dsain</title>
@@ -31,7 +32,7 @@
                 <div class="logo_loading" id="logo_animado">
                     <img class="logoanimador" id="ilogoanimador" src="./src/img/loadinglogo.gif" alt="logo_loading" />
                     <img class="logoestatico" id="ilogoestatico" src="./src/img/logo.svg" alt="logo_loading" />
-                    <h5 class="nombrelogo" id="nombrelogo" data-global-delay="2" data-letter-delay="100">DSAIN
+                    <h5 class="nombrelogo" id="nombrelogo" data-global-delay="2" data-letter-delay="100" translate="no">DSAIN
                         </5h>
                 </div>
                 <div class="progress-container" id="progress">
@@ -39,12 +40,12 @@
                 </div>
 
                 <h1>
-                    <h5 id="tituloh1" data-global-delay="1.8" data-letter-delay="150">DSAIN</h5>
+                    <h5 id="tituloh1" data-global-delay="1.8" data-letter-delay="150" translate="no">DSAIN</h5>
                 </h1>
 
                 <div class="contparrafo">
                     <img id="imgparrafoinicio" src="./src/img/iconparrafoinicio.svg" alt="" />
-                    <h5 id="parrafodeinicio" data-global-delay="1.6" data-letter-delay="10">
+                    <h5 id="parrafodeinicio" data-global-delay="1.6" data-letter-delay="10" data-i18n="loading-desc">
                         Hello, I am the ux ui designer you are looking for, I am very happy to
                         have you here, I welcome you to my portfolio.
                     </h5>
@@ -52,7 +53,7 @@
 
                 <a id="botoninicio" class="bottoninicio cursor-scale magnetic-button " data-strength="0.1"
                     data-text-strength="0.1">
-                    <p class="magnetic-text">Touch me !</p>
+                    <p class="magnetic-text" data-i18n="cta-touch">Touch me !</p>
                     <div class="onda"></div>
                     <div class="onda"></div>
                     <div class="onda"></div>
@@ -60,7 +61,7 @@
 
                 <a id="botonsecundariouno" class="bottoninicio cursor-scale magnetic-button" data-strength="0.1"
                     data-text-strength="0.1" href="./pages/proyectouno.html">
-                    <p class="magnetic-text">Ver proyecto</p>
+                    <p class="magnetic-text" data-i18n="cta-view-project">Ver proyecto</p>
                     <div class="onda"></div>
                     <div class="onda"></div>
                     <div class="onda"></div>
@@ -68,7 +69,7 @@
 
                 <a id="botonsecundariodos" class="bottoninicio cursor-scale magnetic-button" data-strength="0.1"
                     data-text-strength="0.1" href="./pages/proyectodos.html">
-                    <p class="magnetic-text">Ver proyecto</p>
+                    <p class="magnetic-text" data-i18n="cta-view-project">Ver proyecto</p>
                     <div class="onda"></div>
                     <div class="onda"></div>
                     <div class="onda"></div>
@@ -77,7 +78,7 @@
 
                 <a id="botonsecundariotres" class="bottoninicio cursor-scale magnetic-button" data-strength="0.1"
                     data-text-strength="0.1" href="#about">
-                    <p class="magnetic-text">Ver proyecto</p>
+                    <p class="magnetic-text" data-i18n="cta-view-project">Ver proyecto</p>
                     <div class="onda"></div>
                     <div class="onda"></div>
                     <div class="onda"></div>
@@ -89,7 +90,7 @@
                         data-text-strength="0.05" href="">
                         <div class="cont_txt_botoncontact">
                             <h5 data-global-delay="4" data-letter-delay="3" class="animatedTitle magnetic-text"
-                                id="animatedTitle"
+                                id="animatedTitle" data-i18n="cta-lets-talk"
                                 style="width: auto;font-family: Regular;font-size: 12px;white-space: nowrap;">
                                 Let’s Talk
                             </h5>
@@ -105,32 +106,58 @@
 
                     <nav id="nav-menu" class="hidden">
                         <ul class="contlistmenu">
-                            <p id="menuTitle">Menu</p>
+                            <p id="menuTitle" data-i18n="menu-title">Menu</p>
                             <li><a href="#home" class="animated-text" style="color: rgb(0, 0, 0);"
-                                    data-delay="0.1">Home</a>
+                                    data-delay="0.1" data-i18n="nav-home">Home</a>
                             </li>
-                            <li><a class="cursor-scale animated-text" href="#about" data-delay="0.1">Blogs</a>
+                            <li><a class="cursor-scale animated-text" href="#about" data-delay="0.1" data-i18n="nav-blogs">Blogs</a>
                             </li>
-                            <li><a class="cursor-scale animated-text" href="#services" data-delay="0.1">Works</a>
+                            <li><a class="cursor-scale animated-text" href="#services" data-delay="0.1" data-i18n="nav-works">Works</a>
                             </li>
-                            <li><a class="cursor-scale animated-text" href="#contact" data-delay="0.1">About
+                            <li><a class="cursor-scale animated-text" href="#contact" data-delay="0.1" data-i18n="nav-about">About
                                     me</a></li>
                         </ul>
                         <ul class="contsocial">
-                            <p>Social</p>
+                            <p data-i18n="social-title">Social</p>
                             <div class="list_social">
-                                <li><a class="cursor-scale animated-text" data-delay="0.1" href="#home">Whatsapp</a>
+                                <li><a class="cursor-scale animated-text" data-delay="0.1" href="#home" translate="no">Whatsapp</a>
                                 </li>
-                                <li><a class="cursor-scale animated-text" data-delay="0.1" href="#about">Gmail</a>
+                                <li><a class="cursor-scale animated-text" data-delay="0.1" href="#about" translate="no">Gmail</a>
                                 </li>
                                 <li><a class="cursor-scale animated-text" data-delay="0.1"
-                                        href="#services">Instagram</a>
+                                        href="#services" translate="no">Instagram</a>
                                 </li>
-                                <li><a class="cursor-scale animated-text" data-delay="0.1" href="#contact">Facebook</a>
+                                <li><a class="cursor-scale animated-text" data-delay="0.1" href="#contact" translate="no">Facebook</a>
                                 </li>
                             </div>
 
                         </ul>
+
+                        <!-- 🌐 Selector de idioma -->
+                        <div class="lang-select lang-select--instant" id="lang-select" role="radiogroup"
+                            aria-label="Idioma">
+                            <p data-i18n="lang-select-title" class="lang-select-title">Language</p>
+                            <div class="list-lenguaje">
+                                <label class="lang-option">
+                                    <input type="radio" name="lang" value="en" />
+                                    <span class="lang-radio"></span>
+                                    <span class="lang-name">English</span>
+                                    <img class="lang-flag" src="./src/img/ingles.png" alt="" />
+                                </label>
+                                <label class="lang-option">
+                                    <input type="radio" name="lang" value="es" />
+                                    <span class="lang-radio"></span>
+                                    <span class="lang-name">Español</span>
+                                    <img class="lang-flag" src="./src/img/español.png" alt="" />
+                                </label>
+                                <label class="lang-option">
+                                    <input type="radio" name="lang" value="fr" />
+                                    <span class="lang-radio"></span>
+                                    <span class="lang-name">Français</span>
+                                    <img class="lang-flag" src="./src/img/frances.png" alt="" />
+                                </label>
+                            </div>
+                        </div>
                     </nav>
 
                 </div>
@@ -162,49 +189,103 @@
 
             </div>
 
-            <!-- 5 PARES DE FRASES -->
-            <div class="cont-proyectos" id="proyecto-1">
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo *</h3>
-                <h3 class="tituloproyecto">Kymbo </h3>
-            </div>
 
-            <div class="cont-proyectos" id="proyecto-2">
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate *</h3>
-                <h3 class="tituloproyecto">Textomate </h3>
-            </div>
-
-            <div class="cont-proyectos" id="proyecto-3">
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains *</h3>
-                <h3 class="tituloproyecto">Dsains </h3>
-            </div>
 
         </div>
         <footer class="piedepagina"></footer>
     </div>
+
+    <!-- 🌐 Traducción — debe ir PRIMERO, antes de cualquier script que lea o divida el texto -->
+    <script>
+        (function () {
+            var i18n = {
+                en: {
+                    "loading-desc": "Hello, I am the ux ui designer you are looking for, I am very happy to have you here, I welcome you to my portfolio.",
+                    "cta-touch": "Touch me !",
+                    "cta-view-project": "View project",
+                    "cta-lets-talk": "Let’s Talk",
+                    "menu-title": "Menu",
+                    "nav-home": "Home",
+                    "nav-blogs": "Blogs",
+                    "nav-works": "Works",
+                    "nav-about": "About me",
+                    "social-title": "Social",
+                    "lang-select-title": "Language"
+                },
+                es: {
+                    "loading-desc": "Hola, soy el diseñador ux ui que estabas buscando, me alegra mucho tenerte por aquí, bienvenido a mi portafolio.",
+                    "cta-touch": "Tócame !",
+                    "cta-view-project": "Ver proyecto",
+                    "cta-lets-talk": "Hablemos",
+                    "menu-title": "Menú",
+                    "nav-home": "Inicio",
+                    "nav-blogs": "Blog",
+                    "nav-works": "Proyectos",
+                    "nav-about": "Sobre mí",
+                    "social-title": "Redes",
+                    "lang-select-title": "Idioma"
+                },
+                fr: {
+                    "loading-desc": "Bonjour, je suis le designer ux ui que vous recherchiez, je suis très heureux de vous accueillir dans mon portfolio.",
+                    "cta-touch": "Touche-moi !",
+                    "cta-view-project": "Voir le projet",
+                    "cta-lets-talk": "Discutons",
+                    "menu-title": "Menu",
+                    "nav-home": "Accueil",
+                    "nav-blogs": "Blog",
+                    "nav-works": "Projets",
+                    "nav-about": "À propos",
+                    "social-title": "Réseaux",
+                    "lang-select-title": "Langue"
+                }
+            };
+
+            var lang = localStorage.getItem("lang") || "en";
+            document.documentElement.lang = lang;
+
+            function aplicarTextos(l) {
+                document.querySelectorAll("[data-i18n]").forEach(function (el) {
+                    var key = el.getAttribute("data-i18n");
+                    var text = i18n[l] && i18n[l][key];
+                    if (text !== undefined) el.textContent = text;
+                });
+            }
+
+            aplicarTextos(lang);
+
+            // 🌐 Selector de idioma (radio buttons) — posición instantánea
+            // al cargar y retraso antes de recargar para ver la animación.
+            var langSelect = document.getElementById("lang-select");
+            if (langSelect) {
+                var radios = langSelect.querySelectorAll('input[name="lang"]');
+
+                radios.forEach(function (radio) {
+                    radio.checked = radio.value === lang;
+                });
+
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        langSelect.classList.remove("lang-select--instant");
+                    });
+                });
+
+                radios.forEach(function (radio) {
+                    radio.addEventListener("change", function () {
+                        if (!radio.checked) return;
+                        localStorage.setItem("lang", radio.value);
+
+                        setTimeout(function () {
+                            if (window.reloadConTransicion) {
+                                window.reloadConTransicion();
+                            } else {
+                                location.reload();
+                            }
+                        }, 250);
+                    });
+                });
+            }
+        })();
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/smooth-scrollbar@8.8.1/dist/smooth-scrollbar.js"></script>
     <script type="module" src="./js/three.js"></script>

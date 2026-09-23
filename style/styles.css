@@ -269,7 +269,7 @@ h5 {
   transform: translate(-50%, -50%);
   width: 100px;
   height: 3px;
-  background-color: #5686FF;
+  background-color: #5686ff;
   overflow: hidden;
   z-index: 3;
   /* Barra de progreso */
@@ -458,7 +458,7 @@ h5 {
   display: flex;
   flex-direction: column;
   transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
-  border-radius: 100%;
+  border-radius: 0%;
   overflow: hidden;
 }
 .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu {
@@ -491,7 +491,7 @@ h5 {
   list-style: none;
   padding: 0;
   margin: 0;
-  bottom: 5%;
+  bottom: 30%;
   left: 15%;
   display: flex;
   flex-direction: column;
@@ -523,6 +523,101 @@ h5 {
   color: #000000;
   font-size: 0.9vw;
   width: 100%;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 0%;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .lang-select-title {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input[type=radio] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #c7d0ff;
+  position: relative;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #2d5bff;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-name {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #cacaca;
+  font-size: 0.9vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+  border-color: #2d5bff;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+  color: #2d5bff;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+  opacity: 1;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje.lang-select--instant * {
+  transition: none !important;
 }
 .scroll-contents #scroll-content #contenedor .loading .contactnav {
   /* Clase para mostrar el menú */
@@ -580,7 +675,7 @@ h5 {
   list-style: none;
   padding: 0;
   margin: 0;
-  bottom: 5%;
+  bottom: 17%;
   left: 15%;
   display: flex;
   flex-direction: column;
@@ -619,6 +714,101 @@ h5 {
   display: inline-block;
   transform: translateY(100%);
   opacity: 0;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 100%;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .lang-select-title {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input[type=radio] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #c7d0ff;
+  position: relative;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #2d5bff;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-name {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #cacaca;
+  font-size: 0.9vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+  border-color: #2d5bff;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+  color: #2d5bff;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+  opacity: 1;
+}
+.scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje.lang-select--instant * {
+  transition: none !important;
 }
 .scroll-contents #scroll-content #contenedor .loading .contactnav .hidden {
   display: none;
@@ -761,7 +951,7 @@ h5 {
   transform: translateY(100px);
 }
 .scroll-contents .piedepagina {
-  background: #5686FF;
+  background: #5686ff;
   width: 100%;
   height: 1px;
 }
@@ -857,7 +1047,7 @@ h5 {
     transform: translate(-50%, -50%);
     width: 100px;
     height: 3px;
-    background-color: #5686FF;
+    background-color: #5686ff;
     overflow: hidden;
     z-index: 3;
     /* Barra de progreso */
@@ -1030,17 +1220,16 @@ h5 {
     display: flex;
     flex-direction: column;
     transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
-    border-radius: 100%;
+    border-radius: 0%;
     overflow: hidden;
-    z-index: 999;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu {
     position: absolute;
     list-style: none;
     padding: 0;
     margin: 0;
-    top: 20%;
-    left: 15%;
+    top: 17%;
+    left: 5%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu p {
     text-decoration: none;
@@ -1097,6 +1286,101 @@ h5 {
     font-size: 0.9vw;
     width: 100%;
   }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select {
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    bottom: 5%;
+    left: 15%;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    opacity: 0%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .lang-select-title {
+    text-decoration: none;
+    font-size: 18px;
+    opacity: 100%;
+    font-family: "Regular";
+    color: #c0c0c0;
+    font-size: 0.9vw;
+    opacity: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input[type=radio] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #c7d0ff;
+    position: relative;
+    transition: border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #2d5bff;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-name {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Medium";
+    color: #cacaca;
+    font-size: 0.9vw;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-flag {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+    border-color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+    color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+    opacity: 1;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje.lang-select--instant * {
+    transition: none !important;
+  }
   .scroll-contents #scroll-content #contenedor .loading .contactnav {
     /* Clase para mostrar el menú */
   }
@@ -1106,10 +1390,9 @@ h5 {
     width: 100dvw;
     height: 100dvh;
     right: 0;
-    box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
+    box-shadow: 0vw 0px 5px 0px rgba(0, 0, 0, 0.082);
     border-radius: 0;
     background-color: #ffffff;
-    z-index: 999;
     /* Desliza el menú hacia dentro */
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu {
@@ -1117,16 +1400,14 @@ h5 {
     padding: 0;
     margin: 0;
     width: 100%;
-    position: absolute;
-    top: 20%;
-    left: 10%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu p {
     text-decoration: none;
+    font-size: 3vw;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 3vw;
+    font-size: 4vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li {
@@ -1137,7 +1418,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #999999;
-    font-size: 8vw;
+    font-size: 7.7vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -1155,19 +1436,20 @@ h5 {
     list-style: none;
     padding: 0;
     margin: 0;
-    bottom: 5%;
-    left: 10%;
+    bottom: 20%;
+    left: 5%;
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 90%;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial p {
     text-decoration: none;
+    font-size: 18px;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 3vw;
+    font-size: 3.5vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial .list_social {
@@ -1184,7 +1466,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #000000;
-    font-size: 2vw;
+    font-size: 3vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -1193,6 +1475,100 @@ h5 {
     display: inline-block;
     transform: translateY(100%);
     opacity: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select {
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    bottom: 10%;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    opacity: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .lang-select-title {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Regular";
+    color: #c0c0c0;
+    font-size: 3vw;
+    opacity: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option {
+    margin-right: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input[type=radio] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #c7d0ff;
+    position: relative;
+    transition: border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #2d5bff;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-name {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Medium";
+    color: #cacaca;
+    font-size: 3vw;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-flag {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+    border-color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+    color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+    opacity: 1;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje.lang-select--instant * {
+    transition: none !important;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .hidden {
     display: none;
@@ -1414,7 +1790,7 @@ h5 {
     transform: translate(-50%, -50%);
     width: 100px;
     height: 3px;
-    background-color: #5686FF;
+    background-color: #5686ff;
     overflow: hidden;
     z-index: 3;
     /* Barra de progreso */
@@ -1590,17 +1966,16 @@ h5 {
     display: flex;
     flex-direction: column;
     transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
-    border-radius: 100%;
+    border-radius: 0%;
     overflow: hidden;
-    z-index: 999;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu {
     position: absolute;
     list-style: none;
     padding: 0;
     margin: 0;
-    top: 20%;
-    left: 15%;
+    top: 17%;
+    left: 5%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu p {
     text-decoration: none;
@@ -1666,10 +2041,9 @@ h5 {
     width: 100dvw;
     height: 100dvh;
     right: 0;
-    box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
+    box-shadow: 0vw 0px 5px 0px rgba(0, 0, 0, 0.082);
     border-radius: 0;
     background-color: #ffffff;
-    z-index: 999;
     /* Desliza el menú hacia dentro */
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu {
@@ -1677,16 +2051,14 @@ h5 {
     padding: 0;
     margin: 0;
     width: 100%;
-    position: absolute;
-    top: 20%;
-    left: 10%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu p {
     text-decoration: none;
+    font-size: 3vw;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 3vw;
+    font-size: 4vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li {
@@ -1697,7 +2069,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #999999;
-    font-size: 8vw;
+    font-size: 7.7vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -1716,18 +2088,19 @@ h5 {
     padding: 0;
     margin: 0;
     bottom: 5%;
-    left: 10%;
+    left: 5%;
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 90%;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial p {
     text-decoration: none;
+    font-size: 18px;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 3vw;
+    font-size: 3.5vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial .list_social {
@@ -1744,7 +2117,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #000000;
-    font-size: 2vw;
+    font-size: 3vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -1974,7 +2347,7 @@ h5 {
     transform: translate(-50%, -50%);
     width: 100px;
     height: 3px;
-    background-color: #5686FF;
+    background-color: #5686ff;
     overflow: hidden;
     z-index: 3;
     /* Barra de progreso */
@@ -2152,7 +2525,7 @@ h5 {
     display: flex;
     flex-direction: column;
     transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
-    border-radius: 100%;
+    border-radius: 0%;
     overflow: hidden;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu {
@@ -2160,8 +2533,8 @@ h5 {
     list-style: none;
     padding: 0;
     margin: 0;
-    top: 20%;
-    left: 15%;
+    top: 17%;
+    left: 5%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .contlistmenu p {
     text-decoration: none;
@@ -2185,7 +2558,7 @@ h5 {
     list-style: none;
     padding: 0;
     margin: 0;
-    bottom: 5%;
+    bottom: 15%;
     left: 15%;
     display: flex;
     flex-direction: column;
@@ -2218,16 +2591,110 @@ h5 {
     font-size: 0.9vw;
     width: 100%;
   }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select {
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    bottom: 5%;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    opacity: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .lang-select-title {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Regular";
+    color: #c0c0c0;
+    font-size: 3vw;
+    opacity: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option {
+    margin-right: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input[type=radio] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #c7d0ff;
+    position: relative;
+    transition: border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #2d5bff;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-name {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Medium";
+    color: #cacaca;
+    font-size: 3vw;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option .lang-flag {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+    border-color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+    color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+    opacity: 1;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu .lang-select .list-lenguaje.lang-select--instant * {
+    transition: none !important;
+  }
   .scroll-contents #scroll-content #contenedor .loading .contactnav {
     /* Clase para mostrar el menú */
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show {
     top: 0vh;
     right: 0vh;
-    width: 50dvw;
+    width: 100dvw;
     height: 100dvh;
     right: 0;
-    box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
+    box-shadow: 0vw 0px 5px 0px rgba(0, 0, 0, 0.082);
     border-radius: 0;
     background-color: #ffffff;
     /* Desliza el menú hacia dentro */
@@ -2240,11 +2707,11 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu p {
     text-decoration: none;
-    font-size: 18px;
+    font-size: 3vw;
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 0.9vw;
+    font-size: 4vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li {
@@ -2252,11 +2719,10 @@ h5 {
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contlistmenu li a {
     text-decoration: none;
-    font-size: 18px;
     opacity: 100%;
     font-family: "Medium";
     color: #999999;
-    font-size: 2.2vw;
+    font-size: 7.7vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -2274,11 +2740,11 @@ h5 {
     list-style: none;
     padding: 0;
     margin: 0;
-    bottom: 5%;
-    left: 15%;
+    bottom: 15%;
+    left: 5%;
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 90%;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial p {
@@ -2287,7 +2753,7 @@ h5 {
     opacity: 100%;
     font-family: "Regular";
     color: #c0c0c0;
-    font-size: 0.9vw;
+    font-size: 3.5vw;
     opacity: 100%;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .contsocial .list_social {
@@ -2304,7 +2770,7 @@ h5 {
     opacity: 100%;
     font-family: "Medium";
     color: #000000;
-    font-size: 0.9vw;
+    font-size: 3vw;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -2313,6 +2779,100 @@ h5 {
     display: inline-block;
     transform: translateY(100%);
     opacity: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select {
+    position: absolute;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    bottom: 5%;
+    left: 5%;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    opacity: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .lang-select-title {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Regular";
+    color: #c0c0c0;
+    font-size: 3vw;
+    opacity: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option {
+    margin-right: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input[type=radio] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #c7d0ff;
+    position: relative;
+    transition: border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #2d5bff;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-name {
+    text-decoration: none;
+    opacity: 100%;
+    font-family: "Medium";
+    color: #cacaca;
+    font-size: 3vw;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-flag {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+    border-color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+    color: #2d5bff;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+    opacity: 1;
+  }
+  .scroll-contents #scroll-content #contenedor .loading .contactnav #nav-menu.show .lang-select .list-lenguaje.lang-select--instant * {
+    transition: none !important;
   }
   .scroll-contents #scroll-content #contenedor .loading .contactnav .hidden {
     display: none;

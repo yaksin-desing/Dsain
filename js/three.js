@@ -997,109 +997,6 @@ function main() {
   let animateWaves = false;
 
 
-
-  // Definir rangos personalizados con sus respectivas cámaras
-  const ranges = [{
-    id: "proyecto-1",
-    min: 30,
-    max: 80,
-    camera: camera
-  },
-  {
-    id: "proyecto-2",
-    min: 1040,
-    max: 1090,
-    camera: cameraDos
-  },
-  {
-    id: "proyecto-3",
-    min: 20,
-    max: 110,
-    camera: cameraTres
-  },
-  ];
-
-  // Función para animar texto letra por letra
-  function animateText(element) {
-    const text = element.innerText;
-    element.innerHTML = "";
-
-    let timeline = gsap.timeline({
-      paused: true
-    });
-
-    text.split("").forEach((char, index) => {
-      let letterWrapper = document.createElement("span");
-      letterWrapper.classList.add("letter-wrapperp");
-
-      let letter = document.createElement("span");
-      letter.classList.add("letterp");
-      letter.textContent = char === " " ? "\u00A0" : char;
-
-      letterWrapper.appendChild(letter);
-      element.appendChild(letterWrapper);
-
-      timeline.to(letter, {
-        y: 0,
-        duration: 0.6,
-        delay: index * 0.05,
-        ease: "power2.out"
-      }, 0);
-    });
-
-    return timeline;
-  }
-
-  // Guardamos las animaciones de los subtítulos y títulos
-  const animations = {};
-
-  ranges.forEach((range) => {
-    const container = document.getElementById(range.id);
-
-    // Ahora selecciona TODOS los h3 dentro del contenedor
-    const titles = container.querySelectorAll(".tituloproyecto");
-
-    // Creamos un array de timelines para todos los h3
-    const titleAnims = Array.from(titles).map(title => animateText(title));
-
-    animations[range.id] = {
-      container: container,
-      titleAnims: titleAnims, // ahora es un array
-      min: range.min,
-      max: range.max,
-      camera: range.camera
-    };
-  });
-
-  // Función para actualizar visibilidad de textos según la posición de la cámara activa
-  function updateTextVisibility(activeCamera) {
-    Object.keys(animations).forEach((id) => {
-      const {
-        container,
-        titleAnims,
-        min,
-        max,
-        camera
-      } = animations[id];
-
-      if (activeCamera !== camera) {
-        container.style.opacity = 0;
-        titleAnims.forEach(anim => anim.reverse());
-        return;
-      }
-
-      if (activeCamera.position.z >= min && activeCamera.position.z <= max) {
-        container.style.opacity = 1;
-        titleAnims.forEach(anim => anim.play());
-      } else {
-        container.style.opacity = 0;
-        titleAnims.forEach(anim => anim.reverse());
-      }
-    });
-  }
-
-
-
   let frameCongelado = false;
   let freezeSceneDos = false;
 
@@ -1161,7 +1058,6 @@ function main() {
       // Actualizar la relación de aspecto de la cámara
       // Renderiza la escena secundaria en pantalla
       renderer.render(sceneDos, cameraDos);
-      updateTextVisibility(cameraDos);
       // Actualizar el tiempo en cada material
       planesD.forEach(planeD => {
         if (planeD.material.uniforms.uTime) {
@@ -1217,7 +1113,6 @@ function main() {
 
         // Renderizar sceneTres normalmente
         renderer.render(sceneTres, cameraTres);
-        updateTextVisibility(cameraTres);
 
         // Ocultar objetos de scene principal
         scene.traverse((child) => {
@@ -1240,7 +1135,6 @@ function main() {
       // Renderiza la escena primaria si la posición Z de la cámara principal es menor o igual a 20
 
       renderer.render(scene, camera); // Renderiza la escena primaria
-      updateTextVisibility(camera);
       // Capturar fondo en el render target
 
       if (wateru) {
