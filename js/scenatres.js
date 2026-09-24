@@ -21,8 +21,8 @@ const cameraTres = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-cameraTres.position.set(26, 9, -21);
-cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
+cameraTres.position.set(0, 9, -21);
+//cameraTres.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
 
 
 // Configuración de la luz direccional
@@ -227,8 +227,8 @@ const planeMaterialportal = new THREE.MeshBasicMaterial({
 const textuportal = new THREE.Mesh(planeGeometryportal, planeMaterialportal);
 
 // Configura la posición del plano si es necesario
-textuportal.position.set(31, 9.8, -21); // Cambia las coordenadas según tu escena
-textuportal.quaternion.setFromEuler(new THREE.Euler(0.05, -1.58, 0, "YXZ"));
+textuportal.position.set(0, 9.8, -20); // Cambia las coordenadas según tu escena
+textuportal.quaternion.setFromEuler(new THREE.Euler(0, 0, 0, "YXZ"));
 
 
 // Agrega el plano a la escena secundaria
@@ -240,9 +240,9 @@ loaderpared.load(
   "./src/objt/escena/escenatres/paredtres.glb",
   (gltf) => {
     const paredtres = gltf.scene;
-    paredtres.position.set(34.3, -6.1, -20);
+    paredtres.position.set(0, -6.1, -24);
     paredtres.scale.set(0.4, 0.4, 0.35);
-    paredtres.rotation.set(0, -1.58, 0);
+    paredtres.rotation.set(0, 0, 0);
 
     paredtres.traverse((child) => {
       if (child.isMesh) {

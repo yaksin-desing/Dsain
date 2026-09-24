@@ -37,9 +37,13 @@ import {
   renderTargetTres
 } from './scenatres.js';
 
-
-
 gsap.registerPlugin(ScrollTrigger);
+
+// ───────────────────────── Ajustes rápidos ─────────────────────────
+const SCRUB_SMOOTH = 0.5;    // antes 2. Smooth Scrollbar ya suaviza, así que un scrub alto suma retraso.
+const PLANE_DISTANCE = 2.9;  // distancia del plane a la cámara (antes: cameraZ - 2.9)
+const PLANE_DRAG = true;     // true = conserva el arrastre sutil en x/y; false = sigue la cámara exacto
+const DEBUG_STATS = false;   // true = muestra el panel de FPS
 
 function main() {
   const idioma = document.documentElement.lang;
@@ -48,10 +52,6 @@ function main() {
       elemento.textContent = elemento.dataset.es;
     }
   });
-
-
-
-
 
   const container = document.getElementById("scene-container");
 
@@ -65,66 +65,52 @@ function main() {
     1000
   );
   camera.rotation.set(1, 0, 0);
-  camera.position.set(0, 10.5, -4.8); // Ajusta los valores según tu escena
+  camera.position.set(0, 10.5, -4.8);
 
-  scene.background = new THREE.Color(0x0000ff); // Fondo azul cielo
+  scene.background = new THREE.Color(0x0000ff);
 
   //////////////////////////////////////////
 
-
-  // Inicializa el renderer antes de utilizarlo
   const renderer = new THREE.WebGLRenderer({
     powerPreference: "high-performance",
     antialias: false,
   });
 
   renderer.shadowMap.enabled = true;
-
-
-  //Puedes probar con otros tipos como THREE.PCFSoftShadowMap - THREE.PCFShadowMap o THREE.VSMShadowMap
-
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Máximo x2 para evitar sobrecarga
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
-  // Carga la animación Lottie
+  // Animación Lottie de progreso
   const animationprogres = lottie.loadAnimation({
-    container: document.getElementById("lottie-container"), // Contenedor para la animación
+    container: document.getElementById("lottie-container"),
     renderer: "svg",
     loop: false,
     autoplay: false,
-    path: "./src/img/progreso.json", // Ruta de tu archivo Lottie
+    path: "./src/img/progreso.json",
   });
-
 
   const mouse = new THREE.Vector2();
   const minCameraX = -5;
   const maxCameraX = 5;
-  if (screenWidth >= 990) {
-
+  if (window.innerWidth >= 990) {
     function onMouseMove(event) {
       mouse.x = (event.clientX / window.innerWidth) * 0.5 - 0.25;
     }
-
     window.addEventListener("mousemove", onMouseMove);
   }
 
-  // ✅ Efecto giroscopio SOLO en Android y pantallas menores a 500 px
+  // Efecto giroscopio SOLO en Android y pantallas menores a 500 px
   if (/Android/i.test(navigator.userAgent) && window.innerWidth <= 500) {
 
     function iniciarGiroscopioAndroid() {
       window.addEventListener("deviceorientation", (event) => {
-        const inclinacionY = event.gamma || 0; // Movimiento izquierda / derecha
-
-        // Limitar el rango de movimiento
+        const inclinacionY = event.gamma || 0;
         const rotacionLimitadaY = THREE.MathUtils.clamp(inclinacionY, -25, 25);
+        const movCamX = rotacionLimitadaY * 0.01;
 
-        // Convertir el valor a un desplazamiento suave en el eje X de la cámara
-        const movCamX = rotacionLimitadaY * 0.01; // Ajusta la sensibilidad aquí (0.01 → más suave)
-
-        // Aplicar movimiento con animación suave
         gsap.to(camera.position, {
           x: movCamX,
           duration: 0.79,
@@ -133,19 +119,17 @@ function main() {
       });
     }
 
-    // Iniciar el giroscopio directamente en Android
     iniciarGiroscopioAndroid();
   }
 
-  let textMeshes = {}; // Objeto para almacenar los textos
+  // ───────────────────────── Textos 3D ─────────────────────────
+  let textMeshes = {};
   const loadertx = new FontLoader();
 
-  // Función para obtener la configuración de textos según el ancho de la pantalla
   function getTextConfig() {
-    let screenWidth = window.innerWidth; // Usar window.innerWidth en vez de container.clientWidth para mejor compatibilidad
+    let screenWidth = window.innerWidth;
 
     if (screenWidth < 450) {
-      // Configuración para pantallas muy pequeñas (<400px)
       return [{
         id: "text2",
         text: "Middle Ux-Designer",
@@ -162,7 +146,6 @@ function main() {
       },
       ];
     } else if (screenWidth < 855) {
-      // Configuración para pantallas pequeñas (<855px)
       return [{
         id: "text2",
         text: "Middle Ux-Designer",
@@ -179,7 +162,6 @@ function main() {
       },
       ];
     } else {
-      // Configuración para pantallas grandes (>=855px)
       return [{
         id: "text2",
         text: "Middle Ux-Designer",
@@ -196,15 +178,12 @@ function main() {
       },
       ];
     }
-
   }
 
-  // Función para calcular el tamaño dinámico del texto
   function getResponsiveSize(baseSize) {
     return window.innerWidth / baseSize;
   }
 
-  // Función para crear o actualizar textos
   function createText({
     id,
     text,
@@ -213,14 +192,13 @@ function main() {
     y
   }) {
     loadertx.load(font, function (loadedFont) {
-      // Eliminar texto anterior si ya existe
       if (textMeshes[id]) {
         scene.remove(textMeshes[id]);
       }
 
       const textGeometry = new TextGeometry(text, {
         font: loadedFont,
-        size: getResponsiveSize(size), // Tamaño dinámico basado en el ancho de pantalla
+        size: getResponsiveSize(size),
         height: 0,
         curveSegments: 12,
         bevelEnabled: false
@@ -232,8 +210,8 @@ function main() {
       const textMaterial = new THREE.MeshBasicMaterial({
         color: 0xFFFFFF,
         side: THREE.DoubleSide,
-        transparent: true, // Permite transparencia
-        opacity: 1, // Nivel de transparencia (0 = totalmente transparente, 1 = totalmente opaco)
+        transparent: true,
+        opacity: 1,
       });
 
       const textMesh = new THREE.Mesh(textGeometry, textMaterial);
@@ -241,74 +219,57 @@ function main() {
       textMesh.position.y = y;
 
       scene.add(textMesh);
-      textMeshes[id] = textMesh; // Guardar el texto en el objeto global
+      textMeshes[id] = textMesh;
     });
   }
 
-  // Función para actualizar todos los textos según el tamaño de pantalla
   function updateAllTexts() {
-    let textsConfig = getTextConfig(); // Obtener configuración correcta
-    textsConfig.forEach(createText); // Aplicar los textos
+    let textsConfig = getTextConfig();
+    textsConfig.forEach(createText);
   }
 
-  // Crear textos iniciales
   updateAllTexts();
 
-
-
-
-
-  // Crear un gradiente utilizando un Canvas
+  // ───────────────────────── Fondo con gradiente ─────────────────────────
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth; // Ajustamos el tamaño del canvas para que cubra toda la pantalla
+  canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  // Crear un gradiente lineal de arriba hacia abajo (puedes personalizarlo)
   const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
   gradient.addColorStop(0, "#FFEBA8FF"); // abajo
   gradient.addColorStop(1, "#0400FFFF"); // arriba
 
-  // Rellenar el canvas con el gradiente
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Crear una textura con el canvas
   const texture = new THREE.CanvasTexture(canvas);
 
-  // Crear un rectángulo (plane geometry) con un material que tenga el gradiente
-  const geometry = new THREE.PlaneGeometry(1500, 150, 1); // Rectángulo de 2x2 unidades para que ocupe toda la pantalla
+  const geometry = new THREE.PlaneGeometry(1500, 150, 1);
   const material = new THREE.MeshBasicMaterial({
     map: texture,
-    transparent: true, // Hacerlo transparente
-    opacity: 1, // Totalmente opaco
+    transparent: true,
+    opacity: 1,
   });
 
   const backgroundRect = new THREE.Mesh(geometry, material);
-  backgroundRect.position.set(0, -30, -189); // Colocarlo detrás de la cámara
+  backgroundRect.position.set(0, -30, -189);
   backgroundRect.rotation.set(0, 0, 0);
   scene.add(backgroundRect);
 
-
-
-
-
+  // ───────────────────────── Luces ─────────────────────────
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(-15, 16, -50);
   directionalLight.castShadow = true;
   scene.add(directionalLight);
 
-
   const segundaLight = new THREE.DirectionalLight(0xff9419, 1);
   segundaLight.position.set(0, 5, -40);
-  segundaLight.target.position.set(0, 0, 0); // Dirige la luz hacia el origen
-
-
-  // Agregar la luz a la escena
+  segundaLight.target.position.set(0, 0, 0);
   scene.add(segundaLight);
 
-
-  let wateru; // Definir variable globalmente
+  // ───────────────────────── Agua ─────────────────────────
+  let wateru;
 
   const textureaguaLoader = new THREE.TextureLoader();
   textureaguaLoader.load('./src/objt/agua/norm.jpg', function (waterNormal) {
@@ -325,7 +286,7 @@ function main() {
       waterColor: 0x0199FF,
       distortionScale: 1,
       fog: false,
-      alpha: 0.8, // Nivel de transparencia (0 totalmente transparente, 1 totalmente opaco)
+      alpha: 0.8,
     });
 
     wateru.material.transparent = true;
@@ -344,26 +305,24 @@ function main() {
   let mixer;
   const animateFunctions = [];
 
-  let model = null; // Variable global para el modelo
+  let model = null;
 
-
-  // ((( LOGO ))) Cargar el modelo y aplicar un HDRI local solo al modelo
+  // ───────────────────────── Logo ─────────────────────────
   const loader = new GLTFLoader();
   loader.load(
     "./src/objt/logo/scene.gltf",
     (gltf) => {
-      model = gltf.scene; // Asignar el modelo a la variable global
+      model = gltf.scene;
       model.scale.set(1, 1, 1);
       model.position.set(0, 12, -5);
       model.rotation.set(-2, 0, 0);
-      // Cargar HDRI específico para el modelo
+
       const rgbeLoader = new RGBELoader();
       rgbeLoader.load("./src/objt/logo/logo.hdr", (texture) => {
         texture.mapping = THREE.EquirectangularReflectionMapping;
 
         model.traverse((child) => {
           if (child.isMesh && child.material) {
-            // Aplica el HDRI solo al modelo
             child.material.envMap = texture;
             child.material.envMapIntensity = 1.5;
             child.material.metalness = 1;
@@ -376,7 +335,6 @@ function main() {
         });
 
         scene.add(model);
-        //focusCameraOnObject(camera, model);
 
         function rotateModel() {
           model.rotation.y += 0.01;
@@ -388,25 +346,36 @@ function main() {
     (error) => console.error("Error al cargar el modelo:", error)
   );
 
-  // EVENTO UNO
-  const loaderbanderas = new THREE.TextureLoader();
-  const textures = [
-    loaderbanderas.load('./src/img/proyectounod.png'),
-  ];
+  // ═════════════════════════════════════════════════════════════════
+  //  PLANES DE PROYECTO (escenas 1, 2 y 3)
+  //  Cada plane es HIJO de su cámara: se mueve con ella sin lerp,
+  //  sin lookAt y sin recalcular posición por frame.
+  // ═════════════════════════════════════════════════════════════════
 
-  // Función para crear materiales únicos con diferentes texturas y opacidad
-  function createMaterial(texture) {
+  // Las texturas se suben a la GPU en cuanto cargan (no en el primer render visible)
+  const texLoader = new THREE.TextureLoader();
+  function loadTexture(url) {
+    return texLoader.load(url, (tex) => {
+      if (renderer.initTexture) renderer.initTexture(tex);
+    });
+  }
+
+  const texUno = loadTexture('./src/img/proyectounod.png');
+  const texDos = loadTexture('./src/img/proyectouno.jpg'); // escenas 2 y 3 usan la misma imagen
+
+  // Un solo material/shader para los tres planes
+  function createMaterial(tex) {
     return new THREE.ShaderMaterial({
       uniforms: {
         uTime: {
           value: 0
         },
         uTexture: {
-          value: texture
+          value: tex
         },
         uOpacity: {
           value: 0
-        }, // Inicialmente invisible
+        },
       },
       vertexShader: `
       uniform float uTime;
@@ -429,297 +398,95 @@ function main() {
         gl_FragColor = vec4(color.rgb, color.a * uOpacity);
       }
     `,
-      transparent: true
+      transparent: true,
+      depthWrite: false
     });
   }
 
-  // Crear planos con materiales
-  const planes = textures.map(texture =>
-    new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture))
-  );
-  planes.forEach(plane => scene.add(plane));
+  function createFollowPlane({ tex, cam, scn, minZ, maxZ, buttonId }) {
+    const mesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(1, 0.5, 1, 24), // antes 50x50 (2601 vértices); el wave solo usa y
+      createMaterial(tex)
+    );
+    mesh.position.set(0, 0, -PLANE_DISTANCE); // local a la cámara
+    mesh.visible = false;
+    cam.add(mesh);
+    if (cam.parent !== scn) scn.add(cam); // los hijos de la cámara solo se renderizan si la cámara está en la escena
 
-  // Función para actualizar el tamaño de los planos dinámicamente
-  function updatePlanesSize() {
-    const screenWidth = window.innerWidth;
-    const newWidth = screenWidth * 0.003;
-    const newHeight = newWidth / 2;
+    const u = mesh.material.uniforms;
+    const button = document.getElementById(buttonId);
+    let btnShown = null;
+    let lagX = cam.position.x;
+    let lagY = cam.position.y;
 
-    planes.forEach(plane => {
-      plane.geometry.dispose();
-      plane.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
-    });
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-  window.addEventListener('resize', updatePlanesSize);
-  updatePlanesSize();
-
-  // Función para actualizar la visibilidad y posición de los planos + botón
-  function updatePlanes() {
-    const cameraZ = camera.position.z;
-    const cameraX = camera.position.x;
-    const cameraY = camera.position.y;
-
-    const minZ = 30;
-    const maxZ = 80;
-
-    let isVisible = false;
-
-    planes.forEach(plane => {
-      plane.position.z += (cameraZ - 2.9 - plane.position.z) * 0.5;
-      plane.position.x += (cameraX - plane.position.x) * 0.1;
-      plane.position.y += (cameraY - plane.position.y) * 0.1;
-      plane.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
-
-      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
-      if (targetOpacity === 1) {
-        isVisible = true;
-      }
-
-      plane.material.uniforms.uOpacity.value +=
-        (targetOpacity - plane.material.uniforms.uOpacity.value) * 0.1;
-    });
-
-    // Control del botón (igual que en EVENTO DOS)
-    const boton = document.getElementById("botonsecundariouno");
-    if (boton) {
-      boton.style.bottom = isVisible ? "-20vh" : "-45vh";
+    function resize() {
+      const w = window.innerWidth * 0.003;
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.PlaneGeometry(w, w / 2, 1, 24);
     }
-  }
+    resize();
+    window.addEventListener("resize", resize);
 
+    // active = false fuerza que el plane se oculte (por ejemplo, fuera de su tramo de scroll)
+    function update(dt, active = true) {
+      const cz = cam.position.z;
+      const inRange = active && cz >= minZ && cz <= maxZ;
+      const k = 1 - Math.exp(-7 * dt); // equivale a 0.1 por frame a 60fps, pero independiente de los FPS
 
+      u.uOpacity.value += ((inRange ? 1 : 0) - u.uOpacity.value) * k;
 
+      // arrastre sutil en x/y (offset local respecto a la cámara)
+      lagX += (cam.position.x - lagX) * k;
+      lagY += (cam.position.y - lagY) * k;
 
-
-
-
-  // EVENTO DOS
-  const loaderbanderasD = new THREE.TextureLoader();
-  const texturesD = [
-    loaderbanderasD.load('./src/img/proyectouno.jpg'),
-  ];
-
-  // Función para crear materiales únicos con diferentes texturas y opacidad
-  function createMaterial(texture) {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: {
-          value: 0
-        },
-        uTexture: {
-          value: texture
-        },
-        uOpacity: {
-          value: 0
-        }, // Inicialmente invisible
-      },
-      vertexShader: `
-      uniform float uTime;
-      varying vec2 vUv;
-
-      void main() {
-        vUv = uv;
-        vec3 pos = position;
-        float wave = sin(pos.y * 2.0 + uTime * 1.0) * 0.1;
-        pos.x += wave;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `,
-      fragmentShader: `
-      uniform sampler2D uTexture;
-      uniform float uOpacity;
-      varying vec2 vUv;
-
-      void main() {
-        vec4 color = texture2D(uTexture, vUv);
-        if (color.a < 0.1) discard;
-        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
-      }
-    `,
-      transparent: true
-    });
-  }
-
-  // Crear planos con materiales
-  const planesD = texturesD.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
-  planesD.forEach(planeD => sceneDos.add(planeD));
-
-  // Función para actualizar el tamaño de los planos dinámicamente
-  function updatePlanesSizeDos() {
-    const screenWidth = window.innerWidth;
-    const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
-    const newHeight = newWidth * (1 / 2); // Mantener la proporción 2:1
-
-    planesD.forEach(planeD => {
-      planeD.geometry.dispose();
-      planeD.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
-      planeD.scale.set(1, 1, 1);
-    });
-
-    cameraDos.aspect = window.innerWidth / window.innerHeight;
-    cameraDos.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-  }
-
-  window.addEventListener('resize', updatePlanesSizeDos);
-  updatePlanesSizeDos();
-
-  function updatePlanesDos() {
-    const cameraZ = cameraDos.position.z;
-    const cameraX = cameraDos.position.x;
-    const cameraY = cameraDos.position.y;
-
-    const visibilityRanges = [{
-      planeD: planesD[0],
-      minZ: 1040,
-      maxZ: 1090
-    },];
-
-    let isVisible = false; // ← Aquí lo inicializamos
-
-    visibilityRanges.forEach(({
-      planeD,
-      minZ,
-      maxZ
-    }) => {
-      planeD.position.z += (cameraZ - 2.9 - planeD.position.z) * 0.5;
-      planeD.position.x += (cameraX - planeD.position.x) * 0.1;
-      planeD.position.y += (cameraY - planeD.position.y) * 0.1;
-      planeD.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
-
-      const targetOpacity = (cameraZ >= minZ && cameraZ <= maxZ) ? 1 : 0;
-
-      if (targetOpacity === 1) {
-        isVisible = true; // Si entra en rango, marcamos visible
-      }
-
-      planeD.material.uniforms.uOpacity.value +=
-        (targetOpacity - planeD.material.uniforms.uOpacity.value) * 0.1;
-    });
-
-    // Mover el botón con CSS
-    const boton = document.getElementById("botonsecundariodos");
-    if (boton) {
-      boton.style.bottom = isVisible ? "-20vh" : "-45vh";
-    }
-  }
-
-
-  // EVENTO TRES
-  const loaderbanderasT = new THREE.TextureLoader();
-  const texturesT = [
-    loaderbanderasT.load('./src/img/proyectouno.jpg'),
-  ];
-
-  // Función para crear materiales únicos con diferentes texturas y opacidad
-  function createMaterial(texture) {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: {
-          value: 0
-        },
-        uTexture: {
-          value: texture
-        },
-        uOpacity: {
-          value: 0
-        }, // Inicialmente invisible
-      },
-      vertexShader: `
-      uniform float uTime;
-      varying vec2 vUv;
-
-      void main() {
-        vUv = uv;
-        vec3 pos = position;
-        float wave = sin(pos.y * 2.0 + uTime * 1.0) * 0.1;
-        pos.x += wave;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `,
-      fragmentShader: `
-      uniform sampler2D uTexture;
-      uniform float uOpacity;
-      varying vec2 vUv;
-
-      void main() {
-        vec4 color = texture2D(uTexture, vUv);
-        if (color.a < 0.1) discard;
-        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
-      }
-    `,
-      transparent: true
-    });
-  }
-
-  // Crear planos con materiales
-  const planesT = texturesT.map(texture => new THREE.Mesh(new THREE.PlaneGeometry(2, 1, 50, 50), createMaterial(texture)));
-  planesT.forEach(planesT => sceneTres.add(planesT));
-
-  // Función para actualizar el tamaño de los planos dinámicamente
-  function updatePlanesSizeTres() {
-    const screenWidth = window.innerWidth;
-    const newWidth = screenWidth * 0.003; // 50% del ancho de la pantalla
-    const newHeight = newWidth * (1 / 2); // Mantener la proporción 2:1
-
-    planesT.forEach(planeT => {
-      planeT.geometry.dispose();
-      planeT.geometry = new THREE.PlaneGeometry(newWidth, newHeight, 50, 50);
-      planeT.scale.set(1, 1, 1);
-    });
-
-    cameraTres.aspect = window.innerWidth / window.innerHeight;
-    cameraTres.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-  }
-
-  window.addEventListener('resize', updatePlanesSizeTres);
-  updatePlanesSizeTres();
-
-  function updatePlanesTres() {
-    const cameraZ = cameraTres.position.z;
-    const cameraX = cameraTres.position.x;
-    const cameraY = cameraTres.position.y;
-
-    const visibilityRanges = [{
-      planeT: planesT[0],
-      minZ: 20,
-      maxZ: 110
-    }];
-
-    visibilityRanges.forEach(({
-      planeT,
-      minZ,
-      maxZ
-    }) => {
-      planeT.position.z += (cameraZ - 2.9 - planeT.position.z) * 0.12;
-      planeT.position.x += (cameraX - planeT.position.x) * 0.1;
-      planeT.position.y += (cameraY - planeT.position.y) * 0.1;
-      planeT.lookAt(new THREE.Vector3(cameraX, cameraY, cameraZ));
-
-      const isVisible = cameraZ >= minZ && cameraZ <= maxZ;
-      const targetOpacity = isVisible ? 1 : 0;
-      planeT.material.uniforms.uOpacity.value += (targetOpacity - planeT.material.uniforms.uOpacity.value) * 0.1;
-
-      // Mover el botón con CSS
-      const boton = document.getElementById("botonsecundariotres");
-      if (boton) {
-        if (isVisible) {
-          boton.style.bottom = "-20vh"; // Sube el botón
-        } else {
-          boton.style.bottom = "-45vh"; // Lo baja fuera de vista
+      const show = inRange || u.uOpacity.value > 0.01;
+      mesh.visible = show; // fuera de rango no hay draw call
+      if (show) {
+        u.uTime.value += dt * 0.6; // equivale a 0.01 por frame a 60fps
+        if (PLANE_DRAG) {
+          mesh.position.x = lagX - cam.position.x;
+          mesh.position.y = lagY - cam.position.y;
         }
       }
-    });
+
+      // el botón solo se toca cuando cambia de estado (antes: escritura de estilo en cada frame)
+      if (button && btnShown !== inRange) {
+        btnShown = inRange;
+        button.style.bottom = inRange ? "-20vh" : "-45vh";
+      }
+    }
+
+    return { mesh, update };
   }
 
+  const planeUno = createFollowPlane({
+    tex: texUno,
+    cam: camera,
+    scn: scene,
+    minZ: 35,
+    maxZ: 80,
+    buttonId: "botonsecundariouno"
+  });
 
+  const planeDos = createFollowPlane({
+    tex: texDos,
+    cam: cameraDos,
+    scn: sceneDos,
+    minZ: 1040,
+    maxZ: 1090,
+    buttonId: "botonsecundariodos"
+  });
 
+  const planeTres = createFollowPlane({
+    tex: texDos,
+    cam: cameraTres,
+    scn: sceneTres,
+    minZ: 20,
+    maxZ: 110,
+    buttonId: "botonsecundariotres"
+  });
 
-  // Cargar el modelo de las dunas
+  // ───────────────────────── Dunas ─────────────────────────
   const textureLoaderDunas = new THREE.TextureLoader();
   const ambientOcclusion = textureLoaderDunas.load(
     "./src/objt/tierra/arenaambientcclusion.jpg"
@@ -742,33 +509,25 @@ function main() {
       modelDunas.receiveShadow = true;
 
       const sandMaterial = new THREE.MeshStandardMaterial({
-        color: 0xf6b756, // Color base del material
-        aoMap: ambientOcclusion, // Mapa de oclusión ambiental
-        emissive: 0xcc5219, // Color de emisión (luz propia)
-        emissiveIntensity: 1, // Intensidad de la emisión
-        emissiveMap: null, // Textura de emisión
-        metalness: 0, // Cantidad de metal en el material (0 = no metálico, 1 = completamente metálico)
-        metalnessMap: null, // Mapa de metalicidad
-        roughness: 1, // Rugosidad de la superficie (0 = completamente suave, 1 = completamente rugoso)
-        roughnessMap: roughnessMap, // Mapa de rugosidad
-        bumpMap: null, // Mapa de relieve (bump)
-        normalMap: null, // Mapa normal (para efectos de iluminación)
-        displacementMap: displacementMap, // Mapa de desplazamiento
-        displacementScale: 0, // Escala del desplazamiento
-        displacementBias: 0, // Desplazamiento de la altura
-        alphaMap: null, // Mapa de transparencia
-        transparent: false, // Si es transparente (se usa con alphaMap o opacity)
-        opacity: 1, // Opacidad del material (0 = completamente transparente)
-        side: THREE.FrontSide, // Qué caras del material se deben renderizar (FrontSide, BackSide, DoubleSide)
-        flatShading: false, // Si se aplica sombreado plano en las caras
-        wireframe: false, // Si se muestra como líneas (wireframe)
-        wireframeLinewidth: 1, // Grosor de las líneas en el modo wireframe
-        wireframeLinecap: "round", // Estilo de las líneas en wireframe (round, square, butt)
-        wireframeLinejoin: "round", // Estilo de las esquinas de las líneas en wireframe (round, bevel, miter)
-        shadowSide: true, // Qué caras se deben utilizar para las sombras (null, FrontSide, BackSide)
-        envMap: null, // Mapa del entorno para reflejos
-        envMapIntensity: 0, // Intensidad de los reflejos del mapa del entorno
-        alphaTest: 0, // Umbral para la transparencia (si el valor alfa de la textura es menor que este valor, el píxel es descartado)
+        color: 0xf6b756,
+        aoMap: ambientOcclusion,
+        emissive: 0xcc5219,
+        emissiveIntensity: 1,
+        metalness: 0,
+        roughness: 1,
+        roughnessMap: roughnessMap,
+        displacementMap: displacementMap,
+        displacementScale: 0,
+        displacementBias: 0,
+        transparent: false,
+        opacity: 1,
+        side: THREE.FrontSide,
+        flatShading: false,
+        wireframe: false,
+        shadowSide: true,
+        envMap: null,
+        envMapIntensity: 0,
+        alphaTest: 0,
       });
 
       modelDunas.traverse((child) => {
@@ -786,7 +545,7 @@ function main() {
   // Sol 1
   const sun1Geometry = new THREE.SphereGeometry(3, 32, 32);
   const sun1Material = new THREE.MeshStandardMaterial({
-    emissive: 0xffffff, // Color brillante del primer sol
+    emissive: 0xffffff,
     emissiveIntensity: 1.8,
     color: 0xffffff,
     roughness: 0.2,
@@ -799,21 +558,18 @@ function main() {
   // Sol 2
   const sun2Geometry = new THREE.SphereGeometry(25, 35, 35);
   const sun2Material = new THREE.MeshStandardMaterial({
-    emissive: 0xff0000, // Color brillante del segundo sol
+    emissive: 0xff0000,
     emissiveIntensity: 1.8,
     color: 0xff0000,
   });
   const sun2 = new THREE.Mesh(sun2Geometry, sun2Material);
   sun2.position.set(3, 19, -150);
-
   scene.add(sun2);
 
+  // ───────────────────────── Animaciones de la puerta ─────────────────────────
+  let animationStarted = false;
+  let isPaused = false;
 
-  let animationStarted = false; // Definir la variable
-
-  let isPaused = false; // Controla si la animación está pausada
-
-  // Controlar las animaciones según la posición de la cámara
   function updateAnimations() {
     if (camera.position.z >= 0 && cameraDos.position.z <= 1011 && !isPaused) {
       isPaused = true;
@@ -824,24 +580,22 @@ function main() {
     }
   }
 
-
-
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  texture.encoding = THREE.sRGBEncoding; // Para texturas
-  material.map.encoding = THREE.sRGBEncoding; // Si usas texturas en materiales
+  texture.encoding = THREE.sRGBEncoding;
+  material.map.encoding = THREE.sRGBEncoding;
 
+  // ───────────────────────── Botón de inicio ─────────────────────────
   const botonInicio = document.getElementById("botoninicio");
 
   botonInicio.addEventListener("click", () => {
     updateAnimations()
     document.getElementById("contenedor").classList.add("fijo");
-    ScrollTrigger.refresh(); // Actualiza el cálculo de ScrollTrigger
+    ScrollTrigger.refresh();
 
-    setTimeout(() => { // Agregar el delay de 1 segundo
-      const currentFrame = animationprogres.currentFrame; // Obtener el frame actual
+    setTimeout(() => {
+      const currentFrame = animationprogres.currentFrame;
       if (currentFrame < 60) {
         animationprogres.playSegments([currentFrame, 61], true);
-
       }
 
       if (!model) {
@@ -849,10 +603,6 @@ function main() {
         return;
       }
     }, 1000);
-
-
-
-    animateWaves = true;
 
     // Animación inicial
     const inicioescena = gsap.timeline({
@@ -910,30 +660,32 @@ function main() {
       ease: "expo.out",
     });
 
-    // Ejecutar lógica después de la animación inicial
+    // Lógica después de la animación inicial
     inicioescena.then(() => {
       console.log("Animación inicial completada.");
 
-      animationStarted = true; // Permitir que ScrollTrigger controle Lottie
+      animationStarted = true;
 
-      const endFrame = 300; // Suponiendo que la animación tiene 500 frames totales
+      const endFrame = 300;
+      let lastLottieFrame = -1;
 
-      // Animación con GSAP y ScrollTrigger
       gsap.timeline({
         scrollTrigger: {
-          scroller: "#scroll-content", // Usar el contenedor virtual
+          scroller: "#scroll-content",
           trigger: "#contenedor",
           start: "top top",
-          end: () => window.innerWidth > 768 ? "25000vh" : "10000vh", // 200vh para desktop, 500vh para móvil
-          scrub: 2,
+          end: () => window.innerWidth > 768 ? "25000vh" : "10000vh",
+          scrub: SCRUB_SMOOTH,
           pin: true,
           markers: false,
           onUpdate: function (self) {
-            const progress = self.progress; // Progreso del scroll (0 a 1)
-            const frame = Math.round(61 + progress * (endFrame - 61));
-            animationprogres.goToAndStop(frame, true);
+            const frame = Math.round(61 + self.progress * (endFrame - 61));
+            // solo toca el DOM del Lottie cuando el frame realmente cambia
+            if (frame !== lastLottieFrame) {
+              lastLottieFrame = frame;
+              animationprogres.goToAndStop(frame, true);
+            }
           },
-
         },
       })
         .to(camera.position, {
@@ -952,88 +704,67 @@ function main() {
           y: 3,
           z: 1100,
           ease: "sine.in",
-          // onStart: () => {
-          //   renderer.setRenderTarget(renderTargetTres);
-          //   renderer.render(sceneDos, cameraDos);
-          // }
         })
-        .to(cameraTres.position, {
-          duration: 5,
-          x: -5,
-          y: 5,
-          z: 0,
 
-        })
-        .to(cameraTres.rotation, {
-          delay: -5,
-          duration: 5,
-          x: 0,
-          y: -1.2,
-          z: 0,
-        })
-        .to(cameraTres.position, {
-          duration: 5,
-          x: 0,
-          y: 3,
-          z: 30,
-        })
-        .to(cameraTres.rotation, {
-          delay: -5,
-          duration: 5,
-          x: 0,
-          y: 0,
-          z: 0,
-        })
+
         .to(cameraTres.position, {
           duration: 10,
           x: 0,
           y: 3,
           z: 163,
         })
-
     });
   });
 
-  let animateWaves = false;
-
-
+  // ───────────────────────── Estado del render ─────────────────────────
   let frameCongelado = false;
-  let freezeSceneDos = false;
-
 
   const clock = new THREE.Clock();
 
-  // 🚫 Congelar sceneDos completamente
-  if (freezeSceneDos) {
+  const stats = new Stats();
+  stats.showPanel(0);
+  if (DEBUG_STATS) container.appendChild(stats.dom);
 
-    // detener shaders animados
-    planesD.forEach(p => {
-      if (p.material?.uniforms?.uTime) {
-        p.material.uniforms.uTime.value = p.material.uniforms.uTime.value; // no avanzar
-      }
+  // Visibilidad de meshes: solo se recorre la escena cuando el estado cambia (antes: traverse en cada frame)
+  let sceneMeshesOn = null;
+  let sceneTresMeshesOn = null;
+
+  function setMeshesVisible(root, value) {
+    root.traverse((child) => {
+      if (child.isMesh) child.visible = value;
     });
-
-    // detener mixers (si existen)
-    if (mixerDos) mixerDos.update = () => { };
-
-    // evitar updatePlanesDos()
-    // (si te interesa, lo puedes dejar sin efecto)
   }
 
-  var stats = new Stats();
-  stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-  //container.appendChild(stats.dom);
+  function syncMeshVisibility(inSecondStage) {
+    const wantScene = !(inSecondStage && cameraDos.position.z >= 1100);
+    if (wantScene !== sceneMeshesOn) {
+      sceneMeshesOn = wantScene;
+      setMeshesVisible(scene, wantScene);
+    }
+    if (inSecondStage !== sceneTresMeshesOn) {
+      sceneTresMeshesOn = inSecondStage;
+      setMeshesVisible(sceneTres, inSecondStage);
+    }
+  }
 
+  // Aspecto de la cámara principal: solo se recalcula al cambiar de modo (antes: en cada frame)
+  let aspectMode = null; // "portal" | "normal"
+  function setAspectMode(mode) {
+    if (aspectMode === mode) return;
+    aspectMode = mode;
+    camera.aspect = mode === "portal" ?
+      (container.clientWidth / 2.5) / container.clientHeight / 2 :
+      container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+
+  // ───────────────────────── Loop principal ─────────────────────────
+  // Va en el ticker de GSAP: la cámara (scrub) y el render se actualizan en el mismo tick
   function animate() {
-    //stats.begin();
-    //monitored code goes here
-    //stats.end();
+    if (DEBUG_STATS) stats.begin();
 
-    requestAnimationFrame(animate);
+    const delta = Math.min(clock.getDelta(), 0.05);
 
-    const delta = clock.getDelta(); // Tiempo entre frames
-
-    // Actualizar las animaciones si el mixer está definido
     if (mixerpuerta) {
       mixerpuerta.update(delta);
     }
@@ -1046,64 +777,31 @@ function main() {
 
     animateFunctions.forEach((fn) => fn());
 
-    // Lógica para cambiar entre escenas según la posición de la cámara principal
-    if (camera.position.z >= 90) {
-      // Dividir el ancho de la cámara
-      camera.aspect = (container.clientWidth / 2.5) / container.clientHeight / 2;
-      camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
-      // Renderiza la escena primaria al render target
+    const inSecondStage = camera.position.z >= 90;
+
+    syncMeshVisibility(inSecondStage);
+
+    planeUno.update(delta);
+    planeDos.update(delta, inSecondStage);
+    planeTres.update(delta, inSecondStage && cameraTres.position.z >= 5);
+
+    if (inSecondStage) {
+      setAspectMode("portal");
+
+      // Escena principal al render target (portal) y escena 2 en pantalla
       renderer.setRenderTarget(renderTarget);
       renderer.render(scene, camera);
-      renderer.setRenderTarget(null); // Restablece el render target
-      // Actualizar la relación de aspecto de la cámara
-      // Renderiza la escena secundaria en pantalla
+      renderer.setRenderTarget(null);
       renderer.render(sceneDos, cameraDos);
-      // Actualizar el tiempo en cada material
-      planesD.forEach(planeD => {
-        if (planeD.material.uniforms.uTime) {
-          planeD.material.uniforms.uTime.value += 0.01;
-        }
-      });
 
-      updatePlanesDos();
-
-
-      if (cameraTres.position.z >= 5) { // Actualizar el tiempo en cada material
-        planesT.forEach(planeT => {
-          if (planeT.material.uniforms.uTime) {
-            planeT.material.uniforms.uTime.value += 0.01;
-          }
-        });
-        // Actualizar planos
-        updatePlanesTres();
-      }
-
-      // Ocultar objetos de la escena principal para liberar GPU
-      scene.traverse((child) => {
-        if (child.isMesh) {
-          child.visible = true;
-        }
-      });
-
-      // Ocultar objetos de la escena principal para liberar GPU
-      sceneTres.traverse((child) => {
-        if (child.isMesh) {
-          child.visible = true;
-        }
-      });
-
-
-      // Nueva condición dentro del primer if
       if (cameraDos.position.z >= 1100) {
 
-        // 🔥 Congelar el frame SOLO una vez
+        // Congelar el frame de sceneDos SOLO una vez
         if (!frameCongelado) {
           renderer.setRenderTarget(renderTargetTres);
           renderer.render(sceneDos, cameraDos);
           renderer.setRenderTarget(null);
-
-          frameCongelado = true;   // marcar que ya está congelado
-          freezeSceneDos = true;   // detener toda actualización ligada a sceneDos
+          frameCongelado = true;
         }
 
         // Animación de agua dentro de sceneTres
@@ -1111,103 +809,58 @@ function main() {
           water.material.uniforms.time.value += 0.02;
         }
 
-        // Renderizar sceneTres normalmente
         renderer.render(sceneTres, cameraTres);
-
-        // Ocultar objetos de scene principal
-        scene.traverse((child) => {
-          if (child.isMesh) child.visible = false;
-        });
       }
 
     } else {
+      setAspectMode("normal");
 
-      // Ocultar objetos de la escena principal para liberar GPU
-      sceneTres.traverse((child) => {
-        if (child.isMesh) {
-          child.visible = false;
-        }
-      });
+      renderer.render(scene, camera);
 
-      // Restablece la relación de aspecto de la cámara original
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix(); // Asegúrate de actualizar la matriz de proyección
-      // Renderiza la escena primaria si la posición Z de la cámara principal es menor o igual a 20
-
-      renderer.render(scene, camera); // Renderiza la escena primaria
-      // Capturar fondo en el render target
-
-      if (wateru) {
-        if (wateru.material.uniforms['time']) {
-          wateru.material.uniforms['time'].value += 0.005; // Ajusta la velocidad de la animación
-        }
+      if (wateru && wateru.material.uniforms['time']) {
+        wateru.material.uniforms['time'].value += 0.005;
       }
 
+      // Los textos siguen a la cámara en z (sin crear objetos nuevos por frame)
+      const targetTextZ = camera.position.z - 11;
       if (textMeshes["text1"]) {
-        textMeshes["text1"].position.lerp(
-          new THREE.Vector3(
-            textMeshes["text1"].position.x,
-            textMeshes["text1"].position.y,
-            camera.position.z - 11
-          ),
-          0.1 // Ajusta este valor para suavizar el movimiento
-        );
-
+        textMeshes["text1"].position.z += (targetTextZ - textMeshes["text1"].position.z) * 0.1;
       }
-
       if (textMeshes["text2"]) {
-        textMeshes["text2"].position.lerp(
-          new THREE.Vector3(
-            textMeshes["text2"].position.x,
-            textMeshes["text2"].position.y,
-            camera.position.z - 11
-          ),
-          0.1
-        );
-
+        textMeshes["text2"].position.z += (targetTextZ - textMeshes["text2"].position.z) * 0.1;
       }
     }
-    //console.log("Posición de cameraTres en Z:", cameraTres.position.z);
-    updateAnimations()
 
-    // SIEMPRE ejecuta updatePlanes para que el botón también baje cuando z < 30
-    planes.forEach(plane => {
-      if (plane.material?.uniforms?.uTime) {
-        plane.material.uniforms.uTime.value += 0.01;
-      }
-    });
-    updatePlanes(); // <- sin condicional
+    updateAnimations();
 
+    if (DEBUG_STATS) stats.end();
   }
-  animate();
+
+  gsap.ticker.add(animate);
+  gsap.ticker.lagSmoothing(0);
+
+  // ───────────────────────── Resize (un solo handler) ─────────────────────────
   window.addEventListener('resize', () => {
-
-    // Actualizar el tamaño del render target con el factor de escala
-    renderTarget.setSize(
-      container.clientWidth, // Aumenta el ancho
-      container.clientHeight // Mantén la altura original
-    );
-
-    // Actualizar las dimensiones del canvas
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // Actualizar la relación de aspecto de la cámara
+    renderTarget.setSize(width, height);
+
     cameraTres.aspect = width / height;
     cameraTres.updateProjectionMatrix();
 
-    // Actualizar la relación de aspecto de la cámara
     cameraDos.aspect = width / height;
     cameraDos.updateProjectionMatrix();
 
+    aspectMode = null; // la cámara principal recalcula su aspecto en el siguiente frame
 
-    // Actualizar la relación de aspecto de la cámara
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-
-    // Ajustar el tamaño del renderizador
     renderer.setSize(width, height);
   });
 
+  // Ajuste inicial (antes lo hacían las funciones updatePlanesSize*)
+  cameraDos.aspect = container.clientWidth / container.clientHeight;
+  cameraDos.updateProjectionMatrix();
+  cameraTres.aspect = container.clientWidth / container.clientHeight;
+  cameraTres.updateProjectionMatrix();
 }
 main();
