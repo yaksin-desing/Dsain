@@ -227,7 +227,7 @@ const planeMaterialportal = new THREE.MeshBasicMaterial({
 const textuportal = new THREE.Mesh(planeGeometryportal, planeMaterialportal);
 
 // Configura la posición del plano si es necesario
-textuportal.position.set(0, 9.8, -20); // Cambia las coordenadas según tu escena
+textuportal.position.set(0, 9, -21); // Cambia las coordenadas según tu escena
 textuportal.quaternion.setFromEuler(new THREE.Euler(0, 0, 0, "YXZ"));
 
 
@@ -240,9 +240,8 @@ loaderpared.load(
   "./src/objt/escena/escenatres/paredtres.glb",
   (gltf) => {
     const paredtres = gltf.scene;
-    paredtres.position.set(0, -6.1, -24);
-    paredtres.scale.set(0.4, 0.4, 0.35);
-    paredtres.rotation.set(0, 0, 0);
+    paredtres.position.set(1, -6.3, -23.7);
+    paredtres.scale.set(0.38, 0.38, 0.35);
 
     paredtres.traverse((child) => {
       if (child.isMesh) {
