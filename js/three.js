@@ -41,7 +41,21 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ───────────────────────── Ajustes rápidos ─────────────────────────
 const SCRUB_SMOOTH = 0.5;    // antes 2. Smooth Scrollbar ya suaviza, así que un scrub alto suma retraso.
-const PLANE_DISTANCE = 2.9;  // distancia del plane a la cámara (antes: cameraZ - 2.9)
+// Distancia del plane a la cámara según el ancho de pantalla (menor = más cerca = se ve más grande)
+const PLANE_DISTANCE_MOBILE = 1.7;   // pantallas <= PLANE_BP_MOBILE
+const PLANE_DISTANCE_DESKTOP = 2.9;  // pantallas >= PLANE_BP_DESKTOP (tu valor actual)
+const PLANE_BP_MOBILE = 450;         // ancho donde empieza a acercarse
+const PLANE_BP_DESKTOP = 990;        // ancho donde vuelve a la distancia de escritorio
+
+// Interpola suave entre móvil y escritorio (sin saltos al redimensionar)
+function getPlaneDistance() {
+  const t = THREE.MathUtils.clamp(
+    (window.innerWidth - PLANE_BP_MOBILE) / (PLANE_BP_DESKTOP - PLANE_BP_MOBILE),
+    0,
+    1
+  );
+  return THREE.MathUtils.lerp(PLANE_DISTANCE_MOBILE, PLANE_DISTANCE_DESKTOP, t);
+}
 const PLANE_DRAG = true;     // true = conserva el arrastre sutil en x/y; false = sigue la cámara exacto
 const DEBUG_STATS = false;   // true = muestra el panel de FPS
 
@@ -192,8 +206,15 @@ function main() {
     y
   }) {
     loadertx.load(font, function (loadedFont) {
+      // Libera geometría y material del mesh anterior antes de reemplazarlo
       if (textMeshes[id]) {
         scene.remove(textMeshes[id]);
+        textMeshes[id].geometry.dispose();
+        if (Array.isArray(textMeshes[id].material)) {
+          textMeshes[id].material.forEach((m) => m.dispose());
+        } else {
+          textMeshes[id].material.dispose();
+        }
       }
 
       const textGeometry = new TextGeometry(text, {
@@ -297,7 +318,7 @@ function main() {
 
     scene.add(wateru);
 
-    console.log("¡Agua cargada correctamente!", water);
+    console.log("¡Agua cargada correctamente!", wateru);
   }, undefined, function (error) {
     console.error("Error al cargar la textura del agua:", error);
   });
@@ -347,44 +368,69 @@ function main() {
   );
 
   // ═════════════════════════════════════════════════════════════════
-  //  PLANES DE PROYECTO (escenas 1, 2 y 3)
+  //  PLANES DE PROYECTO (escenas 1, 2 y 3) — con VIDEO + marco marquee
   //  Cada plane es HIJO de su cámara: se mueve con ella sin lerp,
   //  sin lookAt y sin recalcular posición por frame.
   // ═════════════════════════════════════════════════════════════════
 
-  // Las texturas se suben a la GPU en cuanto cargan (no en el primer render visible)
-  const texLoader = new THREE.TextureLoader();
-  function loadTexture(url) {
-    return texLoader.load(url, (tex) => {
-      if (renderer.initTexture) renderer.initTexture(tex);
-    });
+  // Crea un <video> oculto + su VideoTexture. No se agrega al DOM visible,
+  // solo sirve como fuente de datos para Three.js.
+  function loadVideoTexture(url) {
+    const video = document.createElement('video');
+    video.src = url;
+    video.crossOrigin = 'anonymous';
+    video.muted = true;       // requerido para autoplay en casi todos los navegadores
+    video.loop = true;
+    video.playsInline = true; // evita fullscreen automático en iOS
+    video.preload = 'auto';
+
+    const videoTexture = new THREE.VideoTexture(video);
+    videoTexture.minFilter = THREE.LinearFilter;
+    videoTexture.magFilter = THREE.LinearFilter;
+    videoTexture.colorSpace = THREE.SRGBColorSpace;
+
+    return { texture: videoTexture, video };
   }
 
-  const texUno = loadTexture('./src/img/proyectounod.png');
-  const texDos = loadTexture('./src/img/proyectouno.jpg'); // escenas 2 y 3 usan la misma imagen
+  // Videos de proyectos
+  const { texture: texUno, video: videoUno } = loadVideoTexture('./src/img/proysamy.mp4');
+  const { texture: texDos, video: videoDos } = loadVideoTexture('./src/img/proysamy.mp4');
+  const { texture: texTres, video: videoTres } = loadVideoTexture('./src/img/proyectodsain.mp4');
 
-  // Un solo material/shader para los tres planes
+  // Un solo material/shader para los tres planes (SIN CAMBIOS: es tu shader de bandera)
   function createMaterial(tex) {
     return new THREE.ShaderMaterial({
       uniforms: {
-        uTime: {
-          value: 0
-        },
-        uTexture: {
-          value: tex
-        },
-        uOpacity: {
-          value: 0
-        },
+        uTime: { value: 0 },
+        uTexture: { value: tex },
+        uOpacity: { value: 0 },
+        uWidth: { value: 1 }, // ancho del plane, para que la amplitud escale con el tamaño
       },
       vertexShader: `
       uniform float uTime;
+      uniform float uWidth;
       varying vec2 vUv;
+      varying float vShade;
+
       void main() {
         vUv = uv;
         vec3 pos = position;
-        float wave = sin(pos.y * 2.0 + uTime * 1.0) * 0.1;
-        pos.x += wave;
+
+        // 0 en el borde izquierdo (anclado) -> 1 en el borde libre
+        float pin = smoothstep(0.0, 0.9, uv.x);
+
+        // Tres ondas con distinta frecuencia, velocidad e inclinación
+        float p1 = uv.x * 5.0  - uTime * 2.0 + uv.y * 2.0;
+        float p2 = uv.x * 9.0  - uTime * 3.2 + uv.y * 4.5;
+        float p3 = uv.y * 4.0  + uTime * 1.2 + uv.x * 2.0;
+
+        float wave = sin(p1) + 0.5 * sin(p2) + 0.3 * sin(p3);
+        pos.z += wave * uWidth * 0.025 * pin;
+
+        // Pendiente de la onda en X: sirve para simular luz y sombra en los pliegues
+        float slope = 5.0 * cos(p1) + 0.5 * 9.0 * cos(p2) + 0.3 * 2.0 * cos(p3);
+        vShade = slope * pin;
+
         gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
       }
     `,
@@ -392,10 +438,15 @@ function main() {
       uniform sampler2D uTexture;
       uniform float uOpacity;
       varying vec2 vUv;
+      varying float vShade;
+
       void main() {
         vec4 color = texture2D(uTexture, vUv);
         if (color.a < 0.1) discard;
-        gl_FragColor = vec4(color.rgb, color.a * uOpacity);
+
+        // Aclara/oscurece según la inclinación del pliegue
+        float shade = 1.0 + vShade * 0.06;
+        gl_FragColor = vec4(color.rgb * shade, color.a * uOpacity);
       }
     `,
       transparent: true,
@@ -403,12 +454,193 @@ function main() {
     });
   }
 
-  function createFollowPlane({ tex, cam, scn, minZ, maxZ, buttonId }) {
+  // ───────────────────────── Marco con texto marquee ─────────────────────────
+  // Banda de texto que gira sin fin alrededor del plane. Comparte uTime, uOpacity
+  // y uWidth con el material del plane, y usa la MISMA fórmula de onda, así que
+  // ondea pegada al borde del video.
+  function createMarqueeFrame(shared, options = {}) {
+    const cfg = {
+      items: ["DISEÑO WEB", "UX / UI", "BRANDING"], // textos que se repiten
+      separator: "   ✦   ",                          // separador entre textos
+      font: "500 64px 'DM Mono', monospace",        // el canvas mide 128px de alto
+      color: "#ffffff",
+      background: "rgba(0,0,0,0.6)",                // null = banda transparente
+      thickness: 0.05,                              // grosor, como fracción del ancho del plane
+      speed: 0.08,                                  // velocidad, en anchos del plane por segundo
+      direction: 1,                                 // 1 = sentido horario, -1 = antihorario
+      ...options
+    };
+
+    const TEX_H = 128;
+    let tex = null;
+    let texAspect = 8;
+    let tileWorld = 1;
+    let scroll = 0;
+    let lastW = 1;
+    let lastH = 0.5;
+
+    const frameMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: shared.uTime,       // mismos objetos: se actualizan solos con el plane
+        uOpacity: shared.uOpacity,
+        uWidth: shared.uWidth,
+        uScroll: { value: 0 },
+        uTexture: { value: null },
+      },
+      vertexShader: `
+      attribute vec2 aPlaneUv;
+      uniform float uTime;
+      uniform float uWidth;
+      varying vec2 vUv;
+      varying float vShade;
+
+      void main() {
+        vUv = uv;
+        vec3 pos = position;
+
+        // Misma onda que el plane (aPlaneUv = coordenada del vértice sobre el plane)
+        float pin = smoothstep(0.0, 0.9, aPlaneUv.x);
+        float p1 = aPlaneUv.x * 5.0  - uTime * 2.0 + aPlaneUv.y * 2.0;
+        float p2 = aPlaneUv.x * 9.0  - uTime * 3.2 + aPlaneUv.y * 4.5;
+        float p3 = aPlaneUv.y * 4.0  + uTime * 1.2 + aPlaneUv.x * 2.0;
+
+        float wave = sin(p1) + 0.5 * sin(p2) + 0.3 * sin(p3);
+        pos.z += wave * uWidth * 0.025 * pin;
+
+        float slope = 5.0 * cos(p1) + 0.5 * 9.0 * cos(p2) + 0.3 * 2.0 * cos(p3);
+        vShade = slope * pin;
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+      }
+    `,
+      fragmentShader: `
+      uniform sampler2D uTexture;
+      uniform float uOpacity;
+      uniform float uScroll;
+      varying vec2 vUv;
+      varying float vShade;
+
+      void main() {
+        vec4 c = texture2D(uTexture, vec2(vUv.x - uScroll, vUv.y));
+        if (c.a < 0.01) discard;
+        float shade = 1.0 + vShade * 0.06;
+        gl_FragColor = vec4(c.rgb * shade, c.a * uOpacity);
+      }
+    `,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+
+    const mesh = new THREE.Mesh(new THREE.BufferGeometry(), frameMaterial);
+    mesh.frustumCulled = false;
+    mesh.position.z = 0.002; // apenas delante del video para evitar z-fighting
+
+    // Un "tile" = todos los textos + separador. Se repite a lo largo del perímetro.
+    function drawTexture() {
+      const text = cfg.items.join(cfg.separator) + cfg.separator;
+      const probe = document.createElement("canvas").getContext("2d");
+      probe.font = cfg.font;
+      const textW = Math.ceil(probe.measureText(text).width);
+
+      const cv = document.createElement("canvas");
+      cv.width = Math.max(textW, TEX_H);
+      cv.height = TEX_H;
+      const c2d = cv.getContext("2d");
+
+      if (cfg.background) {
+        c2d.fillStyle = cfg.background;
+        c2d.fillRect(0, 0, cv.width, cv.height);
+      }
+      c2d.font = cfg.font;
+      c2d.fillStyle = cfg.color;
+      c2d.textBaseline = "middle";
+      c2d.fillText(text, 0, TEX_H / 2 + 4);
+
+      if (tex) tex.dispose();
+      tex = new THREE.CanvasTexture(cv);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      texAspect = cv.width / TEX_H;
+      frameMaterial.uniforms.uTexture.value = tex;
+    }
+
+    // redraw = true fuerza volver a dibujar el texto (por ejemplo, cuando carga la fuente)
+    function rebuild(w = lastW, h = lastH, redraw = false) {
+      lastW = w;
+      lastH = h;
+      if (!tex || redraw) drawTexture();
+
+      const t = w * cfg.thickness;
+      const P = 2 * (w + 2 * t) + 2 * h;                              // perímetro total
+      const repeats = Math.max(1, Math.round(P / (t * texAspect)));   // entero => loop sin salto
+      tileWorld = P / repeats;
+
+      // Cada lado: punto inicial en el borde interior, dirección, largo y normal hacia afuera
+      const sides = [
+        { A: [-w / 2 - t,  h / 2], d: [ 1,  0], len: w + 2 * t, n: [ 0,  1] }, // arriba
+        { A: [ w / 2,      h / 2], d: [ 0, -1], len: h,         n: [ 1,  0] }, // derecha
+        { A: [ w / 2 + t, -h / 2], d: [-1,  0], len: w + 2 * t, n: [ 0, -1] }, // abajo
+        { A: [-w / 2,     -h / 2], d: [ 0,  1], len: h,         n: [-1,  0] }, // izquierda
+      ];
+
+      const pos = [], planeUv = [], uvs = [], idx = [];
+      let sOff = 0;
+      let base = 0;
+
+      sides.forEach(({ A, d, len, n }) => {
+        const N = Math.max(2, Math.ceil((len / w) * 48));
+        for (let i = 0; i <= N; i++) {
+          const a = i / N;
+          const ix = A[0] + d[0] * a * len;
+          const iy = A[1] + d[1] * a * len;
+          for (let k = 0; k < 2; k++) {                 // k=0 borde interior, k=1 exterior
+            const x = ix + n[0] * t * k;
+            const y = iy + n[1] * t * k;
+            pos.push(x, y, 0);
+            planeUv.push((x + w / 2) / w, (y + h / 2) / h); // UV del plane, para la onda
+            uvs.push(((sOff + a * len) / P) * repeats, k);
+          }
+        }
+        for (let i = 0; i < N; i++) {
+          const a = base + i * 2;
+          idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+        }
+        base += (N + 1) * 2;
+        sOff += len;
+      });
+
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+      geo.setAttribute("aPlaneUv", new THREE.Float32BufferAttribute(planeUv, 2));
+      geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+      geo.setIndex(idx);
+
+      mesh.geometry.dispose();
+      mesh.geometry = geo;
+    }
+
+    function update(dt) {
+      scroll = (scroll + (dt * cfg.speed * cfg.direction * lastW) / tileWorld) % 1;
+      frameMaterial.uniforms.uScroll.value = scroll;
+    }
+
+    // Si la fuente aún no cargó al dibujar el canvas, redibuja cuando esté lista
+    if (document.fonts && document.fonts.load) {
+      document.fonts.load(cfg.font).then(() => rebuild(lastW, lastH, true)).catch(() => {});
+    }
+
+    return { mesh, rebuild, update };
+  }
+
+  // `video` es opcional: si se pasa, el plane pausa/reanuda el video según esté dentro o fuera de rango
+  // `marquee` es opcional: si se pasa, dibuja el marco de texto alrededor del plane
+  function createFollowPlane({ tex, cam, scn, minZ, maxZ, buttonId, video, marquee }) {
     const mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(1, 0.5, 1, 24), // antes 50x50 (2601 vértices); el wave solo usa y
+      new THREE.PlaneGeometry(1, 0.5, 40, 20),
       createMaterial(tex)
     );
-    mesh.position.set(0, 0, -PLANE_DISTANCE); // local a la cámara
+     mesh.position.set(0, 0, -getPlaneDistance()); // local a la cámara
     mesh.visible = false;
     cam.add(mesh);
     if (cam.parent !== scn) scn.add(cam); // los hijos de la cámara solo se renderizan si la cámara está en la escena
@@ -419,10 +651,17 @@ function main() {
     let lagX = cam.position.x;
     let lagY = cam.position.y;
 
+    // Marco de texto: hijo del plane, así hereda posición, arrastre y visibilidad
+    const frame = marquee ? createMarqueeFrame(u, marquee) : null;
+    if (frame) mesh.add(frame.mesh);
+
     function resize() {
       const w = window.innerWidth * 0.003;
       mesh.geometry.dispose();
-      mesh.geometry = new THREE.PlaneGeometry(w, w / 2, 1, 24);
+      mesh.geometry = new THREE.PlaneGeometry(w, w / 2, 40, 20);
+      u.uWidth.value = w; // la amplitud escala con el tamaño
+      mesh.position.z = -getPlaneDistance(); // recalcula la distancia según el ancho
+      if (frame) frame.rebuild(w, w / 2);
     }
     resize();
     window.addEventListener("resize", resize);
@@ -443,9 +682,24 @@ function main() {
       mesh.visible = show; // fuera de rango no hay draw call
       if (show) {
         u.uTime.value += dt * 0.6; // equivale a 0.01 por frame a 60fps
+        if (frame) frame.update(dt);
         if (PLANE_DRAG) {
           mesh.position.x = lagX - cam.position.x;
           mesh.position.y = lagY - cam.position.y;
+        }
+      }
+
+      // Play/pause del video: solo decodifica mientras el plane es visible
+      if (video) {
+        if (inRange && video.paused) {
+          video.play().catch(() => {
+            // Autoplay bloqueado: reintenta tras la primera interacción (botonInicio)
+            document.getElementById("botoninicio")?.addEventListener("click", () => {
+              video.play().catch((e) => console.warn("No se pudo reproducir el video:", e));
+            }, { once: true });
+          });
+        } else if (!inRange && !video.paused) {
+          video.pause();
         }
       }
 
@@ -459,13 +713,22 @@ function main() {
     return { mesh, update };
   }
 
+  // ── Planes: personaliza aquí el texto de cada marco ──
   const planeUno = createFollowPlane({
     tex: texUno,
     cam: camera,
     scn: scene,
     minZ: 35,
     maxZ: 80,
-    buttonId: "botonsecundariouno"
+    buttonId: "botonsecundariouno",
+    video: videoUno,
+    marquee: {
+      items: ["SAMY COSMETICS", "WEB APP", "LIP FILTER"],
+      separator: "   ✦   ",
+      color: "#ffffff",
+      background: "rgba(0,0,0,0.6)",
+      speed: 0.08
+    }
   });
 
   const planeDos = createFollowPlane({
@@ -474,16 +737,29 @@ function main() {
     scn: sceneDos,
     minZ: 1040,
     maxZ: 1090,
-    buttonId: "botonsecundariodos"
+    buttonId: "botonsecundariodos",
+    video: videoDos,
+    marquee: {
+      items: ["SAMY COSMETICS", "UX / UI", "MEDIAPIPE"],
+      color: "#FFDA05",
+      background: "rgba(4,0,255,0.7)",
+      direction: -1 // gira en sentido contrario
+    }
   });
 
   const planeTres = createFollowPlane({
-    tex: texDos,
+    tex: texTres,
     cam: cameraTres,
     scn: sceneTres,
     minZ: 20,
     maxZ: 110,
-    buttonId: "botonsecundariotres"
+    buttonId: "botonsecundariotres",
+    video: videoTres,
+    marquee: {
+      items: ["DSAIN", "PORTFOLIO", "THREE.JS"],
+      background: null, // sin fondo, solo letras
+      thickness: 0.04
+    }
   });
 
   // ───────────────────────── Dunas ─────────────────────────
