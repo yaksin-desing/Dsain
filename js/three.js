@@ -43,7 +43,7 @@ gsap.registerPlugin(ScrollTrigger);
 const SCRUB_SMOOTH = 0.5;    // antes 2. Smooth Scrollbar ya suaviza, así que un scrub alto suma retraso.
 // Distancia del plane a la cámara según el ancho de pantalla (menor = más cerca = se ve más grande)
 const PLANE_DISTANCE_MOBILE = 1.7;   // pantallas <= PLANE_BP_MOBILE
-const PLANE_DISTANCE_DESKTOP = 2.9;  // pantallas >= PLANE_BP_DESKTOP (tu valor actual)
+const PLANE_DISTANCE_DESKTOP = 2;  // pantallas >= PLANE_BP_DESKTOP (tu valor actual)
 const PLANE_BP_MOBILE = 450;         // ancho donde empieza a acercarse
 const PLANE_BP_DESKTOP = 990;        // ancho donde vuelve a la distancia de escritorio
 
@@ -73,7 +73,7 @@ function main() {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
-    70,
+    80,
     container.clientWidth / container.clientHeight,
     0.1,
     1000
@@ -726,8 +726,10 @@ function main() {
       items: ["SAMY COSMETICS", "WEB APP", "LIP FILTER"],
       separator: "   ✦   ",
       color: "#ffffff",
-      background: "rgba(0,0,0,0.6)",
-      speed: 0.08
+      background: "rgba(4,0,255,0.7)",
+      speed: 0.08,
+      direction: 1, // gira en sentido
+      thickness: 0.04 // Grosor
     }
   });
 
@@ -741,9 +743,12 @@ function main() {
     video: videoDos,
     marquee: {
       items: ["SAMY COSMETICS", "UX / UI", "MEDIAPIPE"],
-      color: "#FFDA05",
+      separator: "   ✦   ",
+      color: "#ffffff",
       background: "rgba(4,0,255,0.7)",
-      direction: -1 // gira en sentido contrario
+      speed: 0.08,
+      direction: 1, // gira en sentido
+      thickness: 0.04 // Grosor
     }
   });
 
@@ -756,9 +761,13 @@ function main() {
     buttonId: "botonsecundariotres",
     video: videoTres,
     marquee: {
-      items: ["DSAIN", "PORTFOLIO", "THREE.JS"],
-      background: null, // sin fondo, solo letras
-      thickness: 0.04
+      items: ["DSAIN", "PORTFOLIO", "UX-UI", "YAKSIN SAIN"],
+      separator: "   ✦   ",
+      color: "#ffffff",
+      background: "rgba(4,0,255,0.7)",
+      speed: 0.08,
+      direction: 1, // gira en sentido
+      thickness: 0.04 // Grosor
     }
   });
 
@@ -979,16 +988,23 @@ function main() {
           duration: 10,
           y: 3,
           z: 1100,
-          ease: "sine.in",
+          ease: "none",
         })
-
-
+        .to(cameraTres.position, {
+          duration: 4,
+          x: 0,
+          y: 3,
+          z: 20,
+          ease: "none",
+        })
         .to(cameraTres.position, {
           duration: 10,
           x: 0,
           y: 3,
-          z: 163,
+          z: 157,
+          ease: "none",
         })
+
     });
   });
 
