@@ -58,7 +58,31 @@ function getPlaneDistance() {
 }
 const PLANE_DRAG = true;     // true = conserva el arrastre sutil en x/y; false = sigue la cámara exacto
 const ENABLE_SKY = true;     // false = el cielo (backgroundRect) no se agrega a la escena (sirve para medir rendimiento)
-const DEBUG_STATS = true;    // true = muestra el panel de FPS + escena actual, draw calls y triángulos (ponlo en false en producción)
+const DEBUG_STATS = false;   // true = muestra el panel de FPS + escena actual, draw calls y triángulos (ponlo en false en producción)
+
+// ───────────────────────── Cursor "Ver proyecto" (hover sobre las banderas) ─────────────────────────
+const CURSOR_LABELS = {
+  en: "View project",
+  es: "Ver proyecto",
+  fr: "Voir le projet",
+};
+const CURSOR_SIZE = 110;     // diámetro del círculo en px
+const CURSOR_HIDE_NATIVE = true; // true = oculta el cursor del sistema mientras el círculo está visible
+// Ruta relativa al HTML (no al CSS): el index está en la raíz, por eso es ./src y no ../src
+const CURSOR_FONT_URL = "./src/fonts/Panchang-Light.woff2";
+const CURSOR_FONT_SIZE = 11; // px; Panchang es ancha, así que va un poco más chica que DM Mono
+
+// Dispositivo con mouse (portátil/PC): usa el círculo "Ver proyecto" y oculta los botones inferiores.
+// Móvil y tablet (táctiles): mantienen los botones inferiores.
+const HAS_MOUSE = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+// Sobre estos elementos el círculo no aparece (menú, botones, audio...)
+const CURSOR_UI_SELECTOR = "a, button, nav, .contactnav, .cont_menu, .audio-container";
+
+// Se lee en cada hover, así que si cambias el idioma se actualiza solo
+function getCursorLabel() {
+  const lang = (document.documentElement.lang || "en").toLowerCase().slice(0, 2);
+  return CURSOR_LABELS[lang] || CURSOR_LABELS.en;
+}
 
 // =========================================================
 // 🌈 GRAINIENT — configuración del fondo animado (backgroundRect)
@@ -881,6 +905,9 @@ function main() {
 
     const u = mesh.material.uniforms;
     const button = document.getElementById(buttonId);
+    // Con mouse el botón inferior no hace falta (lo reemplaza el círculo); el link sigue en el DOM
+    // para que el click sobre la bandera pueda activarlo (y Barba maneje la transición).
+    if (button && HAS_MOUSE) button.style.display = "none";
     let btnShown = null;
     let lagX = cam.position.x;
     let lagY = cam.position.y;
@@ -938,13 +965,14 @@ function main() {
       }
 
       // el botón solo se toca cuando cambia de estado (antes: escritura de estilo en cada frame)
-      if (button && btnShown !== inRange) {
+      if (button && !HAS_MOUSE && btnShown !== inRange) {
         btnShown = inRange;
         button.style.bottom = inRange ? "-20vh" : "-45vh";
       }
     }
 
-    return { mesh, update };
+    // cam, u y button se exponen para el raycast y el click del cursor "Ver proyecto"
+    return { mesh, update, cam, u, button };
   }
 
   // ── Planes: personaliza aquí el texto de cada marco ──
@@ -1004,6 +1032,111 @@ function main() {
       thickness: 0.04 // Grosor
     }
   });
+
+  // ═════════════════════════════════════════════════════════════════
+  //  CURSOR "VER PROYECTO": círculo blanco que aparece al pasar el
+  //  mouse sobre una bandera. Solo en dispositivos con mouse.
+  // ═════════════════════════════════════════════════════════════════
+  let updateHoverCursor = () => {}; // se reasigna abajo si hay hover; animate() lo llama cada frame
+
+  if (HAS_MOUSE) {
+    // Fuente del círculo: se registra con un nombre propio para no depender del @font-face del CSS.
+    // El navegador reutiliza el archivo en caché, así que no se descarga dos veces.
+    const cursorFont = new FontFace("PanchangCursor", "url(" + CURSOR_FONT_URL + ")", { weight: "300" });
+    cursorFont.load()
+      .then((f) => document.fonts.add(f))
+      .catch((e) => console.warn("No se pudo cargar la fuente del cursor:", e));
+
+    const hoverCursor = document.createElement("div");
+    hoverCursor.style.cssText =
+      "position:fixed;top:0;left:0;z-index:10001;" +
+      "width:" + CURSOR_SIZE + "px;height:" + CURSOR_SIZE + "px;" +
+      "border-radius:50%;background:#fff;color:#000;display:flex;" +
+      "align-items:center;justify-content:center;text-align:center;padding:12px;" +
+      "box-sizing:border-box;font:300 " + CURSOR_FONT_SIZE + "px/1.3 'PanchangCursor',sans-serif;" +
+      "text-transform:uppercase;pointer-events:none;opacity:0;will-change:transform";
+    document.body.appendChild(hoverCursor);
+    gsap.set(hoverCursor, { xPercent: -50, yPercent: -50, scale: 0 });
+
+    const cursorMoveX = gsap.quickTo(hoverCursor, "x", { duration: 0.35, ease: "power3" });
+    const cursorMoveY = gsap.quickTo(hoverCursor, "y", { duration: 0.35, ease: "power3" });
+
+    const hoverRaycaster = new THREE.Raycaster();
+    const pointerNDC = new THREE.Vector2();
+    const pointerPx = { x: 0, y: 0 };
+    let pointerActive = false;
+    let pointerOverUI = false; // true si el mouse está sobre menú, botones, audio...
+    let cursorShown = false;
+    let currentLabel = "";
+
+    window.addEventListener("pointermove", (e) => {
+      pointerPx.x = e.clientX;
+      pointerPx.y = e.clientY;
+      pointerActive = true;
+      pointerOverUI = !!(e.target.closest && e.target.closest(CURSOR_UI_SELECTOR));
+      cursorMoveX(e.clientX);
+      cursorMoveY(e.clientY);
+    });
+    document.addEventListener("mouseleave", () => { pointerActive = false; });
+
+    // Click sobre la bandera = activar el link del botón oculto (así Barba hace su transición).
+    // isTrusted evita que el click programático vuelva a entrar en este handler.
+    window.addEventListener("click", (e) => {
+      if (!e.isTrusted || !cursorShown) return;
+      const hovered = getHoveredPlane();
+      if (hovered && hovered.button) hovered.button.click();
+    });
+
+    const hoverPlanes = [planeUno, planeDos, planeTres];
+
+    // Devuelve el plane bajo el mouse (o null)
+    function getHoveredPlane() {
+      if (!pointerActive || pointerOverUI) return null;
+
+      // Plane visible en este momento: el de mayor opacidad
+      let best = null;
+      for (const p of hoverPlanes) {
+        const op = p.u.uOpacity.value;
+        if (p.mesh.visible && op > 0.5 && (!best || op > best.u.uOpacity.value)) best = p;
+      }
+      if (!best) return null;
+
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointerNDC.x = ((pointerPx.x - rect.left) / rect.width) * 2 - 1;
+      pointerNDC.y = -((pointerPx.y - rect.top) / rect.height) * 2 + 1;
+
+      // Cada plane se testea con SU cámara (camera, cameraDos o cameraTres)
+      hoverRaycaster.setFromCamera(pointerNDC, best.cam);
+      return hoverRaycaster.intersectObject(best.mesh, false).length ? best : null;
+    }
+
+    updateHoverCursor = function () {
+      const shouldShow = !!getHoveredPlane();
+
+      if (shouldShow) {
+        const label = getCursorLabel();
+        if (label !== currentLabel) {
+          currentLabel = label;
+          hoverCursor.textContent = label;
+        }
+      }
+
+      // Solo anima cuando cambia el estado
+      if (shouldShow !== cursorShown) {
+        cursorShown = shouldShow;
+        gsap.to(hoverCursor, {
+          scale: shouldShow ? 1 : 0,
+          opacity: shouldShow ? 1 : 0,
+          duration: 0.35,
+          ease: shouldShow ? "back.out(1.7)" : "power2.in",
+          overwrite: "auto",
+        });
+        if (CURSOR_HIDE_NATIVE) {
+          document.documentElement.style.cursor = shouldShow ? "none" : "";
+        }
+      }
+    };
+  }
 
   // ───────────────────────── Dunas ─────────────────────────
   const textureLoaderDunas = new THREE.TextureLoader();
@@ -1381,6 +1514,9 @@ function main() {
         textMeshes["text2"].position.z += (targetTextZ - textMeshes["text2"].position.z) * 0.1;
       }
     }
+
+    // Cursor "Ver proyecto": va después del render para que las matrices de los planes estén al día
+    updateHoverCursor();
 
     updateAnimations();
 
