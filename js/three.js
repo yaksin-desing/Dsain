@@ -57,7 +57,193 @@ function getPlaneDistance() {
   return THREE.MathUtils.lerp(PLANE_DISTANCE_MOBILE, PLANE_DISTANCE_DESKTOP, t);
 }
 const PLANE_DRAG = true;     // true = conserva el arrastre sutil en x/y; false = sigue la cámara exacto
-const DEBUG_STATS = false;   // true = muestra el panel de FPS
+const ENABLE_SKY = true;     // false = el cielo (backgroundRect) no se agrega a la escena (sirve para medir rendimiento)
+const DEBUG_STATS = true;    // true = muestra el panel de FPS + escena actual, draw calls y triángulos (ponlo en false en producción)
+
+// =========================================================
+// 🌈 GRAINIENT — configuración del fondo animado (backgroundRect)
+// Ajusta estos valores para personalizar el gradiente.
+// =========================================================
+const GRAINIENT_CONFIG = {
+  color1: "#041dff",
+  color2: "#e8e6ff",
+  color3: "#2b80ff",
+
+  speed: 0.1,         // 0 - 2   → velocidad global de la animación
+  balance: 0.5,       // 0 - 1   → hacia qué color se inclina la mezcla
+  rotation: 0.15,     // 0 - 1   → rotación orgánica del campo de ruido
+
+  warpStrength: 0.55, // 0 - 1.5 → intensidad del "empuje" líquido
+  warpFreq: 1.4,      // 0.3 - 4 → frecuencia/ondulación del warp
+
+  angle: 70,          // 0 - 360 → ángulo base del gradiente
+  softness: 0.45,     // 0.05 - 1 → qué tan difuminadas son las transiciones
+
+  contrast: 1.05,     // 0.5 - 1.8
+  saturation: 1.1,    // 0 - 2
+
+  // Desvanece el borde superior del plano para que se funda con
+  // scene.background (azul) y no se vea una línea dura. 0 = sin desvanecer.
+  fadeTop: 0.25,      // 0 - 0.6 → fracción superior del plano que se desvanece
+};
+
+// Fondo FIJO (ya no se anima en la timeline): un tramo de esfera que rodea la
+// escena, así cubre un ángulo real de visión en vez de un plano plano.
+// Se ve desde adentro y está centrado hacia -z (hacia donde mira la cámara).
+const BG_COVER_X_DEG = 180;         // cobertura horizontal (grados)
+const BG_COVER_Y_DEG = 57;          // cobertura vertical (grados)
+const BG_CENTER_Y = 50;             // sube TODO el cielo esta cantidad (unidades) para separarlo de los objetos
+const BG_ELEVATION_START_DEG = -21; // borde inferior, medido desde el centro de la esfera (que ahora está en
+                                    // y = BG_CENTER_Y). -21° compensa la subida: desde la cámara el borde
+                                    // inferior sigue viéndose a ~-15°, escondido detrás de las dunas
+const BG_RADIUS = 500;              // ya no importa para que toque objetos (se dibuja sin test de profundidad);
+                                    // solo debe ser mayor que la distancia máxima de la cámara (z = 90)
+                                    // y menor que camera.far
+
+// Cielo optimizado: el degradado se calcula a baja resolución y a pocos FPS.
+// Es suave y se mueve despacio, así que a ojo no se nota, pero el costo por
+// píxel de pantalla baja a casi cero (solo se muestrea una textura).
+const SKY_RT_WIDTH = window.innerWidth < 770 ? 256 : 512; // proporción 2:1 = 180° x 90°
+const SKY_RT_HEIGHT = SKY_RT_WIDTH / 2;
+const SKY_UPDATE_FPS = 20;                                // cuántas veces por segundo se recalcula
+const SKY_UPDATE_INTERVAL = 1 / SKY_UPDATE_FPS;
+
+// Menos octavas de ruido en pantallas chicas: es lo más caro del shader
+const GRAINIENT_OCTAVES = window.innerWidth < 770 ? 3 : 5;
+
+// El shader ya NO se dibuja sobre la esfera a resolución de pantalla: se calcula en
+// un render target pequeño (quad a pantalla completa) y la esfera solo muestrea esa textura.
+const GRAINIENT_VERTEX_SHADER = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = vec4(position.xy, 0.0, 1.0);
+  }
+`;
+
+const GRAINIENT_FRAGMENT_SHADER = `
+  precision highp float;
+  #define OCTAVES ${GRAINIENT_OCTAVES}
+  varying vec2 vUv;
+
+  uniform float uTime;
+  uniform float uAspect;
+
+  uniform vec3 uColor1;
+  uniform vec3 uColor2;
+  uniform vec3 uColor3;
+
+  uniform float uSpeed;
+  uniform float uBalance;
+  uniform float uRotation;
+
+  uniform float uWarpStrength;
+  uniform float uWarpFreq;
+
+  uniform float uAngle;
+  uniform float uSoftness;
+
+  uniform float uContrast;
+  uniform float uSaturation;
+  uniform float uFadeTop;
+  uniform vec3 uBgColor;
+
+  vec2 hash(vec2 p) {
+    p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+    return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+  }
+
+  float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(
+      mix(dot(hash(i + vec2(0.0,0.0)), f - vec2(0.0,0.0)),
+          dot(hash(i + vec2(1.0,0.0)), f - vec2(1.0,0.0)), u.x),
+      mix(dot(hash(i + vec2(0.0,1.0)), f - vec2(0.0,1.0)),
+          dot(hash(i + vec2(1.0,1.0)), f - vec2(1.0,1.0)), u.x),
+      u.y
+    );
+  }
+
+  float fbm(vec2 p) {
+    float v = 0.0;
+    float a = 0.5;
+    mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
+    for (int i = 0; i < OCTAVES; i++) {
+      v += a * noise(p);
+      p = m * p;
+      a *= 0.5;
+    }
+    return v;
+  }
+
+  vec3 rgb2hsv(vec3 c) {
+    vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
+    vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0*d + e)), d / (q.x + e), q.x);
+  }
+  vec3 hsv2rgb(vec3 c) {
+    vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+  }
+
+  void main() {
+    // vUv cubre todo el plano; uAspect corrige la proporción del plano
+    // para que el ruido no se estire.
+    vec2 p = (vUv - 0.5);
+    p.x *= uAspect;
+
+    float t = uTime * uSpeed;
+
+    float rot = uRotation * t * 0.3;
+    mat2 rotM = mat2(cos(rot), -sin(rot), sin(rot), cos(rot));
+    vec2 rp = rotM * p;
+
+    vec2 warpUv = rp * uWarpFreq + vec2(t * 0.15, -t * 0.12);
+    float n1 = fbm(warpUv);
+    float n2 = fbm(warpUv + vec2(5.2, 1.3) + t * 0.08);
+    vec2 warped = rp + uWarpStrength * vec2(n1, n2);
+
+    float rad = radians(uAngle);
+    vec2 axis = vec2(cos(rad), sin(rad));
+    float g = dot(warped, axis) + 0.5;
+
+    float n3 = fbm(warped * 1.3 - t * 0.05);
+    g += n3 * 0.35;
+
+    float soft = max(uSoftness, 0.001);
+    float m1 = smoothstep(0.5 - soft, 0.5 + soft, g + (uBalance - 0.5));
+
+    vec3 col = mix(uColor1, uColor2, m1);
+    col = mix(col, uColor3, clamp((g - 0.65) / max(soft, 0.05), 0.0, 1.0) * 0.85);
+
+    float swirl = smoothstep(0.3, 0.9, fbm(warped * 0.8 + 3.1));
+    col = mix(col, uColor3, swirl * 0.25);
+
+    col = (col - 0.5) * uContrast + 0.5;
+    vec3 hsv = rgb2hsv(clamp(col, 0.0, 1.0));
+    hsv.y = clamp(hsv.y * uSaturation, 0.0, 1.0);
+    col = hsv2rgb(hsv);
+
+    col = clamp(col, 0.0, 1.0);
+
+    // Funde el borde superior con el azul de scene.background. Sin alpha:
+    // el cielo es opaco y se dibuja primero, sin test de profundidad.
+    float fade = smoothstep(1.0 - uFadeTop, 1.0, vUv.y);
+    col = mix(col, uBgColor, fade);
+    gl_FragColor = vec4(col, 1.0);
+  }
+`;
+
+function colorToVec3(hex) {
+  const c = new THREE.Color(hex);
+  return new THREE.Vector3(c.r, c.g, c.b);
+}
 
 function main() {
   const idioma = document.documentElement.lang;
@@ -251,32 +437,80 @@ function main() {
 
   updateAllTexts();
 
-  // ───────────────────────── Fondo con gradiente ─────────────────────────
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
-  gradient.addColorStop(0, "#FFEBA8FF"); // abajo
-  gradient.addColorStop(1, "#0400FFFF"); // arriba
-
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  const texture = new THREE.CanvasTexture(canvas);
-
-  const geometry = new THREE.PlaneGeometry(1500, 150, 1);
-  const material = new THREE.MeshBasicMaterial({
-    map: texture,
-    transparent: true,
-    opacity: 1,
+  // ───────────────────────── Fondo animado (Grainient) ─────────────────────────
+  // Se mantiene el nombre `backgroundRect`, pero ahora es un tramo de esfera FIJO:
+  // ya no se mueve en la timeline, solo el shader se anima.
+  const grainientMaterial = new THREE.ShaderMaterial({
+    vertexShader: GRAINIENT_VERTEX_SHADER,
+    fragmentShader: GRAINIENT_FRAGMENT_SHADER,
+    depthTest: false,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    uniforms: {
+      uTime: { value: 0 },
+      uAspect: { value: BG_COVER_X_DEG / BG_COVER_Y_DEG },
+      uColor1: { value: colorToVec3(GRAINIENT_CONFIG.color1) },
+      uColor2: { value: colorToVec3(GRAINIENT_CONFIG.color2) },
+      uColor3: { value: colorToVec3(GRAINIENT_CONFIG.color3) },
+      uSpeed: { value: GRAINIENT_CONFIG.speed },
+      uBalance: { value: GRAINIENT_CONFIG.balance },
+      uRotation: { value: GRAINIENT_CONFIG.rotation },
+      uWarpStrength: { value: GRAINIENT_CONFIG.warpStrength },
+      uWarpFreq: { value: GRAINIENT_CONFIG.warpFreq },
+      uAngle: { value: GRAINIENT_CONFIG.angle },
+      uSoftness: { value: GRAINIENT_CONFIG.softness },
+      uContrast: { value: GRAINIENT_CONFIG.contrast },
+      uSaturation: { value: GRAINIENT_CONFIG.saturation },
+      uFadeTop: { value: GRAINIENT_CONFIG.fadeTop },
+      uBgColor: { value: colorToVec3(scene.background.getHex()) },
+    },
   });
 
-  const backgroundRect = new THREE.Mesh(geometry, material);
-  backgroundRect.position.set(0, -30, -189);
-  backgroundRect.rotation.set(0, 0, 0);
-  scene.add(backgroundRect);
+  // Render target pequeño donde se calcula el degradado, con su mini escena (un quad)
+  const skyRT = new THREE.WebGLRenderTarget(SKY_RT_WIDTH, SKY_RT_HEIGHT, {
+    minFilter: THREE.LinearFilter,
+    magFilter: THREE.LinearFilter,
+    depthBuffer: false,
+    stencilBuffer: false,
+  });
+  const skyScene = new THREE.Scene();
+  const skyCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const skyQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), grainientMaterial);
+  skyQuad.frustumCulled = false;
+  skyScene.add(skyQuad);
+
+  // La esfera solo muestrea la textura: material básico, opaco y sin test de profundidad
+  const skyDisplayMaterial = new THREE.MeshBasicMaterial({
+    map: skyRT.texture,
+    side: THREE.BackSide, // la cámara está dentro de la esfera
+    depthTest: false,     // ignora la profundidad: NUNCA se cruza con los objetos
+    depthWrite: false,
+    fog: false,
+    toneMapped: false,
+  });
+
+  // Tramo de esfera: theta se mide desde el polo (+y), phi alrededor del eje y.
+  const bgPhiLength = THREE.MathUtils.degToRad(BG_COVER_X_DEG);
+  const bgPhiStart = THREE.MathUtils.degToRad(270) - bgPhiLength / 2; // 270° = dirección -z
+  const bgThetaLength = THREE.MathUtils.degToRad(BG_COVER_Y_DEG);
+  const bgThetaStart = THREE.MathUtils.degToRad(90 - (BG_ELEVATION_START_DEG + BG_COVER_Y_DEG));
+
+  const backgroundRect = new THREE.Mesh(
+    new THREE.SphereGeometry(
+      BG_RADIUS, 64, 32,
+      bgPhiStart, bgPhiLength,
+      bgThetaStart, bgThetaLength
+    ),
+    skyDisplayMaterial
+  );
+  backgroundRect.position.set(0, BG_CENTER_Y, 0);
+  backgroundRect.renderOrder = -1;      // se dibuja PRIMERO de todo; los objetos se pintan encima
+  backgroundRect.frustumCulled = false; // la cámara siempre está dentro de la esfera
+  if (ENABLE_SKY) scene.add(backgroundRect);
+
+  // Tiempo del shader y acumulador para actualizar el render target a SKY_UPDATE_FPS
+  let backgroundTime = 0;
+  let skyAccum = SKY_UPDATE_INTERVAL; // así se dibuja el primer frame de inmediato
 
   // ───────────────────────── Luces ─────────────────────────
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -866,8 +1100,6 @@ function main() {
   }
 
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  texture.encoding = THREE.sRGBEncoding;
-  material.map.encoding = THREE.sRGBEncoding;
 
   // ───────────────────────── Botón de inicio ─────────────────────────
   const botonInicio = document.getElementById("botoninicio");
@@ -926,14 +1158,6 @@ function main() {
       y: 0,
       z: 0,
       ease: "power3.easeInOut",
-    });
-
-    inicioescena.to(backgroundRect.position, {
-      delay: 0,
-      x: 0,
-      y: 60,
-      z: -190,
-      ease: "none",
     });
 
     inicioescena.to(camera.position, {
@@ -1014,8 +1238,23 @@ function main() {
   const clock = new THREE.Clock();
 
   const stats = new Stats();
-  stats.showPanel(0);
+  stats.showPanel(0); // 0 = FPS, 1 = ms, 2 = MB (clic en el panel para cambiar)
   if (DEBUG_STATS) container.appendChild(stats.dom);
+
+  // Panel extra: escena actual + draw calls / triángulos por frame.
+  // Hay varios render() por frame (escena 1, portal, escena 3), así que se
+  // desactiva el reset automático y se acumulan todos en animate().
+  let debugInfo = null;
+  let debugLastUpdate = 0;
+  if (DEBUG_STATS) {
+    renderer.info.autoReset = false;
+    debugInfo = document.createElement("div");
+    debugInfo.style.cssText =
+      "position:fixed;top:48px;left:0;z-index:10000;padding:4px 6px;" +
+      "font:11px/1.4 monospace;color:#0ff;background:rgba(0,0,0,.75);" +
+      "pointer-events:none;white-space:pre";
+    document.body.appendChild(debugInfo);
+  }
 
   // Visibilidad de meshes: solo se recorre la escena cuando el estado cambia (antes: traverse en cada frame)
   let sceneMeshesOn = null;
@@ -1053,7 +1292,10 @@ function main() {
   // ───────────────────────── Loop principal ─────────────────────────
   // Va en el ticker de GSAP: la cámara (scrub) y el render se actualizan en el mismo tick
   function animate() {
-    if (DEBUG_STATS) stats.begin();
+    if (DEBUG_STATS) {
+      stats.begin();
+      renderer.info.reset();
+    }
 
     const delta = Math.min(clock.getDelta(), 0.05);
 
@@ -1072,6 +1314,23 @@ function main() {
     const inSecondStage = camera.position.z >= 90;
 
     syncMeshVisibility(inSecondStage);
+
+    // El cielo solo existe mientras la escena 1 está activa. Se asigna DESPUÉS de
+    // syncMeshVisibility, que si no lo volvería a encender al cambiar de estado.
+    backgroundRect.visible = ENABLE_SKY && !inSecondStage;
+
+    // Cielo: recalcula el render target pequeño solo si es visible y toca actualizar
+    if (backgroundRect.visible) {
+      backgroundTime += delta;
+      skyAccum += delta;
+      if (skyAccum >= SKY_UPDATE_INTERVAL) {
+        skyAccum = 0;
+        grainientMaterial.uniforms.uTime.value = backgroundTime;
+        renderer.setRenderTarget(skyRT);
+        renderer.render(skyScene, skyCamera);
+        renderer.setRenderTarget(null);
+      }
+    }
 
     planeUno.update(delta);
     planeDos.update(delta, inSecondStage);
@@ -1125,7 +1384,23 @@ function main() {
 
     updateAnimations();
 
-    if (DEBUG_STATS) stats.end();
+    if (DEBUG_STATS) {
+      const now = performance.now();
+      if (now - debugLastUpdate > 500) {
+        debugLastUpdate = now;
+        const stage = !inSecondStage
+          ? "Escena 1"
+          : (cameraDos.position.z >= 1100 ? "Escena 3" : "Escena 2 (portal)");
+        const i = renderer.info;
+        debugInfo.textContent =
+          stage + "\n" +
+          "draw calls: " + i.render.calls + "\n" +
+          "triángulos: " + i.render.triangles + "\n" +
+          "geometrías: " + i.memory.geometries + "\n" +
+          "texturas: " + i.memory.textures;
+      }
+      stats.end();
+    }
   }
 
   gsap.ticker.add(animate);
