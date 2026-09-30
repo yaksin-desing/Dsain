@@ -1,18 +1,7 @@
-import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-
-import {
-  GLTFLoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
-
-import {
-  Water
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Water.js";
-
-import {
-  Sky
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Sky.js";
-
-
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { Sky } from "three/addons/objects/Sky.js";
+import { Water } from "three/addons/objects/Water.js";
 const container = document.getElementById("scene-container");
 
 
@@ -35,7 +24,7 @@ cameraTres.position.set(0, 7, -21);
 // ============================================================
 
 // Configuración de la luz direccional
-const luzdospasillo = new THREE.DirectionalLight(0xffffff, 1);
+const luzdospasillo = new THREE.DirectionalLight(0xffffff, 1 * Math.PI);
 
 luzdospasillo.position.set(10, 80, -7);
 
@@ -78,7 +67,7 @@ sceneTres.add(luzdospasillo);
 
 
 // Configuración de la luz direccional
-const luzdospasillotres = new THREE.DirectionalLight(0xFDFFA2, 0.7);
+const luzdospasillotres = new THREE.DirectionalLight(0xFDFFA2, 0.7 * Math.PI);
 
 luzdospasillotres.position.set(-5, 5, 500);
 
@@ -98,7 +87,7 @@ sceneTres.add(luzdospasillotres);
 // LINTERNA
 // ============================================================
 
-const luzLinterna = new THREE.SpotLight(0xffffff, 1.7);
+const luzLinterna = new THREE.SpotLight(0xffffff, 1.7 * Math.PI );
 
 luzLinterna.position.set(0, 0, 0);
 
@@ -107,6 +96,8 @@ luzLinterna.angle = 2;
 
 // Qué tan difuso es el borde
 luzLinterna.penumbra = 0.9;
+
+luzLinterna.decay = 0; // sin caída con la distancia (como en r129)
 
 
 // Configurar el target
@@ -128,7 +119,7 @@ sceneTres.add(luzLinterna);
 const luzHemisferica = new THREE.HemisphereLight(
   0xffffff,
   0x444444,
-  1.2
+  1.2 * Math.PI
 );
 
 luzHemisferica.position.set(0, -5, 0);
@@ -937,14 +928,6 @@ const geometryTress =
   );
 
 
-// UV2 para AO
-geometryTress.setAttribute(
-  "uv2",
-  new THREE.BufferAttribute(
-    geometryTress.attributes.uv.array,
-    2
-  )
-);
 
 
 const planeTress =

@@ -1,13 +1,6 @@
-import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-
-import {
-  GLTFLoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
-
-import {
-  Sky
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Sky.js";
-
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { Sky } from "three/addons/objects/Sky.js";
 
 const container = document.getElementById("scene-container");
 
@@ -70,7 +63,7 @@ skyUniforms["sunPosition"].value.copy(sun);
 sceneDos.add(sky);
 
 ///////// Crear luz direccional  ////////////////
-const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8);
+const luzdospasillo = new THREE.DirectionalLight(0xffffff, 0.8 * Math.PI);
 luzdospasillo.position.set(0, 80, 970); // Posición de la luz
 luzdospasillo.castShadow = true; // Activar sombras
 
@@ -84,7 +77,7 @@ luzdospasillo.shadow.camera.far = 200; // Distancia máxima
 luzdospasillo.shadow.mapSize.width = 2000; // Ancho del mapa de sombras
 luzdospasillo.shadow.mapSize.height = 2000; // Alto del mapa de sombras
 luzdospasillo.shadow.bias = -0.001; // Previene artefactos de sombra
-luzdospasillo.shadow.opacity = 0; // Un valor entre 0 (transparente) y 1 (opaco)
+luzdospasillo.shadow.normalBias = 0.02; // opcional: evita manchas en las sombras
 
 // Cambiar el objetivo de la luz
 const targetdos = new THREE.Object3D();
@@ -103,7 +96,7 @@ luzdospasillo.target = targetdos; // Asignar el objetivo a la luz
 
 sceneDos.add(luzdospasillo);
 
-const ambientLightdos = new THREE.DirectionalLight(0xffffff, 0.2); // Luz ambiental
+const ambientLightdos = new THREE.DirectionalLight(0xffffff, 0.2 * Math.PI); // Luz ambiental
 ambientLightdos.position.set(0, -1, 800); // Posición de la luz
 sceneDos.add(ambientLightdos);
 
@@ -134,6 +127,7 @@ const displacementTexture = textureLoaderazulejo.load(
   aoTexture,
   displacementTexture,
 ].forEach((texture) => {
+  colorTexture.colorSpace = THREE.SRGBColorSpace;
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(110, 40); // Ajustar el número de repeticiones (10 en X, 2 en Y)

@@ -1,21 +1,9 @@
-import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-
-import {
-  FontLoader,
-  TextGeometry
-} from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
-
-import {
-  GLTFLoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
-
-import {
-  RGBELoader
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js";
-
-import {
-  Water
-} from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/objects/Water.js";
+import * as THREE from "three";
+import { FontLoader } from "three/addons/loaders/FontLoader.js";
+import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+import { Water } from "three/addons/objects/Water.js";
 
 import gsap from "https://cdn.skypack.dev/gsap@3.11.0";
 
@@ -561,12 +549,12 @@ function main() {
   let skyAccum = SKY_UPDATE_INTERVAL; // así se dibuja el primer frame de inmediato
 
   // ───────────────────────── Luces ─────────────────────────
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1 * Math.PI);
   directionalLight.position.set(-15, 16, -50);
   directionalLight.castShadow = true;
   scene.add(directionalLight);
 
-  const segundaLight = new THREE.DirectionalLight(0xff9419, 1);
+  const segundaLight = new THREE.DirectionalLight(0xff9419, 1 * Math.PI);
   segundaLight.position.set(0, 5, -40);
   segundaLight.target.position.set(0, 0, 0);
   scene.add(segundaLight);
@@ -611,7 +599,45 @@ function main() {
   let model = null;
 
   // ───────────────────────── Logo ─────────────────────────
+    // ───────────────────────── Logo ─────────────────────────
   const loader = new GLTFLoader();
+
+  // Entorno con bandas de color y franjas oscuras (es lo que crea los reflejos tipo arcoíris)
+  function makeGlassEnv() {
+    const w = 1024, h = 512;
+    const c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    const g = c.getContext("2d");
+
+    const bg = g.createLinearGradient(0, 0, 0, h);
+    bg.addColorStop(0, "#dfe8ff");
+    bg.addColorStop(1, "#0a1a80");
+    g.fillStyle = bg;
+    g.fillRect(0, 0, w, h);
+
+    const blob = (x, y, r, col) => {
+      const gr = g.createRadialGradient(x, y, 0, x, y, r);
+      gr.addColorStop(0, col);
+      gr.addColorStop(1, "rgba(255,255,255,0)");
+      g.fillStyle = gr;
+      g.fillRect(0, 0, w, h);
+    };
+    blob(150, 200, 170, "#ff7a00");
+    blob(420, 330, 200, "#0a5cff");
+    blob(700, 180, 160, "#ffb000");
+    blob(900, 320, 190, "#00d0ff");
+    blob(560, 260, 120, "#c040ff");
+
+    g.fillStyle = "#050510";
+    [[60, 60, 40, 300], [330, 40, 30, 260], [560, 90, 60, 320], [800, 30, 35, 280]]
+      .forEach(([x, y, ww, hh]) => g.fillRect(x, y, ww, hh));
+
+    const t = new THREE.CanvasTexture(c);
+    t.mapping = THREE.EquirectangularReflectionMapping;
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  }
+
   loader.load(
     "./src/objt/logo/scene.gltf",
     (gltf) => {
@@ -620,35 +646,38 @@ function main() {
       model.position.set(0, 12, -5);
       model.rotation.set(-2, 0, 0);
 
-      const rgbeLoader = new RGBELoader();
-      rgbeLoader.load("./src/objt/logo/logo.hdr", (texture) => {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-
-        model.traverse((child) => {
-          if (child.isMesh && child.material) {
-            child.material.envMap = texture;
-            child.material.envMapIntensity = 1.5;
-            child.material.metalness = 1;
-            child.material.roughness = 0;
-            child.material.emissive = new THREE.Color(0x9966cc);
-            child.material.emissiveIntensity = 0.4;
-            child.material.ior = 5;
-            child.material.needsUpdate = true;
-          }
-        });
-
-        scene.add(model);
-
-        function rotateModel() {
-          model.rotation.y += 0.01;
-        }
-        animateFunctions.push(rotateModel);
+      const glassMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0,
+        roughness: 0,
+        transmission: 1,          // transparencia con refracción real
+        thickness: 1.2,           // grosor aparente (ajústalo a la escala del logo)
+        ior: 1.5,
+        dispersion: HAS_MOUSE ? 8 : 4,   // arcoíris en los bordes
+        clearcoat: 1,
+        clearcoatRoughness: 0,
+        envMap: makeGlassEnv(),
+        envMapIntensity: 1.5,
+        side: THREE.DoubleSide,
       });
+
+      model.traverse((child) => {
+        if (child.isMesh) {
+          if (child.material) child.material.dispose();
+          child.material = glassMaterial;
+        }
+      });
+
+      scene.add(model);
+
+      function rotateModel() {
+        model.rotation.y += 0.01;
+      }
+      animateFunctions.push(rotateModel);
     },
     undefined,
     (error) => console.error("Error al cargar el modelo:", error)
   );
-
   // ═════════════════════════════════════════════════════════════════
   //  PLANES DE PROYECTO (escenas 1, 2 y 3) — con VIDEO + marco marquee
   //  Cada plane es HIJO de su cámara: se mueve con ella sin lerp,
@@ -669,7 +698,6 @@ function main() {
     const videoTexture = new THREE.VideoTexture(video);
     videoTexture.minFilter = THREE.LinearFilter;
     videoTexture.magFilter = THREE.LinearFilter;
-    videoTexture.colorSpace = THREE.SRGBColorSpace;
 
     return { texture: videoTexture, video };
   }
