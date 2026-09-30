@@ -57,6 +57,18 @@ function getPlaneDistance() {
   return THREE.MathUtils.lerp(PLANE_DISTANCE_MOBILE, PLANE_DISTANCE_DESKTOP, t);
 }
 const PLANE_DRAG = true;     // true = conserva el arrastre sutil en x/y; false = sigue la cámara exacto
+
+// Proporción (ancho / alto) de cada plano de portal. DEBEN coincidir con su PlaneGeometry:
+//   scenados.js  → new THREE.PlaneGeometry(1.85, 4.8)
+//   scenatres.js → new THREE.PlaneGeometry(16, 8)
+// La imagen que se dibuja en cada render target se estira para llenar su plano, así que solo
+// se ve sin deformar si se renderiza con esta misma proporción (y no con la de la pantalla).
+const PORTAL1_ASPECT = 1.85 / 4.8;
+const PORTAL2_ASPECT = 16 / 8;
+// FOV vertical al capturar el frame congelado del portal 2 (la cámara normal usa 80).
+// Con proporción 2:1, un FOV de 80 abre el campo horizontal a ~118° y el piso se ve muy estirado en los bordes.
+// Bájalo para reducir ese efecto (más zoom, menos estiramiento); súbelo hacia 80 para ver más escena.
+const PORTAL2_CAPTURE_FOV = 55;
 const ENABLE_SKY = true;     // false = el cielo (backgroundRect) no se agrega a la escena (sirve para medir rendimiento)
 const DEBUG_STATS = false;   // true = muestra el panel de FPS + escena actual, draw calls y triángulos (ponlo en false en producción)
 
@@ -306,6 +318,18 @@ function main() {
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
+
+  // Filtro anisotrópico en las texturas de sceneDos (azulejos del piso). Sin él, el piso visto en
+  // ángulo rasante se emborrona y parece estirarse hacia el horizonte. Se aplica antes del primer
+  // render, así que no hace falta needsUpdate. En móvil se limita a 8 para cuidar el rendimiento.
+  const maxAniso = Math.min(renderer.capabilities.getMaxAnisotropy(), HAS_MOUSE ? 16 : 8);
+  sceneDos.traverse((obj) => {
+    const mat = obj.isMesh && obj.material;
+    if (!mat || Array.isArray(mat)) return;
+    ["map", "normalMap", "roughnessMap", "aoMap", "displacementMap"].forEach((key) => {
+      if (mat[key]) mat[key].anisotropy = maxAniso;
+    });
+  });
 
   // Animación Lottie de progreso
   const animationprogres = lottie.loadAnimation({
@@ -1417,7 +1441,7 @@ function main() {
     if (aspectMode === mode) return;
     aspectMode = mode;
     camera.aspect = mode === "portal" ?
-      (container.clientWidth / 2.5) / container.clientHeight / 2 :
+      PORTAL1_ASPECT :
       container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
   }
@@ -1480,11 +1504,26 @@ function main() {
 
       if (cameraDos.position.z >= 1100) {
 
-        // Congelar el frame de sceneDos SOLO una vez
+        // Congelar el frame de sceneDos SOLO una vez.
+        // Se captura con la proporción del plano de sceneTres (no la de la pantalla) para que en
+        // móvil no se estire; después se restaura el aspecto normal de cameraDos.
         if (!frameCongelado) {
+          const prevAspect = cameraDos.aspect;
+          const prevFov = cameraDos.fov;
+          const capH = container.clientHeight;
+
+          cameraDos.aspect = PORTAL2_ASPECT;
+          cameraDos.fov = PORTAL2_CAPTURE_FOV;
+          cameraDos.updateProjectionMatrix();
+          renderTargetTres.setSize(Math.round(capH * PORTAL2_ASPECT), capH);
+
           renderer.setRenderTarget(renderTargetTres);
           renderer.render(sceneDos, cameraDos);
           renderer.setRenderTarget(null);
+
+          cameraDos.aspect = prevAspect;
+          cameraDos.fov = prevFov;
+          cameraDos.updateProjectionMatrix();
           frameCongelado = true;
         }
 
@@ -1547,7 +1586,7 @@ function main() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    renderTarget.setSize(width, height);
+    renderTarget.setSize(Math.round(height * PORTAL1_ASPECT), height);
 
     cameraTres.aspect = width / height;
     cameraTres.updateProjectionMatrix();
@@ -1565,5 +1604,8 @@ function main() {
   cameraDos.updateProjectionMatrix();
   cameraTres.aspect = container.clientWidth / container.clientHeight;
   cameraTres.updateProjectionMatrix();
+
+  // scenados.js crea este render target con el tamaño de la pantalla: aquí se ajusta a la proporción del plano
+  renderTarget.setSize(Math.round(container.clientHeight * PORTAL1_ASPECT), container.clientHeight);
 }
 main();
