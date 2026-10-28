@@ -1,4 +1,461 @@
 @charset "UTF-8";
+.abautmepage .seccionuno {
+  background: rgb(254, 255, 254);
+  width: 100vw;
+  height: 100vh;
+}
+.abautmepage .seccionuno .barra_nav {
+  z-index: 1000;
+  position: fixed;
+  display: none;
+  flex-direction: row;
+  width: 100%;
+  padding: 1vw 2vw 1vw 2vw;
+  justify-content: space-between;
+}
+.abautmepage .seccionuno .barra_nav .logo {
+  display: flex;
+  align-items: center;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .boton_contact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 20px 10px 20px;
+  background-color: #0004ee;
+  border-radius: 30px;
+  font-family: "Medium";
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #eff3ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .boton_contact:hover {
+  background-color: #003bd1;
+  transform: scale(1.05);
+  gap: 20px;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .boton_contact .texto_boton {
+  text-decoration: none;
+  color: #eff3ff;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .boton_contact img {
+  width: 17px;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .contd_menu {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .contd_menu .cont_boton_menu {
+  display: flex;
+  border-radius: 100%;
+  overflow: hidden;
+  width: 100%;
+  background: #eff3ff;
+  justify-content: center;
+  align-items: center;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .contd_menu .cont_boton_menu #menu-button {
+  padding: 7px;
+  width: 2.7vw;
+  height: 2.7vw;
+  z-index: 1000;
+  cursor: pointer;
+  border-radius: 100%;
+  background: #eff3ff;
+}
+.abautmepage .seccionuno .barra_nav .cont_menu .contd_menu .cont_boton_menu:hover {
+  box-shadow: 0em 0em 1em rgba(0, 0, 0, 0.247);
+}
+.abautmepage .seccionuno .barra_nav .magnetic-button {
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+.abautmepage .seccionuno .barra_nav {
+  /* Comienza oculto */
+}
+.abautmepage .seccionuno .barra_nav #nav-menu {
+  position: fixed;
+  top: 5vh;
+  right: 5vh;
+  width: 3vw;
+  height: 3vw;
+  background-color: rgba(255, 255, 255, 0);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s cubic-bezier(0.68, -0.2, 0.27, 1);
+  border-radius: 0%;
+  overflow: hidden;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contlistmenu {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  top: 20%;
+  left: 15%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contlistmenu p {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 0%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contlistmenu li {
+  margin: 15px 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contlistmenu li a {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 0%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contsocial {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 30%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 0%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contsocial p {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contsocial .list_social {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contsocial .list_social li {
+  margin: 15px 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .contsocial .list_social li a {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #000000;
+  font-size: 0.9vw;
+  width: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 0%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .lang-select-title {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input[type=radio] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #c7d0ff;
+  position: relative;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-radio::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #2d5bff;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-name {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #cacaca;
+  font-size: 0.9vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option .lang-flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+  border-color: #2d5bff;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+  color: #2d5bff;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+  opacity: 1;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu .lang-select .list-lenguaje.lang-select--instant * {
+  transition: none !important;
+}
+.abautmepage .seccionuno .barra_nav {
+  /* Clase para mostrar el menú */
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show {
+  top: 0vh;
+  right: 0vh;
+  width: 50dvw;
+  height: 100dvh;
+  right: 0;
+  box-shadow: -50vw 0px 5px 0px rgba(0, 0, 0, 0.082);
+  border-radius: 0;
+  background-color: #ffffff;
+  /* Desliza el menú hacia dentro */
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contlistmenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contlistmenu p {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contlistmenu li {
+  margin: 15px 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contlistmenu li a {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #999999;
+  font-size: 2.2vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contlistmenu li .char {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contlistmenu li:hover a {
+  color: #0066ff;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contsocial {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 17%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contsocial p {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contsocial .list_social {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contsocial .list_social li {
+  margin: 15px 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contsocial .list_social li a {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #000000;
+  font-size: 0.9vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .contsocial .list_social li .char {
+  display: inline-block;
+  transform: translateY(100%);
+  opacity: 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  bottom: 5%;
+  left: 15%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  opacity: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .lang-select-title {
+  text-decoration: none;
+  font-size: 18px;
+  opacity: 100%;
+  font-family: "Regular";
+  color: #c0c0c0;
+  font-size: 0.9vw;
+  opacity: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input[type=radio] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #c7d0ff;
+  position: relative;
+  transition: border-color 0.2s ease;
+  flex-shrink: 0;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-radio::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #2d5bff;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-name {
+  text-decoration: none;
+  opacity: 100%;
+  font-family: "Medium";
+  color: #cacaca;
+  font-size: 0.9vw;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option .lang-flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio {
+  border-color: #2d5bff;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-radio::after {
+  opacity: 1;
+  transform: scale(1);
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-name {
+  color: #2d5bff;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje .lang-option input:checked ~ .lang-flag {
+  opacity: 1;
+}
+.abautmepage .seccionuno .barra_nav #nav-menu.show .lang-select .list-lenguaje.lang-select--instant * {
+  transition: none !important;
+}
+.abautmepage .seccionuno .barra_nav .hidden {
+  display: none;
+}
+
 * {
   margin: 0;
   padding: 0;

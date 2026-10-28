@@ -1,0 +1,241 @@
+<!doctype html>
+<html translate="no">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google" content="notranslate" />
+  <link rel="stylesheet" href="../style/styles.css" />
+  <link rel="icon" type="image/svg" href="../src/img/logo.svg" />
+  <title>About me 😎</title>
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+</head>
+
+<style>
+  /* estilos del visor 3D (#escena3d) - enlazar en el <head> de la pagina:
+   <link rel="stylesheet" href="../style/escena3d.css" />  (guardalo en style/escena3d.css) */
+#escena3d { position: relative; width: 100%; height: 100vh; min-height: 420px; overflow: hidden;
+  background: #0b0f1a; color: #eef2fb; border-radius: inherit; font-family: inherit; }
+#escena3d:fullscreen { height: 100vh; width: 100vw; border-radius: 0; }
+#escena3d canvas.escena-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  touch-action: pan-y; outline: none; }
+#escena3d.activo canvas.escena-canvas { touch-action: none; cursor: grab; }
+#escena3d.activo canvas.escena-canvas:active { cursor: grabbing; }
+#escena3d .esc-load { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px; background: #0b0f1a; font-size: 13px; letter-spacing: .08em; transition: opacity .7s; }
+#escena3d.cargado .esc-load { opacity: 0; pointer-events: none; }
+#escena3d .esc-bar { width: min(260px, 60%); height: 3px; background: #1c2438; border-radius: 2px; overflow: hidden; }
+#escena3d .esc-bar i { display: block; height: 100%; width: 0; background: #7f98ff; transition: width .2s; }
+#escena3d .esc-btn { position: absolute; z-index: 4; border: 0; cursor: pointer; color: #fff; font: inherit; font-size: 13px;
+  background: rgba(11, 15, 26, .55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 999px; }
+#escena3d .esc-enter { left: 50%; bottom: 22px; transform: translateX(-50%); padding: 12px 26px; letter-spacing: .08em;
+  border: 1px solid rgba(255, 255, 255, .35); }
+#escena3d.activo .esc-enter { display: none; }
+#escena3d .esc-top { position: absolute; z-index: 4; top: 14px; right: 14px; display: flex; gap: 8px; }
+#escena3d .esc-top .esc-btn { position: static; width: 40px; height: 40px; padding: 0; font-size: 18px; display: grid; place-items: center; }
+#escena3d .esc-exit { display: none !important; }
+#escena3d.activo .esc-exit { display: grid !important; }
+#escena3d .esc-panel { position: absolute; z-index: 4; top: 62px; right: 14px; width: min(270px, 78%); max-height: calc(100% - 80px);
+  overflow: auto; padding: 12px 14px 14px; border-radius: 14px; background: rgba(11, 15, 26, .78); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); font-size: 12px; display: none; }
+#escena3d .esc-panel.open { display: block; }
+#escena3d .esc-title { margin: 0 0 4px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+#escena3d .esc-panel label { display: flex; justify-content: space-between; align-items: center; margin: 9px 0 2px; opacity: .92; }
+#escena3d .esc-panel label.esc-check { justify-content: flex-start; gap: 8px; }
+#escena3d .esc-panel input[type=range] { width: 100%; accent-color: #7f98ff; }
+#escena3d .esc-panel button { margin-top: 12px; width: 100%; padding: 8px; border: 1px solid rgba(255, 255, 255, .3); border-radius: 8px;
+  background: transparent; color: #fff; font: inherit; cursor: pointer; }
+#escena3d .esc-hint { position: absolute; z-index: 3; left: 50%; bottom: 16px; transform: translateX(-50%); padding: 8px 14px;
+  border-radius: 999px; background: rgba(11, 15, 26, .55); backdrop-filter: blur(6px); font-size: 12px; text-align: center;
+  max-width: 90%; opacity: 0; transition: opacity .6s; pointer-events: none; }
+#escena3d.activo .esc-hint { opacity: .9; }
+#escena3d.pc .h-touch, #escena3d.touch .h-pc { display: none; }
+#escena3d .esc-joy { position: absolute; z-index: 3; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%;
+  display: none; border: 2px solid rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .06); pointer-events: none; }
+#escena3d .esc-joy i { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+  background: rgba(255, 255, 255, .35); }
+</style>
+
+<body class="abautmepage">
+  <div class="cursorp"></div>
+  <div id="transition">
+    <svg viewBox="0 0 1920 700" preserveAspectRatio="none">
+      <path id="wave" fill="#0004ee" d="M0,1080 L0,800 Q960,750 1920,800 L1920,1080 Z" />
+    </svg>
+    <div id="gif-overlay">
+      <img src="./src/img/loadinglogo.gif" alt="Cargando...">
+    </div>
+  </div>
+
+  <section class="seccionuno">
+    <div class="barra_nav">
+      <a class="logo" href="../index.html">
+        <img src="../src/img/logoazul.svg" alt="logo dsains" />
+      </a>
+
+      <div class="cont_menu">
+        <div class="boton_contact cursor-scale magnetic-button" data-strength="0.7" data-text-strength="0.2">
+          <a class="texto_boton" href="./proyectodos.html">
+            <p class="magnetic-text" data-i18n="cta-talk">Talk me</p>
+          </a>
+          <img src="../src/img/flechabotoncontact.svg" alt="" />
+        </div>
+
+        <div class="contd_menu cursor-scale">
+          <div class="cont_boton_menu">
+            <div id="menu-button"></div>
+          </div>
+        </div>
+
+        <nav id="nav-menu" class="hidden">
+          <ul class="contlistmenu">
+            <p id="menuTitle" data-i18n="menu-title">Menu</p>
+            <li>
+              <a class="animated-text" href="../index.html" data-delay="0.1" data-i18n="nav-home">Home</a>
+            </li>
+            <li>
+              <a class="cursor-scale animated-text" href="#about" data-delay="0.1" data-i18n="nav-blogs">Blogs</a>
+            </li>
+            <li>
+              <a class="cursor-scale animated-text" href="#services" data-delay="0.1" data-i18n="nav-works">Works</a>
+            </li>
+            <li>
+              <a class="cursor-scale animated-text" href="#contact" data-delay="0.1" data-i18n="nav-about">About me</a>
+            </li>
+          </ul>
+          <ul class="contsocial">
+            <p data-i18n="social-title">Social</p>
+            <div class="list_social">
+              <li>
+                <a class="cursor-scale animated-text" data-delay="0.1" href="#home" translate="no">Whatsapp</a>
+              </li>
+              <li>
+                <a class="cursor-scale animated-text" data-delay="0.1" href="#about" translate="no">Gmail</a>
+              </li>
+              <li>
+                <a class="cursor-scale animated-text" data-delay="0.1" href="#services" translate="no">Instagram</a>
+              </li>
+              <li>
+                <a class="cursor-scale animated-text" data-delay="0.1" href="#contact" translate="no">Facebook</a>
+              </li>
+            </div>
+          </ul>
+          <!-- 🌐 Selector de idioma -->
+          <div class="lang-select lang-select--instant" id="lang-select" role="radiogroup" aria-label="Idioma">
+            <p data-i18n="lang-select-title" class="lang-select-title">lenguaje</p>
+            <div class="list-lenguaje">
+              <label class="lang-option">
+                <input type="radio" name="lang" value="en" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">English</span>
+                <img class="lang-flag" src="../src/img/ingles.png" alt="" />
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="lang" value="es" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">Español</span>
+                <img class="lang-flag" src="../src/img/español.png" alt="" />
+              </label>
+              <label class="lang-option">
+                <input type="radio" name="lang" value="fr" />
+                <span class="lang-radio"></span>
+                <span class="lang-name">Français</span>
+                <img class="lang-flag" src="../src/img/frances.png" alt="" />
+              </label>
+
+            </div>
+
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="cont_imagen_proyecto">
+      <!-- data-lenis-prevent: evita que el scroll suave del sitio capture la rueda dentro de la escena -->
+      <div id="escena3d" data-lenis-prevent="">
+        <div class="esc-load" id="esc-load">
+          <span data-i18n="ui-loading">Loading scene…</span>
+          <div class="esc-bar"><i></i></div>
+        </div>
+
+        <button id="esc-enter" class="esc-btn esc-enter cursor-scale" type="button">
+          <span data-i18n="ui-enter">Explore</span>
+        </button>
+
+        <div class="esc-top">
+          <button id="esc-gear" class="esc-btn cursor-scale" type="button" title="Lights" aria-label="Lights">☀</button>
+          <button id="esc-fs" class="esc-btn cursor-scale" type="button" title="Fullscreen"
+            aria-label="Fullscreen">⛶</button>
+          <button id="esc-exit" class="esc-btn esc-exit cursor-scale" type="button" title="Exit"
+            aria-label="Exit">✕</button>
+        </div>
+
+        <div id="esc-panel" class="esc-panel">
+          <p class="esc-title" data-i18n="ui-panel-title">Light controls</p>
+          <label><span data-i18n="ui-sun-az">Light angle</span> <b id="esc-vaz"></b></label>
+          <input id="esc-az" type="range" min="0" max="360" step="1" value="20">
+          <label><span data-i18n="ui-sun-el">Light height</span> <b id="esc-vel"></b></label>
+          <input id="esc-el" type="range" min="35" max="90" step="1" value="68">
+          <label><span data-i18n="ui-rays">Light rays</span> <b id="esc-vry"></b></label>
+          <input id="esc-ry" type="range" min="0" max="2" step="0.05" value="1">
+          <label class="esc-check"><input id="esc-auto" type="checkbox"><span data-i18n="ui-auto">Animate
+              sun</span></label>
+          <label class="esc-check"><input id="esc-refl" type="checkbox" checked=""><span data-i18n="ui-refl">Floor
+              reflection</span></label>
+          <label><span data-i18n="ui-rs">Reflection strength</span> <b id="esc-vrs"></b></label>
+          <input id="esc-rs" type="range" min="0" max="1" step="0.05" value="0.6">
+          <label><span data-i18n="ui-exp">Exposure</span> <b id="esc-vexp"></b></label>
+          <input id="esc-exp" type="range" min="0.4" max="2.2" step="0.05" value="1">
+          <label><span data-i18n="ui-res">Resolution</span> <b id="esc-vq"></b></label>
+          <input id="esc-q" type="range" min="0.6" max="2" step="0.05" value="1">
+          <label><span data-i18n="ui-paint">Painting style</span> <b id="esc-vpaint"></b></label>
+          <input id="esc-paint" type="range" min="0" max="1" step="0.05" value="0.55">
+          <button id="esc-reset" type="button" data-i18n="ui-reset">Reset</button>
+        </div>
+
+        <p id="esc-hint" class="esc-hint">
+          <span class="h-pc" data-i18n="ui-hint-pc">Drag to look · W A S D / arrows to walk · wheel to move · Esc to
+            exit</span>
+          <span class="h-touch" data-i18n="ui-hint-touch">Drag on the left to walk · drag anywhere else to look</span>
+        </p>
+        <div id="esc-joy" class="esc-joy"><i></i></div>
+      </div>
+    </div>
+
+  </section>
+
+  </div>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MorphSVGPlugin.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script>
+    // use a script tag or an external JS file
+    document.addEventListener("DOMContentLoaded", (event) => {
+      gsap.registerPlugin(MorphSVGPlugin);
+      // gsap code here!
+    });
+  </script>
+  <script type="module" src="../js/script.js"></script>
+  <script type="module" src="../js/aboutme.js"></script>
+  <script src="../js/barva.js"></script>
+  <script type="module" src="../js/piedepagina.js"></script>
+  <script src="../js/magenitboton.js"></script>
+  <script type="module" src="../js/proyectos/scroll.js"></script>
+  <!-- escena 3D del pasillo -->
+  <script type="module" src="../js/proyectos/pasillo.js"></script>
+</body>
+
+</html>
