@@ -15,6 +15,8 @@ import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js'
 /* Ruta del modelo, relativa a ESTE archivo (js/proyectos/pasillo.js → raíz del proyecto = ../../) */
 const MODEL_URL = new URL('../../src/objt/aboutme/techo_longitudinal.glb', import.meta.url).href;
 
+
+
 /* ===== valores fijos ===== */
 const SUN_AZ = 80;          // ángulo de la luz (°)
 const SUN_EL = 70;          // altura de la luz (°)
@@ -33,6 +35,70 @@ if (cont) {
 }
 
 function init() {
+
+  
+  /* ---------- imagen PNG transparente sobre un plano ---------- */
+
+  const PNG_URL = new URL(
+    '../../src/img/about.png',
+    import.meta.url
+  ).href;
+
+  const imageTextureLoader = new THREE.TextureLoader();
+
+  imageTextureLoader.load(
+    PNG_URL,
+    (texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = Math.min(
+        8,
+        renderer.capabilities.getMaxAnisotropy()
+      );
+
+      // Altura deseada del plano.
+      const IMAGE_HEIGHT = 2;
+
+      // Calcula el ancho según las dimensiones originales del PNG.
+      const aspect = texture.image.width / texture.image.height;
+      const IMAGE_WIDTH = IMAGE_HEIGHT * aspect;
+
+      const imageGeometry = new THREE.PlaneGeometry(
+        IMAGE_WIDTH,
+        IMAGE_HEIGHT
+      );
+
+      const imageMaterial = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        alphaTest: 0.01,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+        toneMapped: false
+      });
+
+const imagePlane = new THREE.Mesh(
+  imageGeometry,
+  imageMaterial
+);
+
+imagePlane.name = 'imagenPNG';
+imagePlane.position.set(0, 1, 15);
+imagePlane.renderOrder = 10;
+
+scene.add(imagePlane);
+window.pasilloImagePlane = imagePlane;
+
+      console.log('PNG cargado correctamente:', PNG_URL);
+    },
+    undefined,
+    (error) => {
+      console.error('Error cargando el PNG:', PNG_URL, error);
+    }
+  );
+
+
+
+
   const $ = (id) => cont.querySelector('#' + id);
   const isTouch = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
   const cw = () => Math.max(1, cont.clientWidth);
@@ -203,7 +269,7 @@ function init() {
   /* ---------- cámara y movimiento ---------- */
   const camera = new THREE.PerspectiveCamera(65, cw() / ch(), 0.1, 250);
   camera.rotation.order = 'YXZ';
-  camera.position.set(0, 1.7, 10.5);
+  camera.position.set(0, 1, 17);
   let yaw = 0, pitch = 0.05;
   const keys = Object.create(null);
   const cols = [];
