@@ -21,9 +21,9 @@ const MODEL_URL = new URL('../../src/objt/aboutme/techo_longitudinal.glb', impor
 const SUN_AZ = 80;          // ángulo de la luz (°)
 const SUN_EL = 70;          // altura de la luz (°)
 const RAYS = 1.10;          // intensidad de los rayos de luz
-const REFLECTION = 0.70;    // fuerza del reflejo del piso
+const REFLECTION = 0.30;    // fuerza del reflejo del piso
 const EXPOSURE = 1.00;      // exposición
-const QUALITY = 1.40;       // resolución (pixel ratio)
+const QUALITY = 1;       // resolución (pixel ratio)
 
 const cont = document.getElementById('escena3d');
 if (cont) {
@@ -35,6 +35,17 @@ if (cont) {
 }
 
 function init() {
+
+    /* ---------- aviso de "escena lista" para la transición ---------- */
+  let pendientes = 2; // modelo .glb + imagen PNG
+  const listo = () => {
+    if (--pendientes > 0) return;
+    // dos frames para asegurar que la escena ya se dibujó
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      window.__escena3dListo = true;
+      window.dispatchEvent(new CustomEvent('escena3d:ready'));
+    }));
+  };
 
   
   /* ---------- imagen PNG transparente sobre un plano ---------- */
@@ -89,10 +100,12 @@ scene.add(imagePlane);
 window.pasilloImagePlane = imagePlane;
 
       console.log('PNG cargado correctamente:', PNG_URL);
+      listo();
     },
     undefined,
     (error) => {
       console.error('Error cargando el PNG:', PNG_URL, error);
+      listo();
     }
   );
 
@@ -371,10 +384,12 @@ window.pasilloImagePlane = imagePlane;
       } else if (o.isMesh) { p.setFromMatrixPosition(o.matrixWorld); cols.push(new THREE.Vector2(p.x, p.z)); }
     });
     cont.classList.add('cargado');
+    listo();
   }, (xhr) => {
     if (xhr.lengthComputable && bar) bar.style.width = (xhr.loaded / xhr.total * 100) + '%';
   }, (err) => {
     console.error('No se pudo cargar el modelo:', MODEL_URL, err);
+    listo();
   });
 
   /* ---------- bucle ---------- */

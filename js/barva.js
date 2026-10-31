@@ -6,17 +6,52 @@ document.addEventListener("DOMContentLoaded", () => {
   const wavePathEnd   = "M0,1080 L0,-500 Q960,-300 1920,-500 L1920,1080 Z";
 
   // ⚡️ Animación de entrada (ola baja)
+  // ⚡️ Animación de entrada (ola baja)
   const wave = document.querySelector("#wave");
   if (wave) {
-    gsap.fromTo(
-      "#wave",
-      { morphSVG: wavePathEnd },
-      {
-        duration: 1,
-        morphSVG: wavePathStart,
-        ease: "power4.out"
-      }
-    );
+    const abrirOla = () =>
+      gsap.fromTo(
+        "#wave",
+        { morphSVG: wavePathEnd },
+        {
+          duration: 1,
+          morphSVG: wavePathStart,
+          ease: "power4.out",
+          onComplete: () => gsap.set("#transition", { pointerEvents: "none" })
+        }
+      );
+
+    if (!document.body.hasAttribute("data-espera-escena")) {
+      // páginas normales: entra directo, igual que antes
+      abrirOla();
+    } else {
+      // páginas con escena 3D: la ola se queda cubriendo y el GIF hace de loading
+      const MIN_MS = 800;     // tiempo mínimo para que el GIF no parpadee
+      const MAX_MS = 20000;   // tope por si la escena nunca avisa
+
+      wave.setAttribute("d", wavePathEnd);
+      gsap.set("#transition", { pointerEvents: "auto" });
+      gsap.set("#gif-overlay", { display: "block", opacity: 0 });
+      gsap.to("#gif-overlay", { opacity: 1, duration: 0.4 });
+
+      const escenaLista = new Promise((res) => {
+        if (window.__escena3dListo) return res();
+        window.addEventListener("escena3d:ready", res, { once: true });
+      });
+      const tope   = new Promise((res) => setTimeout(res, MAX_MS));
+      const minimo = new Promise((res) => setTimeout(res, MIN_MS));
+
+      Promise.all([Promise.race([escenaLista, tope]), minimo]).then(() => {
+        gsap.to("#gif-overlay", {
+          opacity: 0,
+          duration: 0.4,
+          onComplete: () => {
+            gsap.set("#gif-overlay", { display: "none" });
+            abrirOla();
+          }
+        });
+      });
+    }
   }
 
   // 🌐 Recarga la página actual con la misma ola de transición que usan

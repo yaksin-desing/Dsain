@@ -455,6 +455,70 @@
 .abautmepage .seccionuno .barra_nav .hidden {
   display: none;
 }
+.abautmepage .seccionuno #escena3d {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 420px;
+  overflow: hidden;
+  background: #0b0f1a;
+  color: #eef2fb;
+  border-radius: inherit;
+  font-family: inherit;
+}
+.abautmepage .seccionuno #escena3d:fullscreen {
+  height: 100vh;
+  width: 100vw;
+  border-radius: 0;
+}
+.abautmepage .seccionuno #escena3d canvas.escena-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: pan-y;
+  outline: none;
+}
+.abautmepage .seccionuno #escena3d.activo canvas.escena-canvas {
+  touch-action: none;
+  cursor: grab;
+}
+.abautmepage .seccionuno #escena3d.activo canvas.escena-canvas:active {
+  cursor: grabbing;
+}
+.abautmepage .seccionuno #escena3d .esc-load {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  gap: 12px;
+  background: #0b0f1a;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  transition: opacity 0.7s;
+}
+.abautmepage .seccionuno #escena3d.cargado .esc-load {
+  opacity: 0;
+  pointer-events: none;
+}
+.abautmepage .seccionuno #escena3d .esc-bar {
+  width: min(260px, 60%);
+  height: 3px;
+  background: #1c2438;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.abautmepage .seccionuno #escena3d .esc-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #7f98ff;
+  transition: width 0.2s;
+}
 
 * {
   margin: 0;
