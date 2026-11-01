@@ -13,7 +13,7 @@ import { Reflector } from 'three/addons/objects/Reflector.js';
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 
 /* Ruta del modelo, relativa a ESTE archivo (js/proyectos/pasillo.js → raíz del proyecto = ../../) */
-const MODEL_URL = new URL('../../src/objt/aboutme/techo_longitudinal.glb', import.meta.url).href;
+const MODEL_URL = new URL('../src/objt/aboutme/techo_longitudinal.glb', import.meta.url).href;
 
 
 
