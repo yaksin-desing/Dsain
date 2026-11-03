@@ -17,7 +17,7 @@ const SUN_AZ = 80;          // ángulo de la luz (°)
 const SUN_EL = 70;          // altura de la luz (°)
 const RAYS = 1.10;          // intensidad de los rayos de luz
 const REFLECTION = 0.30;    // fuerza del reflejo del piso
-const EXPOSURE = 1.00;      // exposición
+const EXPOSURE = 1.2;      // exposición
 const QUALITY = 1;       // resolución (pixel ratio)
 
 /* ===== TEXTO EN CILINDRO "DSAINS" (todo lo que puedes ajustar) =====
@@ -105,12 +105,12 @@ const CABEZA = {
   distanciaVentana: 8,          // profundidad (unidades de escena) del "cristal": lo que está ahí no se mueve,
                                 //   lo más cercano se mueve al lado contrario de tu rostro, lo lejano apenas se mueve
   intensidad: 0.5,              // 1 = ventana físicamente exacta; menos = movimiento más sutil (0.3–0.7 es lo habitual)
-  maxCm: 1,                     // máximo desplazamiento lateral/vertical de la cabeza que se tiene en cuenta (cm)
+  maxCm: 1.7,                     // máximo desplazamiento lateral/vertical de la cabeza que se tiene en cuenta (cm)
   maxCmZ: 7,                    // máximo acercarte / alejarte (cm)
   zonaMuertaCm: 0.5,            // movimientos menores a esto (temblor de la detección) se ignoran
   fovVentana: 0,                // 0 = no tocar el FOV de la cámara
-  suavizado: 7,                 // mayor = responde más rápido, menor = más suave
-  calibrarFrames: 30,           // lecturas para fijar tu posición neutra al activar
+  suavizado: 5,                 // mayor = responde más rápido, menor = más suave
+  calibrarFrames: 20,           // lecturas para fijar tu posición neutra al activar
 
   libUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.mjs',
   wasmUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm',
