@@ -1,0 +1,30 @@
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+svg { overflow: visible; }
+@keyframes kf_Vector_24_transform_0 {
+  0% {
+    transform: translateX(2px) translateY(14px) translateX(0px) translateY(-8px);
+  }
+  50.15% {
+    transform: translateX(2px) translateY(14px) translateX(0px) translateY(8px);
+  }
+  100% {
+    transform: translateX(2px) translateY(14px) translateX(0px) translateY(-8px);
+  }
+}
+#Vector_24 {
+  transform-origin: 0 0;
+  animation: kf_Vector_24_transform_0 4s linear infinite;
+}
+</style>
+<g id="iconoscam">
+<g id="Group_4534573" transform="translate(1 1)">
+<path id="Rectangle_44" transform="translate(15.8889 16.2778)" d="M0 9.72222H3.11111C6.97711 9.72222 10.1111 6.58821 10.1111 2.72222V0" stroke="#0048FF" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Rectangle_44_2" transform="translate(0 16.2778)" d="M10.1111 9.72222H7C3.13401 9.72222 0 6.58821 0 2.72222V0" stroke="#0048FF" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Rectangle_44_3" d="M10.1111 0H7C3.13401 0 0 3.13401 0 7V9.72222" stroke="#0048FF" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Rectangle_44_4" transform="translate(15.8889)" d="M0 0H3.11111C6.97711 0 10.1111 3.13401 10.1111 7V9.72222" stroke="#0048FF" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+<path id="Vector_24" transform="translate(2 14)" d="M24 0H0" stroke="#0048FF" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Vector_25" transform="translate(5 3.5)" d="M0 22.5L0.796278 17.8108C0.921421 17.0739 1.44708 16.4682 2.15909 16.2406L5.72661 15.1002C6.55527 14.8353 7.11765 14.0651 7.11765 13.1952V11.6748C7.11765 11.0166 6.77226 10.4176 6.33457 9.92609C5.37685 8.8505 4.76471 7.20761 4.76471 5.36667C4.76471 2.1266 6.66091 0 9 0C11.3391 0 13.2353 2.1266 13.2353 5.36667C13.2353 7.2177 12.6164 8.86851 11.6496 9.94373C11.2187 10.423 10.8824 11.0178 10.8824 11.6736V13.2112C10.8824 14.0697 11.4213 14.8278 12.2111 15.0803L15.8012 16.1446C16.5346 16.362 17.0798 16.9788 17.2056 17.7333L18 22.5" stroke="#0048FF" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+</svg>
