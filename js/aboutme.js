@@ -13,7 +13,7 @@ const MODEL_URL = new URL('../src/objt/aboutme/techo_longitudinal.glb', import.m
 
 
 /* ===== valores fijos ===== */
-const SUN_AZ = 80;          // ángulo de la luz (°)
+const SUN_AZ = 70;          // ángulo de la luz (°)
 const SUN_EL = 70;          // altura de la luz (°)
 const RAYS = 1.10;          // intensidad de los rayos de luz
 const REFLECTION = 0.30;    // fuerza del reflejo del piso
@@ -102,19 +102,35 @@ const CABEZA = {
   camFovH: 70,                  // campo de visión horizontal de tu webcam en ° (la mayoría: 65–78)
 
   /* --- comportamiento --- */
-  distanciaVentana: 8,          // profundidad (unidades de escena) del "cristal": lo que está ahí no se mueve,
-                                //   lo más cercano se mueve al lado contrario de tu rostro, lo lejano apenas se mueve
-  intensidad: 0.5,              // 1 = ventana físicamente exacta; menos = movimiento más sutil (0.3–0.7 es lo habitual)
-  maxCm: 1.7,                     // máximo desplazamiento lateral/vertical de la cabeza que se tiene en cuenta (cm)
+  distanciaVentana: 12,         // profundidad (unidades de escena) del "cristal": lo que está ahí no se mueve,
+                                //   lo más cercano se mueve al lado contrario de tu rostro, lo lejano se mueve con tu cabeza
+  intensidad: 0.7,              // 1 = ventana físicamente exacta; menos = movimiento más sutil
+  maxCm: 1,                     // máximo desplazamiento lateral/vertical de la cabeza que se tiene en cuenta (cm)
   maxCmZ: 7,                    // máximo acercarte / alejarte (cm)
-  zonaMuertaCm: 0.5,            // movimientos menores a esto (temblor de la detección) se ignoran
+  zonaMuertaCm: 0.2,            // movimientos menores a esto se ignoran (ahora el temblor lo quita el filtro)
   fovVentana: 0,                // 0 = no tocar el FOV de la cámara
-  suavizado: 5,                 // mayor = responde más rápido, menor = más suave
-  calibrarFrames: 20,           // lecturas para fijar tu posición neutra al activar
+
+  /* filtro One Euro: quita el temblor de la detección SIN meter retardo cuando mueves la cabeza.
+     Quieto → muy suave; moviéndote rápido → casi sin filtrar. */
+  filtroMinCutoff: 0.5,         // menor = más estable cuando estás quieto (pero con algo más de retardo en movimientos lentos)
+  filtroBeta: 0.2,              // mayor = menos retardo al moverte (si notas arrastre, sube a 0.4–1; si tiembla, baja a 0.1)
+  filtroDerivCutoff: 1.0,       // suavizado de la velocidad (normalmente no se toca)
+  suavizado: 30,                // suavizado final, ya casi sin retardo (mayor = responde más rápido; antes 7 = ~140 ms de arrastre)
+  calibrarFrames: 30,           // lecturas para fijar tu posición neutra al activar
 
   libUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.mjs',
   wasmUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm',
   modeloUrl: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
+};
+
+/* ===== CÁMARA POR SCROLL (la controla js/proyectos/scroll-about.js) =====
+   Primer scroll hacia abajo en la sección 1: la cámara se desplaza `avance` unidades en el eje Z.
+   Al volver hacia arriba regresa a su posición inicial. */
+const ESCENA_SCROLL = {
+  zBase: 19,                    // posición inicial de la cámara en Z
+  avance: -30,                   // cuánto se mueve en Z (+15 = hacia atrás, aleja; usa -15 para avanzar hacia el pasillo)
+  duracion: 4.3,                // segundos
+  ruedaCamina: false,           // false = la rueda ya no camina por la escena (la usa el scroll de secciones)
 };
 
 const cont = document.getElementById('escena3d');
@@ -531,7 +547,7 @@ window.pasilloImagePlane = imagePlane;
   /* ---------- ***********cámara y movimiento********* ---------- */
   const camera = new THREE.PerspectiveCamera(65, cw() / ch(), 0.1, 250);
   camera.rotation.order = 'YXZ';
-  camera.position.set(0, 1.5, 19);
+  camera.position.set(0, 1.5, ESCENA_SCROLL.zBase);
   let yaw = 0, pitch = 0.05;
   const keys = Object.create(null);
   const cols = [];
@@ -545,7 +561,21 @@ window.pasilloImagePlane = imagePlane;
     for (const c of cols) if (Math.hypot(x - c.x, z - c.y) < 0.7) return false;
     return true;
   };
+  let pasoEscena = 0;                                             // 0 = posición inicial · 1 = cámara desplazada
+  const camAnim = { activo: false, x0: 0, z0: 0, x1: 0, z1: 0, t0: 0, dur: 1 };
+  const easeInOutExpo = (t) => t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
+  function irAPaso(n, instantaneo) {                              // lo llama el scroll de secciones
+    pasoEscena = n;
+    const zObjetivo = ESCENA_SCROLL.zBase + (n > 0 ? ESCENA_SCROLL.avance : 0);
+    if (instantaneo) { camera.position.x = 0; camera.position.z = zObjetivo; camAnim.activo = false; return; }
+    Object.assign(camAnim, { activo: true, x0: camera.position.x, z0: camera.position.z, x1: 0, z1: zObjetivo,
+      t0: performance.now(), dur: ESCENA_SCROLL.duracion * 1000 });
+  }
+  window.pasilloCamara = { config: ESCENA_SCROLL, irAPaso, get paso() { return pasoEscena; } };
+  if (window.__pasoEscena) irAPaso(window.__pasoEscena, true);    // el scroll pidió un paso antes de que cargara la escena
+
   function move(f, s) {
+    if (pasoEscena > 0 || camAnim.activo) return;                 // con la cámara desplazada no se camina
     const sx = Math.sin(yaw), cz = Math.cos(yaw);
     const nx = camera.position.x + (-sx * f) + (cz * s), nz = camera.position.z + (-cz * f) + (-sx * s);
     if (free(nx, nz)) { camera.position.x = nx; camera.position.z = nz; }
@@ -585,7 +615,9 @@ window.pasilloImagePlane = imagePlane;
   };
   canvas.addEventListener('pointerup', endPointer);
   canvas.addEventListener('pointercancel', endPointer);
-  canvas.addEventListener('wheel', (e) => { e.preventDefault(); move(-e.deltaY * 0.01, 0); }, { passive: false });
+  if (ESCENA_SCROLL.ruedaCamina) {
+    canvas.addEventListener('wheel', (e) => { e.preventDefault(); move(-e.deltaY * 0.01, 0); }, { passive: false });
+  }
   const typing = (e) => /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '');
   window.addEventListener('keydown', (e) => {
     if (typing(e)) return;
@@ -616,6 +648,24 @@ window.pasilloImagePlane = imagePlane;
     const neutral = { x: 0.5, y: 0.5, d: 0.1 };               // posición de referencia de tu cara
     const cal = { n: 0, x: 0, y: 0, d: 0, listo: false };
     const base = new THREE.Vector3(), off = new THREE.Vector3();
+
+    /* Filtro One Euro (Casiez et al.): el corte de frecuencia sube con la velocidad de la cabeza */
+    function oneEuro() {
+      let xp = null, dxp = 0, tp = 0;
+      const alfa = (fc, dt) => 1 / (1 + (1 / (2 * Math.PI * fc)) / dt);
+      return {
+        reset() { xp = null; dxp = 0; },
+        f(x, t) {
+          if (xp === null) { xp = x; tp = t; return x; }
+          const dt = Math.max(1e-3, t - tp); tp = t;
+          dxp += alfa(cfg.filtroDerivCutoff, dt) * ((x - xp) / dt - dxp);
+          xp += alfa(cfg.filtroMinCutoff + cfg.filtroBeta * Math.abs(dxp), dt) * (x - xp);
+          return xp;
+        },
+      };
+    }
+    const fx = oneEuro(), fy = oneEuro(), fz = oneEuro();
+    const reiniciarFiltros = () => { fx.reset(); fy.reset(); fz.reset(); };
     let landmarker = null, video = null, stream = null, lastVT = -1, aplicada = false;
     let fovOriginal = null;
 
@@ -806,9 +856,10 @@ window.pasilloImagePlane = imagePlane;
       hudEl.textContent = t;
     }
 
-    function calibrar() {
+    function calibrar(silencioso) {
       cal.n = 0; cal.x = cal.y = cal.d = 0; cal.listo = false;
-      if (vWrap) minimizar(false);                            // al recalibrar (tecla C) se vuelve a abrir para ver el progreso
+      reiniciarFiltros();
+      if (vWrap && !silencioso) minimizar(false);             // al recalibrar (tecla C) se vuelve a abrir para ver el progreso
     }
 
     function leer() {                                         // una lectura de la cámara (si hay frame nuevo)
@@ -819,7 +870,7 @@ window.pasilloImagePlane = imagePlane;
       catch (err) { hud('error al detectar:\n' + err.message); dibujar(null); console.warn(err); return; }
       const lm = res.faceLandmarks && res.faceLandmarks[0];
       dibujar(lm);
-      if (!lm) { obj.ex = obj.ey = obj.zc = 0; hud('sin rostro detectado\n(luz de frente, cara visible)'); return; }   // vuelve suave al centro
+      if (!lm) { obj.ex = obj.ey = obj.zc = 0; reiniciarFiltros(); hud('sin rostro detectado\n(luz de frente, cara visible)'); return; }   // vuelve suave al centro
 
       // centros de los iris (468 y 473): no cambian al girar la cabeza, a diferencia de las esquinas de los ojos
       const a = lm[468] || lm[33], b = lm[473] || lm[263];
@@ -839,9 +890,13 @@ window.pasilloImagePlane = imagePlane;
       const relAlto = video.videoHeight / video.videoWidth;
       const zm = (v) => (Math.abs(v) < cfg.zonaMuertaCm ? 0 : v - Math.sign(v) * cfg.zonaMuertaCm);
       // la cámara no está espejada: si mueves la cabeza a tu derecha, x baja en la imagen
-      obj.ex = clamp(zm((neutral.x - x) * anchoCamCm), -cfg.maxCm, cfg.maxCm);
-      obj.ey = clamp(zm((neutral.y - y) * anchoCamCm * relAlto), -cfg.maxCm, cfg.maxCm);
-      obj.zc = clamp(zm(cfg.distanciaCm * (1 - neutral.d / d)), -cfg.maxCmZ, cfg.maxCmZ);   // + = más cerca
+      const tt = performance.now() / 1000;                    // primero se filtra la medida cruda, luego se limita
+      const rx = fx.f((neutral.x - x) * anchoCamCm, tt);
+      const ry = fy.f((neutral.y - y) * anchoCamCm * relAlto, tt);
+      const rz = fz.f(cfg.distanciaCm * (1 - neutral.d / d), tt);
+      obj.ex = clamp(zm(rx), -cfg.maxCm, cfg.maxCm);
+      obj.ey = clamp(zm(ry), -cfg.maxCm, cfg.maxCm);
+      obj.zc = clamp(zm(rz), -cfg.maxCmZ, cfg.maxCmZ);        // + = más cerca
       hud('rostro detectado\nx ' + obj.ex.toFixed(2) + '  y ' + obj.ey.toFixed(2) + '  z ' + obj.zc.toFixed(2) + '\n(tecla C = recalibrar)');
     }
 
@@ -883,27 +938,52 @@ window.pasilloImagePlane = imagePlane;
       aplicada = false;
     }
 
-    function apagar() {
-      sesion++; activando = false;                            // cancela cualquier activación en curso
-      est.activo = false;
+    /* Apaga la webcam (se apaga también su luz) y devuelve la cámara 3D a su proyección normal.
+       El modelo de detección se conserva en memoria para reanudar rápido. */
+    function soltarCamara() {
       if (stream) stream.getTracks().forEach((t) => t.stop());
       stream = null;
       if (video) { video.srcObject = null; video.remove(); video = null; }
       est.ex = est.ey = est.zc = obj.ex = obj.ey = obj.zc = 0;
+      reiniciarFiltros();
+      if (fovOriginal !== null) { camera.fov = fovOriginal; fovOriginal = null; }
+      camera.updateProjectionMatrix();                                // vuelve a la proyección normal
+    }
+
+    function apagar() {                                               // el usuario desactiva la interacción
+      sesion++; activando = false; suspendido = false;                // cancela cualquier activación en curso
+      est.activo = false;
+      soltarCamara();
       if (hudEl) { hudEl.remove(); hudEl = null; }
       if (vWrap) { vWrap.remove(); vWrap = null; }
       vista = null; vctx = null; vMin = false;
       estadoTxt = '';
-      if (fovOriginal !== null) { camera.fov = fovOriginal; fovOriginal = null; }
-      camera.updateProjectionMatrix();                                // vuelve a la proyección normal
       refrescarUI();                                                  // queda solo el botón-icono
     }
 
-    async function activar() {
+    /* La escena sale de pantalla (sección 2+ o pestaña oculta): libera la webcam y deja de detectar.
+       Si la interacción estaba activa (o cargando), se reanuda sola al volver. */
+    let suspendido = false;
+    function suspender() {
+      if (!est.activo && !activando) return;
+      sesion++; activando = false;                                    // invalida una carga a medias
+      est.activo = false;
+      soltarCamara();
+      suspendido = true;
+      refrescarUI();
+    }
+    function reanudar() {
+      if (!suspendido) return;
+      suspendido = false;
+      activar({ silencioso: true });                                  // sin abrir el panel; vuelve a calibrar
+    }
+
+    async function activar(opts) {
       if (!soportado || est.activo || activando) return;
+      const silencioso = !!(opts && opts.silencioso);
       activando = true;
       const mi = ++sesion;
-      crearPanel(); minimizar(false); pantallaCarga('Cargando cámara…');
+      crearPanel(); if (!silencioso) minimizar(false); pantallaCarga('Cargando cámara…');
       try {
         const s = await navigator.mediaDevices.getUserMedia({
           video: { width: 640, height: 480, facingMode: 'user' }, audio: false });
@@ -934,7 +1014,7 @@ window.pasilloImagePlane = imagePlane;
           }
         }
         if (mi !== sesion) return;
-        lastVT = -1; calibrar(); est.activo = true;
+        lastVT = -1; calibrar(silencioso); est.activo = true;
         if (cfg.fovVentana > 0) { fovOriginal = camera.fov; camera.fov = cfg.fovVentana; }
         hud('esperando rostro…');
         refrescarUI();
@@ -983,7 +1063,7 @@ window.pasilloImagePlane = imagePlane;
       }
     }
     window.pasilloCabeza = { config: CABEZA, activar, desactivar: apagar, calibrar };
-    return { preparar, restaurar };
+    return { preparar, restaurar, suspender, reanudar };
   })();
 
   /* ---------- carga del modelo ---------- */
@@ -1025,11 +1105,11 @@ window.pasilloImagePlane = imagePlane;
   });
 
   /* ---------- bucle ---------- */
-  let last = performance.now(), visible = true;
-  new IntersectionObserver((es) => { visible = es[0].isIntersecting; }).observe(cont);
-  renderer.setAnimationLoop((t) => {
+  /* Pausa real cuando la escena no se ve (otra sección, pestaña oculta): se detiene el bucle de dibujado
+     —sin GPU ni CPU— y se libera la webcam. Al volver todo se reanuda solo. */
+  let last = performance.now(), visible = true, corriendo = false;
+  const frame = (t) => {
     const dt = Math.min(0.05, (t - last) / 1000); last = t;
-    if (!visible) return;
     const sprint = (keys.ShiftLeft || keys.ShiftRight) ? 2 : 1;
     let f = 0, s = 0;
     if (keys.KeyW || keys.ArrowUp) f += 1;
@@ -1042,9 +1122,37 @@ window.pasilloImagePlane = imagePlane;
     if (f || s) move(f * 3.2 * sprint * dt, s * 3.2 * sprint * dt);
     shaftTime.value = t / 1000;
     textoCil.update(dt);
+    if (camAnim.activo) {                                         // desplazamiento de cámara por scroll
+      const k = Math.min(1, (performance.now() - camAnim.t0) / camAnim.dur), e = easeInOutExpo(k);
+      camera.position.x = camAnim.x0 + (camAnim.x1 - camAnim.x0) * e;
+      camera.position.z = camAnim.z0 + (camAnim.z1 - camAnim.z0) * e;
+      if (k >= 1) camAnim.activo = false;
+    }
     camera.rotation.set(pitch, yaw, 0);
     cabeza.preparar(dt);                 // desplaza la cámara y ajusta el frustum según tu cabeza
     renderer.render(scene, camera);
     cabeza.restaurar();                  // la posición real (colisiones, movimiento) no se toca
-  });
+  };
+  function reanudarEscena() {
+    if (corriendo) return;
+    corriendo = true; last = performance.now();
+    renderer.setAnimationLoop(frame);
+    cabeza.reanudar();
+  }
+  function pausarEscena() {
+    if (!corriendo) return;
+    corriendo = false;
+    renderer.setAnimationLoop(null);
+    for (const k in keys) keys[k] = false;                        // evita teclas "pegadas" al volver
+    cabeza.suspender();
+  }
+  const evaluarVisibilidad = () => (visible && !document.hidden ? reanudarEscena() : pausarEscena());
+  // ojo: una sección pegada al borde del contenedor cuenta como "intersectando" con 0 px visibles → se exige ≥ 1 % de área
+  new IntersectionObserver((es) => {
+    const e = es[es.length - 1];
+    visible = e.isIntersecting && e.intersectionRatio >= 0.01;
+    evaluarVisibilidad();
+  }, { threshold: [0, 0.01] }).observe(cont);
+  document.addEventListener('visibilitychange', evaluarVisibilidad);
+  reanudarEscena();
 }

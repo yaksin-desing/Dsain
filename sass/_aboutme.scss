@@ -24,6 +24,13 @@ $z-load: 5;
 $colorp: #0004ee;
 $fondoboto: #eff3ff;
 
+// ---------- Scroll por secciones (lo mueve js/proyectos/scroll-about.js) ----------
+// El scroll nativo se desactiva: el overflow del body se propaga al viewport.
+body.abautmepage {
+  margin: 0;
+  overflow: hidden;
+}
+
 .abautmepage {
   // ---------- Mixins ----------
   @mixin blur($px: 8px) {
@@ -41,6 +48,36 @@ $fondoboto: #eff3ff;
     flex-direction: $dir;
     align-items: center;
     justify-content: center;
+  }
+
+  // ---------- Contenedor de secciones: cada una mide 100vh × 100vw ----------
+  .contenedorproyectos {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; // solo se mueve por código (scrollIntoView)
+
+    > section {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+
+  // los textos animados arrancan ocultos y scroll-about.js los revela al entrar en pantalla
+  .animar-texto {
+    visibility: hidden;
+  }
+
+  // ---------- Secciones 2–7 (contenido de ejemplo: reemplázalo por el tuyo) ----------
+  .seccion_extra {
+    @include center-flex;
+    background: $c-bg;
+    color: $c-text;
+
+    h2 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 96px);
+    }
   }
 
   .seccionuno {
@@ -716,7 +753,7 @@ $fondoboto: #eff3ff;
           }
         }
 
-        eff3ff .magnetic-button {
+        .magnetic-button {
           transition: transform 0.2s ease;
           will-change: transform;
         }
