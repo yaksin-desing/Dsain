@@ -13,7 +13,7 @@ const MODEL_URL = new URL('../src/objt/aboutme/techo_longitudinal.glb', import.m
 
 
 /* ===== valores fijos ===== */
-const SUN_AZ = 70;          // ángulo de la luz (°)
+const SUN_AZ = 80;          // ángulo de la luz (°)
 const SUN_EL = 70;          // altura de la luz (°)
 const RAYS = 1.10;          // intensidad de los rayos de luz
 const REFLECTION = 0.30;    // fuerza del reflejo del piso
@@ -102,21 +102,29 @@ const CABEZA = {
   camFovH: 70,                  // campo de visión horizontal de tu webcam en ° (la mayoría: 65–78)
 
   /* --- comportamiento --- */
-  distanciaVentana: 12,         // profundidad (unidades de escena) del "cristal": lo que está ahí no se mueve,
+  distanciaVentana: 12,         // distancia (unidades de escena) de tu ojo al cristal (el ojo parte de la posición de la cámara).
+                                //   Menos = más paralaje/profundidad; más = más sutil. Antes: lo que estaba ahí no se movía,
                                 //   lo más cercano se mueve al lado contrario de tu rostro, lo lejano se mueve con tu cabeza
-  intensidad: 0.7,              // 1 = ventana físicamente exacta; menos = movimiento más sutil
+  intensidad: 0.9,              // 1 = ventana físicamente exacta; menos = movimiento más sutil
   maxCm: 1,                     // máximo desplazamiento lateral/vertical de la cabeza que se tiene en cuenta (cm)
-  maxCmZ: 7,                    // máximo acercarte / alejarte (cm)
+  maxCmZ: 2,                    // máximo acercarte / alejarte (cm)
   zonaMuertaCm: 0.2,            // movimientos menores a esto se ignoran (ahora el temblor lo quita el filtro)
   fovVentana: 0,                // 0 = no tocar el FOV de la cámara
+
+  /* --- dónde se coloca la ventana (la cámara) cuando el rastreo de rostro está ACTIVO ---
+     Se suma a la posición normal de la cámara con una transición suave. Cuando desactivas / sales de la sección, vuelve. */
+  ventanaX: 0,                  // mover la ventana a los lados (unidades de escena)
+  ventanaY: 0,                  // subir (+) / bajar (−) la ventana
+  ventanaZ: 0,                  // adelantar (−, entra al pasillo) / retroceder (+) la ventana
+  ventanaTransicion: 1.0,       // segundos que tarda en llegar a esa posición al activar el rastreo
 
   /* filtro One Euro: quita el temblor de la detección SIN meter retardo cuando mueves la cabeza.
      Quieto → muy suave; moviéndote rápido → casi sin filtrar. */
   filtroMinCutoff: 0.5,         // menor = más estable cuando estás quieto (pero con algo más de retardo en movimientos lentos)
-  filtroBeta: 0.2,              // mayor = menos retardo al moverte (si notas arrastre, sube a 0.4–1; si tiembla, baja a 0.1)
+  filtroBeta: 0.1,              // mayor = menos retardo al moverte (si notas arrastre, sube a 0.4–1; si tiembla, baja a 0.1)
   filtroDerivCutoff: 1.0,       // suavizado de la velocidad (normalmente no se toca)
-  suavizado: 30,                // suavizado final, ya casi sin retardo (mayor = responde más rápido; antes 7 = ~140 ms de arrastre)
-  calibrarFrames: 30,           // lecturas para fijar tu posición neutra al activar
+  suavizado: 3,                // suavizado final, ya casi sin retardo (mayor = responde más rápido; antes 7 = ~140 ms de arrastre)
+  calibrarFrames: 17,           // lecturas para fijar tu posición neutra al activar
 
   libUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/vision_bundle.mjs',
   wasmUrl: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm',
@@ -127,9 +135,14 @@ const CABEZA = {
    Primer scroll hacia abajo en la sección 1: la cámara se desplaza `avance` unidades en el eje Z.
    Al volver hacia arriba regresa a su posición inicial. */
 const ESCENA_SCROLL = {
-  zBase: 19,                    // posición inicial de la cámara en Z
+  /* --- dónde empieza la cámara (sin rastreo de rostro) --- */
+  xBase: 0,                     // posición inicial en X (izquierda − / derecha +)
+  yBase: 1.5,                   // altura inicial (Y)
+  zBase: 19,                    // posición inicial en Z
+  giroBase: 0,                  // hacia dónde mira al inicio, en grados (izquierda + / derecha −)
+  inclinacionBase: 3,           // inclinación inicial en grados (+ mira hacia arriba, − hacia abajo)
   avance: -30,                   // cuánto se mueve en Z (+15 = hacia atrás, aleja; usa -15 para avanzar hacia el pasillo)
-  duracion: 4.3,                // segundos
+  duracion: 1.3,                // segundos
   ruedaCamina: false,           // false = la rueda ya no camina por la escena (la usa el scroll de secciones)
 };
 
@@ -547,8 +560,8 @@ window.pasilloImagePlane = imagePlane;
   /* ---------- ***********cámara y movimiento********* ---------- */
   const camera = new THREE.PerspectiveCamera(65, cw() / ch(), 0.1, 250);
   camera.rotation.order = 'YXZ';
-  camera.position.set(0, 1.5, ESCENA_SCROLL.zBase);
-  let yaw = 0, pitch = 0.05;
+  camera.position.set(ESCENA_SCROLL.xBase, ESCENA_SCROLL.yBase, ESCENA_SCROLL.zBase);
+  let yaw = THREE.MathUtils.degToRad(ESCENA_SCROLL.giroBase), pitch = THREE.MathUtils.degToRad(ESCENA_SCROLL.inclinacionBase);
   const keys = Object.create(null);
   const cols = [];
   const inside = (x, z) => {
@@ -567,8 +580,8 @@ window.pasilloImagePlane = imagePlane;
   function irAPaso(n, instantaneo) {                              // lo llama el scroll de secciones
     pasoEscena = n;
     const zObjetivo = ESCENA_SCROLL.zBase + (n > 0 ? ESCENA_SCROLL.avance : 0);
-    if (instantaneo) { camera.position.x = 0; camera.position.z = zObjetivo; camAnim.activo = false; return; }
-    Object.assign(camAnim, { activo: true, x0: camera.position.x, z0: camera.position.z, x1: 0, z1: zObjetivo,
+    if (instantaneo) { camera.position.x = ESCENA_SCROLL.xBase; camera.position.z = zObjetivo; camAnim.activo = false; return; }
+    Object.assign(camAnim, { activo: true, x0: camera.position.x, z0: camera.position.z, x1: ESCENA_SCROLL.xBase, z1: zObjetivo,
       t0: performance.now(), dur: ESCENA_SCROLL.duracion * 1000 });
   }
   window.pasilloCamara = { config: ESCENA_SCROLL, irAPaso, get paso() { return pasoEscena; } };
@@ -901,9 +914,12 @@ window.pasilloImagePlane = imagePlane;
     }
 
     /* Se llama justo antes de renderizar: suaviza, desplaza la cámara y le pone el frustum asimétrico */
+    let mezcla = 0;                                                   // 0 = posición normal, 1 = posición de ventana con rastreo
     function preparar(dt) {
       if (!est.activo) return;
       leer();
+      mezcla = Math.min(1, mezcla + dt / Math.max(0.01, cfg.ventanaTransicion));
+      const me = mezcla * mezcla * (3 - 2 * mezcla);                  // suavizado de la transición
       const k = 1 - Math.exp(-cfg.suavizado * dt);
       est.ex += (obj.ex - est.ex) * k;
       est.ey += (obj.ey - est.ey) * k;
@@ -919,17 +935,19 @@ window.pasilloImagePlane = imagePlane;
       const ey = est.ey / mediaAlto * h * I;
       const zc = clamp(est.zc / cfg.distanciaCm * I, -0.5, 0.5);
       const dz = 1 - zc;                                              // distancia ojo-ventana / D
+      /* Tu OJO parte exactamente de la posición de la cámara (lo que ves al empezar no cambia ni se aleja).
+         El cristal queda D unidades delante de ese punto y es fijo; al mover la cabeza solo se mueve el ojo.
+         Frustum asimétrico (Kooima) con el plano cercano normal, para no recortar lo que está entre el ojo y el cristal. */
+      const D = cfg.distanciaVentana;                                 // distancia ojo–cristal (unidades de escena)
       const n = camera.near, f = camera.far;
       camera.projectionMatrix.makePerspective(
-        n * (-w - ex) / dz, n * (w - ex) / dz,
-        n * (h - ey) / dz, n * (-h - ey) / dz, n, f);
+        n * (-w - ex) / dz, n * (w - ex) / dz, n * (h - ey) / dz, n * (-h - ey) / dz, n, f);
       camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
 
-      /* La ventana (el plano de la pantalla) se queda fija en la escena; solo el ojo se mueve. Es lo mismo que
-         mover la escena en sentido contrario, y la posición real de la cámara se restaura tras dibujar. */
       base.copy(camera.position);
-      off.set(ex, ey, -zc).multiplyScalar(cfg.distanciaVentana).applyQuaternion(camera.quaternion);
+      off.set(ex * D, ey * D, -zc * D).applyQuaternion(camera.quaternion);   // solo el ojo se desplaza
       camera.position.add(off);
+      camera.position.x += cfg.ventanaX * me; camera.position.y += cfg.ventanaY * me; camera.position.z += cfg.ventanaZ * me;
       aplicada = true;
     }
     function restaurar() {
@@ -945,6 +963,7 @@ window.pasilloImagePlane = imagePlane;
       stream = null;
       if (video) { video.srcObject = null; video.remove(); video = null; }
       est.ex = est.ey = est.zc = obj.ex = obj.ey = obj.zc = 0;
+      mezcla = 0;
       reiniciarFiltros();
       if (fovOriginal !== null) { camera.fov = fovOriginal; fovOriginal = null; }
       camera.updateProjectionMatrix();                                // vuelve a la proyección normal
