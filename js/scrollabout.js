@@ -1,8 +1,9 @@
 /* ===== Scroll por secciones — página About me =====
    Un gesto de scroll = un paso. Pasos (con 7 secciones):
      0  sección 1 (escena, cámara en su posición inicial)
-     1  sección 1 con la cámara desplazada en Z (ver ESCENA_SCROLL en pasillo.js)
-     2…7  secciones 2…7
+     1  sección 1 con la cámara desplazada en Z (ESCENA_SCROLL.avance en pasillo.js)
+     2  sección 1 con la cámara aún más adentro (ESCENA_SCROLL.avance2). Al terminar el movimiento pasa SOLO a la sección 2
+     3…8  secciones 2…7
    Funciona con rueda, trackpad y gestos táctiles. Si añades o quitas <section> dentro de
    .contenedorproyectos, los pasos se recalculan solos.
    API:  scrollSecciones.ir(paso)  ·  evento 'secciones:cambio' → detail { paso, seccion, escena } */
@@ -12,6 +13,8 @@
     escenaEnPrimeraSeccion: true,   // true = el primer scroll en la sección 1 mueve la cámara antes de cambiar de sección
     bloqueoSeccion: 900,            // ms que se ignora el scroll tras cambiar de sección
     bloqueoEscena: 1400,            // ms tras mover la cámara (un poco más que ESCENA_SCROLL.duracion)
+    retardoVuelta: 600,             // ms que se ve la cámara en la posición avance2 al volver desde la sección 2, antes de ir a avance
+    retardoAuto: 400,               // ms de pausa al llegar la cámara al final antes de pasar solo a la sección 2
     silencioRueda: 140,             // ms sin rueda para aceptar otro gesto (evita saltos dobles con la inercia del trackpad)
     umbralRueda: 10,                // ignora giros de rueda diminutos
     umbralTactil: 50,               // px de deslizamiento para contar como gesto
@@ -26,7 +29,10 @@
 
     /* ---- pasos ---- */
     const pasos = [{ seccion: 0, escena: 0 }];
-    if (CFG.escenaEnPrimeraSeccion) pasos.push({ seccion: 0, escena: 1 });
+    if (CFG.escenaEnPrimeraSeccion) {
+      pasos.push({ seccion: 0, escena: 1 });
+      pasos.push({ seccion: 0, escena: 2, auto: true });   // al terminar la cámara pasa solo a la siguiente sección
+    }
     for (let i = 1; i < secs.length; i++) pasos.push({ seccion: i });
 
     let paso = 0, bloqueado = false, ultimaRueda = 0;
@@ -50,8 +56,12 @@
     }
 
     function ir(n) {
+      let vuelta = false;
+      if (n < paso && pasos[n] && pasos[n].auto) { n--; vuelta = true; }   // al volver desde la sección 2: la cámara aparece en avance2 y luego va a avance
       if (bloqueado || n < 0 || n >= pasos.length || n === paso) return;
       const prev = pasos[paso], p = pasos[n];
+      autoArmado = !!p.auto && n > paso;          // al volver (subiendo) a este paso NO se salta de nuevo a la sección 2
+      clearTimeout(autoTimer);
       paso = n; bloqueado = true;
       let ms = 0;
 
@@ -60,7 +70,13 @@
         ms = CFG.bloqueoSeccion;
       }
       if (p.escena !== undefined) {               // pasos que pertenecen a la escena 3D
-        if (window.pasilloCamara) window.pasilloCamara.irAPaso(p.escena);
+        if (vuelta) {
+          if (window.pasilloCamara) {
+            window.pasilloCamara.irAPaso(p.escena + 1, true);                          // coloca la cámara en avance2 (la escena aún está oculta)
+            setTimeout(() => { if (pasos[paso] === p) window.pasilloCamara.irAPaso(p.escena); }, CFG.retardoVuelta);   // y la lleva a avance
+          } else window.__pasoEscena = p.escena;
+          ms = CFG.retardoVuelta + CFG.bloqueoEscena;
+        } else if (window.pasilloCamara) window.pasilloCamara.irAPaso(p.escena, p.seccion !== prev.seccion);
         else window.__pasoEscena = p.escena;      // la escena aún no cargó: se aplica al iniciar
         if (p.seccion === prev.seccion) ms = CFG.bloqueoEscena;
       }
@@ -68,6 +84,20 @@
       window.dispatchEvent(new CustomEvent('secciones:cambio', { detail: { paso: n, seccion: p.seccion, escena: p.escena } }));
       desbloquear(ms);
     }
+
+    /* ---- paso automático: la cámara terminó el último movimiento de la escena ---- */
+    let autoTimer = null, autoArmado = false;     // solo se arma al llegar HACIA ADELANTE (bajando)
+    window.addEventListener('escena:camara-lista', (e) => {
+      const actual = pasos[paso];
+      if (!autoArmado || !actual || !actual.auto || e.detail.paso !== actual.escena) return;
+      autoArmado = false;
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(() => {
+        if (pasos[paso] !== actual) return;       // el usuario ya cambió de paso
+        bloqueado = false;                        // salta el bloqueo de la animación de la cámara
+        ir(paso + 1);
+      }, CFG.retardoAuto);
+    });
 
     /* ---- rueda / trackpad ---- */
     window.addEventListener('wheel', (e) => {

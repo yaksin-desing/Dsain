@@ -142,7 +142,9 @@ const ESCENA_SCROLL = {
   giroBase: 0,                  // hacia dónde mira al inicio, en grados (izquierda + / derecha −)
   inclinacionBase: 3,           // inclinación inicial en grados (+ mira hacia arriba, − hacia abajo)
   avance: -30,                   // cuánto se mueve en Z (+15 = hacia atrás, aleja; usa -15 para avanzar hacia el pasillo)
+  avance2: -40,                 // tercer paso: cuánto se mueve en Z desde zBase (igual que `avance`: 19 − 40 = −21). Al terminar, el scroll pasa solo a la sección 2
   duracion: 1.3,                // segundos
+  cieloBlancoDuracion: 1.0,     // segundos que tarda el cielo en volverse totalmente blanco al ir a avance2 (y en volver al azul al regresar)
   ruedaCamina: false,           // false = la rueda ya no camina por la escena (la usa el scroll de secciones)
 };
 
@@ -251,16 +253,28 @@ window.pasilloImagePlane = imagePlane;
 
   /* ---------- escena: cielo, entorno y luces ---------- */
   const scene = new THREE.Scene();
-  (function makeSky() {
+  const cielo = (function makeSky() {
     const cv = document.createElement('canvas'); cv.width = 16; cv.height = 256;
     const g = cv.getContext('2d');
-    const gr = g.createLinearGradient(0, 0, 0, 256);
-    gr.addColorStop(0.0, '#3f74d9'); gr.addColorStop(0.42, '#9fc4f2'); gr.addColorStop(0.5, '#e6eef8');
-    gr.addColorStop(0.52, '#d9dde4'); gr.addColorStop(1.0, '#bfc5cf');
-    g.fillStyle = gr; g.fillRect(0, 0, 16, 256);
+    g.fillStyle = (function () {
+      const gr = g.createLinearGradient(0, 0, 0, 256);
+      gr.addColorStop(0.0, '#3f74d9'); gr.addColorStop(0.42, '#9fc4f2'); gr.addColorStop(0.5, '#e6eef8');
+      gr.addColorStop(0.52, '#d9dde4'); gr.addColorStop(1.0, '#bfc5cf');
+      return gr;
+    })();
+    g.fillRect(0, 0, 16, 256);
     const t = new THREE.CanvasTexture(cv);
     t.mapping = THREE.EquirectangularReflectionMapping; t.colorSpace = THREE.SRGBColorSpace;
+    const blanco = new THREE.Color(0xffffff);
     scene.background = t;
+    /* three guarda el fondo equirectangular ya convertido y NO lo regenera si repintas el canvas, así que el cielo se
+       blanquea con backgroundIntensity (exponencial, el fondo se "quema" a blanco) y al final se cambia por un blanco puro. */
+    const api = { v: 0, objetivo: 0, dibujar(b) {                  // b: 0 = cielo normal · 1 = totalmente blanco
+      if (b >= 0.999) { scene.background = blanco; scene.backgroundIntensity = 1; return; }
+      scene.background = t; scene.backgroundIntensity = Math.pow(80, b);
+    }};
+    api.dibujar(0);
+    return api;
   })();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -574,12 +588,15 @@ window.pasilloImagePlane = imagePlane;
     for (const c of cols) if (Math.hypot(x - c.x, z - c.y) < 0.7) return false;
     return true;
   };
-  let pasoEscena = 0;                                             // 0 = posición inicial · 1 = cámara desplazada
+  let pasoEscena = 0;                                             // 0 = posición inicial · 1 = avance · 2 = avance2
+  let listoPendiente = false;
   const camAnim = { activo: false, x0: 0, z0: 0, x1: 0, z1: 0, t0: 0, dur: 1 };
   const easeInOutExpo = (t) => t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
   function irAPaso(n, instantaneo) {                              // lo llama el scroll de secciones
     pasoEscena = n;
-    const zObjetivo = ESCENA_SCROLL.zBase + (n > 0 ? ESCENA_SCROLL.avance : 0);
+    cielo.objetivo = n >= 2 ? 1 : 0;                              // en avance2 el cielo se vuelve blanco
+    if (instantaneo) { cielo.v = cielo.objetivo; cielo.dibujar(cielo.v); }
+    const zObjetivo = ESCENA_SCROLL.zBase + (n >= 2 ? ESCENA_SCROLL.avance2 : n === 1 ? ESCENA_SCROLL.avance : 0);
     if (instantaneo) { camera.position.x = ESCENA_SCROLL.xBase; camera.position.z = zObjetivo; camAnim.activo = false; return; }
     Object.assign(camAnim, { activo: true, x0: camera.position.x, z0: camera.position.z, x1: ESCENA_SCROLL.xBase, z1: zObjetivo,
       t0: performance.now(), dur: ESCENA_SCROLL.duracion * 1000 });
@@ -1141,11 +1158,20 @@ window.pasilloImagePlane = imagePlane;
     if (f || s) move(f * 3.2 * sprint * dt, s * 3.2 * sprint * dt);
     shaftTime.value = t / 1000;
     textoCil.update(dt);
+    if (cielo.v !== cielo.objetivo) {                             // cielo → blanco / de vuelta a azul
+      const paso = dt / Math.max(0.05, ESCENA_SCROLL.cieloBlancoDuracion);
+      cielo.v = cielo.v < cielo.objetivo ? Math.min(cielo.objetivo, cielo.v + paso) : Math.max(cielo.objetivo, cielo.v - paso);
+      cielo.dibujar(cielo.v * cielo.v * (3 - 2 * cielo.v));
+    }
     if (camAnim.activo) {                                         // desplazamiento de cámara por scroll
       const k = Math.min(1, (performance.now() - camAnim.t0) / camAnim.dur), e = easeInOutExpo(k);
       camera.position.x = camAnim.x0 + (camAnim.x1 - camAnim.x0) * e;
       camera.position.z = camAnim.z0 + (camAnim.z1 - camAnim.z0) * e;
-      if (k >= 1) camAnim.activo = false;
+      if (k >= 1) { camAnim.activo = false; listoPendiente = true; }
+    }
+    if (listoPendiente && !camAnim.activo && cielo.v === cielo.objetivo) {   // cámara Y cielo terminaron → recién ahí se avisa al scroll
+      listoPendiente = false;
+      window.dispatchEvent(new CustomEvent('escena:camara-lista', { detail: { paso: pasoEscena } }));   // el scroll lo usa para pasar solo a la sección 2
     }
     camera.rotation.set(pitch, yaw, 0);
     cabeza.preparar(dt);                 // desplaza la cámara y ajusta el frustum según tu cabeza

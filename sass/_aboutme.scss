@@ -32,6 +32,7 @@ body.abautmepage {
 }
 
 .abautmepage {
+
   // ---------- Mixins ----------
   @mixin blur($px: 8px) {
     backdrop-filter: blur($px);
@@ -56,7 +57,7 @@ body.abautmepage {
     height: 100vh;
     overflow: hidden; // solo se mueve por código (scrollIntoView)
 
-    > section {
+    >section {
       position: relative;
       width: 100vw;
       height: 100vh;
@@ -71,8 +72,8 @@ body.abautmepage {
   // ---------- Secciones 2–7 (contenido de ejemplo: reemplázalo por el tuyo) ----------
   .seccion_extra {
     @include center-flex;
-    background: $c-bg;
-    color: $c-text;
+    background: white;
+    color: $colorp;
 
     h2 {
       margin: 0;
@@ -84,6 +85,7 @@ body.abautmepage {
     background: rgb(254, 255, 254);
     width: 100vw;
     height: 100vh;
+
     .barra_nav {
       z-index: 1000;
       position: fixed;
@@ -291,6 +293,7 @@ body.abautmepage {
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
+
             .lang-option {
               margin: 15px 0;
               display: flex;
@@ -350,17 +353,20 @@ body.abautmepage {
                 transition: opacity 0.2s ease;
               }
 
-              input:checked ~ .lang-radio {
+              input:checked~.lang-radio {
                 border-color: #2d5bff;
               }
-              input:checked ~ .lang-radio::after {
+
+              input:checked~.lang-radio::after {
                 opacity: 1;
                 transform: scale(1);
               }
-              input:checked ~ .lang-name {
+
+              input:checked~.lang-name {
                 color: #2d5bff;
               }
-              input:checked ~ .lang-flag {
+
+              input:checked~.lang-flag {
                 opacity: 1;
               }
             }
@@ -507,6 +513,7 @@ body.abautmepage {
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
+
             .lang-option {
               margin: 15px 0;
               display: flex;
@@ -566,17 +573,20 @@ body.abautmepage {
                 transition: opacity 0.2s ease;
               }
 
-              input:checked ~ .lang-radio {
+              input:checked~.lang-radio {
                 border-color: #2d5bff;
               }
-              input:checked ~ .lang-radio::after {
+
+              input:checked~.lang-radio::after {
                 opacity: 1;
                 transform: scale(1);
               }
-              input:checked ~ .lang-name {
+
+              input:checked~.lang-name {
                 color: #2d5bff;
               }
-              input:checked ~ .lang-flag {
+
+              input:checked~.lang-flag {
                 opacity: 1;
               }
             }
@@ -629,50 +639,15 @@ body.abautmepage {
           cursor: grabbing;
         }
       }
-
-      // ----- Pantalla de carga -----
-      .esc-load {
-        @include cover;
-        @include center-flex(column);
-        z-index: $z-load;
-        gap: 12px;
-        background: $c-bg;
-        font-size: 13px;
-        letter-spacing: 0.08em;
-        transition: opacity 0.7s;
-      }
-
-      &.cargado .esc-load {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .esc-bar {
-        width: min(260px, 60%);
-        height: 3px;
-        background: $c-bar;
-        border-radius: 2px;
-        overflow: hidden;
-
-        i {
-          display: block;
-          height: 100%;
-          width: 0;
-          background: $c-accent;
-          transition: width 0.2s;
-        }
-      }
-
-
     }
   }
 }
 
 /* Móvil pequeño */
-@media (max-width: 480px){
+@media (max-width: 480px) {
   .abautmepage {
-    .seccionuno{
-            .barra_nav {
+    .seccionuno {
+      .barra_nav {
         z-index: 1000;
         position: fixed;
         display: flex;
@@ -872,6 +847,7 @@ body.abautmepage {
               flex-direction: row;
               justify-content: space-between;
               width: 100%;
+
               .lang-option {
                 margin: 15px 0;
                 display: flex;
@@ -931,17 +907,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked ~ .lang-radio {
+                input:checked~.lang-radio {
                   border-color: #2d5bff;
                 }
-                input:checked ~ .lang-radio::after {
+
+                input:checked~.lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
-                input:checked ~ .lang-name {
+
+                input:checked~.lang-name {
                   color: #2d5bff;
                 }
-                input:checked ~ .lang-flag {
+
+                input:checked~.lang-flag {
                   opacity: 1;
                 }
               }
@@ -1086,6 +1065,7 @@ body.abautmepage {
               flex-direction: row;
               justify-content: space-between;
               width: 100%;
+
               .lang-option {
                 margin-right: 7px;
                 display: flex;
@@ -1145,17 +1125,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked ~ .lang-radio {
+                input:checked~.lang-radio {
                   border-color: #2d5bff;
                 }
-                input:checked ~ .lang-radio::after {
+
+                input:checked~.lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
-                input:checked ~ .lang-name {
+
+                input:checked~.lang-name {
                   color: #2d5bff;
                 }
-                input:checked ~ .lang-flag {
+
+                input:checked~.lang-flag {
                   opacity: 1;
                 }
               }
@@ -1177,9 +1160,9 @@ body.abautmepage {
 
 /* Móvil mediano */
 @media (min-width: 481px) and (max-width: 768px) {
-    .abautmepage {
-    .seccionuno{
-            .barra_nav {
+  .abautmepage {
+    .seccionuno {
+      .barra_nav {
         z-index: 1000;
         position: fixed;
         display: flex;
@@ -1466,14 +1449,14 @@ body.abautmepage {
         }
       }
     }
-    }
+  }
 }
 
 /* Tablet */
 @media (min-width: 769px) and (max-width: 1024px) {
-      .abautmepage {
-    .seccionuno{
-            .barra_nav {
+  .abautmepage {
+    .seccionuno {
+      .barra_nav {
         z-index: 1000;
         position: fixed;
         display: flex;
@@ -1645,7 +1628,7 @@ body.abautmepage {
               }
             }
           }
-          
+
           .lang-select {
             position: absolute;
             list-style: none;
@@ -1672,6 +1655,7 @@ body.abautmepage {
               flex-direction: row;
               justify-content: space-between;
               width: 100%;
+
               .lang-option {
                 margin-right: 7px;
                 display: flex;
@@ -1731,17 +1715,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked ~ .lang-radio {
+                input:checked~.lang-radio {
                   border-color: #2d5bff;
                 }
-                input:checked ~ .lang-radio::after {
+
+                input:checked~.lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
-                input:checked ~ .lang-name {
+
+                input:checked~.lang-name {
                   color: #2d5bff;
                 }
-                input:checked ~ .lang-flag {
+
+                input:checked~.lang-flag {
                   opacity: 1;
                 }
               }
@@ -1886,6 +1873,7 @@ body.abautmepage {
               flex-direction: row;
               justify-content: space-between;
               width: 100%;
+
               .lang-option {
                 margin-right: 7px;
                 display: flex;
@@ -1945,17 +1933,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked ~ .lang-radio {
+                input:checked~.lang-radio {
                   border-color: #2d5bff;
                 }
-                input:checked ~ .lang-radio::after {
+
+                input:checked~.lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
-                input:checked ~ .lang-name {
+
+                input:checked~.lang-name {
                   color: #2d5bff;
                 }
-                input:checked ~ .lang-flag {
+
+                input:checked~.lang-flag {
                   opacity: 1;
                 }
               }
