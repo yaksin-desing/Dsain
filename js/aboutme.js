@@ -25,6 +25,7 @@ const QUALITY = 1;       // resolución (pixel ratio)
      pasilloTexto.config.radio = 4;  pasilloTexto.reconstruir();   // radio, tamaño, separaciones, etc.
      pasilloTexto.config.velocidad = 60;  pasilloTexto.aplicar();  // velocidad, color, posición, opacidad */
 const TEXTO = {
+  visible: false,                // interruptor: false = el cilindro de letras desaparece de la escena (y deja de animarse)
   palabra: 'DSAINS',
   repeticiones: 7,              // cuántas veces se repite la palabra alrededor del cilindro
   fuente: new URL('../src/fonts/false_Semi-bold.json', import.meta.url).href,
@@ -66,6 +67,24 @@ const TEXTO = {
     y: 0,                          // subir/bajar la imagen respecto a las letras
     rotacion: { x: -40, y: 0, z: 0 } // grados, igual que las letras
   },
+};
+
+/* ===== TEXTO A TODO EL ANCHO (independiente del cilindro) =====
+   Una palabra con la misma fuente, puesta justo delante de la cámara inicial y escalada para ocupar el ancho de la
+   pantalla (se recalcula al cambiar el tamaño de la ventana / dispositivo). El texto queda fijo en el mundo, en el eje Z que indiques.
+   En vivo:  pasilloTextoAncho.config.z = 10;  pasilloTextoAncho.aplicar(); */
+const TEXTO_ANCHO = {
+  visible: true,                // interruptor: false = no existe en la escena
+  palabra: 'DSAIN',
+  fuente: TEXTO.fuente,         // la misma fuente del cilindro
+  z: 14.7,                        // posición en el eje Z del mundo (la cámara inicial está en ESCENA_SCROLL.zBase = 19; menor = más lejos)
+  desfaseX: 0,                  // mover a los lados (unidades de escena)
+  desfaseY: -0.5,                  // subir (+) / bajar (−) respecto al centro de la vista de la cámara
+  ancho: 1,                     // fracción del ancho de la pantalla que ocupa (1 = todo el ancho, 0.8 = 80 %)
+  grosor: 0,                    // profundidad de las letras (0 = planas)
+  color: '#ffffff',
+  opacidad: 1,
+  siempreEncima: false,         // true = se dibuja sobre todo lo demás (ignora la profundidad)
 };
 
 /* ===== SEGUIMIENTO DE CABEZA (experimento: solo PC con mouse y cámara) =====*/
@@ -144,6 +163,9 @@ const ESCENA_SCROLL = {
   avance: -30,                   // cuánto se mueve en Z (+15 = hacia atrás, aleja; usa -15 para avanzar hacia el pasillo)
   avance2: -40,                 // tercer paso: cuánto se mueve en Z desde zBase (igual que `avance`: 19 − 40 = −21). Al terminar, el scroll pasa solo a la sección 2
   duracion: 1.3,                // segundos
+  botonFade: 0.6,               // segundos del desvanecimiento del botón de la cámara al ir a avance2
+  botonFadeEntrada: 1.2,        // segundos de su aparición al volver de la sección 2 (empieza cuando la cámara arranca hacia avance)
+  cieloBlancoRetardo: 0.6,      // segundos que espera, desde que empieza el movimiento a avance2, antes de empezar a blanquear el cielo
   cieloBlancoDuracion: 1.0,     // segundos que tarda el cielo en volverse totalmente blanco al ir a avance2 (y en volver al azul al regresar)
   ruedaCamina: false,           // false = la rueda ya no camina por la escena (la usa el scroll de secciones)
 };
@@ -269,7 +291,7 @@ window.pasilloImagePlane = imagePlane;
     scene.background = t;
     /* three guarda el fondo equirectangular ya convertido y NO lo regenera si repintas el canvas, así que el cielo se
        blanquea con backgroundIntensity (exponencial, el fondo se "quema" a blanco) y al final se cambia por un blanco puro. */
-    const api = { v: 0, objetivo: 0, dibujar(b) {                  // b: 0 = cielo normal · 1 = totalmente blanco
+    const api = { v: 0, objetivo: 0, espera: 0, dibujar(b) {                  // b: 0 = cielo normal · 1 = totalmente blanco
       if (b >= 0.999) { scene.background = blanco; scene.backgroundIntensity = 1; return; }
       scene.background = t; scene.backgroundIntensity = Math.pow(80, b);
     }};
@@ -450,6 +472,7 @@ window.pasilloImagePlane = imagePlane;
       material.transparent = TEXTO.opacidad < 1;
       material.needsUpdate = true;
       grupo.rotation.y = rad(TEXTO.anguloInicial + giro);
+      grupo.visible = TEXTO.visible !== false;      // interruptor TEXTO.visible
     }
 
     function limpiar() {
@@ -544,7 +567,7 @@ window.pasilloImagePlane = imagePlane;
     }
 
     function update(dt) {
-      if (!TEXTO.velocidad) return;
+      if (!TEXTO.velocidad || TEXTO.visible === false) return;
       giro += TEXTO.velocidad * dt;
       grupo.rotation.y = rad(TEXTO.anguloInicial + giro);
     }
@@ -576,6 +599,52 @@ window.pasilloImagePlane = imagePlane;
   camera.rotation.order = 'YXZ';
   camera.position.set(ESCENA_SCROLL.xBase, ESCENA_SCROLL.yBase, ESCENA_SCROLL.zBase);
   let yaw = THREE.MathUtils.degToRad(ESCENA_SCROLL.giroBase), pitch = THREE.MathUtils.degToRad(ESCENA_SCROLL.inclinacionBase);
+
+  /* ---------- texto a todo el ancho, delante de la cámara ---------- */
+  const textoAncho = (function () {
+    const T = TEXTO_ANCHO;
+    const material = new THREE.MeshBasicMaterial({ toneMapped: false, side: THREE.DoubleSide });
+    const malla = new THREE.Mesh(new THREE.BufferGeometry(), material);
+    scene.add(malla);
+    let fuente = null, anchoNatural = 1;
+
+    function construir() {                                      // cambia palabra / fuente / grosor
+      if (!fuente) return;
+      malla.geometry.dispose();
+      const g = new TextGeometry(T.palabra, { font: fuente, size: 1, height: T.grosor, curveSegments: 12, bevelEnabled: false });
+      g.computeBoundingBox();
+      g.center();                                               // el pivote queda en el centro de la palabra
+      anchoNatural = Math.max(1e-3, g.boundingBox.max.x - g.boundingBox.min.x);
+      malla.geometry = g;
+      aplicar();
+    }
+
+    function aplicar() {                                        // posición, escala y color (se llama también al redimensionar)
+      malla.visible = T.visible !== false && !!fuente;
+      material.color.set(T.color);
+      material.opacity = T.opacidad; material.transparent = T.opacidad < 1;
+      material.depthTest = !T.siempreEncima;
+      malla.renderOrder = T.siempreEncima ? 50 : 8;
+      material.needsUpdate = true;
+      if (!fuente) return;
+
+      /* punto de la vista inicial de la cámara que está en el plano z = T.z */
+      const yawI = THREE.MathUtils.degToRad(ESCENA_SCROLL.giroBase), pitI = THREE.MathUtils.degToRad(ESCENA_SCROLL.inclinacionBase);
+      const dir = new THREE.Vector3(-Math.sin(yawI) * Math.cos(pitI), Math.sin(pitI), -Math.cos(yawI) * Math.cos(pitI));
+      const t = Math.max(0.01, (ESCENA_SCROLL.zBase - T.z) / Math.max(0.05, -dir.z));    // distancia a lo largo de la vista
+      malla.position.set(ESCENA_SCROLL.xBase, ESCENA_SCROLL.yBase, ESCENA_SCROLL.zBase).addScaledVector(dir, t);
+      malla.rotation.set(pitI, yawI, 0, 'YXZ');                 // perpendicular a la vista inicial
+      malla.translateX(T.desfaseX); malla.translateY(T.desfaseY);
+
+      const anchoVista = 2 * t * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect;   // ancho visible a esa distancia
+      malla.scale.setScalar(anchoVista * T.ancho / anchoNatural);
+    }
+
+    new FontLoader().load(T.fuente, (f) => { fuente = f; construir(); }, undefined,
+      (err) => console.error('No se pudo cargar la fuente del texto a todo el ancho:', T.fuente, err));
+    window.pasilloTextoAncho = { config: T, reconstruir: construir, aplicar, malla };
+    return { aplicar };
+  })();
   const keys = Object.create(null);
   const cols = [];
   const inside = (x, z) => {
@@ -594,7 +663,9 @@ window.pasilloImagePlane = imagePlane;
   const easeInOutExpo = (t) => t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
   function irAPaso(n, instantaneo) {                              // lo llama el scroll de secciones
     pasoEscena = n;
+    if (window.pasilloCabeza) window.pasilloCabeza.mostrarUI(n < 2);   // se desvanece al ir a avance2; al volver reaparece cuando la cámara ya se mueve a avance (la escena ya es visible)
     cielo.objetivo = n >= 2 ? 1 : 0;                              // en avance2 el cielo se vuelve blanco
+    cielo.espera = (cielo.objetivo === 1 && !instantaneo) ? ESCENA_SCROLL.cieloBlancoRetardo : 0;   // pequeño delay antes de empezar
     if (instantaneo) { cielo.v = cielo.objetivo; cielo.dibujar(cielo.v); }
     const zObjetivo = ESCENA_SCROLL.zBase + (n >= 2 ? ESCENA_SCROLL.avance2 : n === 1 ? ESCENA_SCROLL.avance : 0);
     if (instantaneo) { camera.position.x = ESCENA_SCROLL.xBase; camera.position.z = zObjetivo; camAnim.activo = false; return; }
@@ -660,6 +731,7 @@ window.pasilloImagePlane = imagePlane;
   /* ---------- tamaño del contenedor ---------- */
   function onResize() {
     camera.aspect = cw() / ch(); camera.updateProjectionMatrix();
+    textoAncho.aplicar();                                       // el texto vuelve a ocupar el ancho del dispositivo
     renderer.setSize(cw(), ch(), false);
     reflector.getRenderTarget().setSize(Math.floor(cw() * QUALITY * reflScale), Math.floor(ch() * QUALITY * reflScale));
   }
@@ -708,10 +780,22 @@ window.pasilloImagePlane = imagePlane;
     const SVG_POWER = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" ' +
       'stroke-width="2.4" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg>';
 
+    /* desvanece (o muestra) el botón, el panel y el HUD de la cámara; mientras está oculto no se puede pulsar */
+    let uiOculta = false;
+    function fadeEl(el) {
+      if (!el) return;
+      const d = (uiOculta ? ESCENA_SCROLL.botonFade : ESCENA_SCROLL.botonFadeEntrada) + 's';
+      el.style.transition = 'opacity ' + d + ' ease, visibility 0s linear ' + (uiOculta ? d : '0s');
+      el.style.opacity = uiOculta ? '0' : '1';
+      el.style.visibility = uiOculta ? 'hidden' : 'visible';
+      el.style.pointerEvents = uiOculta ? 'none' : '';
+    }
+    function mostrarUI(v) { uiOculta = !v; fadeEl(vIcon); fadeEl(vWrap); fadeEl(hudEl); }
     function refrescarUI() {                                  // el icono solo se ve cuando el panel está cerrado
       const abierto = !!vWrap && !vMin;
-      if (vWrap) vWrap.style.display = abierto ? 'block' : 'none';
+      if (vWrap) { vWrap.style.display = abierto ? 'block' : 'none'; fadeEl(vWrap); }
       if (vIcon) {
+        fadeEl(vIcon);
         vIcon.style.display = abierto ? 'none' : 'flex';
         vIcon.style.borderColor = est.activo ? '#0051ff' : 'rgba(255,255,255,.6)';   // verde = interacción activa
         vIcon.title = est.activo ? 'Ver cámara (interacción activa)' : 'Activar interacción con la cámara';
@@ -882,6 +966,7 @@ window.pasilloImagePlane = imagePlane;
           'border-radius:8px;background:rgba(0,0,0,.55);color:#0ff;font:11px/1.4 monospace;' +
           'pointer-events:none;white-space:pre';
         cont.appendChild(hudEl);
+        fadeEl(hudEl);
       }
       hudEl.textContent = t;
     }
@@ -1098,7 +1183,7 @@ window.pasilloImagePlane = imagePlane;
           .catch(() => {});
       }
     }
-    window.pasilloCabeza = { config: CABEZA, activar, desactivar: apagar, calibrar };
+    window.pasilloCabeza = { config: CABEZA, activar, desactivar: apagar, calibrar, mostrarUI };
     return { preparar, restaurar, suspender, reanudar };
   })();
 
@@ -1158,7 +1243,8 @@ window.pasilloImagePlane = imagePlane;
     if (f || s) move(f * 3.2 * sprint * dt, s * 3.2 * sprint * dt);
     shaftTime.value = t / 1000;
     textoCil.update(dt);
-    if (cielo.v !== cielo.objetivo) {                             // cielo → blanco / de vuelta a azul
+    if (cielo.espera > 0) cielo.espera -= dt;                     // delay antes de iniciar la animación del cielo
+    else if (cielo.v !== cielo.objetivo) {                        // cielo → blanco / de vuelta a azul
       const paso = dt / Math.max(0.05, ESCENA_SCROLL.cieloBlancoDuracion);
       cielo.v = cielo.v < cielo.objetivo ? Math.min(cielo.objetivo, cielo.v + paso) : Math.max(cielo.objetivo, cielo.v - paso);
       cielo.dibujar(cielo.v * cielo.v * (3 - 2 * cielo.v));
