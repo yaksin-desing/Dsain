@@ -20,64 +20,15 @@ const REFLECTION = 0.30;    // fuerza del reflejo del piso
 const EXPOSURE = 1.2;      // exposición
 const QUALITY = 1;       // resolución (pixel ratio)
 
-/* ===== TEXTO EN CILINDRO "DSAINS" (todo lo que puedes ajustar) =====
-   Cambia un valor y recarga. También puedes tocarlo en vivo desde la consola:
-     pasilloTexto.config.radio = 4;  pasilloTexto.reconstruir();   // radio, tamaño, separaciones, etc.
-     pasilloTexto.config.velocidad = 60;  pasilloTexto.aplicar();  // velocidad, color, posición, opacidad */
-const TEXTO = {
-  visible: false,                // interruptor: false = el cilindro de letras desaparece de la escena (y deja de animarse)
-  palabra: 'DSAINS',
-  repeticiones: 7,              // cuántas veces se repite la palabra alrededor del cilindro
-  fuente: new URL('../src/fonts/false_Semi-bold.json', import.meta.url).href,
-
-  radio: 2.7,                   // radio del cilindro (unidades de la escena)
-  tamano: 0.2,                  // alto de las letras
-  grosor: 0,                    // profundidad de la letra (0 = plana)
-  posicion: { x: 0, y: 1.2, z: 15 },   // centro del cilindro (el piso está en y = 0)
-
-  velocidad: -20,               // grados por segundo (negativo = gira al revés, 0 = quieto)
-  anguloInicial: 0,             // giro base de todo el cilindro (°)
-
-  color: '#ffffff',
-  opacidad: 1,
-
-  separacionLetras: 0.08,       // espacio entre letras
-  separacionPalabras: 0.9,      // espacio entre una palabra y la siguiente
-  cerrarCirculo: true,          // true = reparte las palabras para cerrar el círculo exacto (ignora separacionPalabras)
-
-  caraHacia: 'afuera',          // 'afuera' = se lee desde fuera del cilindro, 'adentro' = desde dentro
-
-  /* rotación de CADA letra sobre su propio centro, en grados */
-  rotacionLetra: { x: -40, y: 0, z: 0 },   // se aplica igual a todas las letras
-  rotacionPorLetra: [                    // extra por posición dentro de la palabra: D, S, A, I, N, S
-    // { x: 0, y: 0, z: 0 },   // D
-    // { x: 0, y: 0, z: 15 },  // S
-    // { x: 0, y: 0, z: 0 },   // A
-    // { x: 0, y: 0, z: 0 },   // I
-    // { x: 0, y: 0, z: 0 },   // N
-    // { x: 0, y: 0, z: 0 },   // S
-  ],
-
-  /* imagen PNG que se coloca entre cada palabra (después de cada una, así el patrón cierra el círculo) */
-  imagen: {
-    activa: true,
-    url: new URL('../src/img/star.png', import.meta.url).href,   // cambia por tu PNG
-    alto: 0.1,                     // alto de la imagen (el ancho sale de sus proporciones)
-    orden: 10,                     // orden de renderizado: mayor = se dibuja después, encima de lo transparente (piso 2, rayos 3-4)
-    y: 0,                          // subir/bajar la imagen respecto a las letras
-    rotacion: { x: -40, y: 0, z: 0 } // grados, igual que las letras
-  },
-};
-
-/* ===== TEXTO A TODO EL ANCHO (independiente del cilindro) =====
-   Una palabra con la misma fuente, puesta justo delante de la cámara inicial y escalada para ocupar el ancho de la
+/* ===== TEXTO A TODO EL ANCHO =====
+   Una palabra, puesta justo delante de la cámara inicial y escalada para ocupar el ancho de la
    pantalla (se recalcula al cambiar el tamaño de la ventana / dispositivo). El texto queda fijo en el mundo, en el eje Z que indiques.
    En vivo:  pasilloTextoAncho.config.z = 10;  pasilloTextoAncho.aplicar(); */
 const TEXTO_ANCHO = {
   visible: true,                // interruptor: false = no existe en la escena
   palabra: 'DSAIN',
-  fuente: TEXTO.fuente,         // la misma fuente del cilindro
-  z: 14.7,                        // posición en el eje Z del mundo (la cámara inicial está en ESCENA_SCROLL.zBase = 19; menor = más lejos)
+  fuente: new URL('../src/fonts/false_Semi-bold.json', import.meta.url).href,   // fuente (JSON de three.js)
+  z: 14.5,                        // posición en el eje Z del mundo (la cámara inicial está en ESCENA_SCROLL.zBase = 19; menor = más lejos)
   desfaseX: 0,                  // mover a los lados (unidades de escena)
   desfaseY: -0.5,                  // subir (+) / bajar (−) respecto al centro de la vista de la cámara
   ancho: 1,                     // fracción del ancho de la pantalla que ocupa (1 = todo el ancho, 0.8 = 80 %)
@@ -85,6 +36,75 @@ const TEXTO_ANCHO = {
   color: '#ffffff',
   opacidad: 1,
   siempreEncima: false,         // true = se dibuja sobre todo lo demás (ignora la profundidad)
+};
+
+/* ===== CARRUSEL INFINITO CURVO (cinta de 8 imágenes) =====
+   Una cinta horizontal que gira sin fin y se curva hacia la cámara: la imagen del centro es la más cercana, la más grande
+   y la más brillante; las de los lados se alejan, se oscurecen y se desvanecen. Todo el tamaño se calcula en proporción al
+   ancho de la pantalla, así que se adapta a cualquier dispositivo.
+   En vivo:  pasilloCarrusel.config.velocidad = 0.5;  pasilloCarrusel.aplicar();   (si cambias imágenes: pasilloCarrusel.reconstruir()) */
+const CARRUSEL = {
+  visible: true,                // interruptor: false = el carrusel no existe en la escena
+  /* ▼▼▼ PON AQUÍ LAS URL LOCALES DE TUS 8 IMÁGENES (horizontales). Si un hueco queda vacío ('') se usa la imagen de prueba. ▼▼▼
+     Ejemplo:  new URL('../src/img/carrusel/foto1.jpg', import.meta.url).href  */
+  imagenes: [
+    '',   // 1
+    '',   // 2
+    '',   // 3
+    '',   // 4
+    '',   // 5
+    '',   // 6
+    '',   // 7
+    '',   // 8
+  ],
+  /* donde `imagenes` esté vacío se dibuja un cartel de prueba (formas geométricas en verde bosque, rosa y crema) */
+  paleta: { verde: '#1d4a38', verdeOscuro: '#14352a', rosa: '#f1b5c4', rosaFuerte: '#e58fa6', crema: '#efe7d4' },
+
+  /* posición: la imagen central queda justo delante de la cámara inicial, en el plano Z que indiques */
+  z: -19.7,                         // eje Z del mundo de la imagen central (la cámara inicial está en ESCENA_SCROLL.zBase = 19)
+  desfaseX: 0,                  // mover a los lados (en anchos de tarjeta)
+  desfaseY: -0.5,                  // subir (+) / bajar (−) (en anchos de tarjeta)
+
+  /* cinta continua: todas las imágenes forman UNA sola cinta (un borde pegado al siguiente) que se desliza por una curva fija.
+     La curva: el centro se acerca a la cámara y los dos extremos (izquierda y derecha) se curvan hacia atrás. */
+  cima: 1.4,                    // cuánto se adelanta el centro de la cinta respecto a la cámara (en anchos de tarjeta)
+  anchoCurva: 1.8,              // qué tan ancha es la zona central que se acerca (en anchos de tarjeta; mayor = bulto más ancho)
+  curvaExtremos: 1.7,           // cuánto se curvan hacia atrás los extremos izquierdo y derecho (en anchos de tarjeta)
+  alcance: 17,                 // a cuántas tarjetas del centro se desvanecen por completo (los extremos)
+
+  /* forma */
+  anchoVista: 0.03,             // ancho de la imagen central como fracción del ancho de la pantalla (con ~0.42 se ven la central y parte de las dos vecinas)
+  proporcion: 1.6,              // ancho / alto de cada tarjeta (1.6 = 16:10, 1.78 = 16:9)
+  separacion: 0.1,                // hueco entre tarjetas (0 = pegadas, forman una sola cinta)
+  segmentos: 24,                // resolución del doblez de cada tarjeta (más = más suave)
+  filas: 14,                    // resolución vertical de cada tarjeta (para que la tela ondule bien)
+  ondaY: 0,                     // ondulación vertical de la cinta (en anchos de tarjeta, 0 = ninguna; prueba 0.15)
+
+  /* movimiento */
+  modo: 'continuo',                // 'pasos' = avanza una tarjeta, se detiene (la tela queda plana) y vuelve a avanzar · 'continuo' = gira sin parar
+  velocidad: -0.25,             // sentido: negativo = de derecha a izquierda · positivo = de izquierda a derecha. En modo 'continuo' también es la rapidez (tarjetas/s)
+  pausa: 1.7,                   // segundos que se queda quieta cada tarjeta (modo 'pasos')
+  duracionPaso: 1.3,            // segundos que tarda en pasar a la siguiente tarjeta (modo 'pasos')
+
+  /* tela: las tarjetas son de tela suave que ondula y se arrastra con el movimiento */
+  tela: {
+    amplitud: 0.2,             // altura de las arrugas al moverse (en anchos de tarjeta; 0 = tarjeta rígida)
+    reposo: 0,                  // ondulación que queda cuando se detiene (0 = totalmente plana; prueba 0.05 para una tela viva)
+    frecuencia: 4.5,            // cuántas ondas a lo ancho
+    velocidadOnda: 1.7,         // rapidez con que viajan las ondas
+    reaccion: 1,                // cuánto se arruga según la velocidad (0 = no reacciona)
+    velReferencia: 2,           // velocidad (tarjetas/s) a la que la tela se arruga por completo
+    arrastre: 0.14,             // cuánto se "queda atrás" la parte baja de la tela al moverse
+    rotacion: 0,                // ° que se tuerce cada tarjeta sobre sí misma mientras se mueve (0 = no se tuerce)
+    brillo: 0.9,                // brillo de tela (sheen) en los bordes de las ondas
+    autoiluminacion: 0.45,      // 0 = solo la luz de la escena · 1 = la imagen se ve a su color pleno (sin sombras)
+  },
+
+  /* realce de la imagen central */
+  realce: 1,                    // escala extra de la imagen central (1 = sin realce)
+  focoAncho: 1.6,               // hasta dónde llega el realce desde el centro (en anchos de tarjeta)
+  empuje: 0,                    // cuánto se adelanta la central hacia la cámara (en anchos de tarjeta)
+  oscurecer: 0.6,               // brillo de las tarjetas laterales (1 = igual que la central, 0 = negras)
 };
 
 /* ===== SEGUIMIENTO DE CABEZA (experimento: solo PC con mouse y cámara) =====*/
@@ -239,7 +259,7 @@ const imagePlane = new THREE.Mesh(
 
 imagePlane.name = 'imagenPNG';
 imagePlane.position.set(0, 1.5, 15);
-imagePlane.renderOrder = 10;
+imagePlane.renderOrder = 20;
 
 scene.add(imagePlane);
 window.pasilloImagePlane = imagePlane;
@@ -451,154 +471,202 @@ window.pasilloImagePlane = imagePlane;
     };
   }
 
-  /* ---------- texto "DSAINS" en cilindro ---------- */
-  const textoCil = (function () {
-    const rad = THREE.MathUtils.degToRad;
-    const grupo = new THREE.Group();
-    scene.add(grupo);
-    const material = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, toneMapped: false });
-    const materialImg = new THREE.MeshBasicMaterial({
-      transparent: true, alphaTest: 0.01, side: THREE.DoubleSide, depthWrite: false, toneMapped: false
-    });
-    let fuente = null;
-    let textura = null, imgListo = false;           // imgListo = ya se intentó cargar el PNG (éxito o error)
-    let geos = [];
-    let giro = 0;                                   // ángulo acumulado por la animación (°)
-
-    function aplicar() {                            // cambios que NO necesitan reconstruir
-      grupo.position.set(TEXTO.posicion.x, TEXTO.posicion.y, TEXTO.posicion.z);
-      material.color.set(TEXTO.color);
-      material.opacity = TEXTO.opacidad;
-      material.transparent = TEXTO.opacidad < 1;
-      material.needsUpdate = true;
-      grupo.rotation.y = rad(TEXTO.anguloInicial + giro);
-      grupo.visible = TEXTO.visible !== false;      // interruptor TEXTO.visible
-    }
-
-    function limpiar() {
-      grupo.clear();
-      geos.forEach((g) => g.dispose());
-      geos = [];
-    }
-
-    function construir() {                          // radio, tamaño, separaciones, repeticiones, rotaciones
-      if (!fuente || !imgListo) return;
-      limpiar();
-
-      const R = Math.max(0.1, TEXTO.radio);
-      const dir = TEXTO.caraHacia === 'adentro' ? -1 : 1;
-      const chars = [...TEXTO.palabra];
-
-      // 1) una geometría por letra distinta, con el pivote en su centro
-      const glyphs = {};
-      let minY = Infinity, maxY = -Infinity;
-      for (const ch of new Set(chars)) {
-        const g = new TextGeometry(ch, {
-          font: fuente, size: TEXTO.tamano, height: TEXTO.grosor,
-          curveSegments: 10, bevelEnabled: false
-        });
-        g.computeBoundingBox();
-        const b = g.boundingBox;
-        minY = Math.min(minY, b.min.y); maxY = Math.max(maxY, b.max.y);
-        glyphs[ch] = { g, w: b.max.x - b.min.x, cx: (b.min.x + b.max.x) / 2 };
-        geos.push(g);
-      }
-      const cy = (minY + maxY) / 2;                 // mismo centro vertical para todas (mantiene la línea base)
-      for (const k in glyphs) glyphs[k].g.translate(-glyphs[k].cx, -cy, 0);
-
-      // 2) reparto a lo largo del arco
-      const gapL = TEXTO.separacionLetras;
-      const sumW = chars.reduce((a, c) => a + glyphs[c].w, 0);
-      const wordLen = sumW + gapL * (chars.length - 1);
-      const nW = Math.max(1, Math.round(TEXTO.repeticiones));
-      const IMG = TEXTO.imagen;
-      const hayImg = !!(IMG && IMG.activa && textura);
-      const imgW = hayImg ? IMG.alto * (textura.image.width / textura.image.height) : 0;
-      const huecos = hayImg ? 2 : 1;                // con imagen: un hueco antes y otro después de ella
-      const gapW = TEXTO.cerrarCirculo
-        ? Math.max(0, (2 * Math.PI * R - nW * (wordLen + imgW)) / (huecos * nW))
-        : TEXTO.separacionPalabras;
-
-      let s = 0;                                    // longitud de arco recorrida
-      for (let w = 0; w < nW; w++) {
-        chars.forEach((c, i) => {
-          const { g, w: gw } = glyphs[c];
-          const th = dir * (s + gw / 2) / R;        // ángulo del centro de esta letra
-
-          const pivote = new THREE.Group();         // coloca la letra sobre el cilindro
-          pivote.position.set(R * Math.sin(th), 0, R * Math.cos(th));
-          pivote.rotation.y = th + (dir < 0 ? Math.PI : 0);
-
-          const mesh = new THREE.Mesh(g, material); // rotación propia de la letra
-          mesh.renderOrder = 9;                     // si opacidad < 1 también debe dibujarse después de lo transparente
-          const extra = TEXTO.rotacionPorLetra[i] || {};
-          mesh.rotation.set(
-            rad((TEXTO.rotacionLetra.x || 0) + (extra.x || 0)),
-            rad((TEXTO.rotacionLetra.y || 0) + (extra.y || 0)),
-            rad((TEXTO.rotacionLetra.z || 0) + (extra.z || 0))
-          );
-          pivote.add(mesh);
-          grupo.add(pivote);
-
-          s += gw + (i < chars.length - 1 ? gapL : 0);
-        });
-
-        if (hayImg) {                               // imagen entre esta palabra y la siguiente
-          s += gapW;
-          const th = dir * (s + imgW / 2) / R;
-          const pivote = new THREE.Group();
-          pivote.position.set(R * Math.sin(th), IMG.y || 0, R * Math.cos(th));
-          pivote.rotation.y = th + (dir < 0 ? Math.PI : 0);
-
-          const geo = new THREE.PlaneGeometry(imgW, IMG.alto);
-          geos.push(geo);
-          const plano = new THREE.Mesh(geo, materialImg);
-          plano.renderOrder = IMG.orden != null ? IMG.orden : 10;   // después del reflector y los rayos
-          const rot = IMG.rotacion || {};
-          plano.rotation.set(rad(rot.x || 0), rad(rot.y || 0), rad(rot.z || 0));
-          pivote.add(plano);
-          grupo.add(pivote);
-          s += imgW + gapW;
-        } else {
-          s += gapW;
-        }
-      }
-      aplicar();
-    }
-
-    function update(dt) {
-      if (!TEXTO.velocidad || TEXTO.visible === false) return;
-      giro += TEXTO.velocidad * dt;
-      grupo.rotation.y = rad(TEXTO.anguloInicial + giro);
-    }
-
-    new THREE.TextureLoader().load(TEXTO.imagen.url, (t) => {
-      t.colorSpace = THREE.SRGBColorSpace;
-      t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-      textura = t;
-      materialImg.map = t;
-      materialImg.needsUpdate = true;
-      imgListo = true;
-      construir();
-    }, undefined, (err) => {
-      console.error('No se pudo cargar el PNG del cilindro:', TEXTO.imagen.url, err);
-      imgListo = true;                              // sigue sin imagen, solo con el texto
-      construir();
-    });
-
-    new FontLoader().load(TEXTO.fuente, (f) => { fuente = f; construir(); }, undefined,
-      (err) => console.error('No se pudo cargar la fuente:', TEXTO.fuente, err));
-
-    aplicar();
-    window.pasilloTexto = { config: TEXTO, reconstruir: construir, aplicar, grupo };
-    return { update };
-  })();
-
   /* ---------- ***********cámara y movimiento********* ---------- */
   const camera = new THREE.PerspectiveCamera(65, cw() / ch(), 0.1, 250);
   camera.rotation.order = 'YXZ';
   camera.position.set(ESCENA_SCROLL.xBase, ESCENA_SCROLL.yBase, ESCENA_SCROLL.zBase);
   let yaw = THREE.MathUtils.degToRad(ESCENA_SCROLL.giroBase), pitch = THREE.MathUtils.degToRad(ESCENA_SCROLL.inclinacionBase);
+
+  /* ---------- carrusel infinito curvo ---------- */
+  const carrusel = (function () {
+    const C = CARRUSEL;
+    const N = 8;
+    const grupo = new THREE.Group();
+    scene.add(grupo);
+    let items = [], off = 0, xPlano = null;
+    const paso = { esperando: 1.2, t: 0, desde: 0, hasta: 0, activo: false };   // avance por pasos
+    const easeIO = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+    /* la curva de la cinta (en el plano x–z, unidades de ancho de tarjeta): z(x) = bulto central − curva de los extremos */
+    const camino = (x) => { const sg = Math.max(0.2, C.anchoCurva), al = Math.max(0.5, C.alcance);
+      return C.cima * Math.exp(-(x * x) / (sg * sg)) - C.curvaExtremos * (x / al) * (x / al); };
+    const pendiente = (x) => { const sg = Math.max(0.2, C.anchoCurva), al = Math.max(0.5, C.alcance);
+      return -2 * x * C.cima / (sg * sg) * Math.exp(-(x * x) / (sg * sg)) - 2 * C.curvaExtremos * x / (al * al); };
+    function ajustar(it, xc) {                                  // cada tarjeta es un trozo de la MISMA curva (bordes que coinciden)
+      const pos = it.geo.attributes.position, nor = it.geo.attributes.normal, z0 = camino(xc);
+      for (let k = 0; k < pos.count; k++) {
+        const X = xc + xPlano[k], m = pendiente(X), inv = 1 / Math.sqrt(1 + m * m);
+        pos.setX(k, xPlano[k]); pos.setZ(k, camino(X) - z0);
+        nor.setXYZ(k, -m * inv, 0, inv);                         // normal de la curva (para la luz)
+      }
+      pos.needsUpdate = true; nor.needsUpdate = true;
+      it.mesh.position.set(xc, 0, z0);
+    }
+
+    const loader = new THREE.TextureLoader(); loader.setCrossOrigin('anonymous');
+
+    function urlDe(i) { return (C.imagenes[i] && String(C.imagenes[i]).trim()) || ''; }
+
+    function cartel(i) {                                        // póster de prueba minimalista (semicírculos, círculos y barras)
+      const P = C.paleta, w = 800, h = Math.round(800 / C.proporcion);
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const g = cv.getContext('2d');
+      const circ = (x, y, r, col, a0 = 0, a1 = Math.PI * 2) => { g.fillStyle = col; g.beginPath(); g.moveTo(x, y); g.arc(x, y, r, a0, a1); g.closePath(); g.fill(); };
+      const rect = (x, y, ww, hh, col) => { g.fillStyle = col; g.fillRect(x, y, ww, hh); };
+      const U = Math.PI;
+      const dis = [
+        () => { rect(0, 0, w, h, P.crema); circ(w / 2, h, h * 0.62, P.verde, U, 2 * U); circ(w * 0.7, h * 0.3, h * 0.12, P.rosa); },
+        () => { rect(0, 0, w, h, P.verde); circ(w / 2, 0, h * 0.55, P.rosa, 0, U); rect(w * 0.12, h * 0.78, w * 0.76, h * 0.04, P.crema); rect(w * 0.12, h * 0.86, w * 0.4, h * 0.04, P.crema); },
+        () => { rect(0, 0, w, h, P.rosa); circ(w * 0.3, h / 2, h * 0.3, P.crema); circ(w * 0.72, h / 2, h * 0.3, P.verde, U / 2, U * 1.5); },
+        () => { rect(0, 0, w, h, P.crema); circ(0, h, h * 0.9, P.rosa, U * 1.5, 2 * U); circ(w, 0, h * 0.7, P.verde, U / 2, U); circ(w * 0.5, h * 0.5, h * 0.12, P.rosaFuerte); },
+        () => { rect(0, 0, w, h, P.verde); circ(w * 0.62, h * 0.55, h * 0.52, P.crema); circ(w * 0.24, h * 0.3, h * 0.2, P.rosa, U, 2 * U); },
+        () => { rect(0, 0, w, h, P.rosa); for (let k = 0; k < 5; k++) rect(w * (0.08 + k * 0.08), h * 0.12, w * 0.04, h * 0.76, P.verde); circ(w * 0.7, h * 0.7, h * 0.3, P.crema, U, 2 * U); },
+        () => { rect(0, 0, w, h, P.crema); circ(w / 2, h, h * 0.9, P.verde, U, 2 * U); circ(w / 2, h, h * 0.62, P.rosa, U, 2 * U); circ(w / 2, h, h * 0.34, P.crema, U, 2 * U); },
+        () => { rect(0, 0, w, h, P.verdeOscuro); circ(w * 0.3, h, h * 0.55, P.rosa, U, 2 * U); circ(w * 0.7, h, h * 0.55, P.crema, U, 2 * U); circ(w * 0.5, h * 0.28, h * 0.12, P.rosaFuerte); },
+      ];
+      dis[i % dis.length]();
+      g.fillStyle = 'rgba(0,0,0,.35)'; g.font = '600 26px sans-serif'; g.textBaseline = 'top'; g.fillText('0' + (i + 1), 28, 22);
+      const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()); return t;
+    }
+
+    /* tela: ondas animadas en el vertex shader (con normales corregidas para que se vea la luz sobre los pliegues) */
+    const U = { uT: { value: 0 }, uV: { value: 0 }, uS: { value: 0 }, uRest: { value: 0 }, uAmp: { value: 0.16 }, uFreq: { value: 4.5 }, uProp: { value: 1.6 } };
+    function materialTela() {
+      const m = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff, roughness: 0.92, metalness: 0, side: THREE.DoubleSide, transparent: true, depthWrite: false,
+        sheen: C.tela.brillo, sheenRoughness: 0.55, sheenColor: new THREE.Color(0xffffff), emissive: 0xffffff,
+      });
+      m.onBeforeCompile = (sh) => {
+        Object.assign(sh.uniforms, U);
+        sh.vertexShader = 'uniform float uT; uniform float uV; uniform float uS; uniform float uRest; uniform float uAmp; uniform float uFreq; uniform float uProp;\n' +
+          sh.vertexShader
+            .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
+              vec3 nBase = normalize(objectNormal);
+              vec3 tanX = vec3(nBase.z, 0.0, -nBase.x);
+              float qx = uv.x - 0.5, qy = (uv.y - 0.5) / uProp; float yy = qy * uProp;   /* coordenadas propias de la tarjeta */                            // -0.5 abajo … 0.5 arriba
+              float k1 = uFreq, k2 = uFreq * 1.9;
+              float p1 = k1 * qx + 2.2 * qy - uT * 1.3;
+              float p2 = k2 * qx - 3.1 * qy + uT * 1.9;
+              float p3 = 1.4 * k1 * qx + 5.0 * qy + uT * 2.7;
+              float borde = smoothstep(0.0, 0.14, uv.x) * smoothstep(0.0, 0.14, 1.0 - uv.x);   // bordes quietos: la cinta no se corta
+              float env = uAmp * (uRest + uV) * borde * (0.75 + 0.5 * (0.5 - yy)); // plana en reposo; se arruga con la velocidad (más abajo)
+              float dsp = env * (0.5 * sin(p1) + 0.3 * sin(p2) + 0.2 * sin(p3));
+              float dX = env * (0.5 * k1 * cos(p1) + 0.3 * k2 * cos(p2) + 0.2 * 1.4 * k1 * cos(p3));
+              float dY = env * (0.5 * 2.2 * cos(p1) - 0.3 * 3.1 * cos(p2) + 0.2 * 5.0 * cos(p3));
+              objectNormal = normalize(nBase - dX * tanX - dY * vec3(0.0, 1.0, 0.0));`)
+            .replace('#include <begin_vertex>', `#include <begin_vertex>
+              transformed += nBase * dsp;
+              transformed.x += uS * (0.5 - yy) * (0.5 - yy);           // la parte baja de la tela se queda atrás`);
+      };
+      return m;
+    }
+
+    function recortar(tex) {                                    // "cover": llena la tarjeta recortando lo que sobre
+      const ia = tex.image.width / tex.image.height, ta = C.proporcion;
+      tex.repeat.set(1, 1); tex.offset.set(0, 0);
+      if (ia > ta) { tex.repeat.x = ta / ia; tex.offset.x = (1 - tex.repeat.x) / 2; }
+      else { tex.repeat.y = ia / ta; tex.offset.y = (1 - tex.repeat.y) / 2; }
+    }
+    function placeholder(i) {                                   // si una imagen no carga: un panel con su número
+      const cv = document.createElement('canvas'); cv.width = 640; cv.height = Math.round(640 / C.proporcion);
+      const g = cv.getContext('2d'); const gr = g.createLinearGradient(0, 0, cv.width, cv.height);
+      gr.addColorStop(0, 'hsl(' + (i * 45) + ',55%,45%)'); gr.addColorStop(1, 'hsl(' + (i * 45 + 40) + ',60%,25%)');
+      g.fillStyle = gr; g.fillRect(0, 0, cv.width, cv.height);
+      g.fillStyle = 'rgba(255,255,255,.85)'; g.font = '700 160px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillText(String(i + 1), cv.width / 2, cv.height / 2);
+      const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+    }
+
+    function limpiar() {
+      for (const it of items) { grupo.remove(it.mesh); it.mat.map && it.mat.map.dispose(); it.mat.dispose(); it.geo.dispose(); }
+      items = [];
+    }
+
+    function construir() {                                      // imágenes, proporción
+      limpiar();
+      xPlano = null;
+      for (let i = 0; i < N; i++) {
+        const geo = new THREE.PlaneGeometry(1, 1 / C.proporcion, Math.max(1, Math.round(C.segmentos)), Math.max(1, Math.round(C.filas)));
+        if (!xPlano) xPlano = Float32Array.from(geo.attributes.position.array.filter((_, k) => k % 3 === 0));   // x original de cada vértice
+        const mat = materialTela();
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.renderOrder = 9; mesh.frustumCulled = false;
+        grupo.add(mesh);
+        const it = { mesh, mat, geo };
+        items.push(it);
+        const poner = (t) => { mat.map = t; mat.emissiveMap = t; mat.needsUpdate = true; };
+        if (urlDe(i)) {
+          loader.load(urlDe(i), (t) => {
+            t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+            recortar(t); poner(t);
+          }, undefined, () => {
+            console.warn('Carrusel: no se pudo cargar la imagen ' + (i + 1) + ':', urlDe(i));
+            poner(cartel(i));
+          });
+        } else poner(cartel(i));                                // sin imagen: cartel de prueba
+      }
+      aplicar();
+    }
+
+    function aplicar() {                                        // posición y tamaño (también al redimensionar)
+      grupo.visible = C.visible !== false;
+      const yawI = THREE.MathUtils.degToRad(ESCENA_SCROLL.giroBase), pitI = THREE.MathUtils.degToRad(ESCENA_SCROLL.inclinacionBase);
+      const dir = new THREE.Vector3(-Math.sin(yawI) * Math.cos(pitI), Math.sin(pitI), -Math.cos(yawI) * Math.cos(pitI));
+      const t = Math.max(0.01, (ESCENA_SCROLL.zBase - C.z) / Math.max(0.05, -dir.z));
+      const anchoVista = 2 * t * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect;
+      const w = anchoVista * C.anchoVista;                      // ancho de una tarjeta en unidades de escena
+      grupo.position.set(ESCENA_SCROLL.xBase, ESCENA_SCROLL.yBase, ESCENA_SCROLL.zBase).addScaledVector(dir, t);
+      grupo.rotation.set(0, yawI, 0);
+      grupo.translateX(C.desfaseX * w); grupo.translateY(C.desfaseY * w);
+      grupo.scale.setScalar(w);                                 // dentro del grupo 1 unidad = 1 ancho de tarjeta
+    }
+
+    const sstep = (a, b, x) => { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
+    function update(dt) {
+      if (C.visible === false || !items.length) return;
+      const slot = 1 + C.separacion, L = N * slot;
+      const T = C.tela, dir = C.velocidad < 0 ? -1 : 1, off0 = off;
+      if (C.modo === 'continuo') off += C.velocidad * dt * slot;
+      else if (C.velocidad !== 0) {                             // avanza una tarjeta, se queda quieta, y otra vez
+        if (!paso.activo) {
+          paso.esperando -= dt;
+          if (paso.esperando <= 0) { paso.activo = true; paso.t = 0; paso.desde = off; paso.hasta = off + dir * slot; }
+        } else {
+          paso.t += dt / Math.max(0.1, C.duracionPaso);
+          const k = Math.min(1, paso.t);
+          off = paso.desde + (paso.hasta - paso.desde) * easeIO(k);
+          if (k >= 1) { paso.activo = false; paso.esperando = C.pausa; }
+        }
+      }
+      const vel = Math.abs(off - off0) / Math.max(1e-4, dt) / slot;               // tarjetas/s reales en este instante
+      const vN = Math.min(1.3, vel / Math.max(0.05, T.velReferencia)) * T.reaccion;
+      const sube = vN > U.uV.value;                              // la tela se arruga rápido y se alisa despacio
+      U.uV.value += (vN - U.uV.value) * Math.min(1, dt * (sube ? 9 : 2.6));
+      U.uS.value += (-dir * Math.min(1, vel) * T.arrastre - U.uS.value) * Math.min(1, dt * 4);
+      U.uT.value += dt * T.velocidadOnda * (0.4 + U.uV.value);   // las ondas viajan más rápido al moverse
+      U.uRest.value = T.reposo; U.uAmp.value = T.amplitud; U.uFreq.value = T.frecuencia; U.uProp.value = C.proporcion;
+      for (let i = 0; i < N; i++) {
+        const it = items[i];
+        const x = (((i * slot + off + L / 2) % L) + L) % L - L / 2;   // posición a lo largo de la cinta, en [-L/2, L/2)
+        const f = 1 - sstep(0, C.focoAncho, Math.abs(x));       // 1 en el centro, 0 en los lados
+        const esc = 1 + (C.realce - 1) * f;
+        ajustar(it, x);                                         // coloca la tarjeta sobre la curva de la cinta
+        it.mesh.position.y = C.ondaY * Math.sin(x * 2);
+        it.mesh.position.z += C.empuje * f;
+        it.mesh.rotation.set(0, 0, THREE.MathUtils.degToRad(T.rotacion) * -dir * Math.min(1, U.uV.value) * (0.45 + 0.55 * Math.sin(i * 2.1 + 1)));
+        it.mesh.scale.set(esc, esc, 1);
+        const b = C.oscurecer + (1 - C.oscurecer) * f;
+        it.mat.color.setScalar(b); it.mat.emissiveIntensity = C.tela.autoiluminacion * b; it.mat.sheen = C.tela.brillo;
+        it.mat.opacity = (1 - sstep(C.alcance - 1.2, C.alcance, Math.abs(x))) * (1 - sstep(L / 2 - 1.2 * slot, L / 2 - 0.2 * slot, Math.abs(x)));   // se desvanece en los extremos (y antes del salto del bucle)
+        it.mesh.visible = it.mat.opacity > 0.003;
+        it.mesh.renderOrder = 9 + Math.round(f * 10);           // la central se dibuja encima
+      }
+    }
+
+    construir();
+    window.pasilloCarrusel = { config: C, reconstruir: construir, aplicar, grupo };
+    return { aplicar, update };
+  })();
 
   /* ---------- texto a todo el ancho, delante de la cámara ---------- */
   const textoAncho = (function () {
@@ -732,6 +800,7 @@ window.pasilloImagePlane = imagePlane;
   function onResize() {
     camera.aspect = cw() / ch(); camera.updateProjectionMatrix();
     textoAncho.aplicar();                                       // el texto vuelve a ocupar el ancho del dispositivo
+    carrusel.aplicar();
     renderer.setSize(cw(), ch(), false);
     reflector.getRenderTarget().setSize(Math.floor(cw() * QUALITY * reflScale), Math.floor(ch() * QUALITY * reflScale));
   }
@@ -1242,7 +1311,7 @@ window.pasilloImagePlane = imagePlane;
     f += -joy.dy; s += joy.dx;
     if (f || s) move(f * 3.2 * sprint * dt, s * 3.2 * sprint * dt);
     shaftTime.value = t / 1000;
-    textoCil.update(dt);
+    carrusel.update(dt);
     if (cielo.espera > 0) cielo.espera -= dt;                     // delay antes de iniciar la animación del cielo
     else if (cielo.v !== cielo.objetivo) {                        // cielo → blanco / de vuelta a azul
       const paso = dt / Math.max(0.05, ESCENA_SCROLL.cieloBlancoDuracion);
