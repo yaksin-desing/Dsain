@@ -564,6 +564,21 @@ body.abautmepage {
   white-space: normal;
   overflow-wrap: break-word;
 }
+.abautmepage .secciondos .title .ancla-linea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 270px; /* ancho del párrafo */
+  margin: 0;
+  transform-origin: 0 0; /* gira desde el punto de anclaje */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  pointer-events: none;
+  font-size: 1vw;
+  text-align: right;
+  font-family: "light";
+  letter-spacing: 0.05em;
+}
 
 /* Móvil pequeño */
 @media (max-width: 480px) {

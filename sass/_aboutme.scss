@@ -641,57 +641,71 @@ body.abautmepage {
     }
   }
 
-
   .secciondos {
-  @include center-flex;
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  background: white;
-  color: $colorp;
-  overflow: hidden;
-  isolation: isolate;
+    @include center-flex;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    color: $colorp;
+    overflow: hidden;
+    isolation: isolate;
 
-  .reticula-svg {
-    position: absolute;
-    inset: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    pointer-events: none;
-    overflow: visible;
+    .reticula-svg {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: visible;
 
-    .linea-guia {
-      fill: none;
-      stroke: #0048ff;
-      stroke-width: 1;
-      stroke-dasharray: 2 2;
-      vector-effect: non-scaling-stroke;
+      .linea-guia {
+        fill: none;
+        stroke: #0048ff;
+        stroke-width: 1;
+        stroke-dasharray: 2 2;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .punto-guia {
+        fill: #0048ff;
+      }
     }
+    .title {
+      width: 100%;
+      padding: 0 25vw;
+      box-sizing: border-box;
 
-    .punto-guia {
-      fill: #0048ff;
+      p {
+        display: block;
+        margin: 0;
+        font-family: "bold";
+        font-size: 3vw;
+        text-align: center;
+        white-space: normal;
+        overflow-wrap: break-word;
+      }
+
+      .ancla-linea {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 270px; /* ancho del párrafo */
+        margin: 0;
+        transform-origin: 0 0; /* gira desde el punto de anclaje */
+          -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+        pointer-events: none;
+        font-size: 1vw;
+        text-align: right;
+        font-family: "light";
+        letter-spacing: 0.05em;
+
+      }
     }
   }
-.title {
-  width: 100%;
-  padding: 0 25vw;
-  box-sizing: border-box;
-
-  p {
-    display: block;
-    margin: 0;
-    font-family: "bold";
-    font-size: 3vw;
-    text-align: center;
-    white-space: normal;
-    overflow-wrap: break-word;
-  }
-
-  }
-  }
-
 }
 
 /* Móvil pequeño */

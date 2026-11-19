@@ -328,68 +328,86 @@
 
   /* ---- textos animados ---- */
 
-  function textosAnimados() {
+/* ---- textos animados ---- */
 
-    const els = document.querySelectorAll('.animar-texto');
-    const hayGsap = window.gsap && window.SplitText;
+const TEXTO_DEFECTO = {
+  tipo: 'letras',        // 'letras' | 'palabras'
+  velocidad: 0.3,        // duración de la animación de cada letra/palabra (s)
+  delay: 0,              // espera antes de empezar (s)
+  stagger: 0.05,         // separación entre letras/palabras (s)
+  distancia: 30,         // desplazamiento inicial en Y (px)
+  ease: 'back.out(1.7)'
+};
 
-    if (!hayGsap) {
-      els.forEach((el) => {
-        el.style.visibility = 'visible';
+function leerNumero(el, attr, defecto) {
+  const v = parseFloat(el.getAttribute(attr));
+  return Number.isFinite(v) ? v : defecto;
+}
+
+function textosAnimados() {
+
+  const els = document.querySelectorAll('.animar-texto');
+  const hayGsap = window.gsap && window.SplitText;
+
+  if (!hayGsap) {
+    els.forEach((el) => { el.style.visibility = 'visible'; });
+    return;
+  }
+
+  gsap.registerPlugin(SplitText);
+
+  const obs = new IntersectionObserver((entries, o) => {
+
+    entries.forEach((en) => {
+
+      if (!en.isIntersecting) return;
+
+      const el = en.target;
+      o.unobserve(el);
+
+      const D = TEXTO_DEFECTO;
+
+      const tipo      = (el.getAttribute('data-tipo') || D.tipo).toLowerCase();
+      const palabras  = tipo === 'palabras';
+      const velocidad = leerNumero(el, 'data-velocidad', D.velocidad);
+      const delay     = leerNumero(el, 'data-delay', D.delay);
+      const stagger   = leerNumero(el, 'data-stagger', D.stagger);
+      const distancia = leerNumero(el, 'data-distancia', D.distancia);
+      const ease      = el.getAttribute('data-ease') || D.ease;
+
+      if (el.splitText) el.splitText.revert();
+
+      const split = new SplitText(el, {
+        type: palabras ? 'words' : 'chars',
+        charsClass: 'char'
       });
-      return;
-    }
 
-    gsap.registerPlugin(SplitText);
+      el.splitText = split;
+      el.style.visibility = 'visible';
 
-    const obs = new IntersectionObserver((entries, o) => {
+      gsap.fromTo(
+        palabras ? split.words : split.chars,
+        { y: distancia, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger,
+          duration: velocidad,
+          delay,
+          ease
+        }
+      );
 
-      entries.forEach((en) => {
-
-        if (!en.isIntersecting) return;
-
-        const el = en.target;
-
-        o.unobserve(el);
-
-        const palabras =
-          (el.getAttribute('data-tipo') || 'letras').toLowerCase() === 'palabras';
-
-        const dur =
-          parseFloat(el.getAttribute('data-velocidad')) || 0.3;
-
-        if (el.splitText) el.splitText.revert();
-
-        const split = new SplitText(el, {
-          type: palabras ? 'words' : 'chars',
-          charsClass: 'char'
-        });
-
-        el.splitText = split;
-        el.style.visibility = 'visible';
-
-        gsap.fromTo(
-          palabras ? split.words : split.chars,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.05,
-            duration: dur,
-            ease: 'back.out(1.7)'
-          }
-        );
-
-      });
-
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -10% 0px'
     });
 
-    els.forEach((el) => obs.observe(el));
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -10% 0px'
+  });
 
-  }
+  els.forEach((el) => obs.observe(el));
+
+}
 
   const arrancar = () => {
     iniciar();
@@ -703,6 +721,78 @@ const reticula = (() => {
 
   }
 
+  /* -----------------------------------------
+   ANCLAS: elementos HTML pegados a una línea
+----------------------------------------- */
+
+const anclas = [...seccion.querySelectorAll('[data-linea]')];
+
+function actualizarAnclas() {
+
+  anclas.forEach((el) => {
+
+    const linea = estado.lineas[el.dataset.linea];
+    if (!linea) return;
+
+    const g = obtenerGeometria(linea);
+    const px = (g.x1 + g.x2) / 2;
+    const py = (g.y1 + g.y2) / 2;
+
+    const rad = linea.angulo * Math.PI / 180;
+
+    const dx = Math.sin(rad);
+    const dy = Math.cos(rad);
+    const nx = Math.cos(rad);
+    const ny = -Math.sin(rad);
+
+    const posicion   = parseFloat(el.dataset.posicion);
+    const separacion = parseFloat(el.dataset.separacion);
+    const lado       = el.dataset.lado === 'izquierda' ? -1 : 1;
+    const giroExtra  = parseFloat(el.dataset.giro) || 0;
+    const modo       = el.dataset.orientacion || 'legible';   // legible | linea | fija
+
+    const along = (Number.isFinite(posicion) ? posicion : 0) * estado.alto;
+    const gap   = Number.isFinite(separacion) ? separacion : 12;
+
+    const x = px + dx * along + nx * gap * lado;
+    const y = py + dy * along + ny * gap * lado;
+
+    /* ---- orientación ---- */
+
+    let giro = 0;
+    let volteado = false;
+
+    if (modo !== 'fija') {
+
+      giro = -linea.angulo;
+
+      if (modo === 'legible') {
+
+        // normaliza a [-180, 180)
+        giro = ((giro % 360) + 540) % 360 - 180;
+
+        // si quedaría de cabeza, lo voltea 180°
+        if (giro > 90 || giro < -90) {
+          giro += 180;
+          volteado = true;
+        }
+      }
+    }
+
+    giro += giroExtra;
+
+    // al voltear 180° el texto crece hacia el lado contrario,
+    // se compensa para que siga pegado al mismo lado de la línea
+    const tx = ((lado < 0) !== volteado) ? '-100%' : '0';
+    const ty = volteado ? '-100%' : '0';
+
+    el.style.transform =
+      `translate(${x}px, ${y}px) rotate(${giro}deg) translate(${tx}, ${ty})`;
+
+  });
+
+}
+
 
   /* -----------------------------------------
      RENDERIZAR TODA LA RETÍCULA
@@ -712,6 +802,7 @@ const reticula = (() => {
 
     dibujarLineas();
     calcularIntersecciones();
+    actualizarAnclas();
 
   }
 
@@ -915,7 +1006,7 @@ if (reticula && window.gsap) {
 
     nombre: 'an-01',
 
-    duracion: 1.7,
+    duracion: 0.7,
 
     delay: 0,
 
@@ -952,7 +1043,7 @@ if (reticula && window.gsap) {
 
     nombre: 'an-02',
 
-    duracion: 2.5,
+    duracion: 0.5,
 
     delay: 0.2,
 
@@ -988,7 +1079,7 @@ if (reticula && window.gsap) {
 
     nombre: 'an-03',
 
-    duracion: 2,
+    duracion: 1,
 
     delay: 0,
 
