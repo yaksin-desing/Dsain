@@ -30,7 +30,7 @@ const TEXTO_ANCHO = {
   fuente: new URL('../src/fonts/false_Semi-bold.json', import.meta.url).href,   // fuente (JSON de three.js)
   z: 14.5,                        // posición en el eje Z del mundo (la cámara inicial está en ESCENA_SCROLL.zBase = 19; menor = más lejos)
   desfaseX: 0,                  // mover a los lados (unidades de escena)
-  desfaseY: -0.5,                  // subir (+) / bajar (−) respecto al centro de la vista de la cámara
+  desfaseY: 0,                  // subir (+) / bajar (−) respecto al centro de la vista de la cámara
   ancho: 1,                     // fracción del ancho de la pantalla que ocupa (1 = todo el ancho, 0.8 = 80 %)
   grosor: 0,                    // profundidad de las letras (0 = planas)
   color: '#ffffff',
@@ -61,9 +61,9 @@ const CARRUSEL = {
   paleta: { verde: '#1d4a38', verdeOscuro: '#14352a', rosa: '#f1b5c4', rosaFuerte: '#e58fa6', crema: '#efe7d4' },
 
   /* posición: la imagen central queda justo delante de la cámara inicial, en el plano Z que indiques */
-  z: -19.7,                         // eje Z del mundo de la imagen central (la cámara inicial está en ESCENA_SCROLL.zBase = 19)
+  z: -17,                         // eje Z del mundo de la imagen central (la cámara inicial está en ESCENA_SCROLL.zBase = 19)
   desfaseX: 0,                  // mover a los lados (en anchos de tarjeta)
-  desfaseY: -0.5,                  // subir (+) / bajar (−) (en anchos de tarjeta)
+  desfaseY: -0.7,                  // subir (+) / bajar (−) (en anchos de tarjeta)
 
   /* cinta continua: todas las imágenes forman UNA sola cinta (un borde pegado al siguiente) que se desliza por una curva fija.
      La curva: el centro se acerca a la cámara y los dos extremos (izquierda y derecha) se curvan hacia atrás. */
@@ -73,12 +73,37 @@ const CARRUSEL = {
   alcance: 17,                 // a cuántas tarjetas del centro se desvanecen por completo (los extremos)
 
   /* forma */
-  anchoVista: 0.03,             // ancho de la imagen central como fracción del ancho de la pantalla (con ~0.42 se ven la central y parte de las dos vecinas)
+  anchoVista: 0.02,             // ancho de la imagen central como fracción del ancho de la pantalla (con ~0.42 se ven la central y parte de las dos vecinas)
   proporcion: 1.6,              // ancho / alto de cada tarjeta (1.6 = 16:10, 1.78 = 16:9)
   separacion: 0.1,                // hueco entre tarjetas (0 = pegadas, forman una sola cinta)
   segmentos: 24,                // resolución del doblez de cada tarjeta (más = más suave)
   filas: 14,                    // resolución vertical de cada tarjeta (para que la tela ondule bien)
   ondaY: 0,                     // ondulación vertical de la cinta (en anchos de tarjeta, 0 = ninguna; prueba 0.15)
+
+  /* interacción con el mouse / dedo */
+  detenerAlPasar: true,         // true = al poner el mouse encima de la cinta se frena (la tela se asienta) y al salir vuelve a moverse
+  arrastrar: true,              // true = clic sostenido sobre la cinta para moverla a izquierda o derecha
+  abrirAlClic: true,            // true = un clic (sin arrastrar) sobre una tarjeta la saca de la cinta y la agranda en el centro, como un popup
+  popup: {
+    ancho: 0.62,                // ancho de la tarjeta abierta como fracción del ancho de la pantalla
+    duracion: 0.8,              // segundos que tarda en salir de la cinta (y en volver)
+    arruga: 0.7,                // cuánto se arruga la tela al salir y al volver (0 = sin arrugas)
+    atenuar: 0.25,              // brillo del resto de la cinta mientras hay una abierta (1 = igual, 0 = apagada)
+    /* tela de la tarjeta abierta: el mouse la empuja y las ondas viajan y se amortiguan como en una tela de verdad */
+    sensibilidad: 1.4,          // cuánto la empuja el mouse (0 = no reacciona; sube a 2 para empujes más grandes)
+    brisa: 0.12,                // ondas suaves permanentes en la tarjeta abierta, como si hubiera aire (0 = quieta del todo)
+    radio: 0.16,                // tamaño de la zona que empuja el mouse (en anchos de tarjeta)
+    propagacion: 1.8,           // rapidez con que viajan las ondas por la tela (anchos de tarjeta por segundo)
+    amortiguacion: 5,           // cuánto tardan en apagarse las ondas (mayor = tela más pesada, menor = más rebote)
+    rigidez: 4,                 // cuánto vuelve a quedar plana (mayor = más tensa)
+    /* acabado de la tarjeta abierta: reflejos en los pliegues */
+    reflejo: 0.8,               // barniz brillante sobre la tela: refleja las luces y el entorno en las ondas (0 = tela mate)
+    reflejoEntorno: 1.8,        // fuerza del reflejo del entorno de la escena
+    rugosidad: 0.5,             // 1 = tela mate · menor = más brillo
+    autoiluminacion: 0.28,      // menos luz propia = más contraste entre luz y sombra en los pliegues
+  },
+  frenado: 4,                   // qué tan rápido frena / arranca (mayor = más brusco, menor = más suave)
+  inercia: 0.8,                 // 0 = al soltar se detiene · 1 = sigue con la velocidad con la que la soltaste (y luego frena)
 
   /* movimiento */
   modo: 'continuo',                // 'pasos' = avanza una tarjeta, se detiene (la tela queda plana) y vuelve a avanzar · 'continuo' = gira sin parar
@@ -97,6 +122,7 @@ const CARRUSEL = {
     arrastre: 0.14,             // cuánto se "queda atrás" la parte baja de la tela al moverse
     rotacion: 0,                // ° que se tuerce cada tarjeta sobre sí misma mientras se mueve (0 = no se tuerce)
     brillo: 0.9,                // brillo de tela (sheen) en los bordes de las ondas
+    sombra: 0.55,               // sombras dentro de los pliegues (los valles de las ondas se oscurecen · 0 = sin sombras)
     autoiluminacion: 0.45,      // 0 = solo la luz de la escena · 1 = la imagen se ve a su color pleno (sin sombras)
   },
 
@@ -473,6 +499,7 @@ window.pasilloImagePlane = imagePlane;
 
   /* ---------- ***********cámara y movimiento********* ---------- */
   const camera = new THREE.PerspectiveCamera(65, cw() / ch(), 0.1, 250);
+  camera.layers.enable(1);                                      // capa 1: la tarjeta abierta del carrusel (no sale en el reflejo del piso)
   camera.rotation.order = 'YXZ';
   camera.position.set(ESCENA_SCROLL.xBase, ESCENA_SCROLL.yBase, ESCENA_SCROLL.zBase);
   let yaw = THREE.MathUtils.degToRad(ESCENA_SCROLL.giroBase), pitch = THREE.MathUtils.degToRad(ESCENA_SCROLL.inclinacionBase);
@@ -483,7 +510,13 @@ window.pasilloImagePlane = imagePlane;
     const N = 8;
     const grupo = new THREE.Group();
     scene.add(grupo);
-    let items = [], off = 0, xPlano = null;
+    let items = [], off = 0, offPrev = 0, xPlano = null, vel = 0, dragVel = 0, hover = false;
+    const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(); ray.layers.enable(1);        // para poder tocar también la tarjeta abierta (capa 1)
+    const ptr = { dentro: false, arrastrando: false, id: null, lastX: 0, x0: 0, y0: 0, t0: 0, item: null, mov: 0, px: 0, py: 0, pt: 0, sp: 0 };
+    let sel = null;                                             // tarjeta abierta (o abriéndose / cerrándose)
+    const qR = new THREE.Quaternion(), qP = new THREE.Quaternion(), pR = new THREE.Vector3(), pP = new THREE.Vector3(), eul = new THREE.Euler(), fwd = new THREE.Vector3();
+    const ease = (k) => k * k * (3 - 2 * k);
+    const pA = new THREE.Vector3(), pB = new THREE.Vector3();
     const paso = { esperando: 1.2, t: 0, desde: 0, hasta: 0, activo: false };   // avance por pasos
     const easeIO = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
     /* la curva de la cinta (en el plano x–z, unidades de ancho de tarjeta): z(x) = bulto central − curva de los extremos */
@@ -491,14 +524,30 @@ window.pasilloImagePlane = imagePlane;
       return C.cima * Math.exp(-(x * x) / (sg * sg)) - C.curvaExtremos * (x / al) * (x / al); };
     const pendiente = (x) => { const sg = Math.max(0.2, C.anchoCurva), al = Math.max(0.5, C.alcance);
       return -2 * x * C.cima / (sg * sg) * Math.exp(-(x * x) / (sg * sg)) - 2 * C.curvaExtremos * x / (al * al); };
-    function ajustar(it, xc) {                                  // cada tarjeta es un trozo de la MISMA curva (bordes que coinciden)
-      const pos = it.geo.attributes.position, nor = it.geo.attributes.normal, z0 = camino(xc);
+    function ajustar(it, xc, kc = 1, hh = null) {            // hh: alturas de la tela simulada (solo la tarjeta abierta)                          // kc: 1 = sobre la curva de la cinta · 0 = plana (tarjeta abierta)                                  // cada tarjeta es un trozo de la MISMA curva (bordes que coinciden)
+      const pos = it.geo.attributes.position, nor = it.geo.attributes.normal, col = it.geo.attributes.color, z0 = camino(xc);
       for (let k = 0; k < pos.count; k++) {
-        const X = xc + xPlano[k], m = pendiente(X), inv = 1 / Math.sqrt(1 + m * m);
-        pos.setX(k, xPlano[k]); pos.setZ(k, camino(X) - z0);
+        const X = xc + xPlano[k], m = pendiente(X) * kc, inv = 1 / Math.sqrt(1 + m * m);
+        pos.setX(k, xPlano[k]); pos.setZ(k, (camino(X) - z0) * kc);
         nor.setXYZ(k, -m * inv, 0, inv);                         // normal de la curva (para la luz)
       }
-      pos.needsUpdate = true; nor.needsUpdate = true;
+      if (hh) {                                                  // relieve de la tela simulada: altura + normal por diferencias finitas
+        const nx = Math.max(1, Math.round(C.segmentos)) + 1, ny = Math.max(1, Math.round(C.filas)) + 1, du = 1 / (nx - 1), dv = (1 / C.proporcion) / (ny - 1);
+        for (let iy = 0; iy < ny; iy++) for (let ix = 0; ix < nx; ix++) {
+          const k = iy * nx + ix;
+          const dhx = (hh[iy * nx + Math.min(nx - 1, ix + 1)] - hh[iy * nx + Math.max(0, ix - 1)]) / ((Math.min(nx - 1, ix + 1) - Math.max(0, ix - 1)) * du);
+          const dhy = (hh[Math.max(0, iy - 1) * nx + ix] - hh[Math.min(ny - 1, iy + 1) * nx + ix]) / ((Math.min(ny - 1, iy + 1) - Math.max(0, iy - 1)) * dv);
+          pos.setZ(k, pos.getZ(k) + hh[k]);
+          const lap = hh[iy * nx + Math.min(nx - 1, ix + 1)] + hh[iy * nx + Math.max(0, ix - 1)] + hh[Math.max(0, iy - 1) * nx + ix] + hh[Math.min(ny - 1, iy + 1) * nx + ix] - 4 * hh[k];
+          const valle = Math.max(0, Math.min(1, lap * 35 - hh[k] * 6)), cresta = Math.max(0, Math.min(1, -lap * 35 + hh[k] * 6));
+          const sh = 1 - C.tela.sombra * (0.9 * valle - 0.15 * cresta);       // valles oscuros, crestas apenas más claras
+          col.setXYZ(k, sh, sh, sh);
+          const nxv = nor.getX(k) - dhx, nyv = nor.getY(k) - dhy, nzv = nor.getZ(k), l = Math.hypot(nxv, nyv, nzv) || 1;
+          nor.setXYZ(k, nxv / l, nyv / l, nzv / l);
+        }
+      }
+      pos.needsUpdate = true; nor.needsUpdate = true; if (hh) col.needsUpdate = true;
+      it.geo.computeBoundingSphere(); it.geo.computeBoundingBox();   // para que el mouse detecte la tarjeta ya deformada
       it.mesh.position.set(xc, 0, z0);
     }
 
@@ -530,15 +579,16 @@ window.pasilloImagePlane = imagePlane;
     }
 
     /* tela: ondas animadas en el vertex shader (con normales corregidas para que se vea la luz sobre los pliegues) */
-    const U = { uT: { value: 0 }, uV: { value: 0 }, uS: { value: 0 }, uRest: { value: 0 }, uAmp: { value: 0.16 }, uFreq: { value: 4.5 }, uProp: { value: 1.6 } };
-    function materialTela() {
+    const U = { uSombra: { value: 0.55 }, uT: { value: 0 }, uV: { value: 0 }, uS: { value: 0 }, uRest: { value: 0 }, uAmp: { value: 0.16 }, uFreq: { value: 4.5 }, uProp: { value: 1.6 } };
+    function materialTela(boost) {
       const m = new THREE.MeshPhysicalMaterial({
         color: 0xffffff, roughness: 0.92, metalness: 0, side: THREE.DoubleSide, transparent: true, depthWrite: false,
         sheen: C.tela.brillo, sheenRoughness: 0.55, sheenColor: new THREE.Color(0xffffff), emissive: 0xffffff,
+        vertexColors: true, envMap: scene.environment, envMapIntensity: scene.environmentIntensity, clearcoatRoughness: 0.3,
       });
       m.onBeforeCompile = (sh) => {
-        Object.assign(sh.uniforms, U);
-        sh.vertexShader = 'uniform float uT; uniform float uV; uniform float uS; uniform float uRest; uniform float uAmp; uniform float uFreq; uniform float uProp;\n' +
+        Object.assign(sh.uniforms, U); sh.uniforms.uBoost = boost;      // uBoost: arruga propia de la tarjeta que sale / vuelve
+        sh.vertexShader = 'uniform float uSombra; varying float vShade; uniform float uT; uniform float uV; uniform float uBoost; uniform float uS; uniform float uRest; uniform float uAmp; uniform float uFreq; uniform float uProp;\n' +
           sh.vertexShader
             .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
               vec3 nBase = normalize(objectNormal);
@@ -549,14 +599,18 @@ window.pasilloImagePlane = imagePlane;
               float p2 = k2 * qx - 3.1 * qy + uT * 1.9;
               float p3 = 1.4 * k1 * qx + 5.0 * qy + uT * 2.7;
               float borde = smoothstep(0.0, 0.14, uv.x) * smoothstep(0.0, 0.14, 1.0 - uv.x);   // bordes quietos: la cinta no se corta
-              float env = uAmp * (uRest + uV) * borde * (0.75 + 0.5 * (0.5 - yy)); // plana en reposo; se arruga con la velocidad (más abajo)
+              float env = uAmp * (uRest + uV + uBoost) * borde * (0.75 + 0.5 * (0.5 - yy)); // plana en reposo; se arruga con la velocidad (más abajo)
               float dsp = env * (0.5 * sin(p1) + 0.3 * sin(p2) + 0.2 * sin(p3));
               float dX = env * (0.5 * k1 * cos(p1) + 0.3 * k2 * cos(p2) + 0.2 * 1.4 * k1 * cos(p3));
               float dY = env * (0.5 * 2.2 * cos(p1) - 0.3 * 3.1 * cos(p2) + 0.2 * 5.0 * cos(p3));
               objectNormal = normalize(nBase - dX * tanX - dY * vec3(0.0, 1.0, 0.0));`)
             .replace('#include <begin_vertex>', `#include <begin_vertex>
               transformed += nBase * dsp;
+              vShade = 1.0 - uSombra * (0.9 * clamp(-dsp * 14.0, 0.0, 1.0) - 0.15 * clamp(dsp * 14.0, 0.0, 1.0));   // valles más oscuros, crestas apenas más claras
               transformed.x += uS * (0.5 - yy) * (0.5 - yy);           // la parte baja de la tela se queda atrás`);
+        sh.fragmentShader = 'varying float vShade;\n' + sh.fragmentShader
+          .replace('#include <color_fragment>', '#include <color_fragment>\n diffuseColor.rgb *= vShade;')
+          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance *= vShade;');   // sombras en los pliegues
       };
       return m;
     }
@@ -588,11 +642,13 @@ window.pasilloImagePlane = imagePlane;
       for (let i = 0; i < N; i++) {
         const geo = new THREE.PlaneGeometry(1, 1 / C.proporcion, Math.max(1, Math.round(C.segmentos)), Math.max(1, Math.round(C.filas)));
         if (!xPlano) xPlano = Float32Array.from(geo.attributes.position.array.filter((_, k) => k % 3 === 0));   // x original de cada vértice
-        const mat = materialTela();
+        const boost = { value: 0 };
+        geo.setAttribute('color', new THREE.BufferAttribute(new Float32Array(geo.attributes.position.count * 3).fill(1), 3));   // sombras de los pliegues simulados
+        const mat = materialTela(boost);
         const mesh = new THREE.Mesh(geo, mat);
         mesh.renderOrder = 9; mesh.frustumCulled = false;
         grupo.add(mesh);
-        const it = { mesh, mat, geo };
+        const it = { mesh, mat, geo, boost, p: 0, pObj: 0 };    // p: 0 = en la cinta · 1 = abierta en el centro
         items.push(it);
         const poner = (t) => { mat.map = t; mat.emissiveMap = t; mat.needsUpdate = true; };
         if (urlDe(i)) {
@@ -625,47 +681,186 @@ window.pasilloImagePlane = imagePlane;
     function update(dt) {
       if (C.visible === false || !items.length) return;
       const slot = 1 + C.separacion, L = N * slot;
-      const T = C.tela, dir = C.velocidad < 0 ? -1 : 1, off0 = off;
-      if (C.modo === 'continuo') off += C.velocidad * dt * slot;
-      else if (C.velocidad !== 0) {                             // avanza una tarjeta, se queda quieta, y otra vez
-        if (!paso.activo) {
-          paso.esperando -= dt;
-          if (paso.esperando <= 0) { paso.activo = true; paso.t = 0; paso.desde = off; paso.hasta = off + dir * slot; }
-        } else {
-          paso.t += dt / Math.max(0.1, C.duracionPaso);
-          const k = Math.min(1, paso.t);
-          off = paso.desde + (paso.hasta - paso.desde) * easeIO(k);
-          if (k >= 1) { paso.activo = false; paso.esperando = C.pausa; }
+      const T = C.tela;
+      hover = !sel && ptr.dentro && (ptr.arrastrando || golpea());   // el puntero está sobre la cinta
+      ptr.sp *= Math.exp(-dt * 6);                               // si el mouse se queda quieto, su velocidad cae a 0
+      const quieta = (C.detenerAlPasar && hover) || ptr.arrastrando || !!sel;   // con una tarjeta abierta la cinta se queda quieta
+      if (ptr.arrastrando) {                                    // mide la velocidad del arrastre (para la inercia)
+        const v = (off - offPrev) / Math.max(1e-4, dt) / slot;
+        dragVel += (v - dragVel) * Math.min(1, dt * 12);
+      } else if (C.modo === 'pasos') {                          // avanza una tarjeta, se queda quieta, y otra vez
+        if (C.velocidad !== 0 && !quieta) {
+          if (!paso.activo) {
+            paso.esperando -= dt;
+            if (paso.esperando <= 0) { paso.activo = true; paso.t = 0; paso.desde = off; paso.hasta = off + (C.velocidad < 0 ? -1 : 1) * slot; }
+          } else {
+            paso.t += dt / Math.max(0.1, C.duracionPaso);
+            const k = Math.min(1, paso.t);
+            off = paso.desde + (paso.hasta - paso.desde) * easeIO(k);
+            if (k >= 1) { paso.activo = false; paso.esperando = C.pausa; }
+          }
         }
+      } else {                                                  // continuo: frena suave al pasar el mouse y arranca al salir
+        const objetivo = quieta ? 0 : C.velocidad;
+        vel += (objetivo - vel) * (1 - Math.exp(-dt * Math.max(0.1, C.frenado)));
+        off += vel * dt * slot;
       }
-      const vel = Math.abs(off - off0) / Math.max(1e-4, dt) / slot;               // tarjetas/s reales en este instante
-      const vN = Math.min(1.3, vel / Math.max(0.05, T.velReferencia)) * T.reaccion;
+      const dir = (C.modo === 'pasos' || !vel) ? (C.velocidad < 0 ? -1 : 1) : (vel < 0 ? -1 : 1);
+      const velReal = Math.abs(off - offPrev) / Math.max(1e-4, dt) / slot;          // tarjetas/s reales en este instante
+      offPrev = off;
+      canvas.style.cursor = sel ? (ptr.dentro && golpea() ? 'default' : 'zoom-out') : ptr.arrastrando ? 'grabbing' : (hover && C.arrastrar ? 'grab' : '');
+      const vN = Math.min(1.3, velReal / Math.max(0.05, T.velReferencia)) * T.reaccion;
       const sube = vN > U.uV.value;                              // la tela se arruga rápido y se alisa despacio
       U.uV.value += (vN - U.uV.value) * Math.min(1, dt * (sube ? 9 : 2.6));
-      U.uS.value += (-dir * Math.min(1, vel) * T.arrastre - U.uS.value) * Math.min(1, dt * 4);
+      U.uS.value += (-dir * Math.min(1, velReal) * T.arrastre - U.uS.value) * Math.min(1, dt * 4);
       U.uT.value += dt * T.velocidadOnda * (0.4 + U.uV.value);   // las ondas viajan más rápido al moverse
-      U.uRest.value = T.reposo; U.uAmp.value = T.amplitud; U.uFreq.value = T.frecuencia; U.uProp.value = C.proporcion;
+      U.uSombra.value = T.sombra; U.uRest.value = T.reposo; U.uAmp.value = T.amplitud; U.uFreq.value = T.frecuencia; U.uProp.value = C.proporcion;
+      /* tarjeta abierta: progreso 0↔1 y pose de popup (centrada, de frente a la cámara) */
+      const P = C.popup; let pSel = 0;
+      if (sel) {
+        sel.p += Math.sign(sel.pObj - sel.p) * Math.min(Math.abs(sel.pObj - sel.p), dt / Math.max(0.1, P.duracion));
+        pSel = ease(sel.p);
+        if (sel.tela) simularTela(Math.min(dt, 0.05));            // la tela reacciona al mouse
+        sel.boost.value = P.arruga * Math.sin(Math.PI * sel.p) + P.brisa * pSel;   // arrugas al salir/volver + brisa suave una vez abierta   // la tela se arruga mientras sale / vuelve y queda plana al abrirse
+        grupo.getWorldPosition(pP);
+        const dp = camera.position.distanceTo(pP) * 0.5;          // a qué distancia de la cámara se coloca
+        const alto = 2 * dp * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), vw = alto * camera.aspect;
+        const wT = Math.min(vw * P.ancho, alto * 0.8 * C.proporcion);   // ancho final en la escena (sin salirse de la pantalla)
+        fwd.set(0, 0, -1).applyQuaternion(camera.quaternion);
+        pP.copy(camera.position).addScaledVector(fwd, dp); grupo.worldToLocal(pP);
+        qP.copy(grupo.quaternion).invert().multiply(camera.quaternion);
+        sel.destino = { pos: pP.clone(), q: qP.clone(), esc: wT / grupo.scale.x };
+        if (sel.p <= 0 && sel.pObj === 0) { normalizar(sel); sel.tela = null; sel.boost.value = 0; sel.mesh.layers.set(0); sel.mat.depthTest = true; sel.destino = null; sel = null; pSel = 0; }
+      }
       for (let i = 0; i < N; i++) {
         const it = items[i];
         const x = (((i * slot + off + L / 2) % L) + L) % L - L / 2;   // posición a lo largo de la cinta, en [-L/2, L/2)
         const f = 1 - sstep(0, C.focoAncho, Math.abs(x));       // 1 en el centro, 0 en los lados
         const esc = 1 + (C.realce - 1) * f;
-        ajustar(it, x);                                         // coloca la tarjeta sobre la curva de la cinta
+        ajustar(it, x, it === sel ? 1 - ease(sel.p) : 1, it === sel && sel.tela ? sel.tela.h : null);        // coloca la tarjeta sobre la curva de la cinta (se aplana al abrirse)
         it.mesh.position.y = C.ondaY * Math.sin(x * 2);
         it.mesh.position.z += C.empuje * f;
         it.mesh.rotation.set(0, 0, THREE.MathUtils.degToRad(T.rotacion) * -dir * Math.min(1, U.uV.value) * (0.45 + 0.55 * Math.sin(i * 2.1 + 1)));
         it.mesh.scale.set(esc, esc, 1);
-        const b = C.oscurecer + (1 - C.oscurecer) * f;
-        it.mat.color.setScalar(b); it.mat.emissiveIntensity = C.tela.autoiluminacion * b; it.mat.sheen = C.tela.brillo;
+        let b = C.oscurecer + (1 - C.oscurecer) * f;
+        it.mat.sheen = C.tela.brillo;
         it.mat.opacity = (1 - sstep(C.alcance - 1.2, C.alcance, Math.abs(x))) * (1 - sstep(L / 2 - 1.2 * slot, L / 2 - 0.2 * slot, Math.abs(x)));   // se desvanece en los extremos (y antes del salto del bucle)
         it.mesh.visible = it.mat.opacity > 0.003;
         it.mesh.renderOrder = 9 + Math.round(f * 10);           // la central se dibuja encima
+        if (sel && it === sel && sel.destino) {                 // mezcla entre su lugar en la cinta y el popup
+          const e = pSel;
+          eul.copy(it.mesh.rotation); qR.setFromEuler(eul); pR.copy(it.mesh.position);
+          it.mesh.position.lerpVectors(pR, sel.destino.pos, e);
+          it.mesh.quaternion.slerpQuaternions(qR, sel.destino.q, e);
+          const sc = esc + (sel.destino.esc - esc) * e; it.mesh.scale.set(sc, sc, 1);
+          it.mat.opacity += (1 - it.mat.opacity) * e; b += (1 - b) * e; it.mesh.visible = true;
+          it.mesh.renderOrder = 60; it.mat.depthTest = e < 0.001; it.mesh.layers.set(e > 0.001 ? 1 : 0);   // encima de todo; fuera del reflejo del piso
+          it.mat.roughness = 0.92 + (C.popup.rugosidad - 0.92) * e;                      // acabado brillante: refleja luces y entorno en las ondas
+          it.mat.clearcoat = C.popup.reflejo * e; it.mat.envMapIntensity = scene.environmentIntensity + (C.popup.reflejoEntorno - scene.environmentIntensity) * e;
+          it.mat.color.setScalar(b); it.mat.emissiveIntensity = (C.tela.autoiluminacion + (C.popup.autoiluminacion - C.tela.autoiluminacion) * e) * b; continue;
+        }
+        if (pSel > 0) { const a = 1 + (C.popup.atenuar - 1) * pSel; b *= a; it.mat.opacity *= 0.35 + 0.65 * a; }   // el resto de la cinta se apaga
+        it.mat.color.setScalar(b); it.mat.emissiveIntensity = C.tela.autoiluminacion * b;
       }
     }
 
+    /* ---- mouse / dedo: frenar al pasar por encima y arrastrar ---- */
+    function ponerPuntero(e) {
+      const r = canvas.getBoundingClientRect();
+      const ahora = performance.now(), dtp = Math.max(1 / 120, (ahora - (ptr.pt || ahora)) / 1000);
+      if (ptr.dentro) ptr.sp += (Math.hypot(e.clientX - ptr.px, e.clientY - ptr.py) / dtp - ptr.sp) * 0.5;   // velocidad del mouse (px/s)
+      ptr.px = e.clientX; ptr.py = e.clientY; ptr.pt = ahora;
+      ptr.dentro = true;
+      ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    }
+    function golpeaItem() {                                     // la tarjeta que está bajo el puntero (la más cercana) o null
+      if (C.visible === false || !items.length) return null;
+      grupo.updateMatrixWorld(true);
+      ray.setFromCamera(ndc, camera);
+      const lista = sel ? [sel.mesh] : items.filter((it) => it.mesh.visible && it.mat.opacity > 0.2).map((it) => it.mesh);
+      const h = ray.intersectObjects(lista, false);
+      return h.length ? items.find((it) => it.mesh === h[0].object) : null;
+    }
+    const golpea = () => !!golpeaItem();
+    function abrir(it) {
+      if (sel) return; sel = it; it.pObj = 1; vel = 0;
+      const nx = Math.max(1, Math.round(C.segmentos)) + 1, ny = Math.max(1, Math.round(C.filas)) + 1, pf = new Float32Array(nx * ny);
+      for (let iy = 0; iy < ny; iy++) for (let ix = 0; ix < nx; ix++)         // la tela se sujeta más por arriba y por los lados que por abajo
+        pf[iy * nx + ix] = (iy === 0 || ix === 0 || ix === nx - 1) ? 1 : (iy === ny - 1 ? 0.15 : 0);
+      it.tela = { nx, ny, h: new Float32Array(nx * ny), v: new Float32Array(nx * ny), g: new Float32Array(nx * ny), pf };
+    }
+    function simularTela(dt) {                                  // tela como una malla de muelles: el mouse empuja, las ondas viajan y se amortiguan
+      const K = sel.tela, P = C.popup, nx = K.nx, ny = K.ny, h = K.h, v = K.v, g = K.g, pf = K.pf;
+      let hit = false;
+      if (ptr.dentro && sel.p > 0.02) {
+        ray.setFromCamera(ndc, camera);
+        const r = ray.intersectObject(sel.mesh, false);
+        if (r.length && r[0].uv) {
+          hit = true; const u0 = r[0].uv.x, v0 = r[0].uv.y, rad2 = Math.max(0.02, P.radio) ** 2;
+          for (let iy = 0; iy < ny; iy++) for (let ix = 0; ix < nx; ix++) {
+            const dx = ix / (nx - 1) - u0, dy = (1 - iy / (ny - 1) - v0) / C.proporcion;   // distancia en anchos de tarjeta
+            g[iy * nx + ix] = Math.exp(-(dx * dx + dy * dy) / rad2);
+          }
+        }
+      }
+      if (!hit) g.fill(0);
+      const F = hit ? P.sensibilidad * 16 * (0.3 + Math.min(1.5, ptr.sp / 700)) : 0;   // empuje: más fuerte cuanto más rápido mueves el mouse
+      const kap = (P.propagacion * Math.max(1, Math.round(C.segmentos))) ** 2;
+      const n = Math.max(1, Math.ceil(dt / (1 / 120))), sdt = dt / n;
+      for (let s = 0; s < n; s++) {
+        for (let iy = 0; iy < ny; iy++) for (let ix = 0; ix < nx; ix++) {
+          const k = iy * nx + ix;
+          const lap = h[ix > 0 ? k - 1 : k] + h[ix < nx - 1 ? k + 1 : k] + h[iy > 0 ? k - nx : k] + h[iy < ny - 1 ? k + nx : k] - 4 * h[k];
+          v[k] += (kap * lap - (P.rigidez + 400 * pf[k]) * h[k] - P.amortiguacion * v[k] - F * g[k]) * sdt;   // el mouse empuja la tela hacia atrás
+        }
+        for (let k = 0; k < h.length; k++) h[k] = Math.max(-0.4, Math.min(0.4, h[k] + v[k] * sdt));
+      }
+    }
+    function normalizar(it) {                                   // la tarjeta vuelve a su acabado de cinta
+      it.mat.roughness = 0.92; it.mat.clearcoat = 0; it.mat.envMapIntensity = scene.environmentIntensity;
+      const c = it.geo.attributes.color; c.array.fill(1); c.needsUpdate = true;
+    }
+    function cerrar(ya) { if (!sel) return; sel.pObj = 0; if (ya) { normalizar(sel); sel.tela = null; sel.p = 0; sel.boost.value = 0; sel.mesh.layers.set(0); sel.mat.depthTest = true; sel = null; } }
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrar(); });
+    function pxPorTarjeta() {                                   // píxeles en pantalla que mide una tarjeta (para que el arrastre siga al puntero)
+      grupo.updateMatrixWorld(true);
+      pA.set(0, 0, 0).applyMatrix4(grupo.matrixWorld).project(camera);
+      pB.set(1, 0, 0).applyMatrix4(grupo.matrixWorld).project(camera);
+      const W = canvas.clientWidth, H = canvas.clientHeight;
+      return Math.max(4, Math.hypot((pB.x - pA.x) * W / 2, (pB.y - pA.y) * H / 2));
+    }
+    function alPulsar(e) {
+      if (!C.arrastrar || C.visible === false) return false;
+      ponerPuntero(e);
+      if (sel) { if (!golpeaItem()) cerrar(); return true; }      // con una abierta: clic fuera la devuelve a la cinta
+      const h = golpeaItem();
+      if (!h) return false;
+      ptr.arrastrando = true; ptr.id = e.pointerId; ptr.lastX = e.clientX; dragVel = 0; vel = 0;
+      ptr.x0 = e.clientX; ptr.y0 = e.clientY; ptr.t0 = performance.now(); ptr.item = h; ptr.mov = 0;
+      return true;
+    }
+    function alMover(e) {
+      ponerPuntero(e);
+      if (!ptr.arrastrando || e.pointerId !== ptr.id) return false;
+      off += (e.clientX - ptr.lastX) / pxPorTarjeta();           // arrastrar a la derecha mueve la cinta a la derecha
+      ptr.mov = Math.max(ptr.mov, Math.hypot(e.clientX - ptr.x0, e.clientY - ptr.y0));
+      ptr.lastX = e.clientX;
+      return true;
+    }
+    function alSoltar(e) {
+      if (!ptr.arrastrando || e.pointerId !== ptr.id) return false;
+      ptr.arrastrando = false; ptr.id = null;
+      if (C.abrirAlClic && ptr.item && ptr.mov < 6 && performance.now() - ptr.t0 < 600) { abrir(ptr.item); ptr.item = null; return true; }   // fue un clic, no un arrastre
+      ptr.item = null;
+      vel = dragVel * Math.min(1, Math.max(0, C.inercia));        // sigue un poco con la velocidad con que la soltaste
+      if (C.modo === 'pasos') { paso.activo = false; paso.esperando = C.pausa; }
+      return true;
+    }
+    function alSalir() { ptr.dentro = false; }
+
     construir();
-    window.pasilloCarrusel = { config: C, reconstruir: construir, aplicar, grupo };
-    return { aplicar, update };
+    window.pasilloCarrusel = { config: C, reconstruir: construir, aplicar, grupo, abrir: (i) => abrir(items[i]), cerrar };
+    return { aplicar, update, alPulsar, alMover, alSoltar, alSalir, cerrar };
   })();
 
   /* ---------- texto a todo el ancho, delante de la cámara ---------- */
@@ -730,6 +925,7 @@ window.pasilloImagePlane = imagePlane;
   const camAnim = { activo: false, x0: 0, z0: 0, x1: 0, z1: 0, t0: 0, dur: 1 };
   const easeInOutExpo = (t) => t <= 0 ? 0 : t >= 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2;
   function irAPaso(n, instantaneo) {                              // lo llama el scroll de secciones
+    carrusel.cerrar(true);                                        // si había una tarjeta abierta, vuelve a la cinta
     pasoEscena = n;
     if (window.pasilloCabeza) window.pasilloCabeza.mostrarUI(n < 2);   // se desvanece al ir a avance2; al volver reaparece cuando la cámara ya se mueve a avance (la escena ya es visible)
     cielo.objetivo = n >= 2 ? 1 : 0;                              // en avance2 el cielo se vuelve blanco
@@ -753,25 +949,21 @@ window.pasilloImagePlane = imagePlane;
   }
 
   /* ---------- controles (siempre activos) ---------- */
-  const look = { id: null, x: 0, y: 0 };
   const joy = { id: null, ox: 0, oy: 0, dx: 0, dy: 0 };
   const joyEl = $('esc-joy'), knob = joyEl ? joyEl.firstElementChild : null;
   canvas.addEventListener('pointerdown', (e) => {
-    canvas.setPointerCapture(e.pointerId);
+    if (carrusel.alPulsar(e)) { canvas.setPointerCapture(e.pointerId); return; }   // clic sostenido sobre la cinta = arrastrarla
     const r = cont.getBoundingClientRect();
     if (joyEl && e.pointerType === 'touch' && (e.clientX - r.left) < r.width * 0.4 && joy.id === null) {
+      canvas.setPointerCapture(e.pointerId);
       joy.id = e.pointerId; joy.ox = e.clientX; joy.oy = e.clientY; joy.dx = 0; joy.dy = 0;
       joyEl.style.display = 'block'; joyEl.style.left = (e.clientX - r.left) + 'px'; joyEl.style.top = (e.clientY - r.top) + 'px';
       if (knob) knob.style.transform = 'translate(0,0)';
-    } else if (look.id === null) {
-      look.id = e.pointerId; look.x = e.clientX; look.y = e.clientY;
-    }
+    }                                                           // (ya no se mueve la cámara al arrastrar)
   });
   canvas.addEventListener('pointermove', (e) => {
-    if (e.pointerId === look.id) {
-      yaw -= (e.clientX - look.x) * 0.0042; pitch -= (e.clientY - look.y) * 0.0042;
-      pitch = Math.max(-1.25, Math.min(1.25, pitch)); look.x = e.clientX; look.y = e.clientY;
-    } else if (e.pointerId === joy.id) {
+    if (carrusel.alMover(e)) return;
+    if (e.pointerId === joy.id) {
       const dx = e.clientX - joy.ox, dy = e.clientY - joy.oy;
       const L = Math.hypot(dx, dy) || 1, k = Math.min(L, 60) / L;
       joy.dx = dx * k / 60; joy.dy = dy * k / 60;
@@ -779,11 +971,12 @@ window.pasilloImagePlane = imagePlane;
     }
   });
   const endPointer = (e) => {
-    if (e.pointerId === look.id) look.id = null;
+    if (carrusel.alSoltar(e)) return;
     if (e.pointerId === joy.id) { joy.id = null; joy.dx = 0; joy.dy = 0; if (joyEl) joyEl.style.display = 'none'; }
   };
   canvas.addEventListener('pointerup', endPointer);
   canvas.addEventListener('pointercancel', endPointer);
+  canvas.addEventListener('pointerleave', () => carrusel.alSalir());
   if (ESCENA_SCROLL.ruedaCamina) {
     canvas.addEventListener('wheel', (e) => { e.preventDefault(); move(-e.deltaY * 0.01, 0); }, { passive: false });
   }

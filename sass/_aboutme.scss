@@ -32,7 +32,6 @@ body.abautmepage {
 }
 
 .abautmepage {
-
   // ---------- Mixins ----------
   @mixin blur($px: 8px) {
     backdrop-filter: blur($px);
@@ -57,7 +56,7 @@ body.abautmepage {
     height: 100vh;
     overflow: hidden; // solo se mueve por código (scrollIntoView)
 
-    >section {
+    > section {
       position: relative;
       width: 100vw;
       height: 100vh;
@@ -353,20 +352,20 @@ body.abautmepage {
                 transition: opacity 0.2s ease;
               }
 
-              input:checked~.lang-radio {
+              input:checked ~ .lang-radio {
                 border-color: #2d5bff;
               }
 
-              input:checked~.lang-radio::after {
+              input:checked ~ .lang-radio::after {
                 opacity: 1;
                 transform: scale(1);
               }
 
-              input:checked~.lang-name {
+              input:checked ~ .lang-name {
                 color: #2d5bff;
               }
 
-              input:checked~.lang-flag {
+              input:checked ~ .lang-flag {
                 opacity: 1;
               }
             }
@@ -573,20 +572,20 @@ body.abautmepage {
                 transition: opacity 0.2s ease;
               }
 
-              input:checked~.lang-radio {
+              input:checked ~ .lang-radio {
                 border-color: #2d5bff;
               }
 
-              input:checked~.lang-radio::after {
+              input:checked ~ .lang-radio::after {
                 opacity: 1;
                 transform: scale(1);
               }
 
-              input:checked~.lang-name {
+              input:checked ~ .lang-name {
                 color: #2d5bff;
               }
 
-              input:checked~.lang-flag {
+              input:checked ~ .lang-flag {
                 opacity: 1;
               }
             }
@@ -641,6 +640,58 @@ body.abautmepage {
       }
     }
   }
+
+
+  .secciondos {
+  @include center-flex;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  color: $colorp;
+  overflow: hidden;
+  isolation: isolate;
+
+  .reticula-svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: visible;
+
+    .linea-guia {
+      fill: none;
+      stroke: #0048ff;
+      stroke-width: 1;
+      stroke-dasharray: 2 2;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .punto-guia {
+      fill: #0048ff;
+    }
+  }
+.title {
+  width: 100%;
+  padding: 0 25vw;
+  box-sizing: border-box;
+
+  p {
+    display: block;
+    margin: 0;
+    font-family: "bold";
+    font-size: 3vw;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  }
+  }
+
 }
 
 /* Móvil pequeño */
@@ -907,20 +958,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked~.lang-radio {
+                input:checked ~ .lang-radio {
                   border-color: #2d5bff;
                 }
 
-                input:checked~.lang-radio::after {
+                input:checked ~ .lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
 
-                input:checked~.lang-name {
+                input:checked ~ .lang-name {
                   color: #2d5bff;
                 }
 
-                input:checked~.lang-flag {
+                input:checked ~ .lang-flag {
                   opacity: 1;
                 }
               }
@@ -1125,20 +1176,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked~.lang-radio {
+                input:checked ~ .lang-radio {
                   border-color: #2d5bff;
                 }
 
-                input:checked~.lang-radio::after {
+                input:checked ~ .lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
 
-                input:checked~.lang-name {
+                input:checked ~ .lang-name {
                   color: #2d5bff;
                 }
 
-                input:checked~.lang-flag {
+                input:checked ~ .lang-flag {
                   opacity: 1;
                 }
               }
@@ -1715,20 +1766,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked~.lang-radio {
+                input:checked ~ .lang-radio {
                   border-color: #2d5bff;
                 }
 
-                input:checked~.lang-radio::after {
+                input:checked ~ .lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
 
-                input:checked~.lang-name {
+                input:checked ~ .lang-name {
                   color: #2d5bff;
                 }
 
-                input:checked~.lang-flag {
+                input:checked ~ .lang-flag {
                   opacity: 1;
                 }
               }
@@ -1933,20 +1984,20 @@ body.abautmepage {
                   transition: opacity 0.2s ease;
                 }
 
-                input:checked~.lang-radio {
+                input:checked ~ .lang-radio {
                   border-color: #2d5bff;
                 }
 
-                input:checked~.lang-radio::after {
+                input:checked ~ .lang-radio::after {
                   opacity: 1;
                   transform: scale(1);
                 }
 
-                input:checked~.lang-name {
+                input:checked ~ .lang-name {
                   color: #2d5bff;
                 }
 
-                input:checked~.lang-flag {
+                input:checked ~ .lang-flag {
                   opacity: 1;
                 }
               }
